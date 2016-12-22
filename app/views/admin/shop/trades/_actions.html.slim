@@ -1,0 +1,28 @@
+- if can?(:show, trade)
+  = link_to '查看', admin_shop_trade_path(trade), class: "btn btn-xs  btn-success", 'data-target' => "rightPanel"
+- if can?(:update, trade)
+  = link_to '编辑', edit_admin_shop_trade_path(trade), class: "btn btn-xs  btn-success", 'data-target' => "rightPanel"
+  /-if trade.status == 'pay'
+  /= link_to '查询', try_query_admin_shop_trade_path(trade), :method => :put, 'data-target' => "rightPanel", :class => "btn btn-xs  btn-success"
+  - if trade.status == 'pay'
+    = link_to '到付', express_pay_admin_shop_trade_path(trade), :method => :put, "data-confirm" => "确定到付吗？", :class => "btn btn-xs  btn-success"
+  - if trade.status == 'audit'
+    = link_to '审核', audit_admin_shop_trade_path(trade), "data-confirm" => "确定审核吗？", :class => "btn btn-xs  btn-success", :method => :put
+  - if trade.contact.nil?
+    - if trade.status == 'prepare'
+      = link_to '出库', prepare_admin_shop_trade_path(trade), confirm: "确定出库吗？", :class => "btn btn-xs  btn-success", method: :put, "data-target" => "rightPanel"
+  - else
+    - if trade.status == 'prepare'
+      a class="btn btn-xs  btn-success" href=edit_prepare_admin_shop_trade_path(trade) data-target="rightPanel" 出库
+  - if %w[ship prepare out].include?(trade.status)
+    a class="btn btn-xs  btn-success" href=print_admin_shop_trade_path(trade) 打印
+  - if trade.status == 'ship'
+    a class="btn btn-xs  btn-success" href=ship_new_admin_shop_trade_path(trade) data-target="rightPanel" 发货
+  - if trade.status == 'receive'
+    = link_to '收货', receive_admin_shop_trade_path(trade), "data-confirm" => "确定收货吗？", :class => "btn btn-xs  btn-success", :method => :put
+  - if trade.freezable?
+    = link_to '冻结', freeze_admin_shop_trade_path(trade), "data-confirm" => "确定冻结吗？", :class => "btn btn-xs  btn-success", :method => :put
+      /- if trade.freezable? && trade.units.size >= 2
+      /= link_to '拆分', split_new_admin_shop_trade_path(trade), class: "btn btn-xs  btn-success", 'data-target' => "rightPanel"
+      /- if can?(:create, trade)
+      /= link_to '复制', new_admin_shop_trade_path(id: trade.id), class: "btn btn-xs  btn-success", 'data-target' => "rightPanel"

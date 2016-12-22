@@ -1,0 +1,9 @@
+$(".nav-tabs .review span").text("(<%=@comments_count||0%>)")
+<%banner_cate=@product.category2 && @product.category2.current_banner_cate%>
+<%if !banner_cate.blank?%>
+    var banner=$("#product_banner");
+    <%if !banner_cate.banner_pic_link.blank?%>
+        banner=$("#product_banner").wrap('<a href="<%=banner_cate.banner_pic_link%>"></a>');
+    <%end%>
+    banner.wrap('<img src="<%=banner_cate.banner_image.url%>"/>').show();
+<%end%>

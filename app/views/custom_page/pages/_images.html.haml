@@ -1,0 +1,17 @@
+= stylesheet_inline_tag "custom_page/pages/images_#{data['theme']}.css" unless data['theme'].blank?
+- flash = request.fullpath.match(/\?flash$/)
+%style(type="text/css" scoped="scoped") .auction_pages { #{color = data['style']['background-color']; color.blank? || "background-color: #{color};"} #{image = data['style']['background-image']; image.blank? || "background-image: url('#{image}');"} }
+%div.imagesbg
+	.light
+	%div(class="images_#{data['theme']}")
+		.top
+			.bigtitle
+			- link = data['images'][0]
+			%a.link(href="#{legacy_url(link['url'], flash)}" title="" target="_blank")
+				= image_tag link['pic'], :class => 'pic', :alt => ''
+		.contentbox
+			%ul.list
+				- data['images'][1..99].each do |p|
+					%li
+						%a.link(href="#{legacy_url(p['url'], flash)}" title="" target="_blank")
+							= image_tag p['pic'], :class => 'pic', :alt => ''

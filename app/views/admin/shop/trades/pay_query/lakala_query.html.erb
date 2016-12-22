@@ -1,0 +1,50 @@
+<h2>查看拉卡拉付款</h2>
+
+<table class="form-table">
+	<tbody>
+		<tr class="form-field form-required">
+			<th scope="row">ID</th>
+			<td><%= @trade.id %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">商户号</th>
+			<td><%= h @result[:mer_id] %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">商户订单号</th>
+			<td><%= h @result[:order_id] %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">查询结果</th>
+			<td><%= h ({ 'Y' => '支付成功', 'F' => '支付未成功', 'N' => '订单不存在', })[@result[:result]] %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">订单的创建日期</th>
+			<td><%= h @result[:order_date] %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">支付金额</th>
+			<td><%= h @result[:amount] %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">支付方式</th>
+			<td><%= h @result[:pay_method] %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">拉卡拉流水号</th>
+			<td><%= h @result[:pay_seq] %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">交易时间</th>
+			<td><%= h @result[:account_date] %></td>
+		</tr>
+	</tbody>
+</table>

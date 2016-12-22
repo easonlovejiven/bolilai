@@ -1,0 +1,9 @@
+<%
+result = {
+          "count" => @products_count,
+          "data"=> @products.map{|p|{id: p.id,updated_at: p.updated_at}},
+          "products_facet" => @products_facet.to_json
+          # "filters"  => @filters
+          }
+%>
+<%= raw  result.to_json %>

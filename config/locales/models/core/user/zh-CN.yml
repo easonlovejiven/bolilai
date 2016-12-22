@@ -1,0 +1,15 @@
+zh-CN:
+  activerecord:
+    models:
+      core/user: 用户
+    attributes:
+      core/user:
+        name: 姓名
+        sex: 性别
+        birthday: 生日
+        pic: 头像
+    enums:
+      core/user:
+        sex:
+          male: 先生
+          female: 女士

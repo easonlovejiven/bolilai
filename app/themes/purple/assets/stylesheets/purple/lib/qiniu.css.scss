@@ -1,0 +1,35 @@
+ul {
+  li.progressContainer {
+    margin-right: 5px;
+    float: left;
+    overflow: hidden;
+    .pic {
+      position: relative;
+      width: 80px;
+      height: 80px;
+    }
+    .remove_btn {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 0 2px;
+      line-height: 1;
+      z-index: 10;
+    }
+    .status {
+      position: absolute;
+      text-align: right;
+      top: 10px;
+    }
+    .imgWrapper {
+      overflow: hidden;
+      img {
+        display: block;
+        width: 80px;
+        height: 80px;
+      }
+    }
+  }
+}

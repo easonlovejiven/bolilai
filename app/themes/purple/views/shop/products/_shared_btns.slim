@@ -1,0 +1,8 @@
+.jiathis_style style="margin-left: 15px;padding-top: 12px; overflow: hidden; display: inline-block;"
+  span class="jiathis_txt" style="color:#999" 分享到：
+  a class="jiathis_button_weixin"
+  a class="jiathis_button_tsina"
+  - jt_josn = {title: "#{@product.name}", summary: "#{@product.description}（分享自 @珀丽莱）", sm: "cqq,douban",
+               shortUrl: true, hideMore: true, pic: "#{@product.major_image && @product.major_image.url}"}.to_json.html_safe
+  script type="text/javascript" var jiathis_config = #{jt_josn}
+  script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"

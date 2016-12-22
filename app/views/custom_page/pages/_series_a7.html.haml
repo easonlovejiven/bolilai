@@ -1,0 +1,4 @@
+= stylesheet_inline_tag "custom_page/pages/series_a7/#{data['theme']}.css" unless data['theme'].blank?
+-# stylesheet_inline_tag "custom_page/pages/series_a7/#{data['arrange']}.css" unless data['arrange'].blank?
+- flash = request.fullpath.match(/\?flash$/)
+= render :partial => "custom_page/pages/series_a7_#{data['arrange']}", :locals => { :data => data } unless data['arrange'].blank?

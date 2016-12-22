@@ -1,0 +1,106 @@
+<%= stylesheet_link_tag "touch/frame" %>
+<%= stylesheet_link_tag "touch/frame_respond" %>
+<!-- 压缩的model/view/controller -->
+<%= javascript_include_tag "touch/controller" %>
+<% content_for :header do %>
+    <header class="border_1px">
+      <!-- <div class="left_option left"> -->
+      <div class="ico_wrapper back_ico left hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <!-- </div> -->
+      <div class="title list_item ellipsis">
+        <%= @keyword.blank? ? @category.try(:name)||"全部商品" : %{搜索"#{@keyword}"} %>
+      </div>
+      <div class="list_array">
+        <% sort_key=params[:order].blank? ? "default" : params[:order].map { |k, v| "#{k}_#{v}" }[0] %>
+        <%= sort_mapping[sort_key] %>
+        <span class="sprites down_ico"></span>
+      </div>
+      <div class="ico_wrapper add_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper edit_ico right hide">
+        <span class="">编辑
+          <em class="down_shadow"></em>
+        </span>
+        <span class="">完成
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper info_ico right hide text">
+        详情<em class="down_shadow"></em>
+      </div>
+      <div class="ico_wrapper filter_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper mode_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+    </header>
+<% end %>
+<script type="text/javascript">
+    views.recommend_style(0.344);
+    $(function () {
+        var ids = <%=@products.map(&:id)%>;
+        products_index_controller.initialize($('.list_array'), $('.array_box .array_item'), $('.mode_ico'), ids);
+        app.lasy_load($('img'));
+    });
+</script>
+<div class="main" id="main">
+  <div>
+    <% if @products_count == 0 %>
+        <!-- 筛选为空样式 -->
+        <div class="filter_sorry_txt">
+          <p><span class="sprites left"></span>暂无符合筛选条件的商品，<br>请尝试更换筛选条件</p>
+        </div>
+        <!-- 推荐商品 -->
+    <% else %>
+        <!-- 商品列表 -->
+        <section class="products_content clear_fix products_list">
+
+        </section>
+        <!-- 分页 -->
+        <%= paginate(Kaminari.paginate_array([], {total_count: @products_count}).page(params[:page]).per(params[:per_page]||40), views_prefix: "mobile", :theme => 'shop') %>
+    <% end %>
+  </div>
+  <!-- 排序项 -->
+  <div class="array_fixed hide" id="array_fixed">
+    <div class="left_blank left"></div>
+    <span class="array_arrow"></span>
+
+    <div class="array_box left" data-params="<%= request.params.to_param %>">
+      <div class="array_item one <%= 'active' if params[:order].blank? %>" data-params="">
+        <p>默认排序</p>
+      </div>
+      <div class="array_item <%= 'active' if params[:order][:price]=="asc" %>" data-params="&amp;order[price]=asc">
+        <p>价格上升</p>
+      </div>
+      <div class="array_item <%= 'active' if params[:order][:price]=="desc" %>" data-params="&amp;order[price]=desc">
+        <p>价格下降</p>
+      </div>
+      <div class="array_item <%= 'active' if params[:order][:readings_count]=="desc" %>" data-params="&amp;order[readings_count]=desc">
+        <p>人气</p>
+      </div>
+      <div class="array_item <%= 'active' if params[:order][:scarcity]=="desc" %>" data-params="&amp;order[scarcity]=desc">
+        <p>限量</p>
+      </div>
+      <div class="array_item <%= 'active' if params[:order][:percent]=="asc" %>" data-params="&amp;order[percent]=asc">
+        <p>折扣</p>
+      </div>
+      <div class="array_item <%= 'active' if params[:order][:arrived_at]=="desc" %>" data-params="&amp;order[arrived_at]=desc">
+        <p>上架时间</p>
+      </div>
+    </div>
+    <div class="right_blank right"></div>
+    <div class="bottom_blank left"></div>
+  </div>
+</div>

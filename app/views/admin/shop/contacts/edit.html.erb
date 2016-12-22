@@ -1,0 +1,164 @@
+<% @record = @contact %>
+<% @show = !%w[new edit].include?(params[:action]) && @record.valid? %>
+<div class="modal-header">
+  <%= render "admin/modal/header" %>
+</div>
+<%= render 'admin/shared/prompt' %>
+<div class="modal-body">
+  <%= form_for @contact, as: :contact, :url => @contact.new_record? ? admin_shop_contacts_path : admin_shop_contact_path(@contact),
+               :html => {:method => @contact.new_record? ? :post : :put, class: "form-horizontal"} do |f| %>
+      <%= f.error_messages %>
+      <div class="form-group">
+        <%= f.label :id, 'ID', {class: 'col-md-3 control-label'} %>
+        <div class="form-control-static">
+          <strong><%= @contact.send(:id) %></strong>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :user_id, '用户'.html_safe, class: 'col-md-3 control-label' %>
+        <div class="col-md-8">
+          <div class="form-control-static">
+            <%= render :partial => "admin/shop/users/user", :object => @contact.user %>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :trades, "成功交易", class: 'col-md-3 control-label' %>
+        <div class="col-md-8 form-control-static">
+          <%= (c = Shop::Trade.count(:conditions => ["status IN('ship','receive','complete') AND user_id = ?", @contact.user_id]));
+              link_to c.to_i, admin_shop_trades_path('where[user_id]' => @contact.user_id) %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :name, "名称", class: 'col-md-3 control-label' %>
+        <div class="col-md-8 form-control-static">
+          <%= h @contact.name %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :country, "国家", class: 'col-md-3 control-label' %>
+        <div class="col-md-8 form-control-static">
+          <%= h @contact.country %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :province, "省份", class: 'col-md-3 control-label' %>
+        <div class="col-md-8 form-control-static">
+          <%= h @contact.province %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :city, "城市", class: 'col-md-3 control-label' %>
+        <div class="col-md-8 form-control-static">
+          <%= h @contact.city %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :town, "县区", class: 'col-md-3 control-label' %>
+        <div class="col-md-8 form-control-static">
+          <%= h @contact.town %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :address, "地址", class: 'col-md-3 control-label' %>
+        <div class="col-md-8 form-control-static">
+          <%= h @contact.address %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :postcode, "邮编", class: 'col-md-3 control-label' %>
+        <div class="col-md-8 form-control-static">
+          <%= h @contact.postcode %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :phone, "电话", class: 'col-md-3 control-label' %>
+        <div class="col-md-8 form-control-static">
+          <%= h @contact.phone %>
+          &nbsp;&nbsp;<%#= h Core::Phone.query_attribution_by_phone @contact.phone %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :mobile, "手机", class: 'col-md-3 control-label' %>
+        <div class="col-md-8 form-control-static">
+          <%= h @contact.mobile %>
+          &nbsp;&nbsp;<%#= h Core::Phone.query_attribution_by_phone @contact.mobile %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :ip, "IP", class: 'col-md-3 control-label' %>
+        <div class="col-md-8 form-control-static">
+          <%= h @contact.remote_ip %> <%#= h Core::Ip.query_locations_by_ip @contact.remote_ip %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :delivery_service, "快递服务", class: 'col-md-3 control-label' %>
+        <div class="col-md-8">
+          <% if @show %>
+              <div class=" form-control-static">
+                <%= (s = Shop::Trade.delivery_coms_arr.find { |d| d[:name] == @contact.delivery_service }) && s[:title] %>
+              </div>
+          <% else %>
+              <%= f.select :delivery_service, Shop::Trade.delivery_coms_arr.map { |s| [s[:title], s[:name]] },
+                           {:include_blank => true}, class: 'form-control' %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :remark, "备注", class: 'col-md-3 control-label' %>
+        <div class="col-md-8">
+          <% if params[:action] == 'show' %>
+              <div class=" form-control-static">
+                <%= simple_format h @contact.remark %>
+              </div>
+          <% else %>
+              <%= f.text_area :remark, class: 'form-control' %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :editor, '编辑', class: 'col-md-3 control-label' %>
+        <div class="col-md-8 form-control-static">
+          <%= link_to_if @current_user.can_show_editor?, @contact.editor.name, admin_manage_editor_path(@contact.editor), :rel => "facebox" if @contact.editor %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :created_at, "创建时间", class: 'col-md-3 control-label' %>
+        <div class="col-md-8 form-control-static">
+          <%= @contact.created_at && @contact.created_at.to_s(:db) %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :updated_at, "更新时间", class: 'col-md-3 control-label' %>
+        <div class="col-md-8 form-control-static">
+          <%= @contact.updated_at && @contact.updated_at.to_s(:db) %>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <% if @show %>
+            <%= link_to '查看', admin_shop_contact_path(@contact), "data-target" => "rightPanel", class: "btn btn-primary" if can?(:show, @contact) %>
+            <%= link_to '编辑', edit_admin_shop_contact_path(@contact), "data-target" => "rightPanel", class: "btn btn-primary" if can?(:update, @contact) %>
+        <% else %>
+            <%= f.submit "提交", class: "btn btn-primary" %>
+        <% end %>
+      </div>
+  <% end %>
+</div>

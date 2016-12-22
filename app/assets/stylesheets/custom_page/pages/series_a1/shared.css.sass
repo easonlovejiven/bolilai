@@ -1,0 +1,30 @@
+.series_a1
+	.large_list
+		.link
+			.title
+				color: $color_single_title
+	.large_list,
+	.small_list
+		.link
+			.linktext
+				.summary
+					span
+						color: $color_single_brands
+					em
+						color: $color_single_summary
+				.value
+					.MarketPrice
+						color: $color_single_gray
+						em,
+						span
+							color: $color_single_gray
+					.IhaveuPrice
+						color: $color_price_stress
+						em,
+						span
+							color: $color_price_stress
+				.at_once
+					background: #{$color_at_once_bg} asset-url('auction/pages/template/#{$theme}/btn_bg.png') repeat-x 0 0
+					&:hover,
+					&.hover
+						background-position: 0 -28px

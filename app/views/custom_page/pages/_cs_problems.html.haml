@@ -1,0 +1,10 @@
+= stylesheet_inline_tag 'custom_page/pages/cs_problems.css'
+
+.cs_problems
+	- (data['problems'] || {}).each_with_index do |problem, index|
+		%dl
+			%dt
+				= index + 1
+				\.&nbsp;
+				%span.question= problem['question']
+			%dd= simple_format h '' + problem['answer']

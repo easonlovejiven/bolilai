@@ -1,0 +1,2 @@
+- flash = request.fullpath.match(/\?flash$/)
+%style(type="text/css" scoped="scoped") #auction_pages_#{page.id} { overflow: hidden; margin: 0 auto; width: 100%; min-height: 1000px; #{color = data['style']['background-color']; color.blank? || !flash ? "" : "background-color: #{color};"} #{image = data['style']['background-image']; image.blank? || !flash ? "" : "background-image: url('#{image}');"} }

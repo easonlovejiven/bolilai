@@ -1,0 +1,24 @@
+= stylesheet_inline_tag 'custom_page/pages/ultimate.css'
+
+.auction_pages_ultimate.prefetch
+	.sections
+		- data['sections'].each do |section|
+			.section style="#{%[background-color: #{section['style']['background-color']};] unless section['style']['background-color'].blank?} #{%[background-image: url('#{section['style']['background-image']}');] unless section['style']['background-image'].blank?}"
+				- case section['type']
+				- when 'link'
+					a.ultimate_link href="#{section['url']}" title="#{section['name']}" target="_blank" style="#{section['style'].slice(*%w[width height line-height font-size font-family text-align vertical-align color]).reject{ |attr, value| value.blank? }.map { |attr, value| %[#{attr}: #{%w[width height line-height font-size].include?(attr) ? value + 'px' : value};] }.join}"
+						= image_tag section['image'], alt: '', class: 'image' unless section['image'].blank?
+						= section['text']
+				- when 'products'
+					.products
+						.product_box
+							.pbox_list
+								- products = section['ids'].map { |id| Shop::Product.where(id: id).first_or_initialize }
+								- inexistence = products.find_all { |product| product.new_record? }
+								- inactive = products.find_all { |product| !product.active? }
+								- unpublished = products.find_all { |product| !product.published? } - inactive
+								- soldout = products.find_all { |product| product.unsold_count == 0 } - inactive - unpublished
+								- good = products - inactive - unpublished - soldout
+								- products = good + soldout + unpublished + inactive + inexistence
+								- limit = section['limit'].blank? ? 8 : section['limit'].to_i
+								= render :partial => 'auction/products/product', :collection => products[0..(limit-1)]

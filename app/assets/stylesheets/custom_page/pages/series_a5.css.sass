@@ -1,0 +1,175 @@
+@import 'shared/function'
+
+.series_a5
+	display: block
+	width:  1000px
+	margin: 0 auto
+	position: relative
+	height: 897px
+	margin-bottom: 12px
+	background: #fff
+	overflow: hidden
+	.dividing_line_960
+		position: absolute
+		top: 840px
+		left: 0
+		display: block
+		overflow: hidden
+		height: 14px
+		background: asset-url('auction/pages/template/shared/dividing_line_960.png') no-repeat center top
+		width: 100%
+	.navlist
+		display: block
+		width: 90px
+		height: 820px
+		top: 53px
+		left: 31px
+		position: absolute
+		.current a
+			color: #fff
+			background: #333
+		.link
+			display: block
+			width: 68px
+			padding-left: 18px
+			height: 28px
+			text-align: left
+			line-height: 28px
+			font-size: 16px
+			margin-bottom: 14px
+			overflow: hidden
+			&.current
+				color: #fff
+				background: #333
+	.product_mod
+		width: 700px
+		height: 871px
+		display: block
+		position: absolute
+		top: 26px
+		left: 280px
+		overflow: hidden
+		.product_list
+			display: block
+			// margin: 18px 0 0 32px
+			overflow: hidden
+			width: 770px
+			height: 875px
+			.morelink
+				position: absolute
+				top: 814px
+				left: 0
+				width: 680px
+				height: 55px
+				span
+					@include inline-block
+					position: absolute
+					left: 184px
+					top: 20px
+					font-size: 16px
+					line-height: 20px
+					background: asset-url('auction/pages/template/coffee/more.png') no-repeat left center
+					padding-left: 34px
+			.list
+				display: block
+				overflow: hidden
+				padding-top: 18px
+				width: 1033px
+			.link
+				display: block
+				width: 200px
+				height: 365px
+				float: left
+				// margin-left: 15px
+				margin-right: 52px
+				margin-bottom: 58px
+				position: relative
+				overflow: hidden
+				// position: absolute
+				// top: 219px
+				// left: 0px
+				.title
+					position: absolute
+					top: 213px
+					left: 18px
+					width: 150px
+					line-height: 28px
+					font-size: 18px
+					display: block
+					text-align: left
+					height: 30px
+					overflow: hidden
+				.pic
+					display: block
+					width: 200px
+					height: 200px
+					// background: #f1f1f1
+					// position: absolute
+					// left: 14px
+					// top: 13px
+					overflow: hidden
+				.linktext
+					display: block
+					position: absolute
+					left: 19px
+					top: 250px
+					width: 142px
+					.summary
+						display: block
+						span
+							display: block
+							line-height: 20px
+							font-size: 16px
+							height: 20px
+							overflow: hidden
+						em
+							display: block
+							line-height: 20px
+							font-size: 12px
+							height: 38px
+							overflow: hidden
+					.value
+						margin-top: 3px
+						.MarketPrice
+							display: block
+							line-height: 26px
+							font-size: 12px
+							text-decoration: line-through
+							overflow: hidden
+							height: 22px
+							margin-bottom: 4px
+							em
+								height: 22px
+								@include inline-block
+							span
+								min-width: 50px
+								height: 22px
+								text-decoration: line-through
+								@include inline-block
+						.IhaveuPrice
+							display: block
+							line-height: 26px
+							font-size: 18px
+							margin-top: 5px
+							overflow: hidden
+							height: 28px
+							em
+								@include inline-block
+								font-size: 12px
+								height: 30px
+								_float: left
+								_line-height: 24px
+								text-decoration: none
+								margin-bottom: 0
+							span
+								min-width: 50px
+								height: 30px
+								@include inline-block
+
+
+.ihaveu
+	.series_a5
+		left: -20px
+.layout_flash
+	.series_a5
+		left: auto

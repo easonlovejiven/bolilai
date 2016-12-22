@@ -1,0 +1,31 @@
+<h2>查看民生银行付款</h2>
+
+<table class="form-table">
+	<tbody>
+
+		<tr class="form-field form-required">
+			<th scope="row">ID</th>
+			<td><%= @trade.id %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">订单编号</th>
+			<td><%= h @result[:order_id] %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">订单金额</th>
+			<td><%= h @result[:order_price] %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">订单状态</th>
+			<td><%= @result[:status].to_i == 1 ? "支付成功" : "支付失败" %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">订单备注说明</th>
+			<td><%= h @result[:desc] %></td>
+		</tr>
+	</tbody>
+</table>

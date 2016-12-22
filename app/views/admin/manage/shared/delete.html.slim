@@ -1,0 +1,8 @@
+- record ||= instance_variable_get "@#{controller.controller_name.singularize}"
+- if record.deletable?
+	h2 = t('.are_you_sure?')
+	= link_to t('delete'), [:admin, record], method: 'delete', class: 'button-secondary'
+	| &nbsp;|&nbsp;
+	= link_to t(:cancel), '#', :onclick => '$.facebox.close(); return false;'
+- else
+	h2 = t('.unable_to_delete')

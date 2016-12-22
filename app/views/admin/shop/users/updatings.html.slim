@@ -1,0 +1,25 @@
+h2 查看用户修改记录
+table.form-table
+  tbody
+    tr.form-field
+      td
+        table
+          thead
+            tr
+              - %w[等级 交易积分 折扣 商城列表 备注 编辑 时间].each do |name|
+                th(style="padding:0;border-bottom-width:0;")= name
+          tbody
+            - @user.updatings.order("created_at ASC").each do |updating|
+              tr
+                td(style="padding:0;border-bottom-width:0;")
+                  = link_to_if can?(:show, updating.level), raw("#{image_tag(updating.level.icon, alt: "", style: "vertical-align:sub;") if updating.level.icon}#{updating.level.name}"), admin_shop_level_path(updating.level), "data-target" => "rightPanel" if updating.level
+                td(style="padding:0;border-bottom-width:0;")= updating.trades_point
+                td(style="padding:0;border-bottom-width:0;")= updating.percent
+                td(style="padding:0;border-bottom-width:0;")
+                  - updating.malls.each do |mall|
+                    = link_to_if can?(:show, mall), mall.name, admin_shop_mall_path(mall), "data-target" => "rightPanel"
+                    br
+                td(style="padding:0;border-bottom-width:0;")= updating.remark
+                td(style="padding:0;border-bottom-width:0;")
+                  = link_to_if can?(:show, updating.editor), updating.editor.name, admin_manage_editor_path(updating.editor), "data-target" => "rightPanel" if updating.editor
+                td(style="padding:0;border-bottom-width:0;")= updating.created_at.try(:to_s, :db)

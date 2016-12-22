@@ -1,0 +1,168 @@
+- show = !(%w[new edit].include?(params[:action]) || %w[create update].include?(params[:action]) && @page.invalid?)
+- if %w[create update destroy].include?(params[:action])
+  - if @page.valid?
+    .updated
+      %p= %[#{{ 'create' => '创建', 'update' => '修改', 'destroy' => '删除' }[params[:action]]}成功]
+  - else
+    .error
+      %p= %[#{{ 'create' => '创建', 'update' => '修改', 'destroy' => '删除' }[params[:action]]}失败]
+%h2
+  = "#{show ? '查看' : @page.new_record? ? '新建' : '编辑'}页面"
+  - if show
+    %span(style="font-size:12px;")
+      - if @page.active?
+        &nbsp;|&nbsp;
+        = link_to '查看', admin_page_path(@page) if can?(:show, @page)
+        = link_to '编辑', edit_admin_page_path(@page) if can?(:update, @page)
+        = link_to '删除', delete_admin_page_path(@page), :rel => 'facebox' if can?(:destroy, @page)
+        = link_to '复制', new_admin_page_path(:id => @page.id) if can?(:create, @page)
+        = link_to '预览', preview_admin_page_path(@page) if can?(:show, @page)
+        = link_to '刷新', clear_admin_products_path('urls' => [url_for(@page).to_str]), :method => :post if can?(:show, :product)
+        = link_to '访问', admin_page_path(@page)
+      -# link_to '快照', snapshoot_admin_page_path(@page), :confirm => "确定吗？", :method => :put if can?(:show, @page)
+      &nbsp;|&nbsp;
+      = link_to '列表', admin_pages_path if can?(:index, @page)
+      = link_to '新建', new_admin_page_path if can?(:create, @page)
+      = link_to '定制', customizer_admin_pages_path if can?(:create, @page)
+= form_for @page, :url => @page.new_record? ? admin_pages_path : admin_page_path(@page), :method => @page.new_record? ? :post : :put, :html => { :multipart => true } do |f|
+  %table.form-table
+    %tbody
+      - unless @page.new_record?
+        %tr
+          %th= f.label :id, 'ID'
+          %td= @page.id
+      %tr
+        %th= f.label :name, '名称'
+        %td
+          - if show
+            = @page.name
+          - else
+            = f.text_field :name
+            = f.error_message_on :name
+      %tr
+        %th= f.label :series, '系列'
+        %td
+          - if show
+            = @page.series
+          - else
+            = f.text_field :series
+            = f.error_message_on :series
+      %tr
+        %th= f.label :position, '位置'
+        %td
+          - if show
+            = CustomPage::Page::POSITIONS.map { |p| { p[:value] => p[:name] } }.inject(&:merge)[@page.position]
+          - else
+            = f.select :position, CustomPage::Page::POSITIONS.map { |p| [p[:name], p[:value]] }, :include_blank => ''
+            = f.error_message_on :position
+      %tr
+        %th= f.label :title, '标题'
+        %td
+          - if show
+            = @page.title
+          - else
+            = f.text_field :title
+            = f.error_message_on :title
+      %tr
+        %th= f.label :keywords, '关键字'
+        %td
+          - if show
+            = @page.keywords
+          - else
+            = f.text_field :keywords
+            = f.error_message_on :keywords
+      %tr
+        %th= f.label :description, '描述'
+        %td
+          - if show
+            = @page.description
+          - else
+            = f.text_area :description
+            = f.error_message_on :description
+      %tr
+        %th= f.label :engine, '引擎'
+        %td
+          - if show
+            = @page.engine
+          - else
+            = f.select :engine, CustomPage::Page::ENGINES, :include_blank => ''
+            = f.error_message_on :engine
+      -#%tr
+      -#  %th= f.label :content, '内容'
+      -#  %td
+      -#    - if show
+      -#      %pre= h @page.content
+      -#    - else
+      -#      = f.text_area :content
+      -#      = f.error_message_on :content
+      %tr
+        %th= f.label :snapshot, '快照'
+        %td= render :partial => 'admin/shared/attachment', :locals => { :show => show, :form => f, :field => :snapshot, :image => { :width => 320 } }
+      %tr
+        %th= f.label :images, '图片'
+        %td
+          - (@page.images.sort_by { |image| image.id || 99999999 } + (show ? [] : 1..10).map{ @page.images.new(:active => false) }).each do |image|
+            = f.fields_for :images, image do |pf|
+              - unless show
+                = pf.check_box :active, :onclick => "$(this).next().slideToggle('fast');"
+              %div(style="#{'display:none;' unless image.active?}")
+                %table.form-table
+                  %tbody
+                    - unless image.new_record?
+                      %tr
+                        %th= pf.label :id, 'ID'
+                        %td= image.id
+                    %tr
+                      %th= pf.label :pic, "图片"
+                      %td= render :partial => 'admin/shared/attachment', :locals => { :show => show, :form => pf, :field => :pic, :image => { :'max-width' => 300, :'max-height' => 300 } }
+                    - unless image.new_record?
+                      %tr
+                        %th= pf.label :created_at, '创建时间'
+                        %td= image.created_at && image.created_at.to_s(:db)
+                      %tr
+                        %th= pf.label :updated_at, '更新时间'
+                        %td= image.updated_at && image.updated_at.to_s(:db)
+      %tr
+        %th= f.label :pages_pages, '页面'
+        %td
+          - (@page.pages_pages.sort_by{|pages_page| pages_page.id || 99999999 }+(show ? [] : 1..10).map{ @page.pages_pages.new(:active => false) }).each do |pages_page|
+            = f.fields_for :pages_pages, pages_page do |sf|
+              - unless show
+                = sf.check_box :active, :onclick => "$(this).next().slideToggle('fast').find('input').prop('disabled', !$(this).prop('checked'));"
+              %div(style="#{'display:none;' unless pages_page.active?}")
+                %table.form-table
+                  %tbody
+                    - unless pages_page.new_record?
+                      %tr
+                        %th= sf.label :id, 'ID'
+                        %td= pages_page.id
+                    %tr
+                      %th= sf.label :child_id, '子页面'
+                      %td
+                        - if show
+                          = link_to_if can?(:show, pages_page.child), pages_page.child.name, admin_page_path(pages_page.child), :rel => 'facebox' if pages_page.child
+                        - else
+                          = sf.text_field :child_id
+                          = sf.error_message_on :child_id
+                    - unless pages_page.new_record?
+                      %tr
+                        %th= sf.label :created_at, '创建时间'
+                        %td= pages_page.created_at && pages_page.created_at.to_s(:db)
+                      %tr
+                        %th= sf.label :updated_at, '修改时间'
+                        %td= pages_page.updated_at && pages_page.updated_at.to_s(:db)
+      - unless @page.new_record?
+        %tr
+          %th= f.label :created_at, '创建时间'
+          %td= @page.created_at && @page.created_at.to_s(:db)
+        %tr
+          %th= f.label :updated_at, '修改时间'
+          %td= @page.updated_at && @page.updated_at.to_s(:db)
+        %tr
+          %th= f.label :editor, '编辑'
+          %td= link_to_if can?(:show, @page.editor), @page.editor.name, admin_manage_editor_path(@page.editor), "data-target" => "rightPanel" if @page.editor
+        %tr
+          %th= f.label :published, '发布'
+          %td= @page.published? ? '✔' : '✘'
+  - unless show
+    .submit= f.submit "提交"

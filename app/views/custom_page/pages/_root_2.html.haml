@@ -1,0 +1,98 @@
+= stylesheet_inline_tag 'custom_page/pages/root_2.css'
+= javascript_inline_tag 'custom_page/pages/root_2.js'
+
+
+.home2012v2.weimall.prefetch
+	.homecontent
+		.wallbg
+		.topbg01
+		.topbg02
+		.bottombg
+		.PictureWall
+			.wall#wallcont(style=" margin-top: 31px; top:0px; ")
+				- matrix = (data['walls'] || [{}]).map { |wall| wall['photos'] || [] }
+				- matrix.first.size.times.map{|i| matrix.map{|r| r[i] } }.each_with_index do |photos, i|
+					%table(class="list list0#{i+1}")
+						- photos.each_with_index do |photo, j|
+							%tr
+								%td
+									= link_to photo['url'], :class => "link", :target => photo['url'].to_s.match(/#|mails/) ? '_blank' : '' do
+										= image_tag photo['pic'].to_s, :alt => '', :class => 'pic'
+										%span.text
+											%em= photo['name']
+			%a#wall_prev.prev(href="#")
+				%span.icon
+			%a#wall_next.next(href="#")
+				%span.icon
+			%h4.title
+			.nav#wallnav
+				- (data['walls'] || {}).map { |wall| wall['name'] }.each_with_index do |name, i|
+					= link_to name, "#", :class => "link #{'current' if i == 0}"
+					%br
+		.categories
+			.iconslink(style="background-image: url('#{image_path((data['category']||{})['background'].to_s)}')")
+				.list
+					- (data['category']||{})['ids'].to_sz.map { |id| Shop::Category.find_by_id(id) }.compact.each do |category|
+						= link_to category.name, shop_products_path('where[category1_id]' => category.id), :class => "link"
+		.covers.slides(data-options='{ "effect": "slide, fade", "play": 3000, "pause": 2500 }')
+			.js_home_recommend_position(data-interval="5" data-key="key")
+			.list.slides_container
+				- (data['covers'] || []).each do |cover|
+					= link_to cover['url'], :style => "", :class => "link", :target => cover['url'].to_s.match(/#|mails/) ? '_blank' : '' do
+						= image_tag cover['pic'].to_s, :alt => "", :style => "width:100%; height:100%;"
+						.shadow
+			%a.prev.slides_prev(href="##")
+			%a.next.slides_next(href="##")
+			%a.more(href="/auction") raw &nbsp;
+		.newslides.slides(data-options='{ "effect": "fade", "fadeSpeed": 500, "play": 6000 }')
+			%h3.title
+				%strong New
+				%span 每日新品
+			.list.slides_container
+				- (data['slides'] || []).each do |p|
+					= link_to p['url'], :class => "link", :target => p['url'].to_s.match(/#|mails/) ? '_blank' : '' do
+						= image_tag p['pic'].to_s, :alt => '', :class => 'pic'
+						.imgText
+							%span.name= p['name']
+							%span.description= p['description']
+			%ul.pagination.slides_pagination
+				%li.current
+					%a(href="#0") 1
+				%li
+					%a(href="#1") 2
+				%li
+					%a(href="#2") 3
+		.brands
+			.list.list01
+				- (data['brand']||{})['ids'].to_sz[0..15].map{|id|Shop::Brand.find_by_id(id) }.compact.each do |brand|
+					= link_to brand.name, shop_products_path('where[brand_id]' => brand.id), :class => "link"
+			.logo_list
+				%style
+					background-image: url("{image_path((data['brand']||{})['background'].to_s)}")
+				- (data['brand']||{})['ids'].to_sz[16..19].to_a.map{ |id|Shop::Brand.find_by_id(id) }.compact.each do |brand, i|
+					= link_to '', shop_products_path('where[brand_id]' => brand.id), :class => "link link#{brand.id}"
+			= link_to '所有品牌',Shop::Brand.new, :class => 'more'
+		.events
+			%h3.title Events 活动
+			.list
+				- (data['events'] || []).each_with_index do |p, i|
+					= link_to p['url'], :class => "link", :target => p['url'].to_s.match(/#|mails/) ? '_blank' : '' do
+						= image_tag p['pic'].to_s, :alt => '', :class => 'pic'
+						.imgText
+							%h5.name= p['name']
+							%p.description= p['description']
+		.topics
+			%h6.title(title="精品")
+			.list
+				- (data['topics'] || []).each_with_index do |p, i|
+					= link_to p['url'] , :class => "link", :target => p['url'].to_s.match(/#|mails/) ? '_blank' : '' do
+						= image_tag p['pic'].to_s, :alt => '', :class => 'pic'
+						%span.nav= p['name']
+		.peple
+			- people = data['people'] || {}
+			= link_to people['url'], :class => 'mod', :target => people['url'].to_s.match(/#|mails/) ? '_blank' : '' do
+				%p.text= people['description']
+				%h5.title
+					%strong People
+					%span 人物
+			= link_to image_tag(people['pic'].to_s, :alt => '', :class => 'pic'), people['url'], :class => 'avatar', :target => people['url'].to_s.match(/#|mails/) ? '_blank' : ''

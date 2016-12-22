@@ -1,0 +1,8 @@
+<div class="user-changer-panel">
+  切换后台：
+  <div class="btn-group">
+    <% User::ROLES.each do |k, v| %>
+        <%= link_to v, change_user_path(role: k), class: 'btn btn-xs default mr3' %>
+    <% end %>
+  </div>
+</div>

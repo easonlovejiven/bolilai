@@ -1,0 +1,22 @@
+<% form_for :note, :url => contribute_auction_trade_path(@trade), :html => { :method => :put } do |f| %>
+<div class="Shopping_info">
+	<div class="Shopping_Pay Shopping_Share">
+
+		<p>分享成功就得基因点数50点，分享相片额外再获得基因点数50点！</p>
+		<!-- <textarea class="Shopping_ShareBox"></textarea>
+
+		<p>实物相片：<input type="file" /></p>
+		 -->
+		<ul class="Shopping_ShareImg">
+			<li>
+				<%= image_tag @trade.item.product.pic || '' %>
+				<h6>标题：</h6> <%= f.text_field :title %>
+				<h6>描述：<a href="#"><span class="icons17x17 icon_29"></span></a></h6>
+				<%= f.text_area :content %>
+			</li>
+		</ul>
+		<!-- <p>隐私设置：<select><option>所有人可见</option></select></p> -->
+	</div>
+</div>
+<div class="Shopping_btn"><button class="Confirmation_btn"><span class="text">立即分享</span></button></div>
+<% end %>

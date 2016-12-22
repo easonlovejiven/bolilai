@@ -1,0 +1,39 @@
+= stylesheet_inline_tag "custom_page/pages/series_a1/#{data['theme']}.css" unless data['theme'].blank?
+- flash = request.fullpath.match(/\?flash$/)
+.seriesbox.series_a1(style="margin-bottom: #{v = (data['style']||{})['margin-bottom']; v.blank? ? 12 : v}px;")
+	.dividing_line_960
+	.large_list(class="widget" data-widget-id="large_widget_#{page.id}")
+		- data['products']['large'][0..1].each do |p|
+			- product = Shop::Product.where(id: p['id']).first_or_initialize
+			= link_to flash ? "/index.html#subapp=productGrid&category2_id=#{product.category2_id}&keyword=&extid=#{product.id}" : product, :class => "link", :target => "_blank" do
+				%h3.title= h p['title']
+				= image_tag "#{product.major_image.url(:cover400)}", :alt => "", :class => "pic"
+				.linktext
+					.summary
+						%span= h product.brand ? product.brand.name : ''
+						%em= h product.name.to_s.gsub(product.brand ? product.brand.name.to_s.strip : '', '').gsub(product.brand ? product.brand.chinese.to_s.strip : '', '')
+					.value
+						.MarketPrice
+							%em ￥
+							%span= product.price
+						.WeimallPrice
+							%em ￥
+							%span=product.discount
+					.at_once 立即购买
+	.small_list(class="widget" data-widget-id="small_widget_#{page.id}")
+		- data['products']['small']['ids'][0..3].each do |p|
+			- product = Shop::Product.where(id: p['id']).first_or_initialize
+			= link_to flash ? "/index.html#subapp=productGrid&category2_id=#{product.category2_id}&keyword=&extid=#{product.id}" : product, :class => "link", :target => "_blank" do
+				= image_tag "#{product.major_image.url(:medium)}", :alt => "", :class => "pic"
+				.linktext
+					.summary
+						%span= h product.brand ? product.brand.name : ''
+						%em= h product.name.to_s.gsub(product.brand ? product.brand.name.to_s.strip : '', '').gsub(product.brand ? product.brand.chinese.to_s.strip : '', '')
+					.value
+						.MarketPrice
+							%em ￥
+							%span= product.price
+						.WeimallPrice
+							%em ￥
+							%span=product.discount
+	= render :partial => 'admin/custom_page/pages/series_preview', :locals => { :data => data,:page=>page }

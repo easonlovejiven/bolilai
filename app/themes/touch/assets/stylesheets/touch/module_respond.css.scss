@@ -1,0 +1,63 @@
+@media only screen and (-webkit-min-device-pixel-ratio: 3), only screen and (-o-min-device-pixel-ratio: 3/1), only screen and (min--moz-device-pixel-ratio: 3), only screen and (min-device-pixel-ratio: 3) {
+  .go_pic {
+    background-image: image-url("touch/go_pic@3x.png")
+  }
+
+  .font_pic {
+    background-image: image-url("touch/font_pic@3x.png")
+  }
+}
+
+@media only screen and (-webkit-device-pixel-ratio: 1.5), only screen and (-o-device-pixel-ratio: 3/2), only screen and (min--moz-device-pixel-ratio: 1.5), only screen and (device-pixel-ratio: 1.5) {
+  .failed.pro_img {
+    background: image-url("touch/fail@1.5x.png") no-repeat center, #fcfcfc;
+    background-size: 20px 20px
+  }
+
+  .sprites {
+    background-image: image-url("touch/sprites@1.5x.png")
+  }
+
+  .sprite_icos {
+    background-image: image-url("touch/new_sprite@1.5x.png")
+  }
+
+  .go_pic {
+    background-image: image-url("touch/go_pic@1.5x.png")
+  }
+
+  .font_pic {
+    background-image: image-url("touch/font_pic@1.5x.png")
+  }
+
+  .wechat_share_font {
+    background-image: image-url("touch/wechat_share_font_pic@1.5x.png")
+  }
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min--moz-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2) {
+  .failed.pro_img {
+    background: image-url("touch/fail@2x.png") no-repeat center, #fcfcfc;
+    background-size: 20px 20px
+  }
+
+  .sprites {
+    background-image: image-url("touch/sprites@2x.png")
+  }
+
+  .sprite_icos {
+    background-image: image-url("touch/new_sprite@2x.png")
+  }
+
+  .go_pic {
+    background-image: image-url("touch/go_pic@2x.png")
+  }
+
+  .font_pic {
+    background-image: image-url("touch/font_pic@2x.png")
+  }
+
+  .wechat_share_font {
+    background-image: image-url("touch/wechat_share_font_pic@2x.png")
+  }
+}

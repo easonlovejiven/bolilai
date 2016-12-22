@@ -1,0 +1,111 @@
+<!-- 调用页面主体 -->
+<script type="text/javascript">
+    if (typeof views != 'undefined') {
+        views.category_style();
+        views.new_style();
+        views.recommend_list();
+        views.slide_style(<%= data['covers'].size %>);
+    }
+</script>
+<div class="main" id="main">
+  <div>
+    <!-- 轮换图浮层 -->
+    <div class="home_turn turn_height turn_width border_1px widget" data-widget-id="sliders_<%=page.id%>">
+      <div class="clear_fix turn_scroll_width turn_height">
+        <% data['covers'].each do |c| %>
+            <a class="pro_img img_wrap turn_height turn_width " data-href="<%= c["url"] %>">
+              <img class="turn_height turn_width" data-src="<%= c["pic"] %>">
+
+              <div class="down_shadow"></div>
+            </a>
+        <% end %>
+      </div>
+      <ul class="turn_points">
+        <% data['covers'].size.times do |i| %>
+            <li class=""></li>
+        <% end %>
+      </ul>
+    </div>
+
+    <!--首页新品/特惠/品牌-->
+    <div class="navs btn_zone border_1px widget" data-widget-id="navs_<%=page.id%>">
+      <% data["navs"].each do |n| %>
+          <div class="new_btn  box_sizing outer_border" data-href="<%= n["url"] %>">
+            <% if !n['pic'].blank? %>
+                <span class="icon"><%= image_tag n["pic"] %></span>
+            <% end %>
+            <%= n["name"] %>
+            <div class="down_shadow"></div>
+          </div>
+      <% end %>
+    </div>
+    <div class="border_1px magrin"></div>
+    <div class="border_1px home_cate widget" data-widget-id="categories_<%=page.id%>">
+      <h1 class="inner_border"><span class="vl"></span>产品分类</h1>
+      <% data["categories"].each do |c| %>
+          <div class="cate left inner_border box_sizing" data-href="<%= c["url"] %>">
+            <img class="img" src="" data-src="<%= c["pic"] %>"/>
+
+            <div class="down_shadow"></div>
+          </div>
+      <% end %>
+    </div>
+    <div class="border_1px magrin"></div>
+    <!-- 今日新品 -->
+    <% product_news=data["products_section2"] %>
+    <div class="border_1px home_new clear_fix widget" data-widget-id="tops_<%=page.id%>">
+      <h1 class="inner_border"><span class="vl"></span><%= product_news["title"] %>
+        <!--<div class="enter_more right" data-href="<%#= product_news['url'] %>">-->
+        <!--<span class="sprites">-->
+        <!--<em class="down_shadow"></em>-->
+        <!--</span>-->
+        <!--</div>-->
+      </h1>
+      <% product_news["images"].each_with_index do |p, index| %>
+          <div class="pro_img img_wrap  inner_border index_<%= index %>" data-href="<%= p["url"] %>">
+            <img data-src="<%= p["pic"] %>" data-big-src="" data-small-src="">
+
+            <div class="down_shadow"></div>
+          </div>
+      <% end %>
+    </div>
+    <div class="border_1px magrin"></div>
+    <!--首页商品-->
+    <div class="border_1px home_recommend widget" data-widget-id="recommends_<%=page.id%>">
+      <h1 class="inner_border"><span class="vl"></span><%= data['products_section1']['title'] %></h1>
+
+      <div class="recommend_list">
+        <% data['products_section1']['products'].each do |p| %>
+            <% product = Shop::Product.where(id: p['id']).first_or_initialize
+               p["title"] = (p["title"] || product.name).to_s[0..12]
+               p['pic'] = p['pic'] || product.major_image.url(:cover400)
+               p['url'] = p['url'] || product_path(product)
+               p['discount'] = p['discount'] || product.discount
+            %>
+            <div class="btn-div item" data-href="<%= product_path(p["id"]) %>">
+              <%= image_tag "", "data-src" => "#{p['pic']}" %>
+              <span class="summary"><span></span><%= p["title"] %></span>
+
+              <p class="del">￥<%= p['discount'] %></p>
+
+              <div class="down_shadow"></div>
+            </div>
+        <% end %>
+      </div>
+    </div>
+    <!-- 首页底部 -->
+    <footer>
+      <h3 data-href="tel:400-6915-695">客服电话：400-6915-695</h3>
+
+      <div class="box_flex widget footer" data-widget-id="footer_<%=page.id%>">
+        <% (data["footer"]||[]).each do |p| %>
+            <div class="to_page" data-href="<%= p["url"] %>">
+              <span class="border_1px"><%= p["name"] %></span>
+              <span class="down_shadow"></span>
+            </div>
+        <% end %>
+      </div>
+    </footer>
+  </div>
+</div>
+<%=render :partial => 'admin/custom_page/pages/series_preview', :locals => { :data => data,:page=>page }%>

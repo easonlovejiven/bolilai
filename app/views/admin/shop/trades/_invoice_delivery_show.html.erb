@@ -1,0 +1,17 @@
+<% case trade.invoice_delivery_service
+when *%w[fedex zjs sf] %>
+	<%# if @current_user.can_show_trade? %>
+		<a href="<%= invoice_delivery_query_admin_shop_trade_path(trade) %>" data-target="rightPanel" class="express_icon express-<%= trade.invoice_delivery_service %>">
+			<div class='tips_text'><span><%= {'fedex' => '联邦快递', 'zjs' => '宅急送', 'sf' => '顺丰速运'}[trade.invoice_delivery_service] %> <%= trade.invoice_delivery_identifier %></span><i class='icon'></i></div>
+		</a>
+	<%# end %>
+
+<% when 'ems' %>
+	<span class="express_icon express-ems"><div class="tips_text"><span>邮政EMS <%= trade.invoice_delivery_identifier %></span><i class="icon"></i></div></span>
+<% when 'offline' %>
+	<span class="express_icon express-offline"><div class="tips_text"><span>线下</span><i class="icon"></i></div></span>
+<% when 'pickup' %>
+	<span class="express_icon express-pickup"><div class="tips_text"><span>自取</span><i class="icon"></i></div></span>
+<% else %>
+	<%= h trade.invoice_delivery_service %>
+<% end %>

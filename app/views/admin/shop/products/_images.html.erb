@@ -1,0 +1,54 @@
+<% (@product.images.order('COALESCE(sequence, 1000000) ASC, id ASC').select(&:id)+(params[:action] != 'show' ? (1..10).map { Shop::Image.new } : [])).each_with_index do |image, i| %>
+    <div id="image_<%= image.id %>" style="min-height: 105px; _height: 105px; margin-bottom: 5px; border-bottom: 2px solid white;">
+      <%= f.fields_for :images, image do |m| %>
+          <% if !image.new_record? %>
+              ＩＤ：<%= image.id %>
+              时间：<%= image.created_at && image.created_at.to_s(:db) %>
+          <% end %>
+
+          <br/>大图：
+          <span style="position: relative; vertical-align: top;　font-size: 0;"><%= link_to image_tag(image.large && "#{image.large}.medium.jpg" || "/assets/manage/blank.png", :alt => "", :style => "position: absolute; left: 600px; top: -20px; width: 100px; height: 100px;"), image_path(image.large || "/assets/manage/blank.png"), :id => "product_images_attributes_#{i}_large_preview", "data-target" => "rightPanel" %></span>
+          <% if params[:action] != 'show' %>
+              <%= m.file_field :large %>（1000x1000）
+              <%= m.hidden_field :large, :value => "", :disabled => true, :id => "product_images_attributes_#{i}_large_secondary" %>
+              <%= check_box_tag "product_images_attributes_#{i}_large_delete", '1', false, :onchange => "$('#product_images_attributes_#{i}_large_secondary').attr('disabled', !$(this).attr('checked'));" %>
+              <%= label_tag "product_images_attributes_#{i}_large_delete", '删除' %>
+          <% end %>
+
+          <br/>描述：
+          <% if params[:action] != 'show' %>
+              <%= m.text_area :description, :style => "width:545px;height:36px;" %>
+          <% else %>
+              <%= h image.description %>
+          <% end %>
+
+          <br/>顺序：
+          <% if params[:action] != 'show' %>
+              <%= m.text_field :sequence, size: 4 %>
+          <% else %>
+              <%= h image.sequence %>
+          <% end %>
+
+          <% if !image.new_record? %>
+              封页：
+              <% if params[:action] != 'show' %>
+                  <%= f.radio_button :image_id, image.id %>
+              <% else %>
+                  <%= @product.image_id == image.id ? '✔' : '✘' %>
+              <% end %>
+          <% end %>
+
+          <% if !image.new_record? && params[:action] != 'show' %>
+              操作：<%= link_to_remote "删除", :url => admin_shop_image_path(image), :method => :delete, :confirm => "确定删除吗？", :success => "$('#image_#{image.id}').html('');" %>
+          <% end %>
+      <% end %>
+    </div>
+<% end %>
+
+<% if params[:action] != 'show' %>
+    <!--[if !IE]><!-->
+    <div style="margin: 20px 0;">
+      批量上传：<input name="product_images_large_files[]" type="file" multiple="multiple"/>
+    </div>
+    <!--<![endif]-->
+<% end %>

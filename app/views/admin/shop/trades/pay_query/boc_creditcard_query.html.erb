@@ -1,0 +1,27 @@
+<h2>查看中国银行快捷支付付款</h2>
+
+<table class="form-table">
+	<tbody>
+
+		<tr class="form-field form-required">
+			<th scope="row">ID</th>
+			<td><%= @trade.id %></td>
+		</tr>
+	
+		<tr class="form-field form-required">
+			<th scope="row">状态</th>
+			<td><%= @result.css("status").text if @result %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">商户流水号</th>
+			<td><%= @result.css("serialno").text if @result %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">商户号</th>
+			<td><%= @result.css("masterid").text if @result %></td>
+		</tr>
+		
+	</tbody>
+</table>

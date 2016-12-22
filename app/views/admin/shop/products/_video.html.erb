@@ -1,0 +1,57 @@
+<% (@product.videos.scoped(:order => 'id ASC').select(&:id)+(params[:action] != 'show' ? (1..1).map{ Shop::Video.new } : [])).each_with_index do |video, i| %>
+    <div id="video_<%= video.id %>" class="<%= "video_new" if video.new_record? %>">
+      <%= f.fields_for :videos, video do |m| %>
+          <% if !video.new_record? %>
+              ＩＤ：<%= video.id %>
+              时间：<%= video.created_at && video.created_at.to_s(:db) %>
+          <% end %>
+
+          <br />MP4：
+          <% if params[:action] != 'show' %>
+              <%= m.file_field :mp4 %>
+              <%= m.hidden_field :mp4, :value => "", :disabled => true, :id => "product_videos_attributes_#{i}_mp4_secondary" %>
+              <%= check_box_tag "product_videos_attributes_#{i}_mp4_delete", '1', false, :onchange => "$('#product_videos_attributes_#{i}_mp4_secondary').attr('disabled', !$(this).attr('checked'));" %>
+              <%= label_tag "product_videos_attributes_#{i}_mp4_delete", '删除' %>
+              <br />　　　　
+          <% end %>
+          <%= link_to video.mp4, image_path(video.mp4), :onclick => "$.facebox($(this).next().text());return false;" if video.mp4 %>
+          <textarea style="display:none;"><%= render :partial => "admin/shop/shared/multimedia", :object => video.mp4 unless video.mp4.blank? %></textarea>
+
+          <br />SWF：
+          <% if params[:action] != 'show' %>
+              <%= m.file_field :swf %>
+              <%= m.hidden_field :swf, :value => "", :disabled => true, :id => "product_videos_attributes_#{i}_swf_secondary" %>
+              <%= check_box_tag "product_videos_attributes_#{i}_swf_delete", '1', false, :onchange => "$('#product_videos_attributes_#{i}_swf_secondary').attr('disabled', !$(this).attr('checked'));" %>
+              <%= label_tag "product_videos_attributes_#{i}_swf_delete", '删除' %>
+              <br />　　　　
+          <% end %>
+          <%= link_to video.swf, image_path(video.swf), :onclick => "$.facebox($(this).next().text());return false;" if video.swf %>
+          <textarea style="display:none;"><%= render :partial => "admin/shop/shared/multimedia", :object => video.swf unless video.swf.blank? %></textarea>
+
+          <br />高清：
+          <% if params[:action] != 'show' %>
+              <%= m.file_field :hd %>
+              <%= m.hidden_field :hd, :value => "", :disabled => true, :id => "product_videos_attributes_#{i}_hd_secondary" %>
+              <%= check_box_tag "product_videos_attributes_#{i}_hd_delete", '1', false, :onchange => "$('#product_videos_attributes_#{i}_hd_secondary').attr('disabled', !$(this).attr('checked'));" %>
+              <%= label_tag "product_videos_attributes_#{i}_hd_delete", '删除' %>
+              <br />　　　　
+          <% end %>
+          <%= link_to video.hd, image_path(video.hd), :onclick => "$.facebox($(this).next().text());return false;" if video.hd %>
+          <textarea style="display:none;"><%= render :partial => "admin/shop/shared/multimedia", :object => video.hd unless video.hd.blank? %></textarea>
+
+          <br/>封页：
+          <% if params[:action] != 'show' %>
+              <%= f.radio_button :video_id, video.id %>
+          <% else %>
+              <%= @product.video_id == video.id ? '✔' : '✘' %>
+          <% end %>
+
+
+          <% if !video.new_record? && params[:action] != 'show' %>
+              操作：<%= link_to_remote "删除", :url => admin_shop_video_path(video), :method => :delete, :confirm => "确定删除吗？", :success => "$('#video_#{video.id}').html('');" %>
+          <% end %>
+      <% end %>
+
+      <br /><hr style="border:1px solid white;" />
+    </div>
+<% end %>

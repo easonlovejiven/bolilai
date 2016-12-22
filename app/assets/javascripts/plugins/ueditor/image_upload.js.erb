@@ -1,0 +1,133 @@
+var editorUploader;
+var ueditorImagePanel = jQuery('<div class="editor_upload_panel">' +
+        '<a class="btn btn-success editor_upload_files" href="#">' +
+        '<i class="fa fa-upload"></i><sapn>上传图片</sapn></a>' +
+        '<span class="editor_upload_status"></span>' +
+        '<div class="help-info">支持jpg、jpeg、png、gif格式,最大15M图片</div></div>');
+
+function init_image_upload(editor, dialog) {
+    var dialog_id = "editor_upload_panel_image_" + editor.uid;
+    var upload_btn_id = 'editor_upload_files_image_' + editor.uid;
+    var statusTip = $("#" + dialog_id + " .editor_upload_status");
+    editorUploader = Qiniu().uploader({
+        runtimes: 'html5,flash,html4',
+        browse_button: upload_btn_id,
+        container: dialog_id,
+        drop_element: dialog_id,
+        max_file_size: '4mb',
+        flash_swf_url: '/Moxie.swf',
+        max_retries: 3,
+        dragdrop: true,
+        chunk_size: '4mb',
+        uptoken_url: '/uploads/uptoken',
+        domain: "http://<%=Rails.application.secrets[:qiniu_weimall_domain]%>/",
+        auto_start: true,
+        multi_selection: true,
+        filters: [
+            {title: "Image files", extensions: "jpg,gif,png,jpeg"}
+        ],
+        init: {
+            'FilesAdded': function (up, files) {
+                var max_files = 10;
+                plupload.each(files, function (file, i) {
+                    if (i >= max_files) {
+                        up.removeFile(file);
+                        statusTip.text("每次最多支持" + max_files + "个图片上传！");
+                    }
+                });
+                up.refresh();
+            },
+            'BeforeUpload': function (up, file) {
+                var i = up.files.indexOf(file) + 1;
+                statusTip.text("等待上传第" + i + "张图片...");
+            },
+            'UploadProgress': function (up, file) {
+                var percentage = file.percent;
+                percentage = parseInt(percentage, 10);
+                if (file.status !== plupload.DONE && percentage === 100) {
+                    percentage = 99;
+                }
+                var i = up.files.indexOf(file) + 1;
+                statusTip.text("正在上传第" + i + "张：" + percentage + "%");
+            },
+            'FileUploaded': function (up, file, info) {
+                var data = $.parseJSON(info);
+                var key = data.key.replace("uploads/", "");
+                $.post("/uploads.json", {
+                    "upload[file_key]": key,
+                    'upload[file_name]': file.name,
+                    'upload[file_type]': file.type,
+                    'upload[file_size]': file.size || 0
+                }, function (data) {
+                    var res = $.parseJSON(info);
+                    var domain = up.getOption('domain');
+                    //** 返回url **//
+                    var url = domain + encodeURI(res.key) + '-content';
+                    editor.execCommand('insertimage', {src: url});
+                })
+            },
+            'UploadComplete': function (up, files) {
+                statusTip.text("图片上传成功！ ");
+                dialog.close(true);
+            },
+            'Error': function (up, err, errTip) {
+                if (err.code == -600) {
+                    statusTip.text("图片不得大于4M,上传失败!");
+                } else {
+                    statusTip.text("上传失败!");
+                }
+                up.refresh();
+            },
+            'Key': function (up, file) {
+                return "uploads/" + App.guid() + ".jpg";
+            }
+        }
+    })
+}
+
+UE.registerUI('uploadimagedialog', function (editor, uiName) {
+    ueditorImagePanel.attr("id", "editor_upload_panel_image_" + editor.uid);
+    ueditorImagePanel.find(".editor_upload_files").attr("id", "editor_upload_files_image_" + editor.uid);
+    //创建dialog
+    var dialog = new UE.ui.Dialog({
+        //指定弹出层中页面的路径，这里只能支持页面,因为跟addCustomizeDialog.js相同目录，所以无需加路径
+//        iframeUrl:'customizeDialogPage.html',
+        content: ueditorImagePanel.get(0).outerHTML,
+        //需要指定当前的编辑器实例
+        editor: editor,
+        //指定dialog的名字
+        name: uiName,
+        //dialog的标题
+        title: "上传图片",
+        //指定dialog的外围样式
+        cssRules: "width:300px;height:100px;",
+        onclose: function () {
+            editorUploader.stop();
+        },
+        //如果给出了buttons就代表dialog有确定和取消
+        buttons: [
+            {
+                className: 'edui-cancelbutton',
+                label: '取消',
+                onclick: function () {
+                    dialog.close(false);
+                    editorUploader.stop();
+                }
+            }
+        ]
+    });
+
+    //参考addCustomizeButton.js
+    return new UE.ui.Button({
+        name: uiName + "button",
+        title: "上传图片",
+        //需要添加的额外样式，指定icon图标，这里默认使用一个重复的icon
+        cssRules: 'background-position: -380px 0;',
+        onclick: function () {
+            //渲染dialog
+            dialog.render();
+            dialog.open();
+            init_image_upload(editor, dialog);
+        }
+    });
+}, 28);

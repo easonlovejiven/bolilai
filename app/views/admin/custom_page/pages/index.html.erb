@@ -1,0 +1,94 @@
+<section>
+  <div class="row">
+    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="jarviswidget">
+        <header>
+          <span class="widget-icon">
+            <i class="fa fa-table"></i>
+          </span>
+
+          <h2>页面列表</h2>
+
+          <div class="widget-toolbar">
+            <%= link_to raw('<i class="fa fa-plus-circle"></i> 创建'), new_admin_page_path, class: 'btn btn-xs btn-default',"data-target" => "rightPanel" if can?(:create, CustomPage::Page) %>
+            <%= link_to raw('删除'), batch_delete_admin_pages_path,"data-href"=>"#{batch_delete_admin_pages_path}","data-target" => "rightPanel",class: 'btn btn-xs btn-default batch_delete' if can?(:destroy, CustomPage::Page.new) %>
+            <%= link_to '定制', customizer_admin_pages_path, :remote => true, class: "btn btn-xs btn-default" if can?(:create, CustomPage::Page) %>
+          </div>
+        </header>
+        <div>
+          <div class="widget-body-toolbar">
+            <%= form_tag request.path, :method => "get", :id => "search_form", class: 'form-inline' do %>
+                <%= render 'admin/shared/search/basic', field: 'id', kv: search_field_kv(:id), size: 4 %>
+                <%= render 'admin/shared/search/basic', field: 'name', kv: search_field_kv(:name, :like) %>
+                <%= render 'admin/shared/search/basic', field: 'series', kv: search_field_kv(:series) %>
+                <%= render 'admin/shared/search/select', field: 'position', kv: search_field_kv(:position), options: CustomPage::Page::POSITIONS.map { |p| [p[:name], p[:value]] } %>
+                <%= render 'admin/shared/search/select', field: 'tmpl', kv: search_field_kv(:tmpl), options:[["普通页面",0],["模板页面",1]]%>
+                <%= render 'admin/shared/search/basic', field: 'title', kv: search_field_kv(:title, :like) %>
+                <%= render 'admin/shared/search/select', field: 'engine', kv: search_field_kv(:engine), options: CustomPage::Page::ENGINES %>
+                <%= render 'admin/shared/search/range', field: 'created_at', class_names: 'hasDatepicker' %>
+                <%= render 'admin/shared/search/select', field: 'published', kv: search_field_kv(:published), options: [['✔', 'true'], ['✘', 'false']] %>
+                <%= render 'admin/shared/search/basic', field: 'editor_id', kv: search_field_kv(:editor_id), size: 4 %>
+                <%= render 'admin/shared/search/order' %>
+                <%= render 'admin/shared/search/page' %>
+                <%= submit_tag t(:search), :name => nil, class: 'btn search-xs btn-success' %>
+                <%= link_to t(:reset), request.path, class: 'btn search-xs btn-default', data: {remote: true} %>
+            <% end %>
+          </div>
+          <div class="widget-body no-padding">
+            <div class="table-responsive">
+              <table class="table table-striped table-hover">
+                <thead>
+                <tr class="heading">
+                  <th id="checkall"><input type="checkbox"/></th>
+                  <% %w[ID 名称 快照 系列 位置 标题 引擎 创建时间 操作 发布].each do |name| %>
+                      <th>
+                        <%= name %>
+                      </th>
+                  <% end %>
+                </tr>
+                </thead>
+                <tbody>
+                <% @pages.each do |page| %>
+                    <tr>
+                      <td class="check"><input id="<%= page.id %>" type="checkbox"/></td>
+                      <td>
+                        <%= link_to page.id, 'where[id]' => page.id %>
+                      </td>
+                      <td><%= page.name %></td>
+                      <td><%= link_to image_tag(page.snapshot_image.url(:thumb), :style => "max-width: 64px; max-height: 128px;"), image_path(page.snapshot.to_s),href: "#{page.snapshot_image.url(:content)}", "data-target" => 'rightPanel' if page.snapshot %>
+                      </td>
+                      <td></td>
+                      <td>
+                        <%= CustomPage::Page::POSITIONS.map { |p| {p[:value] => p[:name]} }.inject(&:merge)[page.position] %>
+                      </td>
+                      <td></td>
+                      <td>
+                        <%= page.engine %>
+                      </td>
+                      <td>
+                        <%= page.created_at && page.created_at.to_s(:db) %>
+                      </td>
+                      <td>
+                        <%= link_to '查看', admin_page_path(page), "data-target" => "rightPanel", class: 'btn btn-xs btn-success' if can?(:show, page) %>
+                        <%= link_to '编辑', edit_admin_page_path(page), "data-target" => "rightPanel", class: 'btn btn-xs btn-success' if can?(:update, page) %>
+                        <%= link_to '删除', delete_admin_page_path(page),"data-target" => "rightPanel", class: 'btn btn-xs btn-success' if can?(:destroy, page) %>
+                        <%= link_to '预览', preview_admin_page_path(page), class: 'btn btn-xs btn-success', target: "_blank" if can?(:show, page) %>
+                        <%= link_to '快照', snapshoot_admin_page_path(page), class: 'btn btn-xs btn-success', "data-confirm "=> "确定吗？", :method => :put if can?(:show, page) %>
+                        <%= link_to '刷新', clear_admin_shop_products_path('urls' => [page_path(page)]), :method => :post, class: 'btn btn-xs btn-success' if can?(:update, page) %>
+                        <%= link_to '访问', page_path(page), class: 'btn btn-xs btn-success', target: "_blank" if can?(:show, page) %>
+                      </td>
+                      <td><%= render :partial => "admin/shared/publish", :object => page %></td>
+                    </tr>
+                <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="dt-toolbar-footer">
+            <%= render "admin/shared/pagination", object: @pages %>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>

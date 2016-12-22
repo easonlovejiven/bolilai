@@ -1,0 +1,273 @@
+@charset "utf-8";
+form.weimall_form label{
+	margin-top:4px;
+	margin-right: 8px;
+	display: block;
+	float:left;
+	width:70px;
+	color:#444;
+}
+form.weimall_form div.rowElem,form.jqtransformdone li{
+	clear:both;
+	padding:4px 0px;
+	padding-bottom:0;
+	*padding-top:2px;
+}
+form.weimall_form .jqTransformSelectWrapper li { display: block; padding: 0; *padding-top: 0px; height: 25px; overflow: hidden; border-left: 1px solid #CCC\9; border-right: 1px solid #CCC\9; }
+
+/* -------------
+ * Buttons
+ * ------------- */
+.weimall_form .jqTransformButton {
+	margin: 0px;
+	padding: 0px;
+	border: none;
+	background-color: transparent;
+	cursor: pointer;
+	overflow: visible;
+	vertical-align:middle;
+
+	height:25px;
+}
+
+*:first-child+html .weimall_form .jqTransformButton[type]{width: 1;} /* IE7 */
+
+.weimall_form .jqTransformButton span {
+	background: transparent url(/themes/purple/images/common/jqtransform/button_right.gif?0312) no-repeat right top;
+	display: block;
+	float: left;
+	padding: 0px 5px 0px 0px; /* sliding doors padding */
+	margin: 0px;
+	height: 25px;
+}
+
+.weimall_form .jqTransformButton span span {
+	background: transparent url(/themes/purple/images/common/jqtransform/button_left.gif?0312) no-repeat top left;
+	color: #fff;
+	padding: 6px 12px 7px 17px;
+	/*padding-top:7px\0;*/
+	font-weight: normal;
+	font-size: 12px;
+	line-height: 12px;
+	display: block;
+	text-decoration: none;
+	height: 12px;
+}
+
+/*hover*/
+/*button.jqTransformButton_hover span span { background-position: left -33px ; }
+button.jqTransformButton_hover span { background-position: right -33px ; }
+
+/*clicked*/
+/*button.jqTransformButton_click span span { background-position: left -66px ; }
+button.jqTransformButton_click span { background-position: right -66px ; }
+
+/* IE 6 */
+* html .weimall_form .jqTransformButton { height:25px; }
+* .weimall_form .jqTransformButton span span { height: 12px; }
+/* IE 7 */
+*+ html .weimall_form .jqTransformButton { height:25px; }
+*+ .weimall_form .jqTransformButton span span { height: 12px; }
+
+
+/* -------------
+ * Inputs
+ * ------------- */
+.weimall_form .jqTransformInputWrapper {
+	background: transparent url(/themes/purple/images/common/jqtransform/input_text_right.png?0312) no-repeat right top;
+	_background: transparent url(/themes/purple/images/common/jqtransform/input_text_right.gif?0312) no-repeat right top;
+	height: 24px;
+	padding: 0px;
+	float:left;
+	margin-right:10px;
+	padding-right:4px;
+}
+
+.weimall_form .jqTransformInputInner {
+	background: transparent url(/themes/purple/images/common/jqtransform/input_text_left.png?0312) no-repeat top left;
+	_background: transparent url(/themes/purple/images/common/jqtransform/input_text_left.gif?0312) no-repeat top left;
+	padding: 0px;
+	margin: 0px;
+	*overflow: hidden;
+}
+
+.weimall_form .jqTransformInputInner div {
+	height: 24px;
+	margin:0px 0px 0px 8px;
+	*margin-left:10px;
+	overflow:hidden;
+}
+
+.weimall_form .jqTransformInputInner div input {
+	font-size:12px;
+	line-height: 10px;
+
+	vertical-align: middle;
+	height: 21px;
+	/*color:#404040;*/
+	border: none;
+	padding: 0px;
+	margin: 0px;
+	background:transparent;
+	 color: #000;
+}
+@media \0screen {
+	body .feedbackbox .weimall_form table.jqTransformTextarea textarea,
+	body .notifybox .weimall_form table.jqTransformTextarea textarea,
+	.weimall_form table.jqTransformTextarea textarea,
+	.weimall_form .jqTransformInputInner div input { background: url("/themes/purple/images/common/jqtransform/input_bg_ie8.gif") repeat 0 0; cursor: text;}
+}
+.weimall_form .jqTransformInputInner div input:-moz-placeholder { color: #666; }
+.weimall_form .jqTransformInputInner div input::-webkit-input-placeholder { color:#666; padding-top: 3px; }
+
+/*  IE6 */
+* html .weimall_form .jqTransformInputInner div input {
+	padding: 5px 0 0 0;
+	margin: 0 0 0 -8px;
+	height:24px;
+}
+/* Ie7 */
+*+ html .weimall_form .jqTransformInputInner div input {
+	padding: 6px 0 0 0;
+	margin-left:-10px;
+	height:24px;
+}
+
+/*focus*/
+.weimall_form .jqTransformInputWrapper_focus{ background-position: right -24px ;}
+.weimall_form .jqTransformInputWrapper_focus div.jqTransformInputInner{ background-position: left -24px ; }
+/*
+.jqTransformInputWrapper_focus div.jqTransformInputInner div input{color:#000;}
+*/
+
+.weimall_form .jqTransformSafari .jqTransformInputInner div {
+	position: relative;
+	overflow: hidden;
+	margin:0px 8px;
+}
+.weimall_form .jqTransformSafari .jqTransformInputInner div input {
+	background-color: none;
+	/*position: absolute;
+	top: -10px;
+	left: -2px;
+	height: 42px;
+	padding-left: 4px;*/
+}
+
+/*ÊäÈë¿òdisabledÑùÊ½*/
+.weimall_form .jqTransformInputWrapper_disabled { background: transparent url(/themes/purple/images/common/jqtransform/no_checked_inputright.gif?0312) no-repeat top right; }
+.weimall_form .jqTransformInputWrapper_disabled div.jqTransformInputInner { background: transparent url(/themes/purple/images/common/jqtransform/no_checked_inputleft.gif?0312) no-repeat top left;}
+.weimall_form .jqTransformInputWrapper_disabled div.jqTransformInputInner div input {color:#A6A39A;}
+
+
+
+/* -------------
+ * Textarea
+ * ------------- */
+
+.weimall_form table.jqTransformTextarea td#jqTransformTextarea-mm textarea { font-size: 12px; line-height:1.5em; color: #000;}
+
+/* -------------
+ * Radios
+ * ------------- */
+.weimall_form .jqTransformRadioWrapper {float: left;display:block;margin:0px 4px;_margin-left:2px;margin-top:5px;margin-right:10px;}
+.weimall_form .jqTransformRadio {
+	background: transparent url(/themes/purple/images/common/jqtransform/radio.png?0312) no-repeat center top;
+	_background: transparent url(/themes/purple/images/common/jqtransform/radio.gif?0525) no-repeat center top;
+	vertical-align: middle;
+	height: 16px;
+	width: 16px;
+	display:block;/*display: -moz-inline-block;*/
+	_overflow: hidden;
+}
+
+.weimall_form .jqTransformRadio:hover{}
+/* 2012-12-02
+.loginbox .jqTransformRadio:hover,
+.cartbox .jqTransformRadio:hover{ opacity:0.8; filter:alpha(opacity=80);}*/
+/* -------------
+ * Checkboxes
+ * ------------- */
+.weimall_form span.jqTransformCheckboxWrapper{
+	display:block;float:left;
+	margin-top:5px;
+	margin-top:2px\0;
+	*margin-top:5px;
+	_margin-top:2px;
+	margin-right:6px;
+}
+.weimall_form a.jqTransformCheckbox,
+.weimall_form a.jqTransformCheckbox_disbled{
+	background: transparent url(/themes/purple/images/common/jqtransform/checkbox.png?0312) no-repeat center top;
+	_background: transparent url(/themes/purple/images/common/jqtransform/checkbox.gif?0312) no-repeat center top;
+	vertical-align: middle;
+	height: 16px;
+	width: 16px;
+	display:block;/*display: -moz-inline-block;*/
+	_overflow: hidden;
+}
+.weimall_form a.jqTransformCheckbox:hover { opacity:0.7; filter:alpha(opacity=70); }
+/* -------------
+ * Checked - Used for both Radio and Checkbox
+ * ------------- */
+.weimall_form a.jqTransformChecked { background-position: center bottom;  _background-position: center -18px;}
+/*checkbox disabled*/
+.weimall_form a.jqTransformCheckbox_disabled { background:url(/themes/purple/images/common/jqtransform/disabled_checkbox.gif?0312) no-repeat center top;}
+
+
+/* -------------
+ * Selects
+ * ------------- */
+
+/* -------------
+ * Hidden - used to hide the original form elements
+ * ------------- */
+.weimall_form .jqTransformHidden { display: none;}
+.msn .weimall_form .jqTransformSelectWrapper ,
+.msn .weimall_form .jqTransformSelectWrapper_disabled { background-image: url(/themes/purple/images/common/msnform/select_left.jpg?0312);}
+.msn .weimall_form .jqTransformSelectWrapper a.jqTransformSelectOpen,
+.msn .weimall_form .jqTransformSelectWrapper a.jqTransformSelectOpenClick { background-image: url(/themes/purple/images/common/msnform/select_rightnormal.jpg?0312);}
+
+
+.msn .weimall_form .jqTransformInputWrapper { background-image: url(/themes/purple/images/common/msnform/input_text_right.jpg?0312);}
+.msn .weimall_form .jqTransformInputInner { background-image: url(/themes/purple/images/common/msnform/input_text_left.jpg?0312);}
+
+.msn .weimall_form .jqTransformInputWrapper_disabled { background: transparent url(/themes/purple/images/common/msnform/no_checked_inputright.gif?0312) no-repeat top right; }
+.msn .weimall_form .jqTransformInputWrapper_disabled div.jqTransformInputInner { background: transparent url(/themes/purple/images/common/msnform/no_checked_inputleft.gif?0312) no-repeat top left;}
+
+
+.msn .weimall_form a.jqTransformCheckbox { background-image: url(/themes/purple/images/common/msnform/checkbox.jpg?0312000);}
+.msn .weimall_form a.jqTransformCheckbox_disbled { background-image: url(/themes/purple/images/common/msnform/disabled_checkbox.jpg?0312);}
+
+.msn .weimall_form .jqTransformRadio { background-image: url(/themes/purple/images/common/msnform/radio.jpg?0312);}
+.msn .weimall_form .jqTransformSelectWrapper ul { border-bottom: 1px solid #CCC; border-radius:0px; -moz-border-radius:0px; -webkit-border-radius:0px; box-shadow:none; -moz-box-shadow:none; -webkit-box-shadow:none;}
+.msn form.weimall_form .jqTransformSelectWrapper li { border-left: 1px solid #CCC; border-right: 1px solid #CCC; }
+/*
+.jqTransformInputWrapper_disabled,*/
+.weimall_form .jqTransformRadioWrapper_disabled,
+.weimall_form .jqTransformCheckboxWrapper_disabled,
+.weimall_form .jqTransformSelectWrapper_disabled,
+.weimall_form .jqTransformTextarea_disabled { opacity: 0.5; }
+
+.no_popup { padding:30px;}
+.no_popup .feedbackbox .closelog,
+.no_popup .HelpBox .closelog,
+.no_popup .notifybox .closelog,
+.no_popup .logsigbox .closelog ,
+.msn .no_popup .logsigbox .closelog { display:none;}
+.no_popup .HelpBox ,
+.no_popup .notifybox { box-shadow:none; -moz-box-shadow:none; -webkit-box-shadow:none;}
+
+.no_popup .logsigbox ,
+.msn .no_popup .logsigbox,
+.msn .no_popup .logsigbox .box_cont,
+.no_popup .logsigbox .box_cont { background:none; border:0px; box-shadow:none; -moz-box-shadow:none; -webkit-box-shadow:none; -o-box-shadow:none;}
+.no_popup .logsigbox .pop_center,
+.no_popup .logsigbox .pop_right,
+.no_popup .logsigbox .pop_left { display:none;}
+
+.no_popup .feedbackbox .pop_left ,
+.no_popup .feedbackbox .pop_right ,
+.no_popup .feedbackbox .pop_center { display:none;}
+
+

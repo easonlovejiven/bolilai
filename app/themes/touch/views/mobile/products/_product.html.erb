@@ -1,0 +1,15 @@
+<div class="pro_width <%= (index+1).even? ? "right" : "left" %>  product id_<%= index+1 %>" data-href="/products/<%= product.id %>">
+  <div class="wrap_110 img_wrap pro_img pro_width pro_height loaded">
+    <% if !product.label.blank? %>
+        <div class="xgzy"><%= product.label %></div>
+    <% end %>
+    <img class="pro_width pro_height" data-src="<%= product.major_image.url(:thumb220) %>" src="<%= product.major_image.url(:thumb220) %>">
+  </div>
+  <p class="products_name ellipsis pro_width"><%= product.name %></p>
+  <span class="products_price  clear_fix pro_width">￥<%= product.discount %>
+    <em class="ele_logo"></em></span>
+
+  <p class="pro_prefix pro_width ellipsis"></p><em>91791</em>
+
+  <div class="down_shadow"></div>
+</div>

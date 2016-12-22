@@ -1,0 +1,467 @@
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (min--moz-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2) {
+  div.logo {
+    background-image: image-url("touch/logo@2x.png")
+  }
+
+  .msdlogo {
+    background-image: image-url("touch/msdlogo@2x.png")
+  }
+
+  .ele_coupons {
+    background: image-url("touch/tic_enter@2x.jpg") no-repeat;
+    background-size: 100% 100%
+  }
+
+  .exchange_tip {
+    background: image-url("touch/orange_bg@2x.png") repeat;
+    background-size: 10px 126px
+  }
+
+  .tip_ico {
+    background: image-url("touch/tip_ico@2x.png") no-repeat;
+    background-size: 64px 64px
+  }
+
+  .ico {
+    background-image: image-url("touch/uapp_ico@2x.png");
+    background-size: 180px 106px
+  }
+
+  .second_cate_pic.female {
+    /*background-image: image-url("touch/female@2x.jpg")*/
+  }
+
+  .second_cate_pic.male {
+    /*background-image: image-url("touch/male@2x.jpg")*/
+  }
+
+  .second_cate_pic.home {
+    /*background-image: image-url("touch/home@2x.jpg")*/
+  }
+
+  .second_cate_pic.outdoors {
+    /*background-image: image-url("touch/outdoors@2x.jpg")*/
+  }
+
+  .second_cate_pic.china {
+    /*background-image: image-url("touch/china@2x.jpg")*/
+  }
+
+  .search_empty {
+    background: image-url("touch/search_empty@2x.png") center top no-repeat;
+    background-size: 88px 88px
+  }
+
+  .hot_brands {
+    background-image: image-url("touch/brands@2x.png")
+  }
+
+  .fav_empty {
+//    background: image-url("touch/fav_empty@2x.png") center top no-repeat;
+    background-size: 78px 80px
+  }
+
+  .fanship_brand > div {
+    background: image-url("touch/border@2x.png") repeat-y left, image-url("touch/border@2x.png") repeat-y right;
+    background-size: 16px 14px
+  }
+
+  .left_head {
+    background: image-url("touch/left_head@2x.png") no-repeat;
+    background-size: 40px 46px
+  }
+
+  .right_head {
+    background: image-url("touch/right_head@2x.png") no-repeat;
+    background-size: 40px 46px
+  }
+
+  .co_title {
+    background: image-url("touch/co_title@2x.png") no-repeat;
+    background-size: 136px 40px
+  }
+
+  .banks {
+    background-image: image-url("touch/banks@2x.png")
+  }
+
+  .pay_select.uyuan {
+    background-image: image-url("touch/u_bg@2x.png")
+  }
+
+  .success_txt span {
+    background: image-url("touch/success@2x.png") no-repeat;
+    background-size: 34px 38px
+  }
+
+  .trade_empty {
+    background: image-url("touch/trade_empty@2x.png") center top no-repeat;
+    background-size: 84px 84px
+  }
+
+  .voucher_used, .voucher_outdate {
+    background: image-url("touch/voucher_tag@2x.png") no-repeat 0 0;
+    background-size: 36px 36px
+  }
+
+  .voucher_empty {
+    background: image-url("touch/voucher_empty@2x.png") center top no-repeat;
+    background-size: 80px 66px
+  }
+
+  .main.gift, .feedback_board {
+    background: image-url("touch/msg_bg@2x.png") repeat;
+    background-size: 50px 50px
+  }
+
+  .pvt {
+    background: image-url("touch/pvt@2x.png") no-repeat;
+    background-size: 80px 100px
+  }
+
+  .message_board, .blank_board {
+    background: image-url("touch/card_bg@2x.jpg") repeat;
+    background-size: 50px 50px
+  }
+
+  .board_left {
+    background: image-url("touch/left_side@2x.png") repeat-y;
+    background-size: 52px 96px
+  }
+
+  .board_right {
+    background: image-url("touch/right_side@2x.png") repeat-y;
+    background-size: 44px 130px
+  }
+
+  .board_shadow {
+    background: image-url("touch/board_shadow@2x.png") no-repeat center;
+    background-size: 320px 18px
+  }
+
+  .strip {
+    background: image-url("touch/strip@2x.png") repeat-x;
+    background-size: 126px 8px
+  }
+
+  .roll {
+    background: image-url("touch/roll@2x.png") no-repeat;
+    background-size: 32px 82px
+  }
+
+  .products_board > div {
+    background: image-url("touch/left_ribbon@2x.png") repeat-y left 0, image-url("touch/right_ribbon@2x.png") repeat-y right 0;
+    background-size: 32px 772px
+  }
+
+  .iphone_nexus {
+    background: image-url("touch/iphone_nexus@2x.png") no-repeat;
+    background-size: 168px 214px
+  }
+
+  .ipad_log {
+    background: image-url("touch/ipad@2x.png") no-repeat;
+    background-size: 242px 174px
+  }
+
+  .weixin_rqrcode {
+    background: image-url("touch/weixin_rqrcode@2x.png") 2px no-repeat, #fff;
+    background-size: 86px 86px
+  }
+
+  .step_1 {
+    background: image-url("touch/one@2x.png") center no-repeat;
+    background-size: 320px 236px
+  }
+
+  .step_2 {
+    background: image-url("touch/two@2x.png") center no-repeat;
+    background-size: 320px 236px
+  }
+
+  .step_3 {
+    background: image-url("touch/three@2x.png") center no-repeat;
+    background-size: 320px 236px
+  }
+
+  .step_4 {
+    background: image-url("touch/four@2x.png") center no-repeat;
+    background-size: 320px 236px
+  }
+
+  .step_5 {
+    background: image-url("touch/five@2x.png") center no-repeat;
+    background-size: 320px 236px
+  }
+
+  .step_6 {
+    background: image-url("touch/six@2x.png") center no-repeat;
+    background-size: 320px 236px
+  }
+
+  .step_7 {
+    background: image-url("touch/seven@2x.png") center no-repeat;
+    background-size: 320px 236px
+  }
+
+  .step_8 {
+    background: image-url("touch/eight@2x.png") center no-repeat;
+    background-size: 320px 236px
+  }
+
+  .step_9 {
+    background: image-url("touch/nine@2x.png") center no-repeat;
+    background-size: 320px 236px
+  }
+
+  .step_10 {
+    background: image-url("touch/ten@2x.png") center no-repeat;
+    background-size: 320px 236px
+  }
+
+  .mot {
+    background: image-url("touch/slogan@2x.png");
+    background-size: 240px 42px
+  }
+}
+
+@media only screen and (-webkit-device-pixel-ratio: 1.5), only screen and (-o-device-pixel-ratio: 3/2), only screen and (min--moz-device-pixel-ratio: 1.5), only screen and (device-pixel-ratio: 1.5) {
+  div.logo {
+    background-image: image-url("touch/logo@1.5x.png")
+  }
+  .msdlogo {
+    background-image: image-url("touch/msdlogo@1.5x.png")
+  }
+
+  .ele_coupons {
+    background: image-url("touch/tic_enter@1.5x.jpg") no-repeat;
+    background-size: 100% 100%
+  }
+
+  .exchange_tip {
+    background: image-url("touch/orange_bg@1.5x.png") repeat;
+    background-size: 10px 126px
+  }
+
+  .tip_ico {
+    background: image-url("touch/tip_ico@1.5x.png") no-repeat;
+    background-size: 64px 64px
+  }
+
+  .ico {
+    background-image: image-url("touch/uapp_ico@1.5x.png");
+    background-size: 180px 106px
+  }
+
+  .second_cate_pic.female {
+    background-image: image-url("touch/female@1.5x.jpg")
+  }
+
+  .second_cate_pic.male {
+    background-image: image-url("touch/male@1.5x.jpg")
+  }
+
+  .second_cate_pic.home {
+    background-image: image-url("touch/home@1.5x.jpg")
+  }
+
+  .second_cate_pic.outdoors {
+    background-image: image-url("touch/outdoors@1.5x.jpg")
+  }
+
+  .second_cate_pic.china {
+    background-image: image-url("touch/china@1.5x.jpg")
+  }
+
+  .search_empty {
+    background: image-url("touch/search_empty@1.5x.png") center top no-repeat;
+    background-size: 88px 88px
+  }
+
+  .hot_brands {
+    background-image: image-url("touch/brands@1.5x.png")
+  }
+
+  .fav_empty {
+    background: image-url("touch/fav_empty@1.5x.png") center top no-repeat;
+    background-size: 78px 80px
+  }
+
+  .fanship_brand > div {
+    background: image-url("touch/border@1.5x.png") repeat-y left, image-url("touch/border@1.5x.png") repeat-y right;
+    background-size: 16px 14px
+  }
+
+  .left_head {
+    background: image-url("touch/left_head@1.5x.png") no-repeat;
+    background-size: 40px 46px
+  }
+
+  .right_head {
+    background: image-url("touch/right_head@1.5x.png") no-repeat;
+    background-size: 40px 46px
+  }
+
+  .co_title {
+    background: image-url("touch/co_title@1.5x.png") no-repeat;
+    background-size: 136px 40px
+  }
+
+  .banks {
+    background-image: image-url("touch/banks@1.5x.png")
+  }
+
+  .pay_select.uyuan {
+    background-image: image-url("touch/u_bg@1.5x.png")
+  }
+
+  .success_txt span {
+    background: image-url("touch/success@1.5x.png") no-repeat;
+    background-size: 34px 38px
+  }
+
+  .trade_empty {
+    background: image-url("touch/trade_empty@1.5x.png") center top no-repeat;
+    background-size: 84px 84px
+  }
+
+  .voucher_used, .voucher_outdate {
+    background: image-url("touch/voucher_tag@1.5x.png") no-repeat 0 0;
+    background-size: 36px 36px
+  }
+
+  .voucher_empty {
+    background: image-url("touch/voucher_empty@1.5x.png") center top no-repeat;
+    background-size: 80px 66px
+  }
+
+  .main.gift, .feedback_board {
+    background: image-url("touch/msg_bg@1.5x.png") repeat;
+    background-size: 50px 50px
+  }
+
+  .pvt {
+    background: image-url("touch/pvt@1.5x.png") no-repeat;
+    background-size: 80px 100px
+  }
+
+  .message_board, .blank_board {
+    background: image-url("touch/card_bg@1.5x.jpg") repeat;
+    background-size: 50px 50px
+  }
+
+  .board_left {
+    background: image-url("touch/left_side@1.5x.png") repeat-y;
+    background-size: 52px 96px
+  }
+
+  .board_right {
+    background: image-url("touch/right_side@1.5x.png") repeat-y;
+    background-size: 44px 130px
+  }
+
+  .board_shadow {
+    background: image-url("touch/board_shadow@1.5x.png") no-repeat center;
+    background-size: 320px 18px
+  }
+
+  .strip {
+    background: image-url("touch/strip@1.5x.png") repeat-x;
+    background-size: 126px 8px
+  }
+
+  .roll {
+    background: image-url("touch/roll@1.5x.png") no-repeat;
+    background-size: 32px 82px
+  }
+
+  .products_board > div {
+    background: image-url("touch/left_ribbon@1.5x.png") repeat-y left 0, image-url("touch/right_ribbon@1.5x.png") repeat-y right 0;
+    background-size: 32px 772px
+  }
+
+  .iphone_nexus {
+    background: image-url("touch/iphone_nexus@1.5x.png") no-repeat;
+    background-size: 168px 214px
+  }
+
+  .ipad_log {
+    background: image-url("touch/ipad@1.5x.png") no-repeat;
+    background-size: 242px 174px
+  }
+
+  .weixin_rqrcode {
+    background: image-url("touch/weixin_rqrcode@1.5x.png") 2px no-repeat, #fff;
+    background-size: 86px 86px
+  }
+
+  .step_1 {
+    background: image-url("touch/one@1.5x.png") center no-repeat;
+    background-size: 320px 236px
+  }
+
+  .step_2 {
+    background: image-url("touch/two@1.5x.png") center no-repeat;
+    background-size: 320px 236px
+  }
+
+  .step_3 {
+    background: image-url("touch/three@1.5x.png") center no-repeat;
+    background-size: 320px 236px
+  }
+
+  .step_4 {
+    background: image-url("touch/four@1.5x.png") center no-repeat;
+    background-size: 320px 236px
+  }
+
+  .step_5 {
+    background: image-url("touch/five@1.5x.png") center no-repeat;
+    background-size: 320px 236px
+  }
+
+  .step_6 {
+    background: image-url("touch/six@1.5x.png") center no-repeat;
+    background-size: 320px 236px
+  }
+
+  .step_7 {
+    background: image-url("touch/seven@1.5x.png") center no-repeat;
+    background-size: 320px 236px
+  }
+
+  .step_8 {
+    background: image-url("touch/eight@1.5x.png") center no-repeat;
+    background-size: 320px 236px
+  }
+
+  .step_9 {
+    background: image-url("touch/nine@1.5x.png") center no-repeat;
+    background-size: 320px 236px
+  }
+
+  .step_10 {
+    background: image-url("touch/ten@1.5x.png") center no-repeat;
+    background-size: 320px 236px
+  }
+
+  .mot {
+    background: image-url("touch/slogan@1.5x.png");
+    background-size: 240px 42px
+  }
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 3), only screen and (-o-min-device-pixel-ratio: 3/1), only screen and (min--moz-device-pixel-ratio: 3), only screen and (min-device-pixel-ratio: 3) {
+  div.logo {
+    background-image: image-url("touch/logo@2x.png")
+  }
+
+  .msdlogo {
+    background-image: image-url("touch/msdlogo@2x.png")
+  }
+
+  .ico {
+    background-image: image-url("touch/uapp_ico@2x.png");
+    background-size: 180px 106px
+  }
+}

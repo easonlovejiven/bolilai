@@ -1,0 +1,21 @@
+- @page_title = [@product.name.to_s.gsub(@product.brand.try(:name).to_s, '')].uniq.reject(&:blank?).join
+- @page_keywords = @product.values.active.map(&:content)
+- @page_description = @product.description.to_s.gsub(/\s+/, '')[0..99]
+.product_box
+  .pbox_list#product_list
+    .pshow_nav
+      a href="/app/assets/stylesheets" data-remote="true" 首页
+      em >
+      a href=shop_category_path(@product.category1_id) = @product.category1.try(:name)
+      em >
+      a href=shop_products_path(where: { category2_id: @product.category2_id}) = @product.category2.try(:name)
+      em >
+      span = @product.name
+    .addedshow = render :partial => 'product_show', :object => @product, :locals => {:is_large => true, :dom_id => @product.id}
+    /.top_pagination
+    /  h4 更多同类商品
+    div id="pagination_#{params[:page]}"
+      ruby:
+        n = ''
+      = raw %[<span class="pagination"><a class="js_more_page more_page" style="float:left;" data-options='{"updateTitle":false}' data-target="pagination_#{n}" href="#{h shop_products_path('where' => {'category2_id' => @product.category2_id, 'target' => @product.target})}">查看更多</a>#{'<div class="noneitem_mod"><span></span></div>'*0}</span>]
+script $(function(){$('body').append('#{raw(((javascript_include_tag("/shop/products/#{@product.id}/data")).gsub(/\r|\n/, "").gsub("script", "scr'+'ipt")))}') })

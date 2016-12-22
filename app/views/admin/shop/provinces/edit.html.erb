@@ -1,0 +1,85 @@
+<h2><%= {'show' => '查看', 'new' => '新建', 'edit' => '编辑'}[params[:action]] %>省份</h2>
+
+<%= form_for :province, @province, :url => @province.new_record? ? admin_shop_provinces_path : admin_shop_province_path(@province), :html => {:method => @province.new_record? ? :post : :put, :multipart => true} do |f| %>
+
+    <%= f.error_messages %>
+
+    <table class="form-table">
+      <tbody>
+      <% if !@province.new_record? %>
+          <tr class="form-field form-required">
+            <th scope="row"><%= f.label :id, "ID" %></th>
+            <td><%= @province.id %></td>
+          </tr>
+      <% end %>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :name, "名称" %></th>
+        <td>
+          <% if params[:action] == 'show' %>
+              <%= h @province.name %>
+          <% else %>
+              <%= f.text_field :name %>
+          <% end %>
+        </td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :name, "国家" %></th>
+        <td>
+          <% if params[:action] == 'show' %>
+              <%= link_to_if @current_user.can_show_country?, h(@province.country.name), admin_shop_country_path(@province.country), "data-target" => "rightPanel" if @province.country %>
+          <% else %>
+              <%= f.select :country_id, Data::Country.active.collect { |p| [p.name, p.id] }, {:class => "unified-text-box txt"} %>
+          <% end %>
+        </td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :order, "排序" %></th>
+        <td>
+          <% if params[:action] == 'show' %>
+              <%= h @province.order %>
+          <% else %>
+              <%= f.text_field :order %>
+          <% end %>
+        </td>
+      </tr>
+
+      <% if !@province.new_record? %>
+          <tr class="form-field">
+            <th scope="row"><%= f.label :created_at, '创建时间' %></th>
+            <td><%= @province.created_at && @province.created_at.to_s(:db) %></td>
+          </tr>
+
+          <tr class="form-field">
+            <th scope="row"><%= f.label :updated_at, '修改时间' %></th>
+            <td><%= @province.updated_at && @province.updated_at.to_s(:db) %></td>
+          </tr>
+
+          <tr class="form-field form-required">
+            <th scope="row"><%= f.label :editor, '编辑' %></th>
+            <td><%= link_to_if @current_user.can_show_editor?, h(@province.editor.name), admin_manage_editor_path(@province.editor), "data-target" => "rightPanel" if @province.editor %>
+            </td>
+          </tr>
+      <% end %>
+
+      <% if params[:action] == 'show' %>
+          <tr class="form-field form-required">
+            <th scope="row">操作</th>
+            <td class="op">
+              <%= link_to '查看', admin_shop_province_path(@province), "data-target" => "rightPanel" if @current_user.can_show_province? %>
+              <%= link_to '编辑', edit_admin_shop_province_path(@province), "data-target" => "rightPanel" if @current_user.can_update_province? %>
+              <%= link_to '删除', admin_shop_province_path(@province), :confirm => "确定删除吗？", :method => :delete if @current_user.can_destroy_province? %>
+            </td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+
+    <% if params[:action] != 'show' %>
+        <p class="submit">
+          <input type="submit" value="提交" id="addusersub" name="adduser"/>
+        </p>
+    <% end %>
+<% end %>

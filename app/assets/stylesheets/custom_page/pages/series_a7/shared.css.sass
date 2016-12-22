@@ -1,0 +1,46 @@
+@import "compass/css3"
+@import "shared/function"
+
+.series_a7
+	.linktext
+		.summary
+			span
+				color: $color_single_brands
+			em
+				color: $color_single_summary
+		.value
+			.MarketPrice
+				color: $color_single_gray
+				em,
+				span
+					color: $color_single_gray
+			.IhaveuPrice
+				color: $color_price_stress
+				em,
+				span
+					color: $color_price_stress
+		.preferential
+			color: $color_price_preferential
+			em
+				color: $color_price_preferential
+		.at_once
+			background: #{$color_at_once_bg} asset-url('auction/pages/template/#{$theme}/btn_bg.png') repeat-x 0 0
+			&:hover,
+			&.hover
+				background-position: 0 -28px
+	.product_top
+		.product_list
+			.title
+				color: $color_single_title
+			.link
+				.number1
+					color: $color_top_no_1
+				.number2
+					color: $color_top_no_2
+	.product_mod
+		.product_list
+			.link
+				.title
+					color: $color_single_title
+				.number
+					background: asset-url('auction/pages/template/#{$theme}/number_bg.png') no-repeat 0 0

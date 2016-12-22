@@ -1,0 +1,31 @@
+<% products_data.each_with_index do |p, index| %>
+    <% if p['id'].blank? %>
+        <div class="<%= "link link#{index}" %> only_pic">
+          <%= link_to image_tag(p['pic'].to_s, :alt => '', :class => "pic"), p['url'].to_s, :target => "_blank" %>
+          <% if p['label'].present? %>
+              <span class="product_tag_label"><%= p['label'] %></span>
+          <% end %>
+        </div>
+    <% else %>
+        <% product = Shop::Product.where(id: p['id']).first_or_initialize
+           p["title"] = (p["title"] || product.name).to_s[0..12]
+           p['pic'] = p['pic'] || product.major_image.url(:medium)
+           p['url'] = p['url'] || shop_product_path(product)
+           p['label'] = p['label'] || product.label
+        %>
+        <div class="<%= "link link#{index}" %>">
+          <%= link_to image_tag(p['pic'].to_s, :alt => '', :class => "pic"), p['url']||shop_product_path(product), :target => "_blank" %>
+          <div class="title">
+            <%= link_to p["title"], p['url']||shop_product_path(product), :target => "_blank" %>
+          </div>
+          <div class="linktext">
+            <div class="WeimallPrice">
+              <em>￥</em><span><%= product.discount %></span>
+            </div>
+          </div>
+          <% if p['label'].present? %>
+              <span class="product_tag_label"><%= p['label'] %></span>
+          <% end %>
+        </div>
+    <% end %>
+<% end %>

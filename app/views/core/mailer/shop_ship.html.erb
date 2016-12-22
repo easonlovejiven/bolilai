@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <title>订单已发货</title>
+</head>
+<body style="background-color:#f8f8f8;font-family:'微软雅黑',Microsoft YaHei,verdana;margin:0; padding:0;">
+<table width="100%" align="center" cellspacing="0" cellpadding="0" border="0" bgcolor="#e2e2e2" style="background-color:#d7d7d7; margin:0 auto; width:100%; ">
+  <tbody>
+  <tr>
+    <td style="border:none; background-color:#f8f8f8; width:100%; font-family:'微软雅黑',Microsoft YaHei,verdana; " width="100%" bgcolor="#f8f8f8">      <!--header 开始-->
+      <table width="601" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#000" style="background:#000; width:601px; height:34px;">
+        <tr>
+          <td style="background:#000;">
+            <a href="http://www.barlar.cn" target="_blank" title="barlar 珀丽莱 轻奢珠宝时尚品牌" style=" outline:none; text-decoration:none;" hidefocus="true"><span height="34" border="0" style="margin: 0 auto;display: block;color:#fff; font-size:12px;width: 570px">珀丽莱商城(www.barlar.cn)</span></a>
+          </td>
+        </tr>
+      </table>
+      <!--header 结束-->
+      <!--content 开始-->
+      <table width="601" border="0" cellspacing="0" cellpadding="0" bgcolor="#fff" style="background:#fff;" align="center">
+        <tr>
+          <td>
+            <table width="526" border="0" cellspacing="0" cellpadding="0" align="center">
+              <tr>
+                <td height="76" colspan="2" valign="bottom" style="font-size:16px; font-weight:bold; border-bottom:3px solid #e5e5e5;">
+                  <p style="padding:0; margin:5px 0;">订单已发货</p></td>
+              </tr>
+              <tr>
+                <td width="381" valign="middle" style="font-size:12px; color:#333333; line-height:24px;" height="155">尊敬的 <%= h (@trade.user.try(:name) || '用户') %>
+                  ， 您好：<br/>
+                  <span style="padding:0; margin:0; font-size:14px;">您的订单 <span style="color:#cfa972; font-size:14px;"><%= @trade.identifier %></span> 已发货。</span><br/>
+                  <% if @trade.delivery_service? && @trade.delivery_service.in?(Shop::Trade.delivery_coms_arr.map { |delivery_service| delivery_service[:name] }-%w[pickup offline]) %>
+                      <span style="padding:0; margin:0; font-size:14px;">快递公司 <a href="<%= Shop::Trade.delivery_coms_arr.find { |s| s[:name]==@trade.delivery_service }[:url] %>" target="_blank" style="color:#cfa972; font-size:14px;">
+                        <%= Shop::Trade.delivery_coms_arr.find { |s| s[:name]==@trade.delivery_service }[:title] %></a>，运单号 <span style="color:#cfa972; font-size:14px;"><%= h @trade.delivery_identifier %></span></span><br/>
+                      您可以通过珀丽莱或<%= Shop::Trade.delivery_coms_arr.find { |s| s[:name]==@trade.delivery_service }[:title] %>
+                      查看快递状态。<br/>
+                      如果您已收到货品，请及时在珀丽莱官网订单管理中确认收货。</td>
+                  <% end %>
+                  <td width="145" align="right" valign="top" style=" padding-top:26px; padding-right:2px;">
+                    <a href="http://barlar.cn/shop/trades" target="_blank" style=" outline:none; text-decoration:none;" hidefocus="ture" title="立即查看">
+                      <img src="<%= asset_url("purple/mailer/look_btn.jpg") %>" alt="立即查看" width="106" height="33" border="0" style=" font-size:15px; color:#000; "/>
+                    </a>
+                  </td>
+                  </tr>
+              <tr>
+                <td height="35" colspan="2" valign="middle" style="font-size:14px; line-height:20px;">订单信息</td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <table width="526" border="1" cellspacing="0" cellpadding="0" bordercolor="#e7e4e9" style="border:1px solid #e7e4e9;border-collapse:collapse; font-size:12px;">
+                    <tr>
+                      <td height="28" colspan="3" style=" background:#f2f2f2;">
+                        <table width="526" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+                          <tr>
+                            <td width="231" height="28" style=" padding-left:8px; color:#cfa972;font-size:12px;" valign="middle">订单号：<%= h @trade.identifier %></td>
+                            <% if @trade.contact.present? %>
+                                <td width="295" valign="middle" style="color:#cfa972;font-size:12px;">收货人：<%= h @trade.contact.name %></td>
+                            <% end %>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width="122" height="25" align="center" valign="middle" bgcolor="#d7d7d7" style=" font-size:12px; color:#666666; border:1px solid #e7e4e9;border-right:1px solid #fefdfe;">商
+                        品 编 号
+                      </td>
+                      <td width="216" align="center" valign="middle" bgcolor="#d7d7d7" style=" font-size:12px; color:#666666; border:1px solid #e7e4e9;border-right:1px solid #fefdfe;">商
+                        品 名 称
+                      </td>
+                      <td width="188" align="center" valign="middle" bgcolor="#d7d7d7" style="border:1px solid #e7e4e9; font-size:12px; color:#666666;">价
+                        格
+                      </td>
+                    </tr>
+                    <% @trade.units.each do |unit| %>
+                        <tr>
+                          <td height="95" align="center" valign="middle" style="border:1px solid #e7e4e9;border-right:1px dotted #cbcacb; color:#666666; width:118px; overflow:hidden;"><%= h unit.item.product.id %></td>
+                          <td align="left" style=" border:1px solid #e7e4e9; border-right:1px dotted #cbcacb;">
+                            <table width="214" border="0" cellspacing="0" cellpadding="0">
+                              <tr>
+                                <td width="38" height="95">&nbsp;</td>
+                                <td width="152" style=" font-size:12px; overflow:hidden;">
+                                  <a href="http://www.barlar.cn/shop/products/<%= h unit.item.product.id %>" target="_blank" style="color:#000; outline:none; text-decoration:none;" hidefocus="true"><%= h unit.item.product.name %></a>
+                                </td>
+                                <td width="26">&nbsp;</td>
+                              </tr>
+                            </table>
+                          </td>
+                          <td width="185" style="border:1px solid #e7e4e9;">
+                            <table width="185" border="0" cellspacing="0" cellpadding="0">
+                              <tr>
+                                <td width="52">&nbsp;</td>
+                                <td width="133">
+                                  <% if unit.discount > unit.price %>
+                                      <p style=" height:22px; width:120px; overflow:hidden; font-size:13px; margin:0; padding:0; line-height:22px;">折后价 <%= h unit.price %>
+                                        元</p>
+
+                                      <p style="height:22px; width:120px; overflow:hidden;color:#666666; font-size:12px; margin:0; padding:0; line-height:22px;">珀丽莱价 <%= h unit.discount %>
+                                        元</p></td>
+                                  <% else %>
+                                      <p style=" height:22px; width:120px; overflow:hidden; font-size:13px; margin:0; padding:0; line-height:22px;">珀丽莱价 <%= h unit.price %>
+                                        元</p>
+                                  <% end %>
+                                  </tr>
+                            </table>
+                          </td>
+                        </tr>
+                    <% end %>
+                    <tr>
+                      <td height="34" colspan="3" valign="top" style="border:1px solid #e7e4e9;">
+                        <table width="526" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+                          <tr>
+                            <td width="392" height="34" style=" font-size:12px; padding-left:8px;">付款总金额</td>
+                            <td width="134" style="color:#cfa972; font-size:14px; ">
+                              <span style="height:34px; width:134px; display:block; line-height:34px; overflow:hidden;"><%= h @trade.payment_price %>
+                                元</span></td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td height="32" colspan="3" valign="middle" style=" font-size:12px; background:#f2f2f2; padding-left:8px;">有任何疑问，请电话咨询
+                        <span style="color:#cfa972;">400-6915-695</span>。
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td height="55">&nbsp;</td>
+        </tr>
+      </table>
+      <!--content 结束-->
+      <!--footer 开始-->
+      <table width="601" border="0" cellspacing="0" cellpadding="0" align="center">
+        <tr>
+          <td height="31" colspan="3" align="center" valign="bottom" style="font-size:12px;background-color: #eee;padding: 20px;">珀丽莱郑重承诺，所有商品均为正品出售。</td>
+        </tr>
+      </table>
+      <!--footer 结束-->
+    </td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

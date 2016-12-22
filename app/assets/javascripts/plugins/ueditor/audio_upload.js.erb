@@ -1,0 +1,140 @@
+var editorUploader;
+var ueditorAudioPanel = jQuery('<div class="editor_upload_panel">' +
+'<a class="btn btn-success editor_upload_files" href="#">' +
+'<i class="fa fa-upload"></i><sapn>上传文件</sapn></a>' +
+'<span class="editor_upload_status"></span>' +
+'<div class="help-info">支持mp3格式,最大15M文件</div></div>');
+function init_audio_upload(editor, dialog) {
+    var dialog_id = "editor_upload_panel_audio" + editor.uid;
+    var upload_btn_id = 'editor_upload_files_audio' + editor.uid;
+    var statusTip = $("#" + dialog_id + " .editor_upload_status");
+    editorUploader = Qiniu().uploader({
+        runtimes: 'html5,flash,html4',
+        browse_button: upload_btn_id,
+        container: dialog_id,
+        drop_element: dialog_id,
+        max_file_size: '15mb',
+        flash_swf_url: '<%=asset_path("Moxie.swf")%>',
+        dragdrop: true,
+        chunk_size: '4mb',
+        uptoken_url: '/uploads/uptoken',
+        domain: "http://<%=Rails.application.secrets[:qiniu_weimall_domain]%>/",
+        auto_start: true,
+        multi_selection: false,
+        filters: [
+            {title: "Audit files", extensions: "mp3"}
+        ],
+        init: {
+            'FilesAdded': function (up, files) {
+                plupload.each(files, function (file) {
+                    statusTip.text("等待上传...")
+                });
+                editorUploader.start();
+                up.refresh(); // Reposition Flash/Silverlight
+            },
+            'BeforeUpload': function (up, file) {
+            },
+            'UploadProgress': function (up, file) {
+                var percentage = file.percent;
+                percentage = parseInt(percentage, 10);
+                if (file.status !== plupload.DONE && percentage === 100) {
+                    percentage = 99;
+                }
+                statusTip.text("正在上传" + percentage + "%");
+            },
+            'UploadComplete': function (up, file, info) {
+//            $('#success').show();
+//                $(".edui-for-uploaddialog").find(".edui-okbutton").show();
+            },
+            'FileUploaded': function (up, file, info) {
+                var data = $.parseJSON(info);
+                var key = data.key.replace("uploads/", "");
+                $.post("/uploads.json", {
+                    "upload[file_key]": key,
+                    'upload[file_name]': file.name,
+                    'upload[file_type]': file.type,
+                    'upload[file_size]': file.size || 0
+                }, function (data) {
+                    var res = $.parseJSON(info);
+                    var domain = up.getOption('domain');
+                    var url = domain + encodeURI(res.key);
+                    var audioId = 'audioplayer_' + key;
+                    editor.execCommand('music', {url: 'http://box.baidu.com/widget/flash/bdspacesong.swf?from=tiebasongwidget&url=' + url + '&autoPlay=false&loop=true&class=BDE_Music'});
+                    dialog.close(true);
+                })
+            },
+            'Error': function (up, err, errTip) {
+                if (err.code == -600) {
+                    statusTip.text("音频文件不得大于10M,上传失败!");
+                } else {
+                    statusTip.text("上传失败!");
+                }
+                up.refresh();
+            },
+            'Key': function (up, file) {
+                var key = "uploads/" + App.guid() + ".mp3";
+                // do something with key
+                return key
+            }
+        }
+    })
+}
+
+UE.registerUI('uploadaudiodialog', function (editor, uiName) {
+    ueditorAudioPanel.attr("id", "editor_upload_panel_audio" + editor.uid);
+    ueditorAudioPanel.find(".editor_upload_files").attr("id", "editor_upload_files_audio" + editor.uid);
+    //创建dialog
+    var dialog = new UE.ui.Dialog({
+        //指定弹出层中页面的路径，这里只能支持页面,因为跟addCustomizeDialog.js相同目录，所以无需加路径
+//        iframeUrl:'customizeDialogPage.html',
+        content: ueditorAudioPanel.get(0).outerHTML,
+        //需要指定当前的编辑器实例
+        editor: editor,
+        //指定dialog的名字
+        name: uiName,
+        //dialog的标题
+        title: "上传音频文件",
+
+        //指定dialog的外围样式
+        cssRules: "width:300px;height:100px;",
+        onclose: function () {
+            editorUploader.stop();
+        },
+        //如果给出了buttons就代表dialog有确定和取消
+        buttons: [
+//            {
+//                className:'edui-okbutton',
+//                label:'确定',
+//                onclick:function () {
+//                    var images=$("#editor_upload_status .pic img").map(function(){return {src: $(this).attr("src").replace("thumb","medium"),width:"574",height:"574"}});
+//                    editor.execCommand( 'insertimage', images.toArray());
+//                    dialog.close(true);
+//                }
+//            },
+            {
+                className: 'edui-cancelbutton',
+                label: '取消',
+                onclick: function () {
+                    dialog.close(false);
+                    editorUploader.stop();
+                }
+            }
+        ]
+    });
+
+    //参考addCustomizeButton.js
+    var btn = new UE.ui.Button({
+        name: uiName + "button",
+        title: "上传音频文件",
+        //需要添加的额外样式，指定icon图标，这里默认使用一个重复的icon
+        cssRules: 'background-position: -20px -40px;',
+        onclick: function () {
+            //渲染dialog
+            dialog.render();
+            dialog.open();
+            init_audio_upload(editor, dialog);
+        }
+    });
+
+    return btn;
+}, 29);

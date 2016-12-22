@@ -1,0 +1,141 @@
+<div class="login-info">
+	<span> <!-- User image size is adjusted inside CSS, it should stay as is -->
+		<a href="javascript:void(0);" id="show-shortcut" data-action="toggleShortcut">
+          <%#= image_tag @current_user.pic || "missing.jpg", alt: "me", class: "online" %>
+          <span>您好：<%= @current_user.editor.name %></span>
+          <i class="fa fa-angle-down"></i>
+        </a>
+	</span>
+</div>
+
+<nav>
+  <ul>
+    <li class="active">
+      <a href="/admin/home" target="_self">
+        <i class="fa fa-lg fa-fw fa-home"></i>
+        <span class="menu-item-parent">首页</span>
+      </a>
+    </li>
+    <% if [:shop_user, :shop_level].map { |action| can?(:index, action) }.any? %>
+        <li>
+          <a href="#"><i class="fa fa-lg fa-fw fa-key"></i><span class="menu-item-parent">用户管理</span></a>
+          <ul>
+            <% if can?(:index, :shop_user) %>
+                <li><a href="/admin/shop/users"><i class="fa fa-edit"></i>全部用户</a></li>
+            <% end %>
+            <% if can?(:index, :shop_level) %>
+                <li><a href="/admin/shop/levels"><i class="fa fa-edit"></i>用户等级管理</a></li>
+            <% end %>
+          </ul>
+        </li>
+    <% end %>
+
+    <% if [:shop_trade, :shop_unit].map { |action| can?(:index, action) }.any? %>
+        <li>
+          <a href="#"><i class="fa fa-lg fa-fw fa-exchange"></i><span class="menu-item-parent">订单管理</span></a>
+          <ul>
+            <% if can?(:index, :shop_trade) %>
+                <li><a href="/admin/shop/trades"><i class="fa fa-cubes"></i>订单列表</a></li>
+            <% end %>
+            <% if can?(:index, :shop_unit) %>
+                <li><a href="/admin/shop/units"><i class="fa fa-cubes"></i>退货列表</a></li>
+            <% end %>
+          </ul>
+        </li>
+    <% end %>
+
+    <% if [:shop_product, :shop_category, :shop_attribute, :shop_brand, :shop_item, :shop_comment].map { |action| can?(:index, action) }.any? %>
+        <li>
+          <a href="#"><i class="fa fa-usd"></i><span class="menu-item-parent">商品管理</span></a>
+          <ul>
+            <% if can?(:index, :shop_product) %>
+                <li><a href="/admin/shop/products"><i class="fa fa-cubes"></i>全部商品</a></li>
+            <% end %>
+            <% if can?(:index, :shop_category) %>
+                <li><a href="/admin/shop/categories"><i class="fa fa-cubes"></i>品类管理</a></li>
+            <% end %>
+            <% if can?(:index, :shop_attribute) %>
+                <li><a href="/admin/shop/attributes"><i class="fa fa-cubes"></i>属性管理</a></li>
+            <% end %>
+            <% if can?(:index, :shop_item) %>
+                <li><a href="/admin/shop/items"><i class="fa fa-cubes"></i>单件管理</a></li>
+            <% end %>
+            <% if can?(:index, :shop_brand) %>
+                <li><a href="/admin/shop/brands"><i class="fa fa-cubes"></i>品牌管理</a></li>
+            <% end %>
+            <% if can?(:index, :shop_comment) %>
+                <li><a href="/admin/shop/comments"><i class="fa fa-cubes"></i>评论管理</a></li>
+            <% end %>
+          </ul>
+        </li>
+    <% end %>
+    <% if [:shop_event, :shop_voucher].map { |action| can?(:index, action) }.any? %>
+        <li>
+          <a href="#"><i class="fa fa-cubes"></i><span class="menu-item-parent">促销管理</span></a>
+          <ul>
+            <% if [:shop_event, :shop_voucher].map { |action| can?(:index, action) }.any? %>
+                <li>
+                  <a href="#"><i class="fa fa-usd"></i><span class="menu-item-parent">优惠券</span></a>
+                  <ul>
+                    <% if can?(:index, :shop_event) %>
+                        <li><a href="/admin/shop/events"><i class="fa fa-cubes"></i>优惠类型</a></li>
+                    <% end %>
+                    <% if can?(:index, :shop_voucher) %>
+                        <li><a href="/admin/shop/vouchers"><i class="fa fa-cubes"></i>优惠券发放</a></li>
+                    <% end %>
+                  </ul>
+                </li>
+            <% end %>
+          </ul>
+        </li>
+    <% end %>
+    <% if [:cms_category, :cms_page].map { |action| can?(:index, action) }.any? %>
+        <li>
+          <a href="#"><i class="fa fa-file-text"></i><span class="menu-item-parent">内容管理</span></a>
+          <ul>
+            <% if can?(:index, :cms_category) %>
+                <li><a href="/admin/cms/categories"><i class="fa fa-file-text"></i>栏目管理</a></li>
+            <% end %>
+            <% if can?(:index, :cms_page) %>
+                <li><a href="/admin/cms/pages"><i class="fa fa-file-text"></i>文章管理</a></li>
+            <% end %>
+          </ul>
+        </li>
+    <% end %>
+    <% if [:custom_page_page].map { |action| can?(:index, action) }.any? %>
+        <li>
+          <a href="#"><i class="fa fa-desktop"></i><span class="menu-item-parent">店铺装修</span></a>
+          <ul>
+            <% if can?(:index, :custom_page_page) %>
+                <li><a href="/admin/pages"><i class="fa fa-cubes"></i>页面管理</a></li>
+            <% end %>
+          </ul>
+        </li>
+    <% end %>
+
+    <% if [:upload].map { |action| can?(:index, action)||true }.any? %>
+        <li>
+          <a href="#"><i class="fa fa-suitcase"></i><span class="menu-item-parent">资源管理</span></a>
+          <ul>
+            <% if can?(:index, :upload)||true %>
+                <li><a href="/admin/uploads"><i class="fa fa-picture-o"></i>图片管理</a></li>
+            <% end %>
+          </ul>
+        </li>
+    <% end %>
+
+    <% if [:manage_editor, :manage_role].map { |action| can?(:index, action) }.any? %>
+        <li>
+          <a href="#"><i class="fa fa-lg fa-fw fa-key"></i><span class="menu-item-parent">权限管理</span></a>
+          <ul>
+            <% if can?(:index, :manage_editor) %>
+                <li><%= link_to raw('<i class="fa fa-user"></i> 管理员'), admin_manage_editors_path %></li>
+            <% end %>
+            <% if can?(:index, :manage_role) %>
+                <li><%= link_to raw('<i class="fa fa-child"></i> 角色'), admin_manage_roles_path %></li>
+            <% end %>
+          </ul>
+        </li>
+    <% end %>
+  </ul>
+</nav>

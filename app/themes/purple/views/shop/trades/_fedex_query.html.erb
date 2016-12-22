@@ -1,0 +1,69 @@
+<%
+   @xml = Nokogiri::XML(@xml)
+   xml = @xml.xpath('fedex-express/tracking/detail/activities') if @xml
+   activities = xml[0].xpath("activity") if !xml.blank?
+%>
+<div class="popup_main popup_tips">
+  <div class="Shopping_info">
+    <div class="Shopping_Pay">
+      <div class="Shopping_LogisticsIofn">
+        <ul>
+          <li>
+            <strong>物流方式：</strong>
+
+            <p><%= @xml.xpath('fedex-express/tracking/detail/sentby').text if @xml.xpath('fedex-express/tracking/detail/sentby') %></p>
+          </li>
+          <li>
+            <strong>物流公司：</strong>
+
+            <p>EMS</p>
+          </li>
+          <li>
+            <strong>物流编号：</strong>
+
+            <p>LP10072217260252运单号码： 1600020983096.</p>
+          </li>
+          <li>
+            <strong>当前状态：</strong>
+
+            <p><%= @xml.xpath('fedex-express/tracking/detail/status').text if @xml.xpath('fedex-express/tracking/detail/status') %></p>
+          </li>
+
+          <li>
+            <strong>物流跟踪：</strong>
+
+            <p>该信息由物流公司提供，如有疑问请咨询 <span>EMS</span></p>
+            <% (activities.reverse || []).each_with_index do |activity, i| %>
+                <p><%= activity.xpath('datetime').text if activity.xpath('datetime') %>  <%= activity.xpath('scan').text if activity.xpath('scan') %>
+                  中转站 发往 <%= activity.xpath('location').text if activity.xpath('location') %>中转站</p>
+            <% end if activities %>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="popup_main popup_tips">
+  <div class="Shopping_Order_link">
+    <a href="#">
+      <h6><span class="icons17x17 icon_22"></span>订单信息:</h6>
+
+      <div class="HRborder"></div>
+      <div class="OrderTotal">合计金额：<strong><%= @trade.price %></strong>RMB</div>
+    </a>
+
+    <div class="Shopping_info">
+      <p>
+        <label>订单编号：</label><span><%= @xml.xpath('fedex-express/tracking/detail/tn').text if @xml.xpath('fedex-express/tracking/detail/tn') %></span>
+        <label>下单时间：</label><span><%= @xml.xpath('fedex-express/tracking/detail/shipdate').text if @xml.xpath('fedex-express/tracking/detail/shipdate') %></span>
+      </p>
+
+      <p>
+        <label>收货地址：</label><span><span><%= @trade.contact.province if @trade.contact %></span><span><%= @trade.contact.city if @trade.contact %></span><%= @trade.contact.address if @trade.contact %></span>
+        <label>邮编：</label><span><%= @trade.contact.postcode if @trade.contact %></span>
+        <label>收货人：</label><span><%= @trade.user.name if @trade.user %></span>
+        <label>电话：</label><span><%= @trade.contact.mobile if @trade.contact %></span>
+      </p>
+    </div>
+  </div>
+</div>

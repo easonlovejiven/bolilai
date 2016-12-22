@@ -1,0 +1,20 @@
+<div id='list_query' style='display:none;'>
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="rightPanel">×</button>
+    <h4 class="modal-title">批量查询</h4>
+  </div>
+  <div class="modal-body">
+    <%= form_tag admin_shop_products_path, :method => :get, class: "form-horizontal" do %>
+        <div class="form-group clearfix">
+          <%= label_tag "query_content", "产品ID列表", class: "control-label col-md-3" %>
+          <div class="col-md-8 ">
+            <%= text_area_tag "query_content", nil, class: "form-control" %>
+            （每行包含一个产品ID）
+          </div>
+        </div>
+        <div class="form-actions">
+          <%= submit_tag "提交", class: "btn btn-primary" %>
+        </div>
+    <% end %>
+  </div>
+</div>

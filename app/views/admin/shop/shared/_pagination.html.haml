@@ -1,0 +1,4 @@
+.tablenav
+	= raw will_paginate(pagination, ({ :previous_label => '« 上一页', :next_label => '下一页 »', :class => "tablenav-pages" }).merge((options ||= {}))).to_s.gsub('prev_page', 'prev page-numbers').gsub('next_page', 'next page-numbers').gsub('current', 'current page-numbers').gsub(/<a ([^>]*)>/, '<a \1 class="page-numbers">') 
+	%br.clear
+%br.clear

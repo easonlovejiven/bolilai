@@ -1,0 +1,8 @@
+zh-CN:
+  activerecord:
+    models:
+      cms/page: 文章
+    attributes:
+      cms/page:
+        name: 标题
+        category_id: 栏目

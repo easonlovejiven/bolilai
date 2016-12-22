@@ -1,0 +1,147 @@
+//@import "bootstrap";
+//@import "core/font-awesome";
+//@import "core/utils";
+//@import "pages/*";
+
+body {
+  background: #fff;
+}
+
+.mobile-body {
+  .logo {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    text-align: center;
+    img {
+      width: 100%;
+      min-height: 120px;
+    }
+  }
+
+  .icon-list {
+    padding: 0px;
+    margin: 0px;
+    .icon {
+      display: inline-block;
+      width: 25%;
+      float: left;
+      box-sizing: border-box;
+      text-align: center;
+      list-style: none;
+      > a {
+        text-decoration: none;
+      }
+    }
+    .icon-circle {
+      display: block;
+      margin: 0 auto;
+      margin-bottom: .14rem;
+      border-radius: 10rem;
+      text-align: center;
+      line-height: .8rem;
+      font-size: 20px;
+      color: white;
+    }
+    .icon-desc {
+      margin-top: 10px;
+      font-size: 18px;
+      color: #626465;
+      text-align: center;
+    }
+  }
+
+  .medias_nav {
+    padding: 20px 0;
+    background: #fafafa;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    .icon-circle {
+      background: image_url("touch/services_icons");
+      width: 60px;
+      height: 60px;
+      &.typeid1 {
+        background-position: -5px -242px;
+      }
+      &.typeid2 {
+        background-position: -5px -6px;
+      }
+      &.typeid3 {
+        background-position: -5px -163px;
+      }
+      &.typeid4 {
+        background-position: -5px -85px;
+      }
+    }
+  }
+
+  .logins-panel {
+    background: #fafafa;
+    margin-top: 30px;
+    .title {
+      padding: 10px 10px;
+      color: #272323;
+      border-top: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+      h3 {
+        margin: 0;
+        padding: 3px 0 3px 10px;
+        font-size: 14px;
+        border-left: 5px solid #ec725c;
+      }
+    }
+    .login-content {
+      border-bottom: 1px solid #ddd;
+      display: block;
+      .item {
+        width: 50%;
+        float: left;
+        text-align: center;
+        .desc {
+          text-align: center;
+          margin-bottom: 20px;
+        }
+        a.btn {
+          display: inline-block;
+          border: 1px solid #dddbdb;
+          border-radius: 5px !important;
+        }
+        img {
+          padding: 10px;
+          min-height: 100px;
+          width: 100%;
+        }
+      }
+      .normal-item {
+        border-right: 1px solid #ddd;
+        .btn {
+          background: #288bdb;
+        }
+      }
+      .provider-item {
+        .btn {
+          background: #fb8424;
+        }
+      }
+    }
+    .login-footer {
+      background: #fff;
+      padding: 0;
+      padding-bottom: 30px;
+      .btn {
+        color: #959494;
+        font-size: 14px;
+      }
+      img {
+        width: 22px;
+        height: 30px;
+      }
+    }
+  }
+
+  .footer {
+    border-top: 1px solid #ddd;
+    padding: 20px 0;
+    color: #b0aeb1;
+    text-align: center;
+  }
+}

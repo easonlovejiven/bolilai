@@ -1,0 +1,20 @@
+zh-CN:
+  activerecord:
+    models:
+      "shop/item": 单件
+    attributes:
+      "shop/item":
+        editor_id:  编辑ID
+        description:  描述
+        product_id: 产品ID
+        trade_id: 交易ID
+        measure: 尺寸
+        erp_measure: ERP尺寸
+        identifer: 编号
+        remark: 备注
+        purchase_type: 采购类型
+        storage_at: 入库时间
+        expired_at: 过期时间
+        origin: 产地
+        published?:  发布？
+        active?:  有效？

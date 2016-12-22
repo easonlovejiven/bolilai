@@ -1,0 +1,71 @@
+<!-- CSS -->
+<%= stylesheet_link_tag "touch/frame" %>
+<%= stylesheet_link_tag "touch/frame_respond" %>
+<%= javascript_include_tag "touch/controller" %>
+
+<!-- 调用页面主体 -->
+<script type="text/javascript">
+    $(function () {
+        contact_index_controller.initialize();
+    });
+</script>
+<% content_for :header do %>
+    <header class="border_1px">
+      <!-- <div class="left_option left"> -->
+      <div class="ico_wrapper back_ico left hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <!-- </div> -->
+      <div class="title ">
+        选择收货地址
+      </div>
+      <div class="ico_wrapper add_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper edit_ico right hide">
+        <span class="">编辑
+          <em class="down_shadow"></em>
+        </span>
+        <span class="">完成
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper info_ico right hide text">
+        详情<em class="down_shadow"></em>
+      </div>
+      <div class="ico_wrapper filter_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper mode_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+    </header>
+<% end %>
+
+<div class="main" id="main">
+  <div>
+    <div class="contact_box">
+      <% (@current_user && @current_user.contacts.active.order("created_at DESC").limit(10)||[]).each_with_index do |contact, i| %>
+          <div data-href="/contacts/<%= contact.id %>" id="<%= contact.id %>" class="clear_fix  border_1px">
+            <p class="item left clear_fix">
+              <span class="contact_name left ellipsis"><%= h contact.name %></span>
+              <span class="contact_tel left ellipsis"><%= h contact.mobile %> </span>
+            </p>
+
+            <p class="item left clear_fix">
+              <span class="contact_address clear_fix"><%= h contact.province %><%= h contact.city %><%= h contact.town %><%= h contact.address %></span>
+            </p>
+          </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+

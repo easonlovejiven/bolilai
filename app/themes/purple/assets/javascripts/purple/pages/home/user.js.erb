@@ -1,0 +1,176 @@
+$(function () {
+    if (!$.cookie('remember_me') && $.cookie('user_id')) {
+        $.ajax({
+            type: 'post',
+            url: '/core/sessions/0.json',
+            data: {'_method': 'delete'},
+            success: function () {
+                $.cookie('user_id', null, {path: '/'})
+                $(document).trigger('userinit')
+                if (window.go) window.go(null, '', $('#logout_button').data('redirect') || '/auction');
+                else window.location.href = $('#logout_button').data('redirect') || '/auction';
+            }
+        });
+    }
+    $(document).bind('userinit', function () {
+        $.user = {
+            id: parseInt($.cookie('user_id')),
+            name: decodeURI($.cookie('user_name')),
+            pic: $.cookie('user_pic'),
+            remember_me: $.cookie('remember_me'),
+            is_login: function () {
+                return !!($.user.id && $.user.id > 0 && $.user.remember_me);
+            }
+        }
+        if ($.user.is_login()) {
+            $('#right_menu_login .uname').text("欢迎，" + $.user.name);
+            $('#right_menu_login').show();
+            $('#right_menu_not_login').hide();
+        } else {
+            $('#right_menu_login').hide();
+            $('#right_menu_not_login').show();
+            if (document.location.href.match(/comm\.weimall\.com/)) $('#right_menu_not_login').html('<a id="comm_login" class="ulogin">登录</a>');
+        }
+        var orders_count = parseInt($.cookie('orders_count'))
+        if (orders_count > 0) $('#user_orders_count').show().children().text(orders_count > 9 ? '···' : orders_count)
+        else $('#user_orders_count').hide()
+    }).trigger('userinit');
+    $(document).bind('reload', function () {
+        $(document).trigger('userinit');
+    });
+
+    $(document).delegate('#logout_button', 'mousedown', function () {
+        if ($(this).hasClass('disabled')) return;
+        $.ajax({
+            type: 'post',
+            url: '/core/sessions/0.json',
+            data: {'_method': 'delete'},
+            context: this,
+            beforeSend: function () {
+                $(this).addClass('disabled');
+            },
+            complete: function () {
+                $(this).removeClass('disabled');
+            },
+            success: function () {
+                $.cookie('user_id', null, {path: '/',domain: "<%=Rails.application.secrets.domain%>"})
+                $.cookie('orders_count', null, {path: '/',domain: "<%=Rails.application.secrets.domain%>"})
+                $.cookie('site', null, {path: '/',domain: "<%=Rails.application.secrets.domain%>"})
+                $(document).trigger('userinit')
+                if (document.location.href.match(/weimall\.com/)) {
+                    $('.comm_user').remove();
+                    //tofix
+                    //window.go ? window.go(null, '', '/') : window.location.href = '/';
+                    window.location.href = '/';
+                    return;
+                }
+                if (window.go) window.go(null, '', $(this).data('redirect'));
+                else window.location.href = $(this).data('redirect');
+                if (document.location.href.match(/qqcb\.weimall\.com/)) document.location.reload();
+            }
+        });
+    }).delegate('#logout_button', 'click', function () {
+        return false;
+    });
+
+    $(document).delegate('#right_menu_not_login #comm_login', 'click', function () {
+        window.open('/connections/new?redirect=%2Fhome%2Fconnections%2Fpopup%2F0%3Fredirect%3D' + encodeURIComponent(document.location.href) + '&site=comm', '交通银行信用卡积分乐园_登录', 'width=526, height=450, top=50, left=300, menubar=no');
+        return;
+    }).delegate('#right_menu_not_login #comm_login', 'click', function () {
+        return false;
+    });
+    /** 用 .select_group 包起来 **/
+    $(document).on({
+        change: function () {
+            var provinces = document.contact_options.provinces;
+            var $province = $(this);
+            var $selectGroup = $province.parents('.select_group');
+            var $city = $selectGroup.find('select.city');
+            var cities = [];
+            $province.html($.map(provinces, function (v) {
+                var opt = '<option ';
+                if (v['name'] == $province.val()) {
+                    opt = opt + 'selected="selected"';
+                    cities = v['cities'] || []
+                }
+                return opt + ' value="' + v['name'] + '">' + v['name'] + '</option>'
+            }).join(''));
+            $city.html($.map(cities, function (v) {
+                var opt = '<option ';
+                if (v['name'] == $city.val()) {
+                    opt = opt + 'selected="selected" ';
+                }
+                return opt + ' value="' + v['name'] + '">' + v['name'] + '</option>'
+            }).join(''));
+        },
+        initialize_options: function () {
+            if (!document.contact_options) {
+                $.ajax({
+                    url: '/shop/contacts/options.js',
+                    dataType: 'text',
+                    context: this,
+                    success: function (data) {
+                        document.contact_options = eval('(' + data + ')');
+                        $(this).trigger('change')
+                    }
+                });
+                return;
+            }
+            if ($(this).data('inited') || !document.contact_options) return;
+        }
+    }, '#js_info_hometown_province, #js_info_location_province');
+});
+
+function initAvatarUpload() {
+    var avatarUploader = Qiniu().uploader({
+        runtimes: 'html5,flash,html4',
+        browse_button: "avatar_upload_btn",
+        container: "profile_avatar",
+        drop_element: "profile_avatar",
+        max_file_size: '4mb',
+        flash_swf_url: '/Moxie.swf',
+        dragdrop: true,
+        chunk_size: '4mb',
+        uptoken_url: "/uploads/uptoken",
+        domain: "http://<%= Rails.application.secrets[:qiniu_weimall_domain] %>/",
+        auto_start: true,
+        multi_selection: false,
+        filters: [
+            {title: "Image files", extensions: "jpg,png,jpeg"}
+        ],
+        init: {
+            'Key': function (up, file) {
+                return "avatar/" + App.guid() + ".jpg";
+            },
+            'FilesAdded': function (up, files) {
+                avatarUploader.start();
+                up.refresh(); // Reposition Flash/Silverlight
+            },
+            'UploadProgress': function (up, file) {
+                var percentage = file.percent;
+                percentage = parseInt(percentage, 10);
+                if (file.status !== plupload.DONE && percentage === 100) {
+                    percentage = 99;
+                }
+            },
+            'FileUploaded': function (up, file, info) {
+                var data = $.parseJSON(info);
+                var pic = data.key;
+                var pic_key = data.key.replace("avatar/", "");
+                var domain = up.getOption('domain');
+                var url = domain + encodeURI(pic) + "-tiny";
+                $('#pic_key_input').val(pic_key);
+                $('#profile_avatar img').attr("src", url);
+            },
+            'Error': function (up, err, errTip) {
+                if (err.code == -600) {
+                    alert("图片不得大于4M,上传失败!");
+                } else {
+                    alert("上传失败!");
+                }
+                up.refresh(); // Reposition Flash/Silverlight
+            }
+        }
+    })
+
+}

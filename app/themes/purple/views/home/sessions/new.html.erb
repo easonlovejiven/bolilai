@@ -1,0 +1,153 @@
+<%
+   @page_title = "登录"
+   @breadcrumb = [
+           ['登录', new_core_session_path],
+   ]
+   email_reset_passwd = (params[:user_id].present? && params[:reset_password_token].present?)
+%>
+
+<div id="popup_window_original" class="no_popup">
+  <!-- div_popup_window_begin -->
+
+  <div class="logsigbox">
+
+    <a href="#" class="closelog js_facebox_close"></a>
+
+    <div class="box_cont loginbox" style="<%= 'display:none;' if email_reset_passwd %>">
+      <div class="loginline"></div>
+      <h4 class="box_title">立即登录 !</h4>
+
+      <form class="weimall_form" action="<%= core_sessions_path %>" method="post" id="user_login_form" onsubmit="return event.returnValue = false;">
+        <%= hidden_field_tag 'redirect', params[:redirect] || shop_root_path, :id => "user_login_redirect" %>
+        <ol class="formbox">
+          <li class="fli">
+            <label for="user_login_account_login">账号：</label>
+            <%= text_field_tag 'account[login]', '', id: "user_login_account_login", placeholder: "输入注册邮箱或手机", autocomplete: "off" %>
+          </li>
+          <li class="fli">
+            <label for="user_login_account_password">密码：</label>
+            <%= password_field_tag 'account[password]', '', :id => "user_login_account_password", :placeholder => "输入密码" %>
+          </li>
+          <li class="fli">
+            <a class="setext" href="#" id="user_login_reset_link">忘记密码?</a>
+          </li>
+        </ol>
+        <div class="logsend">
+          <input type="checkbox" checked="checked" name="" id="remember_me"/>
+          <label for="remember_me" class="remember_me">记住我</label>
+          <a href="#" class="loginButton disabled" id="user_login_confirm"><span>登录</span><em>登录中...</em></a>
+
+          <div class="error" style="display:none;" id="user_login_confirm_tip"><em class="error_icon"></em>错误的帐号或密码
+          </div>
+        </div>
+      </form>
+
+      <div class="cutover">
+        <strong>还没账号
+          ?</strong><a class="uplink" rel="nofollow" data-target="popup" href="<%= new_core_account_path(:redirect => params[:redirect]) %>"><span>立即注册</span></a>
+      </div>
+    </div>
+
+    <div class="box_cont pwResetbox" id="user_reset_area" style="display:none;">
+      <div class="resetsend">
+        <h4 class="box_title">密码重置 !</h4>
+
+        <form class="weimall_form" action="<%= reset_core_accounts_path %>" method="post" id="user_reset_form" onsubmit="if (event) event.returnValue = false; return false;">
+          <ol class="formbox">
+            <li class="fli">
+              <label for="user_reset_account_login">账号：</label>
+              <input type="text" style="width: 187px;" name="account[login]" id="user_reset_account_login" placeholder="输入注册邮箱或手机"/>
+
+              <div id="user_reset_account_login_error" class="error" style="display:none;"><em class="error_icon"></em>该帐号不存在！
+              </div>
+            </li>
+            <li class="fli">
+              <label for="user_reset_account_captcha">验证码：</label>
+
+              <div class="validation">
+                <input type="text" style="width: 67px;" name="captcha" id="user_reset_account_captcha"/>
+
+                <div class="code_img">
+                  <img alt="验证码" src="<%= captcha_image_core_accounts_path %>?<%= Time.now.to_i %>" id="captcha_image"/>
+                  <a href="#" id="captcha_refresh" title="重新获取验证码"></a>
+
+                  <div id="user_reset_account_captcha_error" class="error" style="display:none;">
+                    <em class="error_icon"></em>验证码错误
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ol>
+          <div class="logsends">
+            <a href="#" id="user_reset_confirm" class="resetButton disabled"><span><span>确定</span></span></a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="box_cont pwResetbox" id="user_reset_success_area" style="display:none;">
+      <div class="resetsuccess">密码重置邮件已经发送到邮箱:<span id="user_reset_success_email"></span></div>
+      <p class="resettips"><em></em>请点击邮件中的密码重置链接即可进行密码重置</p>
+    </div>
+    <!--重置密码-->
+    <div class="box_cont PhoneBox" id="user_reset_phone_area" style="<%= 'display:none;' unless email_reset_passwd %>">
+      <div class="ReSendSuccess pwResetbox">
+        <h2 class="title">重置密码 !</h2>
+        <% unless email_reset_passwd %>
+            <p class="tipsicon">重置码已发送至你的手机。请30分钟内输入重置码进行密码修改。</p>
+        <% end %>
+
+        <form class="weimall_form" id="user_reset_phone_form" method="post" action="<%= core_account_path(params[:user_id].to_i) %>" onsubmit="return event.returnValue = false;">
+          <input type="hidden" name="_method" value="put"/>
+          <input type="hidden" name="account[login]" value="" id="user_reset_phone_login"/>
+          <ol class="formbox">
+            <li class="fli">
+              <label>重置码：</label>
+              <% if email_reset_passwd %>
+                  <label><%= params[:reset_password_token] %></label>
+                  <input type="hidden" name="account[reset_code]" value="<%= params[:reset_password_token] %>" id="user_reset_phone_reset_code"/>
+              <% else %>
+                  <input type="text" name="account[reset_code]" id="user_reset_phone_reset_code"/>
+              <% end %>
+              <div class="error" id="user_reset_phone_reset_code_error"><em class="error_icon"></em>重置码错误</div>
+            </li>
+            <li class="fli">
+              <label for="user_reset_phone_password">新密码：</label>
+              <input type="password" name="account[password]" id="user_reset_phone_password"/>
+
+              <div class="error" id="user_reset_phone_password_error"><em class="error_icon"></em>密码长度小于6位</div>
+            </li>
+            <li class="fli">
+              <label for="user_reset_phone_password_confirmation">确定新密码：</label>
+              <input type="password" id="user_reset_phone_password_confirmation"/>
+
+              <div class="error" id="user_reset_phone_password_confirmation_error"><em class="error_icon"></em>两次密码不一致
+              </div>
+            </li>
+          </ol>
+          <div class="logsend">
+            <button class="jqTransformButton disabled" type="submit" id="user_reset_phone_confirm">确认</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="box_cont pwResetbox" id="user_reset_phone_success_area" style="display:none;">
+      <div class="success">
+        <em></em>
+
+        <h2>重置密码成功!</h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- div_popup_window_end -->
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('form.weimall_form').jqTransform({});
+        if ($("#popup_window").length == 0) {
+            $(".uplink").attr("data-target", "")
+        }
+    })
+</script>

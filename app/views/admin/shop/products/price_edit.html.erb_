@@ -1,0 +1,121 @@
+<script type="text/javascript" charset="utf-8">
+	$(function(){
+		$('.discount_processing').bind('mousedown', function(){
+			if ($('#new_discount'+$(this).attr('pid')).val().match(/^\d+$/) == null){ alert('新价格输入有误！');return false;}
+			$.ajax({
+				url: $(this).attr('href'),
+				type: "put",
+				data: { '_method': 'put', 'format': 'js', 'product[discount]': $('#new_discount'+$(this).attr('pid')).val(), 'product[original_price]': $('#new_original_price'+$(this).attr('pid')).val() },
+				context: this,
+				beforeSend: function(){
+					$(this).addClass('loading').hide();
+				},
+				complete: function(){
+					$(this).removeClass('loading');
+				},
+				success: function(){
+					discount_element = $('#new_discount'+$(this).attr('pid'));
+					discount_element.parent().text(discount_element.val());
+					original_price_element = $('#new_original_price'+$(this).attr('pid'));
+					original_price_element.parent().text(original_price_element.val());
+					$(this).remove();
+				},
+				error: function(){
+					$(this).show();
+					alert("有错误");
+					clearInterval(document.timer);
+					document.timer = null;
+				}
+			});
+		});
+
+		$('.new_discount').bind('keyup', function(){
+			pid = $(this).attr('pid')
+			np = parseInt($(this).val());
+			op = parseInt($("#old_discount" + pid).text());
+			if ($(this).val().match(/^\d+$/) == null){
+				$("#change_value" + pid).text('').css('color','black');
+				$("#change_percent" + pid).text('').css('color','black');
+				return false;
+			}
+			if (np > op){
+				$("#change_value" + pid).text('+'+(np-op)).css('color','red');
+				if (op == 0){ return false; }
+				$("#change_percent" + pid).text('+'+ ((np-op)*100/op).toFixed(2) + '%').css('color','red');
+			}
+			if (np < op){
+				$("#change_value" + pid).text(np-op).css('color','green');
+				if (op == 0){ return false; }
+				$("#change_percent" + pid).text(((np-op)*100/op).toFixed(2) + '%').css('color','green')
+			}
+			if (np == op){
+				$("#change_value" + pid).text(np-op).css('color','black');
+				if (op == 0){ return false; }
+				$("#change_percent" + pid).text(((np-op)*100/op).toFixed(2) + '%').css('color','black')
+			}
+			return false;
+		});
+
+		$('#update_all_price').on({
+			mousedown: function(){
+				var timer = setInterval(function(){
+					var a = $('.discount_processing:first');
+					if (!a.length) { clearInterval(document.timer); document.timer = null; alert('全部修改完成'); return; }
+					if (a.hasClass('loading')) return;
+					a.mousedown();
+				}, 100);
+				document.timer = timer;
+			},
+			click: function(){
+				return false;
+			}
+		});
+	});
+</script>
+
+<h2>批量修改</h2>
+
+<br class="clear" />
+
+<table class="widefat">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>名称</th>
+			<!-- <th>变化历史</th> -->
+			<th>变化百分比</th>
+			<th>变化值</th>
+			<th>旧销售价</th>
+			<th>新销售价</th>
+			<th>新原始价</th>
+			<th>操作</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td></td><td></td><!-- <td></td> --><td></td><td></td><td></td><td></td><td></td>
+			<td><%= link_to '全部修改', '#', :id => 'update_all_price' %></td>
+		</tr>
+		<% @products.each do |product| %>
+			<tr>
+				<td><%= product.id %></td>
+				<td><span style="display:inline-block;max-width:300px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"><%= h product.name %></span></td>
+				<% if nil %>
+				<td>
+					<% CSV.parse(product.discount_history.to_s).map.each do |record| %>
+						<% o = record[0].to_i; n = record[1].to_i %>
+						<span style="color:<%= n > o ? 'red' : 'green' %>;"><%= "%+6d" % (n-o) %></span>
+					<% end %>
+				</td>
+				<% end %>
+				<% op = product.discount.to_i; np = (p = @query_options.find{|h| h['id'].to_i == product.id}) && p['price'].to_i %>
+				<td><span id="change_percent<%= product.id %>"  style="color:<%= ('red' if np > op) || ( 'green' if np < op) || ('black' if np == op) %>"><%= '+' if np > op && product.items.unsold.count != 0 %><%= sprintf('%0.2f', np > op ? (np-op)*100.0/op : (np-op)*100.0/op) + '%' if op != 0 && product.items.unsold.count != 0 %></span></td>
+				<td><span id="change_value<%= product.id %>" style="color:<%= ('red' if np > op) || ( 'green' if np < op) || ('black' if np == op) %>;"><%= "%+6d" % (np-op) if product.items.unsold.count != 0 %></span></td>
+				<td><span id="old_discount<%= product.id %>"><%= op %></span></td>
+				<td><%= text_field_tag "new_discount", np, :size => 5, :id => "new_discount#{product.id}", :pid => "#{product.id}", :class => 'new_discount', :style => "border:1px solid #C6D9E9;" if np != op && product.items.unsold.count != 0 %></td>
+				<td><%= text_field_tag "new_original_price", np > op ? nil : op, :size => 5, :id => "new_original_price#{product.id}", :pid => "#{product.id}", :class => 'new_original_price', :style => "border:1px solid #C6D9E9;" if np != op && product.items.unsold.count != 0 %></td>
+				<td><%= link_to "修改", admin_shop_product_path(product), :class=>"discount_processing", :pid => product.id, :onclick => "return false;" if @current_user.can_manage_message? && np != op && product.items.unsold.count != 0 %></td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>

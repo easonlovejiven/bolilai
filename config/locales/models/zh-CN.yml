@@ -1,0 +1,20 @@
+zh-CN:
+  attributes:
+    id: ID
+    creator_id: 创建人
+    updater_id: 更新人
+    created_at: 创建时间
+    updated_at: 更新时间
+    actions: 操作
+    published: 发布
+  activerecord:
+    models:
+      cms/pages: 自定义页面
+    attributes:
+      cms/page:
+        name: 标题
+        active: 激活
+        url: Url
+        editor: 编辑者
+        editor_id: 编辑者ID
+

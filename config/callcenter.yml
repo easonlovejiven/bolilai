@@ -1,0 +1,13 @@
+development:
+  site: www0.call4006.net
+  port: 8080
+  account: 862910161
+  password: tianrun
+  ivr_id:
+
+production:
+  site: www0.call4006.net
+  port: 8080
+  account: 862910161
+  password: tianrun
+  ivr_id:

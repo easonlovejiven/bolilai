@@ -1,0 +1,8 @@
+= stylesheet_inline_tag 'custom_page/pages/root_2.css'
+= stylesheet_inline_tag 'custom_page/pages/brands.css'
+= javascript_inline_tag 'custom_page/pages/root_2.js'
+.hotbrands
+	.list
+		- data['brands'].each do |brand|
+			= link_to "/auction/brands/#{brand['id']}", :class => "link", :target => "_blank" do
+				/ span #{brand['id']}

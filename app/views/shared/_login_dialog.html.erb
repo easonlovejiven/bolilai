@@ -1,0 +1,30 @@
+<div class="tabbable">
+  <ul class="nav nav-btns">
+    <li class="<%= 'active' if params[:role] != 'provider' %>">
+      <a href="#normal_login" data-toggle="tab">品牌主</a>
+    </li>
+    <!--<li class="<%#= 'active' if params[:role] == 'provider' %>">-->
+      <!--<a href="#provider_login" data-toggle="tab">媒体主</a>-->
+    <!--</li>-->
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane active" id="normal_login">
+      <div class="panel-body">
+        <%= render partial: 'shared/login_form', locals: {str_role: 'normal'} %>
+      </div>
+      <div class="register_link">
+        还没有珀丽莱账号？
+        <%= link_to "立即注册", new_user_registration_path %>
+      </div>
+    </div>
+    <div class="tab-pane" id="provider_login">
+      <div class="panel-body">
+        <%= render partial: 'shared/login_form', locals: {str_role: 'provider'} %>
+      </div>
+      <div class="register_link">
+        还没有成为媒体主？
+        <%= link_to "立即加入", "" %>
+      </div>
+    </div>
+  </div>
+</div>

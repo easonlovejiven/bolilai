@@ -1,0 +1,236 @@
+ruby:
+	units = params[:auction_trade].try(:[], 'units')
+	units = units.values if units.is_a?(Hash)
+	@original = Shop::Trade.find(params[:id]) if params[:id]
+	units ||= @original.units.map { |unit| unit.attributes.slice(*%w[percent guide_percent level_percent point_percent multibuy_id voucher_id level_id]).merge(product_id: unit.item.product.id, measure: unit.item.measure) } if @original
+
+/#server data-trade={ units: units, guide: @trade.guide ? @trade.guide.attributes.slice(*%w[id percent shop_id]) : nil }.to_json data-account=@trade.user.try(:account).try(:to_json, { only: [:id, :email, :phone], include: { user: { only: [:name, :sex] }, auction_user: { only: [:id], include: { level: { only: [:id, :name, :percent, :icon] } } } } }) data-vouchers=(@trade.user ? @trade.user.vouchers.avalable.assign_options(include: { event: { except: [] } }).to_json : nil)
+/= render 'auction/manage/trades/new/style'
+/= render 'auction/manage/trades/new/script'
+
+- trade = @trade
+- @page_title = "#{trade.class.model_name.human} #{trade.id}"
+- show = params[:action] == 'show' || !%w[new edit].include?(params[:action]) && trade.valid?
+- if %w[create update destroy].include?(params[:action])
+	- if trade.valid?
+		.updated
+			p #{t(params[:action])} #{t('successful')}
+	- else
+		.error
+			p #{t(params[:action])} #{t('failed')}
+h2
+	| #{t(show ? 'show' : trade.new_record? ? 'new' : 'edit')} #{t(trade.class.model_name.human)}
+= form_for trade, url: admin_shop_trades_path, method: trade.new_record? ? :post : :put, html: { multipart: true } do |f|
+	table.form-table
+		tbody
+			tr.guide_id
+				th = f.label :guide_id
+				td
+					/- trade.shop.try(:guides).to_a.each do |guide|
+						= f.radio_button :guide_id, guide.id
+						| &nbsp;
+						= f.label "guide_id_#{guide.id}", guide.name
+						| &nbsp;
+					/= f.error_message_on :guide_id
+			tr.user_id
+				th = f.label :user_id
+				td
+					= f.hidden_field :user_id
+					#account_query style='height: 2.5em;'
+						= text_field_tag :auction_trade_user_query, trade.user_id, size: 30
+						| &nbsp;
+						= f.button t('confirm'), class: 'button', id: 'auction_trade_user_query_confirm'
+					#account_text style='display: none; height: 2.5em;'
+						= check_box_tag 'account_select'
+						span#account_id
+							small &nbsp;&nbsp;ID：
+							strong
+						span#account_user_name
+							small &nbsp;&nbsp;姓名：
+							strong
+						span#account_user_sex
+							small &nbsp;&nbsp;性别：
+							strong
+						span#account_phone
+							small &nbsp;&nbsp;手机：
+							strong
+						span#account_email
+							small &nbsp;&nbsp;邮箱：
+							strong
+						span#account_level
+							small &nbsp;&nbsp;等级：
+							strong
+			tr.units
+				th = f.label :units
+				td
+					div style="margin-bottom: 2em"
+						=' label_tag :product_id, '产品'
+						=' text_field_tag :product_id
+						=' label_tag :product_measure, '尺寸'
+						=' select_tag :product_measure, [], style: 'width: 150px;'
+						=' button_tag t('confirm'), class: 'button', id: 'product_confirm'
+						| &#x3000;&#x3000;&#x3000;&#x3000;&#x3000;&#x3000;&#x3000;&#x3000;
+						=' label_tag :item_id, '单件'
+						=' text_field_tag :item_id
+						/=' label_tag :item_identifer, '编号'
+						/=' text_field_tag :item_identifer
+						/=' label_tag :item_barcode, '条码'
+						/=' text_field_tag :item_barcode
+						=' button_tag t('confirm'), class: 'button', id: 'item_confirm'
+					table.form-table
+						tbody
+							tr.units_selector
+								th colspan="999"
+							tr
+								th style="width: 2em"
+								th 产品
+								th 产品ID
+								th 产品尺寸
+								th 单件ID
+								th 单件编号
+								th 单件条码
+								th 市场价
+								th 店铺价
+								th 销售价
+								th 最低价
+								th 成交价
+								th 等级折扣
+								th 连拍折扣
+								th 店铺折扣
+								th 积分折扣
+								th 代金券
+								th 操作
+					label 总价：
+					span.price_total
+			/ tr.price
+			/ 	th = f.label :price
+			/ 	td: #auction_trade_price
+			tr.need_invoice
+				th = f.label :need_delivery
+				td = f.check_box :need_delivery
+			tr.delivery_time
+				th = f.label :delivery_time
+				td
+					- Shop::Trade::DELIVERY_TIMES.keys.each do |delivery_time|
+						=' f.radio_button :delivery_time, delivery_time
+						=' f.label "delivery_time_#{delivery_time}", t("activerecord.enums.auction/trade.delivery_time.#{delivery_time}")
+			tr.delivery_phone
+				th = f.label :delivery_phone
+				td = f.text_field :delivery_phone
+			/tr.contact
+			/	th = f.label :contact
+			/	td
+			/		#contact_form
+			/			= f.fields_for :contact, trade.contact || Shop::Contact.new do |sf|
+			/				table.form-table
+			/					tbody
+			/						tr
+			/							td = sf.label :id
+			/							td = sf.label :name
+			/							td = sf.label :mobile
+			/							td = sf.label :phone
+			/							td = sf.label :country
+			/							td = sf.label :province
+			/							td = sf.label :city
+			/							td = sf.label :town
+			/							td = sf.label :address
+			/							td = sf.label :postcode
+			/						tr
+			/							td = sf.select :id, []
+			/							td = sf.text_field :name
+			/							td = sf.text_field :mobile
+			/							td = sf.text_field :phone
+			/							td = sf.text_field :country
+			/							td = sf.text_field :province
+			/							td = sf.text_field :city
+			/							td = sf.text_field :town
+			/							td = sf.text_field :address
+			/							td = sf.text_field :postcode
+			/		#contact_list
+			tr.need_invoice
+				th = f.label :need_invoice
+				td = f.check_box :need_invoice
+			tr.invoice_type
+				th = f.label :invoice_type
+				td
+					- Shop::Trade::INVOICE_TYPES.keys.each do |invoice_type|
+						=' f.radio_button :invoice_type, invoice_type
+						=' f.label "invoice_type_#{invoice_type}", t("activerecord.enums.auction/trade.invoice_type.#{invoice_type}")
+			tr.invoice_content
+				th = f.label :invoice_content
+				td
+					- Shop::Trade::INVOICE_CONTENTS.keys.each do |invoice_content|
+						=' f.radio_button :invoice_content, invoice_content
+						=' f.label "invoice_content_#{invoice_content}", t("activerecord.enums.auction/trade.invoice_content.#{invoice_content}")
+			tr.invoice_title
+				th = f.label :invoice_title
+				td = f.text_field :invoice_title
+			/tr.invoice_contact
+			/	th = f.label :invoice_contact
+			/	td
+			/		#invoice_contact_form
+			/			= f.fields_for :invoice_contact, trade.invoice_contact || Shop::Contact.new do |sf|
+			/				table.form-table
+			/					tbody
+			/						tr
+			/							td = sf.label :id
+			/							td = sf.label :name
+			/							td = sf.label :mobile
+			/							td = sf.label :phone
+			/							td = sf.label :country
+			/							td = sf.label :province
+			/							td = sf.label :city
+			/							td = sf.label :town
+			/							td = sf.label :address
+			/							td = sf.label :postcode
+			/						tr
+			/							td = sf.select :id, []
+			/							td = sf.text_field :name
+			/							td = sf.text_field :mobile
+			/							td = sf.text_field :phone
+			/							td = sf.text_field :country
+			/							td = sf.text_field :province
+			/							td = sf.text_field :city
+			/							td = sf.text_field :town
+			/							td = sf.text_field :address
+			/							td = sf.text_field :postcode
+			/		#invoice_contact_list
+			/tr.mall_promotion_id
+			/	th = f.label :mall_promotion_id
+			/	td
+			/		= f.collection_select :mall_promotion_id, trade.shop.mall_promotions.where(':current BETWEEN started_at AND ended_at', current: Time.current).order('code ASC'), :id, :code, include_blank: true if trade.shop
+			/		= f.error_message_on :mall_promotion_id
+			tr.shop_identifier
+				th = f.label :shop_identifier
+				td
+					= f.text_field :shop_identifier
+					= f.error_message_on :shop_identifier
+			tr.comment
+				th = f.label :comment
+				td = f.text_field :comment
+			tr.remark
+				th = f.label :remark
+				td = f.text_field :remark
+			/tr.package_from
+			/	th = f.label :package_from
+			/	td = f.text_field :package_from
+			/tr.package_to
+			/	th = f.label :package_to
+			/	td = f.text_field :package_to
+			/tr.package_content
+			/	th = f.label :package_content
+			/	td = f.text_field :package_content
+			/tr.whisper_style
+			/	th = f.label :whisper_style
+			/	td = f.select :whisper_style, options_for_select(["", "清新素雅", "温馨迷人", "炫彩阳光"])
+			/tr.whisper_from
+			/	th = f.label :whisper_from
+			/	td = f.text_field :whisper_from
+			/tr.whisper_to
+			/	th = f.label :whisper_to
+			/	td = f.text_field :whisper_to
+			/tr.whisper_content
+			/	th = f.label :whisper_content
+				td = f.text_field :whisper_content
+	- unless show
+		.submit = f.submit

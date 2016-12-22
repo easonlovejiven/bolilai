@@ -1,0 +1,175 @@
+<%
+   @page_title = "注册"
+   @breadcrumb = [
+           ['注册', new_core_account_path],
+   ]
+%>
+
+<div id="popup_window_original" class="no_popup">
+  <!-- div_popup_window_begin -->
+  <div class="logsigbox">
+    <a class="closelog js_facebox_close" href="#"></a>
+
+    <div class="box_cont signupbox" id="user_signup_success_area" style="display:none;">
+      <div class="success">
+        <em></em>
+
+        <h2>注册成功!</h2>
+      </div>
+    </div>
+
+    <div class="box_cont signupbox" id="user_signup_form_area">
+      <div class="loginline"></div>
+      <h4 class="box_title">开始注册 !</h4>
+
+      <div class="cutover">
+        <strong>已有账号 ? </strong>
+        <%= link_to content_tag(:span, '立即登录'), new_core_session_path(:redirect => params[:redirect]), :class => "uplink", "data-target" => "popup", :rel => "nofollow" %>
+      </div>
+      <div class="Terms_info hide" id="signup_term_content"></div>
+
+
+      <form class="weimall_form" action="<%= core_accounts_path %>" method="post" id="user_signup_form" onsubmit="if (event) event.returnValue = false; return false;">
+        <%= hidden_field_tag 'account[client]', 'html5' %>
+        <%= hidden_field_tag 'redirect', params[:redirect] || auction_root_path, :id => "user_signup_redirect" %>
+        <%= hidden_field_tag "invitation[id]", params[:invitation][:id] if params[:invitation] && params[:invitation][:id] %>
+        <%= hidden_field_tag "invitation[id]", params[:invitation_id] if params[:invitation_id] %>
+        <%= hidden_field_tag "invitation[code]", params[:invitation][:code] if params[:invitation] && params[:invitation][:code] %>
+        <%= hidden_field_tag "invitation[code]", params[:invitation_code] if params[:invitation_code] %>
+        <div class="sigMode">
+          <input type="radio" name="user_signup_login_is" value="" id="user_signup_login_is_email" checked="checked"/><label for="user_signup_login_is_email">E-mail注册</label>
+          <input type="radio" name="user_signup_login_is" value="" id="user_signup_login_is_phone"/><label for="user_signup_login_is_phone">手机注册</label>
+        </div>
+        <ol class="formbox">
+          <li class="fli" id="user_signup_account_email_area">
+            <label for="user_signup_account_email">账号：</label>
+            <%= text_field_tag 'account[email]', '', id: 'user_signup_account_email', autocomplete: "off" %>
+            <div class="tip" id="user_signup_account_email_tip">
+              <em class="tip_left"></em>
+              <span class="tip_text">请填写正确的邮箱地址,该邮箱将作为您的珀丽莱账号。</span>
+              <em class="tip_right"></em>
+            </div>
+            <div class="error" id="user_signup_account_email_error">
+              <em class="error_icon"></em>您的邮箱地址不正确
+            </div>
+            <div class="error" id="user_signup_account_email_error_duplicate">
+              <em class="error_icon"></em>该邮箱已在该网注册
+            </div>
+          </li>
+          <li class="fli" id="user_signup_account_phone_area" style="display:none;">
+            <label for="user_signup_account_phone">账号：</label>
+            <%= text_field_tag 'account[phone]', '', :id => 'user_signup_account_phone', :disabled => true %>
+            <div class="tip" id="user_signup_account_phone_tip">
+              <em class="tip_left"></em>
+              <span class="tip_text">请填写正确的手机号码,该手机将作为您的珀丽莱账号。</span>
+              <em class="tip_right"></em>
+            </div>
+            <div class="error" id="user_signup_account_phone_error">
+              <em class="error_icon"></em>您的手机号不正确
+            </div>
+            <div class="error" id="user_signup_account_phone_error_duplicate">
+              <em class="error_icon"></em>该手机已在该网站注册
+            </div>
+          </li>
+          <li class="fli">
+            <label for="user_signup_account_password">密码：</label>
+            <%= password_field_tag 'account[password]', '', :id => 'user_signup_account_password' %>
+            <div class="tip" id="user_signup_account_password_tip">
+              <em class="tip_left"></em>
+              <span class="tip_text">密码由6～20位字母、数字或符号组成。</span>
+              <em class="tip_right"></em>
+            </div>
+            <div class="error" id="user_signup_account_password_error">
+              <em class="error_icon"></em>密码长度小于6位
+            </div>
+          </li>
+          <li class="fli">
+            <label for="user_signup_account_password_confirmation">重复密码：</label>
+            <%= password_field_tag 'account[password_confirmation]', '', :id => 'user_signup_account_password_confirmation' %>
+            <div class="tip" id="user_signup_account_password_confirmation_tip">
+              <em class="tip_left"></em>
+              <span class="tip_text">请重复您的密码。</span>
+              <em class="tip_right"></em>
+            </div>
+            <div class="error" id="user_signup_account_password_confirmation_error">
+              <em class="error_icon"></em>两次密码不一致
+            </div>
+          </li>
+          <li class="fli">
+            <label for="user_signup_user_name">姓名:</label>
+            <%= text_field_tag 'user[name]', '', :id => 'user_signup_user_name' %>
+            <div class="tip" id="user_signup_user_name_tip">
+              <em class="tip_left"></em>
+              <span class="tip_text">请填写真实的姓名</span>
+              <em class="tip_right"></em>
+            </div>
+            <div class="error" id="user_signup_user_name_error">
+              <em class="error_icon"></em>姓名请勿以空格开头
+            </div>
+          </li>
+          <li class="fli">
+            <label>性别：</label>
+
+            <div class="gender">
+              <%= radio_button_tag 'user[sex]', 'male', true %>
+              <%= label_tag 'user[sex][male]', '男' %>
+              <%= radio_button_tag 'user[sex]', 'female' %>
+              <%= label_tag 'user[sex][female]', '女' %>
+            </div>
+          </li>
+          <li class="fli PromotionCode">
+            <div class="validation" id="user_signup_captcha_area">
+              <label for="user_signup_captcha">验证码:</label>
+              <%= text_field_tag 'captcha', '', :id => 'user_signup_captcha' %>
+              <div class="code_img">
+                <img alt="code" src="<%= captcha_image_core_accounts_path %>?<%= Time.now.to_i %>" id="captcha_image" style="width:48px;height:24px;"/>
+                <a href="#" id="captcha_refresh" title="重新获取验证码"></a>
+              </div>
+              <div class="error" id="user_signup_captcha_error">验证码错误！</div>
+              <div class="tip validation_code" id="user_signup_captcha_tip">
+                <em class="tip_left"></em>
+                <span class="tip_text">请输入所见4位数字，可点击数字右侧按钮刷新.</span>
+                <em class="tip_right"></em>
+              </div>
+            </div>
+          </li>
+        </ol>
+        <div class="logsend">
+          <input type="checkbox" checked="checked" name="" id="remember_me"/>
+          <label for="remember_me" class="remember_me">记住我</label>
+          <a href="#" class="signupButton disabled" id="user_signup_confirm"><span>注册</span></a>
+        </div>
+      </form>
+
+    </div>
+
+    <div class="box_cont PhoneBox" id="user_activate_phone_area" style="display:none;">
+      <div class="Activating">
+        <em class="aticon"></em>
+
+        <h2 class="title">注册成功 ! 激活码已发送至您的手机。请30分钟内输入激活码登录。</h2>
+
+        <div class="formcont">
+          <form class="weimall_form" id="user_activate_phone_form" action="/core/accounts/0/activate" onsubmit="return event.returnValue = false;">
+            <input type="hidden" name="_method" value="put"/>
+            <input type="hidden" name="account[login]" id="user_activate_phone_login"/>
+            <label for="user_activate_phone_activation_code">激活码：</label>
+            <input type="text" style="width: 87px;" name="account[activation_code]" id="user_activate_phone_activation_code"/>
+            <button type="submit" class="jqTransformButton disabled" id="user_activate_phone_confirm">登录</button>
+            <div class="error" id="user_activate_phone_activation_code_error"><em class="error_icon"></em>激活码错误</div>
+            <a href="#" class="ReSend">重新发送激活码</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- div_popup_window_end -->
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('form.weimall_form').jqTransform({});
+        if ($("#popup_window").length == 0) {
+            $(".uplink").attr("data-target", "")
+        }
+    })
+</script>

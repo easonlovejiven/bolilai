@@ -1,0 +1,44 @@
+:ruby
+	@page_title = "订单管理"
+
+.trade_index#trade_index
+	.trade_title 订单管理
+	.trade_thead
+		%p.th1 商品
+		%p.th2 优惠信息
+		%p.th3 交易金额
+		%form.jqeraform
+			%select(onchange="if ($(this).val() != '') window.go({ pushState: true }, '', $(this).val())")
+				%option 选择交易状态
+				- [[nil, '查看全部'], ['pay', '待付款'], [%w[audit prepare ship], '待发货'], ['receive', '待收货'], ['complete', '交易完成'], [%w[cancel freezed], '已取消'], ['punished', '订单过期']].each do |status, name|
+					<option value="#{url_for('where[status]' => status)}" #{'selected="selected"' if status && status == (params[:where] && params[:where][:status])}>#{name}</option>
+		%p.th4 操作
+		%em.th_line1
+		%em.th_line2
+		%em.th_line3
+		%em.th_line4
+		/[if IE]
+			%span.thleft
+			%span.thright
+	.trade_list
+		- if @trades.total_count == 0
+			.list_empty
+				%h3 您还没有订单！
+				%a(href="/shop/products")
+					%span 现在就去购物
+		- else
+			- page = (params[:page] || 1).to_i
+			%div(id="pagination_#{page}")
+				<!-- div_pagination_#{page}_begin -->
+				= render :partial => 'trade', :collection => @trades
+				- if page < @trades.total_pages
+					%div(id="pagination_#{page + 1}")
+						.trade_block
+							= link_to params.merge(:page => page + 1), :class => "js_trade_pagination trade_more", :onclick => "return event.returnValue = false;", "data-target" => "pagination_#{page + 1}" do
+								%strong.more_text
+									%em.more_icon
+									查看更多订单
+								/[if IE]
+									%span.thleft
+									%span.thright
+				<!-- div_pagination_#{page}_end -->

@@ -1,0 +1,50 @@
+:ruby
+	@page_title = "订单支付成功"
+:css
+	.contentbody{ width:690px; margin:0 auto; overflow:hidden;}
+	.contentbody .header { background:  #eee no-repeat 0 0; position:relative; margin-top:119px; overflow:hidden; display:block; height:42px; }
+	.contentbody .header .logo ,
+	.contentbody .header .website { display: none;}
+	.top,
+	.right,
+	.bottom,
+	.left,
+	.l_t_round,
+	.r_t_round,
+	.l_b_round,
+	.r_b_round
+	{ display:none; display:block\9;}
+	.top{ position:absolute; top:-8px; left:0; background:url("") repeat-x;height:8px; width:662px; }
+	.right{position:absolute; top:0; right:-8px; background:url("") repeat-y; width:8px; height:354px;}
+	.bottom{position:absolute; bottom:-8px; left:0; background:url("") repeat-x; height:8px; width:662px;}
+	.left{position:absolute; top:0; left:-8px; background:url("") repeat-y; width:8px; height:354px;}
+	.l_t_round{position:absolute; top:-8px; left:-8px; background:url("") no-repeat;height:8px; width:8px;}
+	.r_t_round{position:absolute; top:-8px; right:-8px; background:url("") no-repeat;height:8px; width:8px;}
+	.l_b_round{position:absolute; bottom:-8px; left:-8px; background:url("") no-repeat;height:8px; width:8px;}
+	.r_b_round{position:absolute; bottom:-8px; right:-8px; background:url("") no-repeat;height:8px; width:8px;}
+	/*pay seccess css*/
+	.contentbody .content_pay{ position:relative;  margin:18px 14px 34px; background:#fff; width:662px; height:354px;}
+	.contentbody .content_pay em{ position:absolute; top:127px; left:115px; background:url("") no-repeat; width:126px; height:99px; }
+	.contentbody .content_pay .info{ position:absolute; top:121px; left:200px; width:264px;  overflow:hidden;}
+	.contentbody .content_pay .info .success{ font-size:33px; height:54px; border-bottom:1px solid #d9d9d9;}
+	.contentbody .content_pay .info  .detail{ font-size:14px; line-height:26px; margin-top:8px;}
+	.contentbody .content_pay .info  .detail .tel{ color:#e5368a; font-size:18px; margin-left:10px;}
+
+.contentbody
+	.content_pay
+		.top
+		.right
+		.bottom
+		.left
+		.l_t_round
+		.r_t_round
+		.l_b_round
+		.r_b_round
+		%em
+		.info
+			%p.success 您已成功付款！
+			%p.detail
+				我们将尽快为您发货。
+				%br/
+				如有问题请致电客服
+				%span.tel 400-6915-695

@@ -1,0 +1,89 @@
+<div class="row">
+  <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="jarviswidget">
+      <header>
+        <span class="widget-icon"><i class="fa fa-table"></i></span>
+
+        <h2>分类列表</h2>
+
+        <div class="widget-toolbar">
+          <%= link_to raw('<i class="fa fa-plus-circle"></i> 创建'), new_admin_shop_category_path, class: 'btn btn-xs btn-default', data: {target: 'rightPanel'} if can?(:create, Shop::Category) %>
+        </div>
+      </header>
+      <div>
+        <div class="widget-body-toolbar">
+          <%= form_tag request.path, method: 'get', id: 'search_form', class: 'form-inline' do %>
+              <%= render 'admin/shared/search/basic', field: 'id', kv: search_field_kv(:id), size: 4 %>
+              <%= render 'admin/shared/search/basic', field: 'name', kv: search_field_kv(:name, :like) %>
+              <%= render 'admin/shared/search/select', field: 'parent_id', kv: search_field_kv(:parent_id), field_name: '父类', options: (Shop::Category.active.to_a).map { |cate| [cate.name, cate.id] } %>
+              <%= render 'admin/shared/search/range', field: 'created_at', class_names: 'hasDatepicker' %>
+              <%= render 'admin/shared/search/select', field: 'published', kv: search_field_kv(:published), field_name: '发布', options: [['✔', 'true'], ['✘', 'false']] %>
+              <%= render 'admin/shared/search/basic', field: 'editor_id', kv: search_field_kv(:editor_id), size: 4 %>
+              <%= render 'admin/shared/search/order' %>
+              <%= render 'admin/shared/search/page' %>
+              <%= submit_tag t(:search), class: 'btn search-xs btn-success' %>
+              <%= link_to t(:reset), request.path, class: 'btn search-xs btn-default', data: {remote: true} %>
+          <% end %>
+        </div>
+        <div class="widget-body no-padding">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+              <thead>
+              <tr>
+                <th>
+                  ID <%= order_link_btn('id') %>
+                </th>
+                <th>名称</th>
+                <th>图片</th>
+                <th>父类</th>
+                <th>属性</th>
+                <th>顺序</th>
+                <th>创建时间 <%= order_link_btn('created_at') %></th>
+                <th class="table_set">操作</th>
+                <th class="table_set">发布</th>
+              </tr>
+              </thead>
+              <tbody>
+              <% @categories.each do |category| %>
+                  <tr>
+                    <td><%= link_to category.id, 'where[id]' => category.id %></td>
+                    <td>
+                      <span data-url="<%= admin_shop_category_path(category) %>" data-field="category[name]"><%= h category.name %></span>
+                    </td>
+                    <td class="center">
+                      <%= image_tag(category.pic_image.url(:tiny), alt: category.name, style: "display: block; width: 64px; height: 64px;") %></td>
+                    <td><%= link_to category.parent.name, admin_shop_category_path(category.parent), "data-target" => "rightPanel" if category.parent %></td>
+                    <td>
+                      <% category.current_attributes.each do |attribute| %>
+                          <%= link_to attribute.name, admin_shop_attribute_path(attribute), "data-target" => "rightPanel" %>
+                          ,
+                      <% end %>
+                    </td>
+                    <td>
+                      <span data-url="<%= admin_shop_category_path(category) %>" data-field="category[order]"><%= h category.order %></span>
+                    </td>
+                    <td><%= category.created_at && category.created_at.to_s(:db) %></td>
+                    <td class='op'>
+                      <%= link_to '查看', admin_shop_category_path(category), "data-target" => "rightPanel", class: 'btn btn-xs btn-success' if can?(:show, category) %>
+                      <%= link_to '编辑', edit_admin_shop_category_path(category), "data-target" => "rightPanel", class: 'btn btn-xs btn-success' if can?(:update, category) %>
+                      <%= link_to '删除', delete_admin_shop_category_path(category), "data-target" => "rightPanel", class: 'btn btn-xs btn-success' if can?(:destroy, category) %>
+                    </td>
+                    <td class="center"><%= render :partial => "admin/shared/publish", :object => category %></td>
+                  </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+          <div class="dt-toolbar-footer">
+            <%= render "admin/shared/pagination", :object => @categories %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+</div>
+<script type="text/javascript">
+    $(function () {
+        App.handleDatePickers(false);
+    })
+</script>

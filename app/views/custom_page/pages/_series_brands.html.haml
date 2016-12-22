@@ -1,0 +1,13 @@
+= stylesheet_inline_tag "custom_page/pages/series_brand/#{data['theme']}.css" unless data['theme'].blank?
+-# stylesheet_inline_tag "custom_page/pages/series_brand/#{data['arrange']}.css" unless data['arrange'].blank?
+- flash = request.fullpath.match(/\?flash$/)
+.seriesbox.series_brand(style="margin-bottom: #{v = (data['style']||{})['margin-bottom']; v.blank? ? 12 : v}px;")
+	.brand_box
+		.list
+			- (data['brands']||{})['ids'].to_sz[0..4].map{|id|Shop::Brand.find_by_id(id) }.compact.each_with_index do |brand, index|
+				= link_to flash ? "http://www.weimall.com/#subapp=productGrid&brand=#{brand.id}" : shop_products_path('where[brand_id]' => brand.id), :class => "link", :target => "_blank" do
+					= image_tag brand.pic.to_s, :class => 'pic', :alt => ''
+					%span.cnname= h brand.name
+	= link_to flash ? "http://www.weimall.com/#subapp=productGrid&channel=brand" :Shop::Brand.new, :class => 'morelink', :target => "_blank" do
+		%span 更多品牌
+	= render :partial => 'admin/custom_page/pages/series_preview', :locals => { :data => data }

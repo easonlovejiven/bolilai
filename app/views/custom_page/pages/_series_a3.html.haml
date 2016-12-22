@@ -1,0 +1,23 @@
+= stylesheet_inline_tag "custom_page/pages/series_a3/#{data['theme']}.css" unless data['theme'].blank?
+-# stylesheet_inline_tag "custom_page/pages/series_a3/#{data['arrange']}.css" unless data['arrange'].blank?
+- flash = request.fullpath.match(/\?flash$/)
+.seriesbox.series_a3(style="margin-bottom: #{v = (data['style']||{})['margin-bottom']; v.blank? ? 12 : v}px;")
+  .product_list(class="widget" data-widget-id="large_widget_#{page.id}")
+    - data['products'][0..2].each do |p|
+      - product = Shop::Product.where(id: p['id']).first_or_initialize
+      = link_to flash ? "/index.html#subapp=productGrid&category2_id=#{product.category2_id}&keyword=&extid=#{product.id}" : product, :class => "link", :target => "_blank" do
+        %h3.title= h p['title']
+        .pic
+          = image_tag p['pic'], :class => '', :alt => p['title']
+        .linktext
+          .summary
+            %span= h product.brand ? product.brand.name : ''
+            %em= h product.name.to_s.gsub(product.brand ? product.brand.name.to_s.strip : '', '').gsub(product.brand ? product.brand.chinese.to_s.strip : '', '')
+          .value
+            .MarketPrice
+              %em ￥
+              %span= product.price
+            .WeimallPrice
+              %em ￥
+              %span=product.discount
+  = render :partial => 'admin/custom_page/pages/series_preview', :locals => { :data => data,:page=>page }

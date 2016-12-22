@@ -1,0 +1,119 @@
+<% @record = @voucher %>
+<% @show = !%w[new edit].include?(params[:action]) && @record.valid? %>
+<div class="modal-header">
+  <%= render "admin/modal/header" %>
+</div>
+<%= render 'admin/shared/prompt' %>
+<div class="modal-body">
+  <%= form_for @voucher, :url => @voucher.new_record? ? admin_shop_vouchers_path : admin_shop_voucher_path(@voucher),
+               :html => {:method => @voucher.new_record? ? :post : :put, :multipart => true, class: "form-horizontal"} do |f| %>
+      <% if @show %>
+          <div class="form-group">
+            <%= f.label :id, 'ID', {class: 'col-md-3 control-label'} %>
+            <div class="form-control-static">
+              <strong><%= @record.id %></strong>
+            </div>
+          </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= f.label :event_id, '<sup>*</sup>券种'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= link_to_if can?(:show, @voucher.event), h(@voucher.event.name), admin_shop_event_path(@voucher.event), :rel => 'facebox' if @voucher.event %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <%= select "voucher", "event_id", options_for_select(Shop::Event.active.unexpired.map { |e| [%[#{e.id} - #{e.name} - 满#{e.limitation}减#{e.amount} - #{e.started_at && e.started_at.to_date.to_s(:db)}~#{e.started_at && e.ended_at.to_date.to_s(:db)}], e.id] },
+                                                                   @voucher.event_id), {:include_blank => true}, class: 'form-control' %>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :identifier, '编号', {class: 'col-md-3 control-label'} %>
+        <div class="form-control-static">
+          <%= @voucher.identifier.to_s.gsub(/.{4}$/, '****') %>
+        </div>
+      </div>
+
+      <!--<div class="form-group">-->
+      <!--<%#= f.label :user_id, '用户', {class: 'col-md-3 control-label'} %>-->
+      <!--<%# if @show %>-->
+      <!--<div class="form-control-static">-->
+      <!--<%#= render :partial => "admin/shop/users/user", :object => @voucher.user %>-->
+      <!--</div>-->
+      <!--<%# else %>-->
+      <!--<div class="col-md-6">-->
+      <!--<%#= f.text_field :user_id, class: 'form-control' %>-->
+      <!--<span class="note">留空为匿名代金券</span>-->
+      <!--</div>-->
+      <!--<#% end %>-->
+      <!--</div>-->
+
+      <div class="form-group">
+        <%= f.label :remark, '备注', {class: 'col-md-3 control-label'} %>
+        <% if @show && @current_user.id == @voucher.editor_id %>
+            <div class="form-control-static">
+              <%= simple_format h @voucher.remark %>
+            </div>
+        <% else %>
+            <div class="col-md-8">
+              <%= f.text_area :remark, class: 'form-control' %>
+            </div>
+        <% end %>
+      </div>
+
+      <% if @voucher.new_record? %>
+          <div class="form-group">
+            <%= f.label :quantity, '数量', {class: 'col-md-3 control-label'} %>
+            <div class="col-md-8">
+              <%= text_field_tag :quantity, 1, class: 'form-control' %>
+              <span class="note">默认为1</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :user_ids, '用户ID列表', {class: 'col-md-3 control-label'} %>
+            <div class="col-md-8">
+              <%= text_area_tag :user_ids, '', class: 'form-control' %>
+              <span class="note">每行一个用户id</span>
+            </div>
+          </div>
+      <% else %>
+          <div class="form-group">
+            <%= f.label :created_at, '创建时间', class: 'col-md-3 control-label' %>
+            <div class="form-control-static">
+              <strong><%= @voucher.created_at && @voucher.created_at.to_s(:db) %></strong>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :updated_at, '更新时间', class: 'col-md-3 control-label' %>
+            <div class="form-control-static">
+              <strong><%= @voucher.updated_at && @voucher.updated_at.to_s(:db) %></strong>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :editor, '编辑', class: 'col-md-3 control-label' %>
+            <div class="form-control-static">
+              <%= link_to_if can?(:show, @voucher.editor), h(@voucher.editor.name), admin_manage_editor_path(@voucher.editor), "data-target" => "rightPanel" if @voucher.editor %>
+            </div>
+          </div>
+      <% end %>
+
+      <div class="form-actions">
+        <% if @show %>
+            <%= link_to '查看', admin_shop_voucher_path(@voucher), "data-target" => "rightPanel", class: 'btn btn-success' if can?(:show, @voucher) %>
+            <%= link_to '编辑', edit_admin_shop_voucher_path(@voucher), "data-target" => "rightPanel", class: 'btn btn-success' if can?(:update, @voucher) %>
+            <%= link_to '删除', delete_admin_shop_voucher_path(@voucher), "data-target" => "rightPanel", class: 'btn btn-success' if !@voucher.trade && can?(:destroy, @voucher) %>
+            <%= link_to '复制', new_admin_shop_voucher_path(:id => @voucher.id), "data-target" => "rightPanel", class: 'btn btn-success' if can?(:create, @voucher) %>
+        <% else %>
+            <%= f.submit "提交", class: "btn btn-primary" %>
+        <% end %>
+      </div>
+  <% end %>
+</div>
+
+

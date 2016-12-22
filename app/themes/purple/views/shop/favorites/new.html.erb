@@ -1,0 +1,11 @@
+<h1>创建收藏</h1>
+<% form_for :favorite, @favorite, :url => auction_favorites_path do |f| -%>
+	<tr>
+		<td>产品ID</td>
+		<td><%= f.text_field :product_id %></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td><%= f.submit "提交", :disable_with => '提交ing...' %></td>
+	</tr>
+<% end -%>

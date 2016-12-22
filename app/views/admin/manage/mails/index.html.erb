@@ -1,0 +1,157 @@
+<div class="inbox-nav-bar no-content-padding">
+	<h6 class="page-title txt-color-blueDark hidden-tablet">zhufujun@qianfandu.com</h6>
+
+	<div class="btn-group hidden-desktop visible-tablet">
+		<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+			Inbox <i class="fa fa-caret-down"></i>
+		</button>
+		<ul class="dropdown-menu pull-left">
+			<li>
+				<a href="javascript:void(0);" class="inbox-load">收件箱 <i class="fa fa-check"></i></a>
+			</li>
+			<li>
+				<a href="javascript:void(0);">已发送</a>
+			</li>
+			<li>
+				<a href="javascript:void(0);">已删除</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="javascript:void(0);">垃圾箱</a>
+			</li>
+		</ul>
+	</div>
+
+	<div class="inbox-checkbox-triggered">
+		<div class="btn-group">
+			<a href="javascript:void(0);" rel="tooltip" title="" data-placement="bottom" data-original-title="标记为重要" class="btn btn-default"><strong><i class="fa fa-exclamation fa-lg text-danger"></i></strong></a>
+			<a href="javascript:void(0);" rel="tooltip" title="" data-placement="bottom" data-original-title="移动至文件夹" class="btn btn-default"><strong><i class="fa fa-folder-open fa-lg"></i></strong></a>
+			<a href="javascript:void(0);" rel="tooltip" title="" data-placement="bottom" data-original-title="删除" class="deletebutton btn btn-default"><strong><i class="fa fa-trash-o fa-lg"></i></strong></a>
+		</div>
+	</div>
+
+	<a href="javascript:void(0);" id="compose-mail-mini" class="btn btn-primary pull-right hidden-desktop visible-tablet">
+		<strong><i class="fa fa-file fa-lg"></i></strong>
+	</a>
+
+	<div class="btn-group pull-right inbox-paging">
+		<a href="javascript:void(0);" class="btn btn-default btn-sm"><strong><i class="fa fa-chevron-left"></i></strong></a>
+		<a href="javascript:void(0);" class="btn btn-default btn-sm"><strong><i class="fa fa-chevron-right"></i></strong></a>
+	</div>
+	<span class="pull-right"><strong>1-30</strong> of <strong>3,452</strong></span>
+</div>
+
+<div id="inbox-content" class="inbox-body no-content-padding">
+	<div class="inbox-side-bar">
+		<a href="javascript:void(0);" id="compose-mail" class="btn btn-primary btn-block">
+			<i class="fa fa-lg fa-pencil-square-o"></i>
+			<strong>写邮件</strong>
+		</a>
+
+		<h6> 文件夹
+			<a href="javascript:void(0);" rel="tooltip" title="" data-placement="right" data-original-title="收邮件" class="pull-right txt-color-darken"><i class="fa fa-refresh"></i></a>
+		</h6>
+
+		<ul class="inbox-menu-lg">
+			<li class="active">
+				<a class="inbox-load" href="javascript:void(0);"> 收件箱 (14) </a>
+			</li>
+			<li>
+				<a href="javascript:void(0);">已发送</a>
+			</li>
+			<li>
+				<a href="javascript:void(0);">草稿箱</a>
+			</li>
+			<li>
+				<a href="javascript:void(0);">已删除</a>
+			</li>
+		</ul>
+
+		<h6> 快速查看
+			<a href="javascript:void(0);" rel="tooltip" title="" data-placement="right" data-original-title="添加更多" class="pull-right txt-color-darken"><i class="fa fa-plus"></i></a>
+		</h6>
+
+		<ul class="inbox-menu-sm">
+			<li>
+				<a href="javascript:void(0);">共享图片 (476)</a>
+			</li>
+			<li>
+				<a href="javascript:void(0);">共享文件 (4)</a>
+			</li>
+		</ul>
+
+		<div class="air air-bottom inbox-space">
+
+			3.5GB of
+			<strong>10GB</strong><a href="javascript:void(0);" rel="tooltip" title="" data-placement="top" data-original-title="Empty Spam" class="pull-right txt-color-darken"><i class="fa fa-trash-o fa-lg"></i></a>
+
+			<div class="progress progress-micro">
+				<div class="progress-bar progress-primary" style="width: 34%;"></div>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="table-wrap custom-scroll animated fast fadeInRight">
+		<%= render 'email_list' %>
+	</div>
+</div>
+
+<script type="text/javascript">
+	var pagefunction = function () {
+
+		// fix table height
+		tableHeightSize();
+
+		$(window).resize(function () {
+			tableHeightSize()
+		})
+		function tableHeightSize() {
+
+			if ($('body').hasClass('menu-on-top')) {
+				var menuHeight = 68;
+				// nav height
+
+				var tableHeight = ($(window).height() - 224) - menuHeight;
+				if (tableHeight < (320 - menuHeight)) {
+					$('.table-wrap').css('height', (320 - menuHeight) + 'px');
+				} else {
+					$('.table-wrap').css('height', tableHeight + 'px');
+				}
+
+			} else {
+				var tableHeight = $(window).height() - 224;
+				if (tableHeight < 320) {
+					$('.table-wrap').css('height', 320 + 'px');
+				} else {
+					$('.table-wrap').css('height', tableHeight + 'px');
+				}
+
+			}
+
+		}
+
+		/*
+		 * LOAD INBOX MESSAGES
+		 */
+//		loadInbox();
+		function loadInbox() {
+			loadURL("/manage/mails/list", $('#inbox-content > .table-wrap'))
+		}
+
+		/*
+		 * Buttons (compose mail and inbox load)
+		 */
+		$(".inbox-load").click(function () {
+			loadInbox();
+		});
+
+		// compose email
+		$("#compose-mail").click(function () {
+			loadURL("/manage/mails/new", $('#inbox-content > .table-wrap'));
+		});
+
+	};
+
+	loadScript("/assets/plugin/delete-table-row/delete-table-row.min.js", pagefunction);
+</script>

@@ -1,0 +1,166 @@
+alipay:
+  key: "hbl8d153iy1cfpnwdlpaeyzjqf8d94pg" # 私钥
+  account: "2088121041355754" # 帐号
+  email: "Barlar@sina.com" # 邮箱
+  client_private_key: ""
+  server_public_key: ""
+
+cmbchina:
+  BranchID: "" # 商户开户分行号
+  CoNo: "" # 商户号
+  OperatorCode: "" # 操作员代码
+  Password: "" # 密码
+
+cmbchina_creditcard:
+  CoNo: "" # 商户号
+  OperatorID: "" # 操作员代码
+  Password: "" # 密码
+  key: "" # 密钥
+  gateWay: 'https://netpay.cmbchina.com/cdpay/cdpay.dll?cdpay'
+  queryUrl: 'https://payment.ebank.cmbchina.com/cdpay/cdpay.dll?DirectRequest'
+
+bill99:
+  merchantAcctId: "" # 帐号
+  pay_key: "" # 人民币网关密钥
+  query_key: "" # 查询密钥
+  server_public_key: "" #快钱公钥
+  client_private_key: "" # 商户私钥
+
+lakala:
+  site: "http://124.126.122.18:8800/merchant/"
+  bill_no_prefix: "111222"
+  mer_id: ""
+  mer_key: ""
+  password: ""
+
+ccb:
+  MerchantId: ""
+  PosId: ""
+  BranchId: ""
+  QupWd: "111111"
+  PublicKey: ""
+
+unionpay:
+  merAbbr: "" # 商户名称
+  merId: "" # 商户代码
+  securityKey: "" # 商户密钥
+  gateWay: "" # 交易测试服务器
+  backStagegateWay: "" # 测试后续交易服务器
+  queryUrl: "" # 查询测试服务器
+
+unionpay_wap:
+  # gateWay: 'https://58.246.226.97:8443/gateway/merchant/trade'
+  # queryUrl: 'https://58.246.226.97:8443/gateway/merchant/query'
+  # gateWay: "http://222.66.233.198:8080/gateway/merchant/trade"
+  # queryUrl: "http://222.66.233.198:8080/gateway/merchant/query"
+  merId: ''
+  securityKey: ""
+  gateWay: "https://202.96.255.146/gateway/merchant/trade"
+  queryUrl: "https://202.96.255.146/gateway/merchant/query"
+
+cmbc:
+  merchantId: ""
+  corpName: ""
+  gateway: "https://ebank.cmbc.com.cn/weblogic/servlets/EService/CSM/B2C/servlet/ReceiveMerchantCMBCTxReqServlet"
+  queryUrl: "https://ebank.cmbc.com.cn/weblogic/servlets/EService/CSM/B2C/servlet/orderQueryServlet"
+  public_key: ""
+  private_key: ""
+  cert: ""
+  key: ""
+
+pab:
+  merchantNo: "WJYZ"
+  gateway: "https://netpay.pingan.com.cn/peps/pabankpay.do"
+  queryUrl: "https://netpay.pingan.com.cn/peps/getPayInfo.do"
+  private_key: ""
+  public_key: ""
+
+pgs:
+  gateWay: "http://202.100.200.78/pgs-pay/gateway/pay.action" #交易服务器
+  queryUrl: "http://202.100.200.78/pgs-pay/gateway/queryStatus.action" #查询服务器地址
+  merchantId: "" #商户ID
+  merchantEmail: "" #商户邮箱
+  merchantMobile: "" #商户电话
+  signNo: "" #安全码
+
+icbc:
+  merAcct: "" # "0302016119300105319"
+  merID:  "" #"0302EC23667693"
+  gateway: "https://mybank3.dccnet.com.cn/servlet/ICBCINBSEBusinessServlet"
+  queryUrl: "https://corporbank3.dccnet.com.cn/servlet/ICBCINBSEBusinessServlet"
+  # gateway: "https://b2c.icbc.com.cn/servlet/ICBCINBSEBusinessServlet"
+  # queryUrl: "https://corporbank.icbc.com.cn/servlet/ICBCINBSEBusinessServlet"
+  # password: "666666"
+  key: ""
+  # private_key: "-----BEGIN RSA PRIVATE KEY-----\nMIICXQIBAAKBgQDhDpLKzRQ1I2X0WknHxTEXmLhWnKC4TDm7j1cyD1/q9IsMKFwF\na3HPYT89PS5xTburhuUYQePkYLXCQpSlsA6az1TqyMKBH+fToPtlVtx3lchPDCLq\n8HEZXnPx2bH4wF06tJiQcH8giEo5Xa6F86V+n0CwCnZvRR07OBl7Mm7G+QIDAQAB\nAoGAbsPcbWG3w1tzr2rMizy7J7DrcP1PgMVLWMt4j9PPUnUfBlHK0IQMFJP5Kuu0\nsuEeL5KJqIGtZtZOPpjETjOzS4Pb9Yjx3JB77azuLEgQd4vGWFwqFHQ5hK70Zhx8\nVueK2xQskNU1xGxn8b/SCyzyOJ7YsfX27u0f67kH9GSipQ0CQQDytoTCNL+tSu/g\nxXLtTQWg9rX4RPkWmbAFqEdg9B134gxXy6NLiWkqGJmKBajrEy4bDYN5BcjwQiGV\nhC8hsIAnAkEA7WCdn5I6Wn04gi+q0ikq00FMe9/oe7AeDA/4FgldHxXAnOJ5feTy\n5nDxSJftKTpnDF5HtusRLPN5oWk+qdnT3wJAeT1lCaHR0Z2qP6xB4XnlAufaND83\n8espe1n49dxbUAQxyDVnx5bHWojZQZHcNDjrggX5E54pJqLSJd7WsEx7ZwJBAMej\nsC1aQDWGhxYGnPXvpZLSok60e8Q61Kp0a8Os0GKqWroXRvJ4sUjZyDOzgsRf1/bw\n/AN9I47Ynn0AFLGo/6UCQQDVoz09x5NbHj+Fkde/cOZYsTEdsmXKWyRXAZvGgcce\nyOL/+Sk6Ej37DsERRtW3JhkfkFGQcDVkaZeb495jF3Rf\n-----END RSA PRIVATE KEY-----\n"
+  # private_key: "-----BEGIN RSA PRIVATE KEY-----\nMIICXAIBAAKBgQCbB4GqQqpiN/maPezJdlR3gd/lfaPhBiykx4LeWfjgkTR//K3i\nugj++gjTywVRIZthWATjpnHFVwaU6NwH1lnbcNIJZgOutCc0npR5etffjSXTUXoS\nzQeRj27yT6diYqcisd7ZVrH1yuC+368g22uTMSc6gtTdRERG2ei0Fe0FSwIDAQAB\nAoGAO0Z5e4IV54wDccgvmzAVR8RuuS561HUp6K8oCKBaGnMqoa0ZR1FeUy+C5IgB\ntm2lHWksJWbkpVGLALCwQIbiv/32IIrde/7c3Z9OMRxsehvKl9TR9qa8OU/ppA91\nll91Tt6K3EY/uCcwPCk4mvnU2miWcFxE0WJ/B7BnirTQ0gECQQDWi1Ta4Qj7Mxd7\nFR8J/uniZBuLOfIcJr2hKqJtNDeDp+0j8FX4ncmKnrZJpjiL9VD/swdU0bnzF3NG\n5b62nAnLAkEAuPwz7juwXUOCizxUglJS5fFZoIN6m47fSjQrqrFi7WzzBwSc5Zu3\n9bdDEdk3PK+mui4gegeoN7t26xA/rpmCgQJAIJr8QmeA3exd3S7QkMxU7zsXlIkx\n6mVY3G2GUeJlrXSP7a5Q4n/YaWDFg1vnrB2UOcgTjShygidGNbgky8vbEQJBALUm\n7egH9e9vNEEMBKpW2i2qS54gA4qgwFPXgUe4TOu7fMdLoiZMdzsei4TIFgrM7NZ4\nY399TiO95nfNwr9GP4ECQF0f7O/PIwdRQOTJ8oJVtBMbdb8ml/m9v7EtDVHfjxqh\nI4yc28Yfq9tBZ4iYCxgT9aXD+HQ4p/SHqwSjjFg0t6o=\n-----END RSA PRIVATE KEY-----\n"
+  private_key: ""
+  public_cert: ""
+  # public_key: "-----BEGIN CERTIFICATE-----\nMIIDAjCCAeqgAwIBAgIKYULKEHrkAEySVjANBgkqhkiG9w0BAQUFADA2MR4wHAYD\nVQQDExVJQ0JDIENvcnBvcmF0ZSBTdWIgQ0ExFDASBgNVBAoTC2ljYmMuY29tLmNu\nMB4XDTEyMDcyMzAxNTc0OFoXDTEzMDcyMzAxNTc0OFowPTEWMBQGA1UEAxMNaWhh\ndmV1LmUuMDMwMjENMAsGA1UECxMEMDMwMjEUMBIGA1UEChMLaWNiYy5jb20uY24w\ngZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAOEOksrNFDUjZfRaScfFMReYuFac\noLhMObuPVzIPX+r0iwwoXAVrcc9hPz09LnFNu6uG5RhB4+RgtcJClKWwDprPVOrI\nwoEf59Og+2VW3HeVyE8MIurwcRlec/HZsfjAXTq0mJBwfyCISjldroXzpX6fQLAK\ndm9FHTs4GXsybsb5AgMBAAGjgY4wgYswHwYDVR0jBBgwFoAU+chFw1OTJjYxky+U\nEN/IUz32b54wSQYDVR0fBEIwQDA+oDygOqQ4MDYxEDAOBgNVBAMTB2NybDUwMTkx\nDDAKBgNVBAsTA2NybDEUMBIGA1UEChMLaWNiYy5jb20uY24wHQYDVR0OBBYEFNO+\ncO5AK4ttFPfxUF4QzCI90xlTMA0GCSqGSIb3DQEBBQUAA4IBAQATbs934Lg3CmEJ\neIXCC7Z5RgEli+jPWXOljVWmcVe5Jmj5S4jMaorSz+8vlTa2SZKRB39h7zZZWAvD\nh9ubbAvYnUD2CKXFfW6S87mKnMV2jCr57fciGIMy1NXkZHwqb3iKBwyAp5DlD57J\nidQShlJela1AtmoEL5OiM0IT9RpHMyD1fdybUtEYFIW350yY18E12K/lpVuUwUoa\nyayRf5PYmXBoR/5kThIFZLy1zBZCmHvExVkWrpUL10GHisj5uot8qpMkoQokxQwo\nQDF+OORkTIJ7tj9cEsi3YUpS/oBb7rqVEwUPvKBKoHOw0bu2UtWIeqhUWaiRaNcH\nasH5jS9i\n-----END CERTIFICATE-----\n"
+  # public_key: "-----BEGIN CERTIFICATE-----\nMIIDEjCCAfqgAwIBAgIKG5LKECVWAAI3dTANBgkqhkiG9w0BAQUFADA7MR8wHQYD\nVQQDExZJQ0JDIFRlc3QgQ29ycG9yYXRlIENBMRgwFgYDVQQKEw90ZXN0aWNiYy5j\nb20uY24wHhcNMTMxMDMxMDA0NzUwWhcNMTQxMDMxMDA0NzUwWjBFMRowGAYDVQQD\nExF0ZXN0MjAxMzExLmUuMDIwMDENMAsGA1UECxMEMDIwMDEYMBYGA1UEChMPdGVz\ndGljYmMuY29tLmNuMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCbB4GqQqpi\nN/maPezJdlR3gd/lfaPhBiykx4LeWfjgkTR//K3iugj++gjTywVRIZthWATjpnHF\nVwaU6NwH1lnbcNIJZgOutCc0npR5etffjSXTUXoSzQeRj27yT6diYqcisd7ZVrH1\nyuC+368g22uTMSc6gtTdRERG2ei0Fe0FSwIDAQABo4GRMIGOMB8GA1UdIwQYMBaA\nFER9t5AsN6TZ7WzipIdXZwq18E0UMEwGA1UdHwRFMEMwQaA/oD2kOzA5MQ8wDQYD\nVQQDEwZjcmw0ODUxDDAKBgNVBAsTA2NybDEYMBYGA1UEChMPdGVzdGljYmMuY29t\nLmNuMB0GA1UdDgQWBBT1/iHFYQfb3gOt/jcJJZDb4J52jDANBgkqhkiG9w0BAQUF\nAAOCAQEAUsW2VcdIsQOwJ0dk8jHlQEAP/v+4/PFTERGNNHHHEFWJuJKLS9vsYQbO\ncDp61PycfSAG8NbnMiDtbdwFCVd9hcBjStCD09KW63qrPk1WJmkcGj+OnX/c7rGp\nEIdaGxSKW7qurpTo//LWPqhHuNv/vY1O1NmuBCSWHbzqNpYLIDpGby2ajK2A8h6D\nyDiiWf3A0jdaIKLmIRZJlZuD3PEyuBNGWqvNec9MZGX+gbz2/1rUeVx0FG2zf/zM\nhsbb9nB8y2rvZ2FAad3TaMjVPv55S1NQLtMJlFfcbd9X5v3zrqvJUwbzpOb4fxAx\nG3xCe1EXAugSuXxC5LQ3/iu2A/UB8Q==\n-----END CERTIFICATE-----\n"
+  public_key: ""
+
+boc_creditcard:
+  masterId: ""
+  terminalID: ""
+  gateway: "https://jf365.boc.cn/BOCCASH/cardPay!addOrderInfo"
+  queryUrl: "https://jf365.boc.cn/BOCCASH/merCheck!checkStatus"
+  cert: ""
+  private_key: ""
+  public_key: ""
+
+
+boc:
+  merchantNo: ''
+  gateway: "https://ebspay.boc.cn/PGWPortal/RecvOrder.do"
+  queryUrl: "https://ebspay.boc.cn/PGWPortal/QueryOrder.do"
+  private_key: ""
+  cert: ""
+  public_key: ""
+
+comm_creditcard:
+  merchantId: ''
+  password: ''
+  gateway: 'https://payment.bankcomm.com/gateway/purchaseOrder.handler'
+  queryUrl: 'https://payment.bankcomm.com/gateway/ShopService/Purchaseservice.asmx/DoOrderManagerTrans'
+  # merchantId: "002777953110013"
+  # password: '123456'
+  # gateway: "https://payment.bankcomm.com/sandbox_gateway/purchaseOrder.handler"
+  # queryUrl: "https://payment.bankcomm.com/sandbox_gateway/shopservice/PurchaseService.asmx/DoOrderManagerTrans"
+  # pab:
+  #   merchantNo: "WJYZ"
+  #   gateway: "https://ibank-peps-stg.pingan.com.cn/peps/pabankpay.do"
+  #   queryUrl: "https://ibank-peps-stg.pingan.com.cn/peps/getPayInfo.do"
+  #   private_key: "-----BEGIN RSA PRIVATE KEY-----\nMIICWwIBAAKBgQC4fuHNfvtCJbUU0pGKM3XHpyISAvY1ZbLcXTVqOh0XcOabdkhl\nOPwK+rLdQVsjbxFnIXmPBcYoJy6ixMFc82KLCJdCfYXH8F69H3yekHa5DVNKrmp3\n3nwJVfB21Sx4vDAC4DmwBELs9CZxIegDeV10LXN0TLvzos/tRhojMk3svQIDAQAB\nAoGAfP6xmtjp/7GuUlIq+nfM1xw7r/pDtn+VQ0j+9F408XmzMyZa/AE0eXfKEK7D\nwWjxYG7EfYqK6w9IwEwPORtH6gTL2eh0rIe1pgPmKFiTEliuW+WCGPCEer7HXL1C\nVblTioHFbOZ/zMumFHpnPE71IW/SkqKth5Z7G457nw0qyb0CQQDr2O6oNvfgAAi2\nhsmsjfrAjC3oE8JErWw082nmYu4OiMc0sgol6s3y5mOZO65hSI30p+rUiqKfGNdf\nwUWqXgTDAkEAyEKmiKOLa/2Z+ifBPJxuCy8QQKgeGXM4nu04ilrwirHWSQkxLxxp\nFb9tM0YzmywgdH4ORJhS42aKFeI+79cwfwJAboe6QYeRX59kdfZxabcYf0iy8wLf\nlsQX5DD3vos6ugEMKvwNmXuTjXS/1L6NmPYh4TkY6wcV8632sd+oQJHTdQJAKFKj\nTagAjsIFmwUeN6IX1lCnqR0w0lcM85M4a0NcY9DjINmk+aNy1VoyFrzv7zK3Zj1r\nigxRxFAFRdrEaW6e6QJAfR3abtX9uI4s7QrigYtPZ3N1X1ZfbakPLJwdr19anU6v\ndwI2I4CYZW1Ktm3fJmn2B817eLbDPA495+LfjDiuuQ==\n-----END RSA PRIVATE KEY-----\n"
+  #   public_key: "-----BEGIN RSA PUBLIC KEY-----\nMIGJAoGBAKuon4WA7hwCymgGJ50Mj6aUBmXG7adgPcoVUrVVW0cki/KDRul4H4hT\nNqSs20KDXwHYyB8OBYTiosYBiPOh/kBxAqKT5J/jjhNg7836j4FyLFcLXJnjSJWT\nn37l0ES6/ouprGwf3F/YGI8G3ei+VE+a7BuNWKdwvGYdPAfU1B5jAgMBAAE=\n-----END RSA PUBLIC KEY-----\n"
+
+yeepay:
+  merId: ""
+  securityKey: ""
+  yeepayCommonReqURL: ""
+  queryUrl: ""
+
+wechat:
+  appid: "wx54e4911f7a85b868"
+  secret: "3313a32bf487eb917d2b1ed8828f0239"
+  paySignKey: "52N1QdwA2ni06YQqV8e12ZoDytHF2knb"
+  partnerId: "1278408001"
+  partnerKey: ""
+  tokenUrl: ""
+  queryUrl: ""
+  delivernotifyURL: ""
+
+pab_pay:
+  merchantId: ''
+  site: 'https://mapi.1qianbao.com/revOrder'
+  key: ''
+
+icbc:
+  merAcct: ""
+  merID:  ""
+  gateway: ""
+  queryUrl: ""
+  key: ""
+  private_key: ""
+  public_cert: ""
+  public_key: ""

@@ -1,0 +1,297 @@
+<% @page_title = [@product.name.to_s.gsub(@product.brand.try(:name).to_s, '')].uniq.reject(&:blank?).join
+   @page_keywords = @product.values.active.map(&:content)
+   @page_description = @product.description.to_s.gsub(/\s+/, '')[0..99] %>
+<!-- ios -->
+<!--<link rel="apple-touch-icon-precomposed" sizes="57x57" href="http://m0.barlar.net/touch/logo_57x57.png?201510261742">-->
+<!--<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://m0.barlar.net/touch/logo_114x114.png?201510261742">-->
+<!--<link rel="apple-touch-startup-image" media="(device-width: 320px) and not (-webkit-min-device-pixel-ratio: 2) and (device-height: 480px)" href="http://m0.barlar.net/touch/startup_320x460.jpg?201510261742">-->
+<!--<link rel="apple-touch-startup-image" media="(device-width: 320px) and (-webkit-min-device-pixel-ratio: 2) and (device-height: 480px)" href="http://m0.barlar.net/touch/startup_640x920.jpg?201510261742">-->
+<!--<link rel="apple-touch-startup-image" media="(device-width: 320px) and (-webkit-min-device-pixel-ratio: 2) and (device-height: 568px)" href="http://m0.barlar.net/touch/startup_640x1096.jpg?201510261742">-->
+<%= stylesheet_link_tag "touch/frame" %>
+<%= stylesheet_link_tag "touch/frame_respond" %>
+<!-- 压缩的model/view/controller -->
+<%= javascript_include_tag "touch/controller" %>
+<% measures = (ActiveSupport::JSON.decode(@product.measures_unsold_count.to_s) || {}).sort_by { |m| @product.category2 && @product.category2.measures.split(',').index(m[0]).to_i || 0 }; selected_measure = (measures.find { |k, v| v>0 }||[nil])[0] %>
+<!-- body -->
+<body id="body" class="clear_fix safari ratio2 ios ">
+<!-- header -->
+<% content_for :header do %>
+    <header class="border_1px">
+      <!-- <div class="left_option left"> -->
+      <div class="ico_wrapper back_ico left hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <!-- </div> -->
+      <div class="title single_pro clear_fix">
+        <%= @product.name %>
+      </div>
+      <div class="ico_wrapper add_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper edit_ico right hide">
+        <span class="">编辑
+          <em class="down_shadow"></em>
+        </span>
+        <span class="">完成
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper info_ico right hide text">
+        详情<em class="down_shadow"></em>
+      </div>
+      <div class="ico_wrapper filter_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper mode_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper  right hide" data-href="/search">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+    </header>
+    <!--  end nav  -->
+<% end %>
+
+<!-- 调用页面主体 -->
+<script type="text/javascript">
+
+    views.product_style(0.75);
+    views.recommend_style(0.344);
+    views.single_style();
+    $(function () {
+        var $optional = $('.optional'),
+                $color_btn = $optional.find('.opt_color'),
+                $size_btn = $optional.find('.opt_size'),
+                $color_box = $('.optional_box.color'),
+                $size_box = $('.optional_box.size'),
+                $button = $('.btn.add_cart'),
+                $collect = $('.collect_ico');
+        products_show_controller.initialize($color_btn, $size_btn, $color_box, $size_box, $button, $collect);
+
+    });
+</script>
+<div class="pic_layer hide" id="pic_layer">
+  <div>
+    <div class="img_wrapper"></div>
+  </div>
+  <%= javascript_include_tag "touch/iscroll-zoom" %>
+  <p class="close_ico" id="close_img"><span class="sprites"></span><em class="down_shadow"></em></p>
+</div>
+<div class="main" id="main">
+  <div>
+    <% images = @product.images.order('COALESCE(sequence, 1000000) ASC, id ASC') %>
+    <div class="ellipsis pro_prefix single"></div>
+    <!-- 商品主体 -->
+    <div class="product_img clear_fix" id="product" data-id="<%= @product.id %>" data-ulife="false" data-hwg="false" data-if-product="true">
+      <%= image_tag 'touch/magnifier.png', class: 'img_magnifier' %>
+
+      <div class="img_wrap pro_height" data-width="<%= @product.major_image.blank? ? images.length : images.length+1 %>">
+        <div class="pro_height">
+          <% if @product.major_image.present? %>
+              <a class="left clear_fix pro_height pro_img" data-href="<%= @product.major_image.url("big800") %>" data-src="<%= @product.major_image.url("cover400") %>" data-origin="<%= @product.major_image.url("big") %>"></a>
+          <% end %>
+          <% images.each do |image| %>
+              <a class="left clear_fix pro_height pro_img" data-href="<%= image.large_image.url("big800") %>" data-src="<%= image.large_image.url("cover400") %>" data-origin="<%= image.large_image.url("big") %>"></a>
+          <% end %>
+        </div>
+      </div>
+      <!-- active -->
+      <ul class="slide ">
+        <% if @product.major_image.present? %>
+            <li class="dot"></li>
+        <% end %>
+        <% images.size.times.each do %>
+            <li class="dot"></li>
+        <% end %>
+      </ul>
+
+      <div class="btn-div summary"><%= @product.description %></div>
+      <div class="black_gap"></div>
+    </div>
+    <!--  商品详情页  -->
+    <div class="product_info clear_fix loaded">
+      <div class="collect_success"></div>
+      <ul class="services">
+        <li><%= image_tag('touch/zp.png', class: 'icon') %> 正品保证</li>
+        <li><%= image_tag('touch/sh.png', class: 'icon') %> 七大售后服务</li>
+        <li><%= image_tag('touch/gh.png', class: 'icon') %> 以小换大</li>
+        <li><%= image_tag('touch/th.png', class: 'icon') %> 十五天退换货</li>
+      </ul>
+      <div class="boundary black_border"></div>
+      <h1 class="first">产品介绍
+        <!-- 收藏 -->
+        <div class="collect_ico right"><span class="sprites"></span></div>
+      </h1>
+
+      <div class="detail_info  size_img size_img_wrap">
+        <%= raw @product.body %>
+      </div>
+      <p>
+        <!--<span>编号：15559</span>-->
+      </p>
+      <!--<div class="similar_recommend">-->
+      <!--<h1>相关推荐</h1>-->
+      <!--<section class="products_content clear_fix recommend"></section>-->
+      <!--</div>-->
+    </div>
+  </div>
+</div>
+<div class="small_tip btn cart hide" id="small_tip">已成功加入购物车</div>
+<div class="bottom_fix clear_fix border_1px">
+  <div class="left">
+    <p class="pro_price clear_fix">
+      <span class="left">￥<%= @product.discount %></span>
+      <span class="zhe left">原价 <%= @product.price %></span>
+    </p>
+    <!--<p class="pro_name ellipsis">Silvio</p>-->
+  </div>
+  <!-- 购买 -->
+  <div class="uyuan_pro hide" data-uyuan="" data-pro="" data-times="" data-level="<%= @current_user && @current_user.shop_user.level %>"></div>
+  <div id="measure" class="hide"></div>
+  <% if selected_measure %>
+      <div class="add_cart btn purple_bg right false" data-measure="">
+        <p>
+          <span class="add_cart sprites "></span>购买
+        </p>
+        <span class="go_buy">结算</span>
+
+        <div class="down_shadow"></div>
+      </div>
+  <% else %>
+      <div class="sale_out btn grey_bg right">
+        <p>售完</p>
+      </div>
+  <% end %>
+</div>
+
+<!-- loading -->
+<div id="loading16" class="hide">
+  <style type="text/css">
+      /*body{
+        -webkit-transform: translate(0,0,0);
+        -webkit-backface-visibility:hidden;
+      }*/
+      .loading16 {
+          top: -31px;
+          width: 100px;
+          height: 100px;
+          position: relative;
+          left: 50%;
+          margin: 0;
+          margin-left: -50px;
+          border-radius: 100px;
+          -webkit-border-radius: 100px;
+          -webkit-animation-duration: 1.5s;
+          -webkit-animation-iteration-count: infinite;
+          -webkit-animation-timing-function: linear;
+          -webkit-animation-name: rotateThis16;
+          -moz-border-radius: 100px;
+          -moz-animation-duration: 1.5s;
+          -moz-animation-iteration-count: infinite;
+          -moz-animation-timing-function: linear;
+          -moz-animation-name: rotateThis16;
+      }
+
+      @-webkit-keyframes rotateThis16 {
+          from {
+              -webkit-transform: scale(0.18) rotate(0deg);
+          }
+          to {
+              -webkit-transform: scale(0.18) rotate(360deg);
+          }
+      }
+
+      @-moz-keyframes rotateThis16 {
+          from {
+              -moz-transform: scale(0.18) rotate(0deg);
+          }
+          to {
+              -moz-transform: scale(0.18) rotate(360deg);
+          }
+      }
+
+      .loading16 > div {
+          width: 18px;
+          height: 18px;
+          background-color: #fff;
+          -webkit-border-radius: 30px;
+          -moz-border-radius: 30px;
+          -o-border-radius: 30px;
+          border-radius: 30px;
+          position: absolute;
+          left: 41px;
+          top: 41px;
+      }
+
+      .bar1 {
+          opacity: 0.3;
+          -webkit-transform: rotate(0deg) translate(0, -42px);
+          -moz-transform: rotate(0deg) translate(0, -42px);
+      }
+
+      .bar2 {
+          opacity: 0.4;
+          -webkit-transform: rotate(45deg) translate(0, -42px);
+          -moz-transform: rotate(45deg) translate(0, -42px);
+      }
+
+      .bar3 {
+          opacity: 0.5;
+          -webkit-transform: rotate(90deg) translate(0, -42px);
+          -moz-transform: rotate(90deg) translate(0, -42px);
+      }
+
+      .bar4 {
+          opacity: 0.6;
+          -webkit-transform: rotate(135deg) translate(0, -42px);
+          -moz-transform: rotate(135deg) translate(0, -42px);
+      }
+
+      .bar5 {
+          opacity: 0.7;
+          -webkit-transform: rotate(180deg) translate(0, -42px);
+          -moz-transform: rotate(180deg) translate(0, -42px);
+      }
+
+      .bar6 {
+          opacity: 0.8;
+          -webkit-transform: rotate(225deg) translate(0, -42px);
+          -moz-transform: rotate(225deg) translate(0, -42px);
+      }
+
+      .bar7 {
+          opacity: 0.9;
+          -webkit-transform: rotate(270deg) translate(0, -42px);
+          -moz-transform: rotate(270deg) translate(0, -42px);
+      }
+
+      .bar8 {
+          opacity: 1;
+          -webkit-transform: rotate(315deg) translate(0, -42px);
+          -moz-transform: rotate(315deg) translate(0, -42px);
+      }
+  </style>
+  <div class="order_load">
+    <div class="loading16">
+      <div class="bar1"></div>
+      <div class="bar2"></div>
+      <div class="bar3"></div>
+      <div class="bar4"></div>
+      <div class="bar5"></div>
+      <div class="bar6"></div>
+      <div class="bar7"></div>
+      <div class="bar8"></div>
+    </div>
+  </div>
+
+</div>

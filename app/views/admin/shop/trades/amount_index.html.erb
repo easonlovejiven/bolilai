@@ -1,0 +1,178 @@
+<h2>财务管理</h2>
+<div id='batch_query' style='display:none;'>
+	<h2>批量查询</h2>
+	<%= form_tag amount_index_admin_shop_trades_path, :method => :get do %>
+	<table class="form-table">
+		<tbody>
+			<tr class="form-field">
+				<th scope="row"><%= label_tag "query_field", "查询条件" %></th>
+				<td><%= select_tag "query_field", options_for_select([['快递编号','delivery_identifier'], ['ID','id'], ['编号','identifier']]) %></td>
+			</tr>
+			<tr class="form-field">
+				<th scope="row"><%= label_tag "query_content", "查询内容" %></th>
+				<td>
+					<%= text_area_tag "query_content" %>
+					<br />（每行包含一个要查询的条件）
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<p class="submit">
+		<%= submit_tag "查询" %>
+	</p>
+	<% end %>
+</div>
+<form action="/auction/manage/trades/amount_index" method="get" id="search_form">
+	<div class="tablenav">
+		<div class="alignleft">
+			<%= link_to "批量查询", '#batch_query', :class => 'button-secondary', :rel => 'facebox' %>
+			&nbsp;|&nbsp;
+			<%= label_tag "where[id]", "ID" %>
+			<%= render :partial => 'auction/manage/shared/search', :locals => { :name => 'id', :title => 'ID', :multiple => true } %>
+			<%= label_tag "where[identifier][like]", "编号" %>
+			<%= render :partial => 'auction/manage/shared/search', :locals => { :name => 'identifier', :title => '编号', :multiple => true } %>
+			<%= label_tag "where[link_id]", "链接ID" %><%= text_field_tag "where[link_id]", params[:where] && params[:where][:link_id] %>
+			<%= render 'manage/shared/search/select', field: 'shop_id', options: Retail::Shop.active.order('name ASC') %>
+			<%= render 'manage/shared/search/select', field: 'guide_id', options: Retail::Guide.active.order('name ASC') %>
+			<%= render 'manage/shared/search/array', field: 'shop_identifier' %>
+			<%= label_tag "where[user_id]", "用户ID" %><%= text_field_tag "where[user_id]", params[:where] && params[:where][:user_id] %>
+			<%= label_tag "where[status]", "状态" %><%= select "where", "status", options_for_select(Shop::Trade::STATUS.map{ |k, v| [v, k] }, params[:where] && params[:where][:status]), { :prompt => "" } %>
+			<%= label_tag "where[payment_service][like]", "付款" %><%= select_tag "where[payment_service][like]", options_for_select([['', ''],['（所有支付宝）', 'alipay%'],['（所有快钱）', 'bill99%']]+Shop::Trade::PAYMENT_SERVICES.map{ |k, v| [v, k] }.sort.reverse, params[:where] && params[:where][:payment_service] && params[:where][:payment_service][:like]) %><%= text_field_tag "where[payment_identifier]", params[:where] && params[:where][:payment_identifier] %>
+			<%= label_tag "where[delivery_service]", "快递" %><%= select "where", "delivery_service", options_for_select(Shop::Trade.delivery_coms_arr.map{|s| [s[:title], s[:name]] }, params[:where] && params[:where][:delivery_service]), { :prompt => "" } %>
+			<%= render :partial => 'auction/manage/shared/search', :locals => { :name => 'delivery_identifier', :title => '快递编号', :multiple => true } %>
+			<%= label_tag "where[created_at][gteq]", "创建时间" %><%= text_field_tag "where[created_at][gteq]", params[:where] && params[:where][:created_at] && params[:where][:created_at][:gteq], :class => "datepicker" %>~<%= text_field_tag "where[created_at][lteq]", params[:where] && params[:where][:created_at] && params[:where][:created_at][:lteq], :class => "datepicker" %>
+			<%= label_tag "where[editor_id]", "创建编辑ID" %><%= text_field_tag "where[editor_id]", params[:where] && params[:where][:editor_id] %>
+			<%= label_tag "where[audit_at][gteq]", "审核时间" %><%= text_field_tag "where[audit_at][gteq]", params[:where] && params[:where][:audit_at] && params[:where][:audit_at][:gteq], :class => "datepicker" %>~<%= text_field_tag "where[audit_at][lteq]", params[:where] && params[:where][:audit_at] && params[:where][:audit_at][:lteq], :class => "datepicker" %>
+			<%= label_tag "where[audit_editor_id]", "审核编辑ID" %><%= text_field_tag "where[audit_editor_id]", params[:where] && params[:where][:audit_editor_id] %>
+			<%= label_tag "where[prepare_at][gteq]", "备货时间" %><%= text_field_tag "where[prepare_at][gteq]", params[:where] && params[:where][:prepare_at] && params[:where][:prepare_at][:gteq], :class => "datepicker" %>~<%= text_field_tag "where[prepare_at][lteq]", params[:where] && params[:where][:prepare_at] && params[:where][:prepare_at][:lteq], :class => "datepicker" %>
+			<%= label_tag "where[prepare_editor_id]", "备货编辑ID" %><%= text_field_tag "where[prepare_editor_id]", params[:where] && params[:where][:prepare_editor_id] %>
+			<%= label_tag "where[ship_at][gteq]", "发货时间" %><%= text_field_tag "where[ship_at][gteq]", params[:where] && params[:where][:ship_at] && params[:where][:ship_at][:gteq], :class => "datepicker" %>~<%= text_field_tag "where[ship_at][lteq]", params[:where] && params[:where][:ship_at] && params[:where][:ship_at][:lteq], :class => "datepicker" %>
+			<%= label_tag "where[ship_editor_id]", "发货编辑ID" %><%= text_field_tag "where[ship_editor_id]", params[:where] && params[:where][:ship_editor_id] %>
+			<%= label_tag "where[freeze_at][gteq]", "冻结时间" %><%= text_field_tag "where[freeze_at][gteq]", params[:where] && params[:where][:freeze_at] && params[:where][:freeze_at][:gteq], :class => "datepicker" %>~<%= text_field_tag "where[freeze_at][lteq]", params[:where] && params[:where][:freeze_at] && params[:where][:freeze_at][:lteq], :class => "datepicker" %>
+			<%= label_tag "where[freeze_editor_id]", "冻结编辑ID" %><%= text_field_tag "where[freeze_editor_id]", params[:where] && params[:where][:freeze_editor_id] %>
+			<%= label_tag "where[delivery_receipted_amount][gteq]", "快递收款金额" %><%= text_field_tag "where[delivery_receipted_amount][gteq]", params[:where] && params[:where][:delivery_receipted_amount] && params[:where][:delivery_receipted_amount][:gteq], :class=>'postform' %>~<%= text_field_tag "where[delivery_receipted_amount][lteq]", params[:where] && params[:where][:delivery_receipted_amount] && params[:where][:delivery_receipted_amount][:lteq], :class=>'postform' %>
+			<%= label_tag "where[delivery_receipted_at][gteq]", "快递收款时间" %><%= text_field_tag "where[delivery_receipted_at][gteq]", params[:where] && params[:where][:delivery_receipted_at] && params[:where][:delivery_receipted_at][:gteq], :class => "datepicker" %>~<%= text_field_tag "where[delivery_receipted_at][lteq]", params[:where] && params[:where][:delivery_receipted_at] && params[:where][:delivery_receipted_at][:lteq], :class => "datepicker" %>
+			<%= label_tag "where[delivery_remitted_at][gteq]", "快递归集时间" %><%= text_field_tag "where[delivery_remitted_at][gteq]", params[:where] && params[:where][:delivery_remitted_at] && params[:where][:delivery_remitted_at][:gteq], :class => "datepicker" %>~<%= text_field_tag "where[delivery_remitted_at][lteq]", params[:where] && params[:where][:delivery_remitted_at] && params[:where][:delivery_remitted_at][:lteq], :class => "datepicker" %>
+			<%= label_tag "where[delivery_settled_amount][gteq]", "快递结算金额" %><%= text_field_tag "where[delivery_settled_amount][gteq]", params[:where] && params[:where][:delivery_settled_amount] && params[:where][:delivery_settled_amount][:gteq], :class=>'postform' %>~<%= text_field_tag "where[delivery_settled_amount][lteq]", params[:where] && params[:where][:delivery_settled_amount] && params[:where][:delivery_settled_amount][:lteq], :class=>'postform' %>
+			<%= label_tag "where[delivery_settled_at][gteq]", "快递结算时间" %><%= text_field_tag "where[delivery_settled_at][gteq]", params[:where] && params[:where][:delivery_settled_at] && params[:where][:delivery_settled_at][:gteq], :class => "datepicker" %>~<%= text_field_tag "where[delivery_settled_at][lteq]", params[:where] && params[:where][:delivery_settled_at] && params[:where][:delivery_settled_at][:lteq], :class => "datepicker" %>
+			<%= label_tag "where[delivery_reconciled_at][gteq]", "快递对账时间" %><%= text_field_tag "where[delivery_reconciled_at][gteq]", params[:where] && params[:where][:delivery_reconciled_at] && params[:where][:delivery_reconciled_at][:gteq], :class => "datepicker" %>~<%= text_field_tag "where[delivery_reconciled_at][lteq]", params[:where] && params[:where][:delivery_reconciled_at] && params[:where][:delivery_reconciled_at][:lteq], :class => "datepicker" %>
+			<%= label_tag "order", "排序" %>
+			<%= select_tag "order", options_for_select([[]]+[%w[id ID], %w[created_at 创建时间], %w[audit_at 审核时间], %w[prepare_at 备货时间], %w[ship_at 发货时间], %w[freeze_at 冻结时间], %w[delivery_receipted_amount 快递收款金额], %w[delivery_receipted_at 快递收款时间], %w[delivery_remitted_at 快递归集时间], %w[delivery_settled_amount 快递结算金额], %w[delivery_settled_at 快递结算时间], %w[delivery_reconciled_at 快递对账时间]].map{|name, title| [["#{title} ↑", "#{name} asc"], ["#{title} ↓", "#{name} desc"]] }.inject([], &:+), params[:order]) %>
+			<%= label_tag "per_page", "每页" %><%= select_tag "per_page", options_for_select([['', nil]]+[10, 20, 30, 50, 100, 200, 300, 500, 1000, 2000, 3000, 5000].map{|i|[i,i]}, params[:per_page].to_i) %>
+			<%= label_tag "page", "页数" %><%= text_field_tag "page", params[:page] %>
+			<input type="submit" id="post-query-submit" value="搜索" class="button-secondary" />
+		</div>
+		<br class="clear" />
+	</div>
+</form>
+
+<br class="clear" />
+
+<table class="widefat">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>状态</th>
+			<th><%= @trades.klass.human_attribute_name(:shop_id) %></th>
+			<th><%= @trades.klass.human_attribute_name(:guide_id) %></th>
+			<th><%= @trades.klass.human_attribute_name(:shop_identifier) %></th>
+			<th>付款</th>
+			<th>快递</th>
+			<th>总价格</th>
+			<th>支付价格</th>
+			<th>使用余额</th>
+			<th>创建</th>
+			<th>审核</th>
+			<th>备货</th>
+			<th>发货</th>
+			<th>冻结</th>
+			<th>快递收款金额</th>
+			<th>快递收款时间</th>
+			<th>快递归集时间</th>
+			<th>快递结算金额</th>
+			<th>快递结算时间</th>
+			<th>快递对账时间</th>
+			<th>单位ID</th>
+			<th>单件</th>
+			<th>单位原价</th>
+			<th>单位折扣</th>
+			<th>单位成交价</th>
+			<th>收款金额</th>
+			<th>收款编辑</th>
+			<th>现金退款金额</th>
+			<th>余额退款金额</th>
+			<th>退款总金额</th>
+			<th>退款编辑</th>
+			<th>退货备注</th>
+			<th>操作</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @trades.each do |trade| %>
+			<tr>
+				<td rowspan="<%= trade.units.count*2+1 %>"><%= link_to trade.id, amount_index_admin_shop_trades_path(:where => { :id => trade.id }) %></td>
+				<td rowspan="<%= trade.units.count*2+1 %>"><span title="<%= h trade.status %>"><%= h Shop::Trade::STATUS[trade.status] %></span></td>
+				<td rowspan="<%= trade.units.count*2+1 %>"><%= render 'manage/shared/link', record: trade.shop %></td>
+				<td rowspan="<%= trade.units.count*2+1 %>"><%= render 'manage/shared/link', record: trade.guide %></td>
+				<td rowspan="<%= trade.units.count*2+1 %>"><%= trade.shop_identifier %></td>
+				<td rowspan="<%= trade.units.count*2+1 %>"><%= render :partial => "payment_show", :locals => { :trade => trade } %></td>
+				<td rowspan="<%= trade.units.count*2+1 %>"><%= render :partial => "delivery_show", :locals => { :trade => trade } %></td>
+				<td rowspan="<%= trade.units.count*2+1 %>"><%= trade.price %></td>
+				<td rowspan="<%= trade.units.count*2+1 %>"><%= trade.payment_price %></td>
+				<td rowspan="<%= trade.units.count*2+1 %>"><%= trade.price - trade.payment_price %></td>
+				<td rowspan="<%= trade.units.count*2+1 %>"><%= link_to_if @current_user.can_show_editor?, trade.editor.name, admin_manage_editor_path(trade.editor), "data-target" => "rightPanel" if trade.editor %><br /><%= trade.created_at && trade.created_at.to_s(:db) %></td>
+				<td rowspan="<%= trade.units.count*2+1 %>"><%= link_to_if @current_user.can_show_editor?, trade.audit_editor.name, admin_manage_editor_path(trade.audit_editor), "data-target" => "rightPanel" if trade.audit_editor %><br /><%= h trade.audit_at && trade.audit_at.to_s(:db) %></td>
+				<td rowspan="<%= trade.units.count*2+1 %>"><%= link_to_if @current_user.can_show_editor?, trade.prepare_editor.name, admin_manage_editor_path(trade.prepare_editor), "data-target" => "rightPanel" if trade.prepare_editor %><br /><%= h trade.prepare_at && trade.prepare_at.to_s(:db) %></td>
+				<td rowspan="<%= trade.units.count*2+1 %>"><%= link_to_if @current_user.can_show_editor?, trade.ship_editor.name, admin_manage_editor_path(trade.ship_editor), "data-target" => "rightPanel" if trade.ship_editor %><br /><%= h trade.ship_at && trade.ship_at.to_s(:db) %></td>
+				<td rowspan="<%= trade.units.count*2+1 %>"><%= link_to_if @current_user.can_show_editor?, trade.freeze_editor.name, admin_manage_editor_path(trade.freeze_editor), "data-target" => "rightPanel" if trade.freeze_editor %><br /><%= h trade.freeze_at && trade.freeze_at.to_s(:db) %></td>
+				<td rowspan="<%= trade.units.count*2+1 %>"><%= trade.delivery_receipted_amount %></td>
+				<td rowspan="<%= trade.units.count*2+1 %>"><%= trade.delivery_receipted_at && trade.delivery_receipted_at.to_s(:db) %></td>
+				<td rowspan="<%= trade.units.count*2+1 %>"><%= trade.delivery_remitted_at && trade.delivery_remitted_at.to_s(:db) %></td>
+				<td rowspan="<%= trade.units.count*2+1 %>"><%= trade.delivery_settled_amount %></td>
+				<td rowspan="<%= trade.units.count*2+1 %>"><%= trade.delivery_settled_at && trade.delivery_settled_at.to_s(:db) %></td>
+				<td rowspan="<%= trade.units.count*2+1 %>"><%= trade.delivery_reconciled_at && trade.delivery_reconciled_at.to_s(:db) %></td>
+			</tr>
+			<% trade.units.each do |unit| %>
+				<tr></tr>
+				<tr>
+					<td><%= unit.id %></td>
+					<td style="padding:0;"><%= render :partial => "auction/manage/items/item", :object => unit.item %></td>
+					<% if unit.voucher && unit.voucher.event %>
+						<td><%= unit.discount %></td>
+						<td><%= link_to_if can?(:show, unit.voucher), "-#{unit.voucher.event.amount}", admin_shop_voucher_path(unit.voucher), title: unit.voucher.event.name, rel: 'facebox' %>
+					<% elsif unit.multibuy %>
+						<td><%= unit.discount %></td>
+						<td><%= link_to_if can?(:show, unit.multibuy), "#{unit.percent}%", admin_shop_multibuy_path(unit.multibuy), title: unit.multibuy.name, rel: 'facebox' %>
+					<% elsif unit.percent.present? && unit.percent != 0 %>
+						<td><%= unit.discount %></td>
+						<td><%= unit.percent %>%</td>
+					<% else %>
+						<td></td>
+						<td></td>
+					<% end %>
+					<td><%= unit.price %></td>
+					<td>
+						<span id="unit_received_<%= unit.id %>" class="<%= 'editable' if @current_user.can_destroy_trade? %>" data-url="<%= amount_update_admin_shop_trades_path %>" data-field="unit[amount_received]" data-params='<%= { "unit[id]" => unit.id }.to_json %>'><%= h unit.amount_received %></span>
+						<%= link_to "#{unit.price}?", '', :onmousedown => "$(this).hide().parent().find('.editable').click().find('textarea').val($(this).text().replace('?',''));", :onclick => "return false;" if unit.amount_received.blank? && %w[receive complete].include?(trade.status) && !unit.returned? %>
+					</td>
+					<td><%= link_to_if @current_user.can_show_editor?, unit.amount_receive_editor.name, admin_manage_editor_path(unit.amount_receive_editor), "data-target" => "rightPanel" if unit.amount_receive_editor %><br /><%= h unit.amount_received_at && unit.amount_received_at.to_s(:db) %></td>
+					<td>
+						<span><%= h unit.amount_returned %></span>
+						<%= link_to "#{unit.amount_received}?", '', :onmousedown => "$(this).hide().parent().find('.editable').click().find('textarea').val($(this).text().replace('?',''));", :onclick => "return false;" if !unit.amount_received.blank? && unit.amount_returned.blank? && unit.returned? %>
+					</td>
+					<td><span><%= unit.amount_balance_returned %></span></td>
+					<td><span><%= unit.amount_balance_returned.to_i + unit.amount_returned.to_i %></span></td>
+					<td><%= link_to_if @current_user.can_show_editor?, unit.amount_return_editor.name, admin_manage_editor_path(unit.amount_return_editor), "data-target" => "rightPanel" if unit.amount_return_editor %><br /><%= h unit.amount_returned_at && unit.amount_returned_at.to_s(:db) %></td>
+					<td><span class="<%= 'editable' if @current_user.can_update_unit? %>" data-url="<%= admin_shop_unit_path(unit) %>" data-field="unit[remark]"><%= h unit.remark %></span></td>
+					<td class="op">
+						<% if @current_user.can_manage_unit? && %w{transfer complete}.include?(unit.status) %>
+							<%= link_to '退款', refund_amount_admin_shop_trade_path(unit), rel: "facebox" %>
+						<% end -%>
+					</td>
+				</tr>
+			<% end %>
+		<% end %>
+	</tbody>
+</table>
+
+<%= render :partial => "auction/manage/shared/pagination" %>

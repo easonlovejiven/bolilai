@@ -1,0 +1,53 @@
+h2 查看平安付支付付款
+table.form-table
+	tbody
+		tr.form-field.form-required
+			th scope="row" ID
+			td
+				= @trade.id
+
+		tr.form-field.form-required
+			th scope="row" 商户号
+			td
+				= @result[:merchantId]
+
+		tr.form-field.form-required
+			th scope="row" 版本
+			td
+				= @result[:version]
+				
+		tr.form-field.form-required
+			th scope="row" 编码
+			td
+				= @result[:charset]
+
+		tr.form-field.form-required
+			th scope="row" 交易类型
+			td
+				= @result[:transType]
+
+		tr.form-field.form-required
+			th scope="row" 交易金额（分）
+			td
+				= @result[:orderAmount]
+
+		tr.form-field.form-required
+			th scope="row" 订单状态
+			td
+				= @result[:orderStatus] == "00" ? '支付成功' : '支付失败'
+
+		tr.form-field.form-required
+			th scope="row" 响应码
+			td
+				= @result[:respCode] == "0000" ? '响应成功' : '响应失败'
+				
+
+		tr.form-field.form-required
+			th scope="row" 响应信息
+			td
+				= @result[:respMsg]
+
+		tr.form-field.form-required
+			th scope="row" 响应时间
+			td
+				= @result[:respTime]

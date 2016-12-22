@@ -1,0 +1,185 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="rightPanel">×</button>
+  <h4 class="modal-title">批量修改</h4>
+</div>
+<div class="modal-body">
+  <%= form_for Shop::Product.new, as: "product", :url => batch_update_admin_shop_products_path, :html => {:onsubmit => "return confirm('确定修改吗？');"} do |f| %>
+      <table class="form-table">
+        <tbody>
+        <tr class="form-field">
+          <th scope="row"><%= f.label :label, "标注" %></th>
+          <td>
+            <%= check_box_tag '', '1', false, :onclick => "$(this).parents('tr').find('select,textarea,input[type=text]').attr('disabled',!$(this).attr('checked'));" %>
+            <%= f.text_field :label, :disabled => true %>
+            <span style="color:gray;"><%= @products.group_by(&:label).sort_by { |k, v| v.size }.reverse.map { |k, v| "#{k}*#{v.size}" }.join(' | ') %></span>
+          </td>
+        </tr>
+
+        <tr class="form-field">
+          <th scope="row"><%= f.label :prefix, "前缀" %></th>
+          <td>
+            <%= check_box_tag '', '1', false, :onclick => "$(this).parents('tr').find('select,textarea,input[type=text]').attr('disabled',!$(this).attr('checked'));" %>
+            <%= f.text_field :prefix, :disabled => true %>
+            <span style="color:gray;"><%= @products.group_by(&:prefix).sort_by { |k, v| v.size }.reverse.map { |k, v| "#{k}*#{v.size}" }.join(' | ') %></span>
+          </td>
+        </tr>
+
+        <tr class="form-field">
+          <th scope="row"><%= f.label :mall_id, "商城" %></th>
+          <td>
+            <%= check_box_tag '', '1', false, :onclick => "$(this).parents('tr').find('select,textarea,input[type=text]').attr('disabled',!$(this).attr('checked'));" %>
+            <%#= f.collection_select :mall_id, Shop::Mall.active, :id, :name, { :include_blank => true }, :disabled => true %>
+            <span style="color:gray;"><%= @products.group_by(&:mall).sort_by { |k, v| v.size }.reverse.map { |k, v| "#{k.try(:name)}*#{v.size}" }.join(' | ') %></span>
+          </td>
+        </tr>
+
+        <tr class="form-field">
+          <th scope="row"><%= f.label :category1_id, "一级分类" %></th>
+          <td>
+            <%= check_box_tag '', '1', false, :onclick => "$(this).parents('tr').find('select,textarea,input[type=text]').attr('disabled',!$(this).attr('checked'));" %>
+            <%= f.collection_select :category1_id, Shop::Category.find(1).children.active, :id, :name, {:include_blank => ''}, :disabled => true %>
+            <span style="color:gray;"><%= @products.group_by(&:category1).sort_by { |k, v| v.size }.reverse.map { |k, v| "#{k.try(:name)}*#{v.size}" }.join(' | ') %></span>
+          </td>
+        </tr>
+
+        <tr class="form-field">
+          <th scope="row"><%= f.label :category2_id, "二级分类" %></th>
+          <td>
+            <%= check_box_tag '', '1', false, :onclick => "$(this).parents('tr').find('select,textarea,input[type=text]').attr('disabled',!$(this).attr('checked'));" %>
+            <%= f.grouped_collection_select :category2_id, Shop::Category.find(1).children.active, :children, :name, :id, :name, {:include_blank => ''}, :disabled => true %>
+            <span style="color:gray;"><%= @products.group_by(&:category2).sort_by { |k, v| v.size }.reverse.map { |k, v| "#{k.try(:name)}*#{v.size}" }.join(' | ') %></span>
+          </td>
+        </tr>
+
+        <tr class="form-field">
+          <th scope="row"><%= f.label :category3_id, "三级分类ID" %></th>
+          <td>
+            <%= check_box_tag '', '1', false, :onclick => "$(this).parents('tr').find('select,textarea,input[type=text]').attr('disabled',!$(this).attr('checked'));" %>
+            <%= f.text_field :category3_id, :disabled => true %>
+            <span style="color:gray;"><%= @products.group_by(&:category3_id).sort_by { |k, v| v.size }.reverse.map { |k, v| "#{k}*#{v.size}" }.join(' | ') %></span>
+          </td>
+        </tr>
+
+        <tr class="form-field">
+          <th scope="row"><%= f.label :brand_id, "品牌" %></th>
+          <td>
+            <%= check_box_tag '', '1', false, :onclick => "$(this).parents('tr').find('select,textarea,input[type=text]').attr('disabled',!$(this).attr('checked'));" %>
+            <%= f.collection_select :brand_id, Shop::Brand.active.published.order('initial ASC'), :id, :name, {:include_blank => ''}, :disabled => true %>
+            <span style="color:gray;"><%= @products.group_by(&:brand).sort_by { |k, v| v.size }.reverse.map { |k, v| "#{k.try(:name)}*#{v.size}" }.join(' | ') %></span>
+          </td>
+        </tr>
+
+        <tr class="form-field">
+          <th scope="row"><%= f.label :color, "颜色" %></th>
+          <td>
+            <%= check_box_tag '', '1', false, :onclick => "$(this).parents('tr').find('select,textarea,input[type=text]').attr('disabled',!$(this).attr('checked'));" %>
+            <%= f.select :color, Shop::Product::COLORS.keys, {:include_blank => true}, :disabled => true %>
+            <span style="color:gray;"><%= @products.group_by(&:color).sort_by { |k, v| v.size }.reverse.map { |k, v| "#{k}*#{v.size}" }.join(' | ') %></span>
+          </td>
+        </tr>
+
+        <tr class="form-field">
+          <th scope="row"><%= f.label :target, "对象" %></th>
+          <td>
+            <%= check_box_tag '', '1', false, :onclick => "$(this).parents('tr').find('select,textarea,input[type=text]').attr('disabled',!$(this).attr('checked'));" %>
+            <%= f.select :target, Shop::Product::TARGETS, {:include_blank => true}, :disabled => true %>
+            <span style="color:gray;"><%= @products.group_by(&:target).sort_by { |k, v| v.size }.reverse.map { |k, v| "#{k}*#{v.size}" }.join(' | ') %></span>
+          </td>
+        </tr>
+
+        <tr class="form-field">
+          <th scope="row"><%= f.label :recommend, "推荐" %></th>
+          <td>
+            <%= check_box_tag '', '1', false, :onclick => "$(this).parents('tr').find('select,textarea,input[type=text]').attr('disabled',!$(this).attr('checked'));" %>
+            <%= f.select :recommend, Shop::Product::RECOMMENDS.map { |k, v| [v, k] }, {:include_blank => true}, :disabled => true %>
+            <span style="color:gray;"><%= @products.group_by(&:recommend).sort_by { |k, v| v.size }.reverse.map { |k, v| "#{Shop::Product::RECOMMENDS[k]}*#{v.size}" }.join(' | ') %></span>
+          </td>
+        </tr>
+
+        <tr class="form-field">
+          <th scope="row"><%= f.label :arrived_at, "上架时间" %></th>
+          <td>
+            <%= check_box_tag '', '1', false, :onclick => "$(this).parents('tr').find('select,textarea,input[type=text]').attr('disabled',!$(this).attr('checked'));" %>
+            <%= f.text_field :arrived_at, :class => "edit_datepicker", :disabled => true %>
+            <span style="color:gray;"><%= @products.group_by { |p| p.arrived_at && p.arrived_at.to_date }.sort_by { |k, v| v.size }.reverse.map { |k, v| "#{k}*#{v.size}" }.join(' | ') %></span>
+          </td>
+        </tr>
+
+        <tr class="form-field">
+          <th scope="row"><%= f.label :published_at, "发布时间" %></th>
+          <td>
+            <%= check_box_tag '', '1', false, :onclick => "$(this).parents('tr').find('select,textarea,input[type=text]').attr('disabled',!$(this).attr('checked'));" %>
+            <%= f.text_field :published_at, :class => "edit_datepicker", :disabled => true %>
+            <span style="color:gray;"><%= @products.group_by { |p| p.published_at && p.published_at.to_date }.sort_by { |k, v| v.size }.reverse.map { |k, v| "#{k}*#{v.size}" }.join(' | ') %></span>
+          </td>
+        </tr>
+
+        <tr class="form-field">
+          <th scope="row"><%= f.label :products, "产品列表" %></th>
+          <td>
+            <style>
+                table.temp th {
+                    border-bottom-width: 0;
+                    padding: 0;
+                    width: auto;
+                }
+
+                table.temp td {
+                    border-bottom-width: 0;
+                    padding: 0;
+                }
+            </style>
+            <table class="temp">
+              <thead>
+              <tr>
+                <th>ID</th>
+                <th>标注</th>
+                <th>前缀</th>
+                <th>名称</th>
+                <th>备注</th>
+                <th>商城</th>
+                <th>一级分类</th>
+                <th>二级分类</th>
+                <th>品牌</th>
+                <th>颜色</th>
+                <th>对象</th>
+                <th>推荐</th>
+                <th>上架时间</th>
+                <th>发布时间</th>
+              </tr>
+              </thead>
+              <tbody>
+              <% @products.each do |product| %>
+                  <tr>
+                    <td><%= product.id %><%= hidden_field_tag 'products[][id]', product.id %></td>
+                    <td><%= h product.label %></td>
+                    <td><%= h product.prefix %></td>
+                    <td><%= h product.name %></td>
+                    <td><%= h product.remark %></td>
+                    <td><%= h product.mall && product.mall.name %></td>
+                    <td><%= h product.category1 && product.category1.name %></td>
+                    <td><%= h product.category2 && product.category2.name %></td>
+                    <td><%= h product.brand && product.brand.name %></td>
+                    <td><%= product.multibuy.try(:name) %></td>
+                    <td><%= h product.color %></td>
+                    <td><%= h product.target %></td>
+                    <td><%= h Shop::Product::RECOMMENDS[product.recommend] %></td>
+                    <td><%= h product.arrived_at && product.arrived_at.to_s(:db) %></td>
+                    <td><%= h product.published_at && product.published_at.to_s(:db) %></td>
+                  </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <div class="form-actions">
+        <% if params[:action] != 'show' %>
+            <p class="submit">
+              <%= f.submit "提交", class: "btn btn-primary" %>
+            </p>
+        <% end %>
+     </div>
+<% end %>
+</div>

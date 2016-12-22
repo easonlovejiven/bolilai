@@ -1,0 +1,7 @@
+development: &default
+  address: "wemaill.com"
+  port: "6379"
+test:
+  <<: *default
+production:
+  address: "barlar.cn"

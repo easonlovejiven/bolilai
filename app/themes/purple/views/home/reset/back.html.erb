@@ -1,0 +1,5 @@
+<% form_for :account,:url => account_url(@account.id),:html=>{:method=>:put} do |f| -%>
+  新密码 <%= f.password_field :password %> <br/>
+  在输入一次密码 <%= f.password_field :password_confirmation %> <br/>
+   <%= submit_tag '修改密码' %>
+<% end -%>

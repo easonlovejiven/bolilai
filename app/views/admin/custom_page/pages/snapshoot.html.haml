@@ -1,0 +1,12 @@
+- if @success
+	.updated
+		%p 创建成功
+	%table.form-table
+		%tbody
+			%tr
+				%th= label_tag :snapshot, '快照'
+				%td
+					= image_tag @page.snapshot.to_s
+- else
+	.error
+		%p 创建失败

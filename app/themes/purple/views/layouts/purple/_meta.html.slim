@@ -1,0 +1,22 @@
+script if (document.location.href.match(/#!/) && (l = (document.location.href).replace(/.*#!/, '')) && l != '') document.location = l
+meta http-equiv="Content-Type" content="text/html; charset=utf-8"
+meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"
+meta name="renderer" content="webkit"
+link rel="canonical" href="http://www.barlar.cn#{request.fullpath.gsub(/^\/$|^\/home\/?$|^\/shop\/?$/, '/home')}"
+link type="image/x-icon" href="/favicon.ico" rel="shortcut icon"
+title #{@page_title.blank? ? '珀丽莱商城' : %[#{@page_title}_珀丽莱商城] }
+script $weimall = { server: { perform_caching: #{ActionController::Base.perform_caching} } }
+
+= stylesheet_link_tag 'purple/application'
+= javascript_include_tag 'purple/application'
+
+- if @prerender && ActionController::Base.perform_caching
+  link rel="prerender" href=@prerender
+  link rel="prefetch" href=@prerender
+- unless @page_keywords.blank?
+  meta name="keywords" content="#{@page_keywords.join(',')}"
+- unless @page_description.blank?
+  meta name="description" content=@page_description
+script if (typeof(write_head_code) != 'undefined') write_head_code()
+- if Rails.env=="production"
+  script var _hmt = _hmt || [];(function() {var hm = document.createElement("script");hm.src = "//hm.baidu.com/hm.js?d9ef9c397ebdaed74c3066c48935679a";var s = document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm, s);})();

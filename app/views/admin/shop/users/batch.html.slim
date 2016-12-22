@@ -1,0 +1,32 @@
+.modal-header
+  button type="button" class="close" data-dismiss="rightPanel" ×
+  h4 class="modal-title" 批量修改
+.modal-body
+  = form_tag batch_update_admin_shop_users_path, method: :put, class: "form-horizontal" do
+    = hidden_field_tag :ids,@users.map(&:id).join(",")
+    .form-group
+      = label_tag "update_field", "操作", class: 'col-md-3 control-label'
+      .col-md-8
+        = select_tag "update_field", options_for_select([['修改标签', 'update_label', {'data-scope' => 'update_label'}]]), onchange: "$(this).closest('form').find('.js_batch_select').hide();$(this).closest('form').find('.js_batch_'+$(this).find(':selected').data('scope')).show();", class: "form-control col-md-8"
+    /.form-group.js_batch_select.js_batch_mall
+          /th scope="row"
+            /= label_tag "update_mall_ids", "商城列表"
+          /td
+            =# hidden_field_tag :update_mall_ids
+            =# select_tag "", options_from_collection_for_select([Shop::Mall.new]+Shop::Mall.active, :id, :name, nil), :multiple => true, :size => 6, :style => "height:auto;", :onchange => "$(this).prev().val(($(this).val()||[]).join('\\n'));"
+    .form-group.js_batch_select.js_batch_update_label style="display:none"
+      = label_tag "update_old_label", "原标签", class: 'col-md-3 control-label'
+      .col-md-8
+        = text_field_tag "update_old_label", nil, class: 'form-control col-md-8'
+    .form-group.js_batch_select.js_batch_update_label style=""
+      = label_tag "update_new_label", "新标签", class: 'col-md-3 control-label'
+      .col-md-8
+        = text_field_tag "update_new_label", nil, class: "form-control"
+    /.form-group
+    /  = label_tag "update_user_id", "用户ID", class: 'col-md-3 control-label'
+      /.col-md-8
+      /  = text_area_tag "update_user_id", nil, class: "form-control"
+      /  br
+      /  |（每行包含一个用户ID）
+    .form-actions
+      = submit_tag "提交", class: "btn btn-primary"

@@ -1,0 +1,24 @@
+doctype html
+html
+  head
+    = render :partial => "layouts/purple/meta"
+    = yield :head
+    = csrf_meta_tag
+  body.weimall.layout_weimall
+    a#service_online_div target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2764054239&site=qq&menu=yes"
+    .layout_wrap
+      .layout_frame
+        .iframe_header#iframe_header
+          = render :partial => "layouts/purple/header"
+        .layout_body#body
+          <!-- div_body_begin -->
+          .header_blank
+          .layout_container
+            = yield
+          <!-- div_body_end -->
+      .footer.website
+        = render :partial => "layouts/purple/footer"
+        #layout_footer
+        .iframe_footer#iframe_footer
+        a href="#" class="layout_scrolltop" id="layout_scrolltop" &nbsp;
+      script if (typeof(write_statistics_code) != 'undefined') write_statistics_code()

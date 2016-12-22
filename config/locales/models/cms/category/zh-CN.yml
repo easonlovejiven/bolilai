@@ -1,0 +1,13 @@
+zh-CN:
+  activerecord:
+    models:
+      cms/category: 栏目
+    attributes:
+      cms/category:
+        name: 名称
+        url: 栏目URL
+    enums:
+      "cms/category":
+        is_pages:
+          true: 是
+          flase: 否

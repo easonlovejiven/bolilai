@@ -1,0 +1,78 @@
+UE.registerUI('insertvideodialog', function (editor, uiName) {
+
+    function convert_url(url) {
+        if (!url) return '';
+        url = url.replace(/(^[ \t\n\r]+)|([ \t\n\r]+$)/g, '')
+                .replace(/\?.*/, "").replace(/v\.youku\.com\/v_show\/id_([\w\-=]+)\.html/i, 'player.youku.com/player.php/sid/$1/v.swf')
+                .replace(/(www\.)?youtube\.com\/watch\?v=([\w\-]+)/i, "www.youtube.com/v/$2")
+                .replace(/youtu.be\/(\w+)$/i, "www.youtube.com/v/$1")
+                .replace(/v\.ku6\.com\/.+\/([\w\.]+)\.html.*$/i, "player.ku6.com/refer/$1/v.swf")
+                .replace(/www\.56\.com\/u\d+\/v_([\w\-]+)\.html/i, "player.56.com/v_$1.swf")
+                .replace(/www.56.com\/w\d+\/play_album\-aid\-\d+_vid\-([^.]+)\.html/i, "player.56.com/v_$1.swf")
+                .replace(/v\.pps\.tv\/play_([\w]+)\.html.*$/i, "player.pps.tv/player/sid/$1/v.swf")
+                .replace(/www\.letv\.com\/ptv\/vplay\/([\d]+)\.html.*$/i, "i7.imgs.letv.com/player/swfPlayer.swf?id=$1&autoplay=0")
+                .replace(/www\.tudou\.com\/programs\/view\/([\w\-]+)\/?/i, "www.tudou.com/v/$1")
+                .replace(/v\.qq\.com\/cover\/[\w]+\/[\w]+\/([\w]+)\.html/i, "static.video.qq.com/TPout.swf?vid=$1")
+                .replace(/v\.qq\.com\/.+[\?\&]vid=([^&]+).*$/i, "static.video.qq.com/TPout.swf?vid=$1")
+                .replace(/my\.tv\.sohu\.com\/[\w]+\/[\d]+\/([\d]+)\.shtml.*$/i, "share.vrs.sohu.com/my/v.swf&id=$1")
+                .replace(/v\.yinyuetai\.com\/video\/([\d]+)/i, "player.yinyuetai.com/video/swf/$1/1/a.swf");
+        return url;
+    }
+
+    var panelId = "videoInsert" + editor.uid;
+    var htmlStr = '<div class="video_insert_panel">' +
+            '<input name="url" class="video_insert_url form-control">' +
+            '<div class="help-info">支持youku,tudou,56,pps,letv,qq,sohu输入视频页面的地址，其他需输入flash地址。</div></div>';
+    var $html = $(htmlStr).attr('id', panelId);
+    //创建dialog
+    var dialog = new UE.ui.Dialog({
+        //指定弹出层中页面的路径，这里只能支持页面,因为跟addCustomizeDialog.js相同目录，所以无需加路径
+//        iframeUrl:'customizeDialogPage.html',
+        content: $html.get(0).outerHTML,
+        //需要指定当前的编辑器实例
+        editor: editor,
+        //指定dialog的名字
+        name: uiName,
+        //dialog的标题
+        title: "插入视频",
+        //指定dialog的外围样式
+        cssRules: "width:400px;height:100px;",
+        //如果给出了buttons就代表dialog有确定和取消
+        buttons: [
+            {
+                className: 'edui-okbutton',
+                label: '确定',
+                onclick: function () {
+                    var url = $('#' + panelId + ' .video_insert_url').val();
+                    url = convert_url(url);
+                    if (url.length) {
+                        editor.execCommand('insertvideo', {url: url, width: 600, height: 380});
+                    }
+                    dialog.close(true);
+                }
+            },
+            {
+                className: 'edui-cancelbutton',
+                label: '取消',
+                onclick: function () {
+                    dialog.close(false);
+                }
+            }
+        ]
+    });
+
+    //参考addCustomizeButton.js
+    var videoBut = new UE.ui.Button({
+        name: uiName + "button",
+        title: "插入Flash视频",
+        //需要添加的额外样式，指定icon图标，这里默认使用一个重复的icon
+        cssRules: 'background-position: -321px -20px;',
+        onclick: function () {
+            //渲染dialog
+            dialog.render();
+            dialog.open();
+        }
+    });
+
+    return videoBut;
+}, 30);

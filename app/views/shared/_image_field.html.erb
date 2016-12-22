@@ -1,0 +1,50 @@
+<% field_key ||= field
+   guid = "#{Time.now.to_f}".gsub('.', '')
+%>
+<div class="upload_group_warp">
+  <div class="upload_btn">
+    <a id="<%= "#{field}_#{guid}_btn" %>" href="#" class="btn btn-xs brown">
+      <i class="icon-c icon-img"></i> 添加图片</a>
+    <span class="errors"></span>
+  </div>
+  <ul id="<%= "#{field}_#{guid}_progress_warp" %>" class="upload_progress_warp" data-key_name="<%= field %>">
+    <% @record.send(nested_filed).each do |image| %>
+        <li class="progressContainer" data-id="<%= image.id %>" data-pic_key="<%= @record.send(field) %>">
+          <div class="pic">
+            <a href="#" class="remove_btn">x</a>
+
+            <div class="imgWrapper">
+              <%= link_to image_tag(@record.send(field_key).url(:thumb)), @record.send(field_key).url, class: "linkWrapper", target: "_blank" %>
+            </div>
+          </div>
+        </li>
+    <% end %>
+  </ul>
+  <%= hidden_field_tag field_name, '', id: "images_input" %>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        var $uploadBtn = $('#<%= "#{field}_#{guid}" %>_btn');
+        var $uploadGroupWarp = $uploadBtn.parents('.upload_group_warp');
+        $uploadBtn.qiniuUpload({
+            domain: "<%=Rails.application.secrets[:qiniu_weimall_domain]%>",
+            $upload_group_warp: $uploadGroupWarp,
+            max_files: <%=defined?(max_files) ? max_files : 6%>
+        });
+        $uploadGroupWarp.parents("form").on("submit", function () {
+            var $form = $(this), pic_keys = [], key_name = $('.upload_progress_warp', $uploadGroupWarp).data('key_name');
+            $form.find("input[type=submit]").addClass("disabled");
+            $("li.progressContainer", $uploadGroupWarp).each(function (k, v) {
+                var $li = $(v), attrs = {};
+                attrs[key_name] = $li.data("pic_key");
+                $.extend(attrs, {id: $li.attr("data-id")});
+                if ($(this).attr("data-destroy") == "1") {
+                    $.extend(attrs, {_destroy: 1})
+                }
+                pic_keys.push(attrs)
+            });
+            $('#images_input').val(JSON.stringify(pic_keys));
+        })
+    })
+</script>

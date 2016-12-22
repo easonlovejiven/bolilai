@@ -1,0 +1,78 @@
+@import "compass/css3"
+@import "shared/function"
+
+.series_a6
+	.product_top
+		.textbox
+			.title
+				color: $color_top_title
+			.subtitle
+				color: $color_top_subtitle
+				border-top-color: #d6c8c2
+			.description
+				color: $color_top_description
+			.label
+				color: $color_top_label
+				border-color: $color_top_label
+		.link
+			.linktext
+				.summary
+					span
+						color: $color_single_brands
+					em
+						color: $color_single_summary
+				.value
+					.MarketPrice
+						color: $color_single_gray
+						em,
+						span
+							color: $color_single_gray
+					.IhaveuPrice
+						color: $color_price_stress
+						em,
+						span
+							color: $color_price_stress
+				.preferential
+					color: $color_price_preferential
+					em
+						color: $color_price_preferential
+				.at_once
+					background: #{$color_at_once_bg} asset-url('auction/pages/template/#{$theme}/btn_bg.png') repeat-x 0 0
+					&:hover,
+					&.hover
+						background-position: 0 -28px
+	.product_mod
+		.product_list
+			.link
+				.label
+					color: $color_list_label
+					border-color: $color_list_label
+				.title
+					color: $color_single_title
+				.linktext
+					.summary
+						span
+							color: $color_single_brands
+						em
+							color: $color_single_summary
+					.value
+						.MarketPrice
+							color: $color_single_gray
+							em,
+							span
+								color: $color_single_gray
+						.IhaveuPrice
+							color: $color_price_stress
+							em,
+							span
+								color: $color_price_stress
+					.preferential
+						color: $color_price_preferential
+						em
+							color: $color_price_preferential
+	.morelink
+		span
+			color: $color_single_more
+			background-image: asset-url('auction/pages/template/#{$theme}/more.png')
+
+

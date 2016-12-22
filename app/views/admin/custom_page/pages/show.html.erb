@@ -1,0 +1,150 @@
+<% @record = @page %>
+<% @show = !%w[new edit].include?(params[:action]) && @record.valid? %>
+<div class="modal-header">
+  <%= render "admin/modal/header" %>
+</div>
+<%= render 'admin/shared/prompt' %>
+<div class="modal-body">
+  <%= form_for @page, :url => @page.new_record? ? admin_pages_path : admin_page_path(@page), :method => @page.new_record? ? :post : :put,
+               :html => {:multipart => true, class: "form-horizontal"} do |f| %>
+
+      <% unless @page.new_record? %>
+          <div class="form-group">
+            <%= f.label :id, 'ID', {class: 'col-md-3 control-label'} %>
+            <div class="form-control-static">
+              <strong><%= @record.id %></strong>
+            </div>
+          </div>
+      <% end %>
+      <div class="form-group">
+        <%= f.label :name, '<sup>*</sup>名称'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <strong><%= @record.name %></strong>
+            </div>
+        <% else %>
+            <div class="col-md-8">
+              <%= f.text_field :name, {class: 'form-control', required: true} %>
+              <span class="note"><%= f.error_message_on :name %></span>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :position, '<sup>*</sup>位置'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= CustomPage::Page::POSITIONS.map { |p| {p[:value] => p[:name]} }.inject(&:merge)[@page.position] %>
+            </div>
+        <% else %>
+            <div class="col-md-8">
+              <%= f.select :position, CustomPage::Page::POSITIONS.map { |p| [p[:name], p[:value]] }, {:include_blank => ''}, {class: 'form-control', required: true} %>
+              <span class="note"><%= f.error_message_on :position %></span>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :title, '<sup>*</sup>标题'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= @page.title %>
+            </div>
+        <% else %>
+            <div class="col-md-8">
+              <%= f.text_field :title, {class: 'form-control', required: true} %>
+              <span class="note"><%= f.error_message_on :title %></span>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :keywords, '关键字'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= @page.keywords %>
+            </div>
+        <% else %>
+            <div class="col-md-8">
+              <%= f.text_field :keywords, {class: 'form-control'} %>
+              <span class="note"><%= f.error_message_on :keywords %></span>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :description, '描述'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= @page.description %>
+            </div>
+        <% else %>
+            <div class="col-md-8">
+              <%= f.text_area :description, {class: 'form-control'} %>
+              <span class="note"><%= f.error_message_on :description %></span>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :engine, '<sup>*</sup>引擎'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= @page.engine %>
+            </div>
+        <% else %>
+            <div class="col-md-8">
+              <%= f.select :engine, CustomPage::Page::ENGINES, {:include_blank => ''}, {class: 'form-control', required: true} %>
+              <span class="note"><%= f.error_message_on :engine %></span>
+            </div>
+        <% end %>
+      </div>
+
+      <%= render :partial => "admin/modal/image_field", locals: {f: f, field: :snapshot, max_files: 1, form_as: :custom_page_page, required: true} %>
+
+
+      <%= render :partial => "admin/modal/image_field", locals: {f: f, field: :pic, max_files: 50, form_as: :custom_page_page, required: true, nested_filed: :images} %>
+
+
+      <% unless @page.new_record? %>
+          <div class="form-group">
+            <%= f.label :created_at, '创建时间', class: 'col-md-3 control-label' %>
+            <div class="form-control-static">
+              <strong><%= @page.created_at && @page.created_at.to_s(:db) %></strong>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :updated_at, '修改时间', class: 'col-md-3 control-label' %>
+            <div class="form-control-static">
+              <strong><%= @page.updated_at && @page.updated_at.to_s(:db) %></strong>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :editor, '编辑', class: 'col-md-3 control-label' %>
+            <div class="form-control-static">
+              <%= link_to_if can?(:show, @page.editor), @page.editor.name, admin_manage_editor_path(@page.editor), "data-target" => "rightPanel" if @page.editor %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :published, '发布', class: 'col-md-3 control-label' %>
+            <div class="form-control-static">
+              <%= @page.published? ? '✔' : '✘' %>
+            </div>
+          </div>
+      <% end %>
+      <div class="form-actions">
+        <% if @show %>
+            <%= link_to '查看', admin_page_path(@page), "data-target" => 'rightPanel', class: 'btn btn-success' if can?(:show, @page) %>
+            <%= link_to '编辑', edit_admin_page_path(@page), "data-target" => 'rightPanel', class: 'btn btn-success' if can?(:update, @page) %>
+            <%= link_to '删除', delete_admin_page_path(@page), "data-target" => 'rightPanel', class: 'btn btn-success' if can?(:destroy, @page) %>
+            <%= link_to '预览', preview_admin_page_path(@page), class: 'btn btn-success' if can?(:show, @page) %>
+            <%= link_to '访问', admin_page_path(@page), class: 'btn btn-success' if can?(:show, @page) %>
+        <% else %>
+            <%= f.submit "提交", class: "btn btn-primary" %>
+        <% end %>
+      </div>
+  <% end %>
+</div>

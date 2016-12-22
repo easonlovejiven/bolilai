@@ -1,0 +1,109 @@
+zh-CN:
+  activerecord:
+    models:
+      shop/trade: 交易
+    attributes:
+      shop/trade:
+        identifier: 编号
+        link_id: 链接
+        shop_id: 店铺
+        guide_id: 导购
+        user_id: 用户
+        contact_id: 收货地址
+        invoice_contact_id: 发票地址
+        mall_promotion_id: 商场促销
+        client: 客户端
+        shop_identifier: 店铺单据号
+        price: 总价
+        delivery_time: 快递时间
+        delivery_phone: 快递电话
+        invoice_type: 发票类型
+        invoice_content: 发票内容
+        invoice_title: 发票抬头
+        comment: 留言
+        remark: 备注
+        package_from: 包装发送人
+        package_to: 包装接收人
+        package_content: 包装内容
+        whisper_style: 密语风格
+        whisper_from: 密语发送人
+        whisper_to: 密语接收人
+        whisper_content: 密语内容
+        need_delivery: 需要快递？
+        need_invoice: 需要发票？
+        editor_id: 创建人员
+        created_at: 创建时间
+        audit_editor_id: 审核人员
+        audit_at: 审核时间
+        prepare_editor_id: 备货人员
+        prepare_at: 备货时间
+        ship_editor_id: 发货人员
+        ship_at: 发货时间
+        freeze_editor_id: 冻结人员
+        freeze_at: 冻结时间
+        units: 单件
+        return: 退货
+        status: 状态
+        payment_service: 付款
+        delivery_service: 快递
+        delivery_identifier: 快递编号
+        invoice_delivery_service: 发票快递
+        delivery_receipted_amount: 快递收款金额
+        delivery_receipted_at: 快递收款时间
+        delivery_remitted_at: 快递归集时间
+        delivery_settled_amount: 快递结算金额
+        delivery_reconciled_at: 快递对账时间
+        delivery_received_at: 快递收货时间
+        delivery_settled_at: 快递结算时间
+        payment_price: 支付价格
+        is_present: 礼物
+        balance: 使用余额
+        calls: 通话
+        smss: 短信
+    enums:
+      shop/trade:
+        status:
+          pay: 待付款
+          audit: 待审核
+          ship: 待发货
+          receive: 待收货
+          contribute: 待投稿
+          complete: 完成
+          cancel: 取消
+          accept: 接受
+          reject: 拒绝
+          punished: 过期
+          freezed: 冻结
+          return: 返还
+          prepare: 出库中
+        delivery_service:
+          lianbangkuaidi: 联邦快递
+          shunfeng: 顺丰速运
+          zhaijisong: 宅急送
+          ems: 邮政EMS
+          offline: 线下
+          pickup: 自取
+        payment_service:
+        delivery_time:
+          workday: 仅工作日
+          playday: 仅休息日
+          all: 所有日期皆可
+        invoice_type:
+          personal: 个人
+          company: 公司
+        invoice_content:
+          present: 礼品
+          detail: 明细
+        client:
+          manage: 管理
+          html5: HTML5
+          osx: OS X
+          windows: Windows
+          linux: Linux
+          flash: Flash
+          iphone: iPhone
+          ipad: iPad
+          android: Android
+          phone_web: 手机网站
+          ipad_web: 平板网站
+          wechat: 微信

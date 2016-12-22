@@ -1,0 +1,155 @@
+<!-- CSS -->
+<%= stylesheet_link_tag "touch/frame" %>
+<%= stylesheet_link_tag "touch/frame_respond" %>
+<%= javascript_include_tag "touch/controller" %>
+<%= javascript_include_tag "touch/search_tip.min" %>
+<!-- header -->
+<% content_for :header do %>
+    <header class="border_1px">
+      <!-- <div class="left_option left"> -->
+      <div class="ico_wrapper back_ico left hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <!-- </div> -->
+      <div class="title list_item ellipsis">
+        搜索
+      </div>
+      <div class="list_array">默认排序
+        <span class="sprites down_ico"></span>
+      </div>
+      <div class="ico_wrapper add_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper edit_ico right hide">
+        <span class="">编辑
+          <em class="down_shadow"></em>
+        </span>
+        <span class="">完成
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper info_ico right hide text">
+        详情<em class="down_shadow"></em>
+      </div>
+      <div class="ico_wrapper filter_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper mode_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+    </header>
+<% end %>
+<!-- 调用页面主体 -->
+<script type="text/javascript">
+    views.empty_style();
+    $(function () {
+        var $input = $('#search_txt'),
+                $cancel = $('.clear_txt');
+        var ids = [];
+        products_index_controller.initialize($('.list_array'), $('.array_box .array_item'), $('.mode_ico'), ids);
+        views.recommend_style(0.344)
+        app.lasy_load($('img'));
+        app.push_event($('.product'), 200);
+        products_search_controller.initialize($('.search_form'), $input, $cancel);
+    });
+</script>
+<div class="main" id="main">
+  <div style="height=100%;">
+    <!-- 页面主题 -->
+    <form method="get" action="/search" id="search_submit" class="search_form">
+      <div class="search doing left"> <!-- 加doing可编辑状态-->
+        <div class="search_ico sprites left"></div>
+        <input type="text" name="keyword" placeholder="请输入要搜索的内容" id="search_txt" class="search_txt left" value="">
+        <span class="clear_txt hide"><em class="sprites"></em></span>
+      </div>
+      <div class="btn black_bg search_btn right">搜索
+        <div class="down_shadow"></div>
+      </div>
+      <div class="clear"></div>
+      <input type="submit" class="search_submit">
+    </form>
+
+    <div class="layer find_brand"></div>
+    <!--<div class="nav_list clear_fix">-->
+      <!--<div class="left" data-class="record_body">搜索历史</div>-->
+      <!--<div class="active left" data-class="hot_body">热门推荐</div>-->
+    <!--</div>-->
+    <!--<div class="hot_body search_list">-->
+      <!--<div class="border_1px search_item" data-href="/search?keyword=2015新款">-->
+        <!--<p class="ellipsis">2015新款</p>-->
+
+        <!--<div class="down_shadow"></div>-->
+      <!--</div>-->
+      <!--<div class="border_1px search_item" data-href="/products?where[brand_id]=106">-->
+        <!--<p class="ellipsis">爱马仕精品</p>-->
+
+        <!--<div class="down_shadow"></div>-->
+      <!--</div>-->
+      <!--<div class="border_1px search_item" data-href="/products?where[category2_id]=86">-->
+        <!--<p class="ellipsis">短袖T恤</p>-->
+
+        <!--<div class="down_shadow"></div>-->
+      <!--</div>-->
+      <!--<div class="border_1px search_item" data-href="/products?where[category2_id]=143">-->
+        <!--<p class="ellipsis">创意家居饰品</p>-->
+
+        <!--<div class="down_shadow"></div>-->
+      <!--</div>-->
+      <!--<div class="border_1px search_item" data-href="/products?where[category2_id]=74">-->
+        <!--<p class="ellipsis">2015新款太阳镜</p>-->
+
+        <!--<div class="down_shadow"></div>-->
+      <!--</div>-->
+      <!--<div class="border_1px search_item" data-href="/products?where[category2_id]=206">-->
+        <!--<p class="ellipsis">文玩收藏，古董珍品</p>-->
+
+        <!--<div class="down_shadow"></div>-->
+      <!--</div>-->
+      <!--<div class="border_1px search_item" data-href="/search?keyword=特惠">-->
+        <!--<p class="ellipsis">每周特惠新品</p>-->
+
+        <!--<div class="down_shadow"></div>-->
+      <!--</div>-->
+    <!--</div>-->
+    <!--<div class="record_body search_list hide"></div>-->
+  </div>
+  <!-- 排序项 -->
+  <div class="array_fixed hide" id="array_fixed">
+    <div class="left_blank left"></div>
+    <span class="array_arrow"></span>
+
+    <div class="array_box left" data-params="">
+      <div class="array_item one" data-params="">
+        <p>默认排序</p>
+      </div>
+      <div class="array_item " data-params="&amp;order[price]=asc">
+        <p>价格上升</p>
+      </div>
+      <div class="array_item " data-params="&amp;order[price]=desc">
+        <p>价格下降</p>
+      </div>
+      <div class="array_item " data-params="&amp;order[readings_count]=desc">
+        <p>人气</p>
+      </div>
+      <div class="array_item " data-params="&amp;order[scarcity]=desc">
+        <p>限量</p>
+      </div>
+      <div class="array_item " data-params="&amp;order[percent]=asc">
+        <p>折扣</p>
+      </div>
+      <div class="array_item " data-params="&amp;order[arrived_at]=desc">
+        <p>上架时间</p>
+      </div>
+    </div>
+    <div class="right_blank right"></div>
+    <div class="bottom_blank left"></div>
+  </div>
+</div>

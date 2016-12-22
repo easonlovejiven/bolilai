@@ -1,0 +1,879 @@
+.cartbox .cart_whisper
+	position: relative
+	display: block
+	height: 560px
+	width: 920px
+	border-radius: 7px
+	-moz-border-radius: 7px
+	-webkit-border-radius: 7px
+	background: #f9f6f5
+	*background: none
+	z-index: 5
+	.corner_left,
+	.corner_right,
+	.corner_center
+		position: absolute
+		display: block
+		width: 34px
+		background-repeat: no-repeat
+		background-image: asset-url('purple/core/trades/whisper/corner.gif')
+	.corner_left
+		height: 29px
+		top: 0
+		left: 0
+		background-position: 0 0
+	.corner_right
+		height: 41px
+		bottom: 0
+		right: 0
+		background-position: 0 -39px
+	.corner_center
+		width: 308px
+		height: 276px
+		bottom: 0
+		left: 0
+		border-radius: 0 0 0 5px
+		background: asset-url('purple/core/trades/whisper/cardbg.png') no-repeat 0 0
+		*background: asset-url('purple/core/trades/whisper/cardbg.gif') no-repeat 0 0
+	.pop_left
+		background-image: asset-url('purple/core/trades/whisper/pop_left.png')
+		_background: none
+		_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/assets/core/trades/whisper/pop_left.png")
+	.pop_center
+		background: #f9f6f5
+	.pop_right
+		background-image: asset-url('purple/core/trades/whisper/pop_right.png')
+		_background: none
+		_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/assets/core/trades/whisper/pop_right.png")
+@media \0screen
+	.cartbox .cart_whisper
+		background: none
+	.cartbox .cart_whisper .corner_center
+		background: asset-url('purple/core/trades/whisper/cardbg.gif') no-repeat 0 0
+
+.cartbox .whisper_on
+	display: block
+	height: 57px
+	width: 100%
+	position: relative
+	margin-top: 20px
+	background: asset-url('purple/core/trades/whisper/whisper_bg.jpg') repeat-x left bottom
+	&.disabled
+		background: asset-url('purple/core/trades/whisper/whisper_bg.jpg') repeat-x left bottom
+	.bgleft,
+	.bgright
+		position: absolute
+		top: 0px
+		height: 57px
+		background: asset-url('purple/core/trades/whisper/whisper.jpg') no-repeat left top
+	.bgleft
+		left: 0px
+		width: 110px
+		background-position: left top
+	.bgright
+		right: 0px
+		width: 10px
+		background-position: right top
+	.newtitle
+		color: #af6128
+		font-size: 14px
+		position: absolute
+		top: 25px
+		left: 130px
+		span
+			color: #666
+			font-size: 12px
+			padding-left: 25px
+	.whisper_edit
+		display: block
+		position: absolute
+		top: 25px
+		right: 10px
+		width: 200px
+		a
+			color: #7e7c76
+			&:hover
+				text-decoration: underline
+				color: #000
+		.editlink
+			width: 75px
+			background: asset-url('purple/core/trades/whisper/whisper_edit.gif') no-repeat 0 1px
+			margin-right: 30px
+		.whisper_off
+			width: 32px
+			background: asset-url('purple/core/trades/whisper/whisper_edit.gif') no-repeat 0 -31px
+.whisper_on .whisper_edit a,
+.whisper_box .closelog
+	background: asset-url('purple/core/trades/whisper/close_icon.png') no-repeat 0 5px
+	color: #333
+	font-size: 12px
+	padding-left: 22px
+	text-decoration: underline
+	line-height: 20px
+.whisper_box .closelog
+	width: 32px
+	right: 22px
+	top: 32px
+.whisper_box .closelog:hover
+	background-position: 0 5px
+	text-decoration: underline
+	color: #000
+.whisper_box
+	display: block
+	position: absolute
+	top: 0px
+	left: 10px
+	height: 560px
+	width: 900px
+	// background: #f9f6f5
+	z-index: 5
+	.whisper_title
+		color: #000
+		font-size: 16px
+		position: absolute
+		left: 20px
+		top: 33px
+	// .closelog
+	// 	background: asset-url('purple/core/trades/whisper/close_icon.png') no-repeat 0 5px
+	// 	color: #333
+	// 	font-size: 12px
+	// 	padding-left: 22px
+	// 	text-decoration: underline
+	// 	width: 32px
+	// 	line-height: 20px
+	// 	right: 22px
+	// 	top: 32px
+	// 	&:hover
+	// 		background-position: 0 5px
+	// 		text-decoration: underline
+	// 		color: #000
+	.btn
+		display: block
+		background-repeat: no-repeat
+		background-image: asset-url('purple/core/trades/whisper/btn.png')
+		height: 30px
+		overflow: hidden
+		text-indent: -999px
+		position: absolute
+	.editbtn
+		width: 115px
+		background-position: 0 -34px
+		&:hover
+			background-position: -135px -34px
+	.determinebtn
+		width: 115px
+		background-position: -290px 0
+		&:hover
+			background-position: -290px -34px
+		&.disabled,
+		&.disabled:hover
+			background-position: -290px -142px
+	.previewbtn
+		width: 115px
+		background-position: 0 0
+		&:hover
+			background-position: -135px 0
+	.nextwritebtn
+		width: 216px
+		background-position: 0 -140px
+		&:hover
+			background-position: 0 -176px
+	.select_style
+		position: absolute
+		display: block
+		width: 620px
+		height: 420px
+		left: 170px
+		top: 75px
+		overflow: hidden
+		background: asset-url('purple/core/trades/whisper/bg1.jpg') no-repeat 0 0
+		.style_list
+			position: absolute
+			top: 0
+			left: 46px
+			z-index: 5
+			// background: rgba(0,0,0,0.2)
+		.style_list,
+		.slides_container
+			display: block
+			width: 441px
+			height: 165px
+			overflow: hidden
+			img
+				// width: 100%
+				// height: 100%
+		.style_nav
+			display: block
+			width: 650px
+			position: absolute
+			top: 225px
+			li
+				display: block
+				width: 115px
+				height: 136px
+				// background: rgba(0,0,0,0.2)
+				float: left
+				margin-right: 93px
+				clear: none
+				&.current
+					background: asset-url('purple/core/trades/whisper/current.png') no-repeat 0 112px
+			a
+				display: block
+				width: 115px
+				height: 136px
+				// background: rgba(0,0,0,0.2)
+				// float: left
+				// margin-right: 93px
+				text-indent: -999px
+				overflow: hidden
+		.nextwritebtn
+			top: 378px
+			left: 150px
+	.whisper_code
+		position: absolute
+		display: block
+		width: 876px
+		height: 400px
+		left: 10px
+		top: 108px
+		overflow: hidden
+		background: asset-url('purple/core/trades/whisper/bg3.jpg') no-repeat 0 0
+		.pic
+			position: absolute
+			display: block
+			left: 361px
+			top: 20px
+			width: 185px
+			height: 185px
+			background: rgba(0,0,0,0.2)
+			img
+				width: 100%
+				height: 100%
+		.editbtn
+			left: 331px
+			top: 357px
+		.determinebtn
+			left: 465px
+			top: 357px
+	.whisper_card
+		width: 608px
+		height: 326px
+		position: absolute
+		top: 110px
+		left: 140px
+		background: asset-url('purple/core/trades/whisper/textbox_bg.png') no-repeat 0 0
+		_background: asset-url('purple/core/trades/whisper/textbox_bg.jpg') no-repeat 0 0
+		// _background: none
+		// _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/assets/core/trades/whisper/textbox_bg.png")
+		input::-moz-placeholder
+			color: #8f8f8f
+		::-webkit-input-placeholder
+			color: #c3c2c2
+		textarea::-moz-placeholder
+			color: #8f8f8f
+		::-webkit-textarea-placeholder
+			color: #c3c2c2
+		.textcont,
+		.dear,
+		.self
+			border: 0px
+			background: none
+			overflow: hidden
+			position: absolute
+			font-size: 18px
+			line-height: 30px
+			color: #000
+			font-weight: normal
+		.textcont
+			width: 458px
+			height: 122px
+			left: 76px
+			top: 102px
+			_top: 104px
+			text-indent: 32px
+			text-align: justify
+			line-height: 40px
+		.dear,
+		.self
+			width: 108px
+			height: 30px
+		.dear
+			left: 168px
+			top: 44px
+			_top: 46px
+		.self
+			top: 253px
+			_top: 255px
+			left: 424px
+			// color: #b2b2b2
+		.previewbtn,
+		.determinebtn
+			top: 349px
+			left: 246px
+
+.cartbox .whisper_box
+	.determinebtn
+		&.disabled,
+		&.disabled:hover
+			background: asset-url('purple/core/trades/whisper/btn.png') no-repeat -290px -141px
+
+.no_popup .cartbox .cart_whisper .pop_left,
+.no_popup .cartbox .cart_whisper .pop_right,
+.no_popup .cartbox .cart_whisper .pop_center
+	display: block
+.no_popup .cartbox .cart_whisper .closelog,
+.no_popup .cartbox .cart_whisper .closelog
+	display: block
+.msn .whisper_box .closelog,
+.msn .whisper_box .closelog:hover
+	background: asset-url('purple/core/trades/whisper/close_icon.png') no-repeat 0 5px
+.msn
+	.whisper_on
+		background-image: asset-url('purple/core/trades/whisper/msn_whisper_bg.jpg')
+		&.disabled
+			background-image: asset-url('purple/core/trades/whisper/msn_whisper_bg.jpg')
+		.bgleft,
+		.bgright
+			background-image: asset-url('purple/core/trades/whisper/msn_whisper.jpg')
+	.cartbox .cart_whisper,
+	.cartbox .cart_whisper .corner_center
+		border-radius: 0px
+		-moz-border-radius: 0px
+		-webkit-border-radius: 0px
+	.cartbox .cart_whisper .pop_left,
+	.cartbox .cart_whisper .pop_right,
+	.cartbox .cart_whisper .pop_center
+		display: block
+		background: #f9f6f5
+	.cartbox .cart_whisper .corner_center
+		background-image: asset-url('purple/core/trades/whisper/cardbg.png')
+	.whisper_box
+		.btn
+			display: block
+			text-indent: auto
+			color: #7e7c76
+			line-height: 28px
+			*line-height: 30px
+			font-size: 14px
+			background-image: asset-url('purple/core/trades/whisper/msn_btn_icons.gif')
+		.editbtn
+			background-color: #e9e9eb
+			background-position: 24px -65px
+			color: #7e7c76
+			text-indent: 60px
+			&:hover
+				background-color: #e1e1e1
+				background-position: 24px -65px
+		.determinebtn
+			background-color: #922a5d
+			background-position: 20px -34px
+			color: #fff
+			text-indent: 58px
+			&:hover
+				background-color: #732049
+				background-position: 20px -34px
+			&.disabled, &.disabled:hover
+				background: #a8547d asset-url('purple/core/trades/whisper/msn_btn_icons.gif')  no-repeat 20px -34px
+		.previewbtn
+			background-color: #922a5d
+			background-position: 17px -2px
+			color: #fff
+			text-indent: 59px
+			&:hover
+				background-color: #732049
+				background-position: 17px -2px
+		.nextwritebtn
+			background-color: #e9e9eb
+			background-position: 17px -123px
+			color: #7e7c76
+			text-indent: 60px
+			&:hover
+				background-color: #e1e1e1
+				background-position: 17px -123px
+		.whisper_card
+			background-color: #fdfdfd
+			background-position: -4px -4px
+			height: 317px
+			width: 600px
+			left: 144px
+			top: 114px
+			.previewbtn,
+			.determinebtn
+				left: 242px
+				top: 345px
+			.dear
+				left: 164px
+				top: 40px
+				_top: 42px
+			.self
+				top: 249px
+				_top: 251px
+				left: 420px
+			.textcont
+				left: 72px
+				top: 98px
+				_top: 100px
+@media \0screen
+	.msn .whisper_box .btn
+		line-height: 30px
+
+.cartbox
+	.cardbox
+		display: block
+		padding-top: 10px
+		margin-bottom: 13px
+		position: relative
+		width: 857px
+		.errorbox
+			display: block
+			position: absolute
+			width: 120px
+			height: 38px
+			top: -33px
+			left: 717px
+			.box_cont
+				display: block
+				width: 120px
+				height: 33px
+				color: #fff
+				text-align: center
+				line-height: 30px
+				_line-height: 34px
+				_overflow: hidden
+				border-radius: 5px 5px 5px 5px
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.3)
+				background: asset-url('purple/core/trades/cart/card_error_bg.gif') no-repeat 0 0
+			.box_bottom
+				width: 13px
+				height: 9px
+				position: absolute
+				top: 30px
+				left: 68px
+				background: asset-url('purple/core/trades/cart/card_error_icon.gif') no-repeat 0 0
+		.cardpassword
+			.errorbox
+				top: -41px
+				left: 361px
+				.box_bottom
+					left: 39px
+			.jqTransformCheckboxWrapper
+				margin: 7px 5px 0 22px
+				_margin: 7px 5px 0 12px
+		.cardsuccess
+			color: #000
+			font-size: 12px
+			line-height: 30px
+			width: 600px
+			overflow: hidden
+			white-space: nowrap
+			span
+				color: #7a7a7a
+				padding-left: 22px
+				padding-right: 8px
+		.numberbox
+			position: absolute
+			width: 194px
+			height: 119px
+			_height: 124px
+			border-radius: 5px 5px 5px 5px
+			box-shadow: 0 0 15px rgba(0, 0, 0, 0.5)
+			// top: -67px
+			// 	left: 659px
+			top: -118px
+			left: 633px
+			.box_top,
+			.box_cont,
+			.box_bottom
+				position: absolute
+				left: 0
+				width: 194px
+			.box_top,
+			.box_bottom
+				height: 10px
+			.box_top
+				top: 0
+				background: asset-url('purple/core/trades/cart/card_black_win.gif') no-repeat -200px 0
+			.box_bottom
+				top: 114px
+				background: asset-url('purple/core/trades/cart/card_black_win.gif') no-repeat 0 0
+			.box_cont
+				top: 10px
+				height: 104px
+				background: asset-url('purple/core/trades/cart/card_black_win.gif') repeat-y right top
+				.ligroup
+					height: 26px
+					clear: both
+					margin-top: 6px
+					padding-left: 19px
+					label
+						width: 51px
+						float: left
+						color: #fff
+						margin: 0
+						padding: 0
+						line-height: 26px
+					.jqTransformInputWrapper
+						margin-right: 0
+						margin-top: 1px
+						// height: 24px
+						// 				background: asset-url('purple/core/trades/cart/card_numberbox_text.gif') no-repeat 0 0
+					input
+						width: 88px
+						// height: 24px
+						// 			padding: 0 6px 0 5px
+						// 			color: #000
+						// 			border: 0px
+						// 			background: asset-url('purple/core/trades/cart/card_numberbox_text.gif') no-repeat 0 0
+				.sure
+					width: 73px
+					height: 23px
+					line-height: 100px
+					overflow: hidden
+					position: absolute
+					left: 101px
+					top: 73px
+					background: asset-url('purple/core/trades/cart/card_numberbox_btn.gif') no-repeat 0 0
+					&:hover
+						background-position: 0 -27px
+		.cardover
+			width: 830px
+			height: 34px
+			background: #fdfff1
+			border: 1px solid #d6d6d6
+			margin: 21px 0 10px 22px
+			_margin: 15px 0 10px 22px
+			position: relative
+			strong,
+			.addlink
+				display: block
+				white-space: nowrap
+				color: #000
+				font-size: 12px
+				line-height: 14px
+				position: absolute
+				left: 16px
+				top: 11px
+				span
+					color: #f47a00
+					padding-left: 15px
+			.addlink
+				text-decoration: underline
+				left: 760px
+				top: 10px
+				line-height: 18px
+		.cardpassword
+			height: 28px
+			position: relative
+			.tips
+				display: block
+				// position: absolute
+				// 	left: 4px
+				// 	top: 33px
+				float: left
+				width: 218px
+				margin: 7px 0 0 20px
+				_margin: 7px 0 0 10px
+				.icon
+					display: block
+					width: 15px
+					height: 15px
+					float: left
+					margin-right: 7px
+					_margin-right: 4px
+					background: url("/themes/purple/images/common/icons/itips_green.gif") no-repeat 0 0
+				p
+					color: #000
+					font-size: 12px
+					line-height: 14px
+			input
+				width: 97px
+				_width: 90px
+			.jqTransformInputWrapper
+				margin-top: 3px
+			.cardbtn
+				width: 73px
+				height: 22px
+				line-height: 100px
+				overflow: hidden
+				position: absolute
+				left: 368px
+				top: 4px
+				background: asset-url('purple/core/trades/cart/card_btn.png') no-repeat 0 0
+				&:hover
+					background-position: 0 -23px
+			.cardinfo
+				position: absolute
+				left: 459px
+				top: 8px
+				width: 395px
+				// height: 14px
+				overflow: hidden
+				white-space: nowrap
+				color: #000
+				font-size: 12px
+				line-height: 14px
+		.newpd
+			.tips
+				width: 382px
+				margin: 6px 0 0 20px
+				_margin: 6px 0 0 10px
+				p
+					display: inline-block
+					*display: inline
+					*zoom: 1
+					color: #e66c36
+				a
+					text-decoration: underline
+					color: #000
+			.errorbox
+				left: 318px
+			.cardinfo
+				left: 404px
+				width: 450px
+			.newpwbox
+				position: absolute
+				width: 230px
+				z-index: 55
+				height: 119px
+				_height: 124px
+				border-radius: 5px 5px 5px 5px
+				box-shadow: 0 0 15px rgba(0, 0, 0, 0.5)
+				// top: -67px
+				// 	left: 659px
+				top: -124px
+				left: 322px
+				.box_top,
+				.box_cont,
+				.box_bottom
+					position: absolute
+					left: 0
+					width: 230px
+				.box_top,
+				.box_bottom
+					height: 10px
+				.box_top
+					top: 0
+					background: asset-url('purple/core/trades/cart/card_newpwbox_bg.gif') no-repeat 0 0
+				.box_bottom
+					top: 114px
+					background: asset-url('purple/core/trades/cart/card_newpwbox_bg.gif') no-repeat -232px 0
+				.box_cont
+					top: 10px
+					height: 104px
+					background: asset-url('purple/core/trades/cart/card_newpwbox_bg.gif') repeat-y right top
+					.wperror
+						color: #cf0f0c
+						position: absolute
+						left: 20px
+						top: 76px
+						width: 125px
+						line-height: 20px
+						height: 20px
+						overflow: hidden
+					.ligroup
+						height: 26px
+						clear: both
+						margin-top: 6px
+						padding-left: 19px
+						label
+							width: 86px
+							float: left
+							color: #fff
+							margin: 2px 10px 0 0
+							padding: 0
+							line-height: 26px
+							text-align: right
+						.jqTransformInputWrapper
+							margin-right: 0
+							margin-top: 1px
+							// height: 24px
+							// 				background: asset-url('purple/core/trades/cart/card_numberbox_text.gif') no-repeat 0 0
+						input
+							width: 88px
+							// height: 24px
+							// 			padding: 0 6px 0 5px
+							// 			color: #000
+							// 			border: 0px
+							// 			background: asset-url('purple/core/trades/cart/card_numberbox_text.gif') no-repeat 0 0
+					.sure
+						width: 73px
+						height: 23px
+						line-height: 100px
+						overflow: hidden
+						position: absolute
+						left: 146px
+						top: 74px
+						background: asset-url('purple/core/trades/cart/card_numberbox_btn.gif') no-repeat 0 0
+						&:hover
+							background-position: 0 -27px
+	.foldtitle
+		display: inline-block
+		*display: inline
+		*zoom: 1
+		color: #000
+		font-size: 14px
+		line-height: 16px
+		letter-spacing: 2px
+		white-space: nowrap
+		.icon
+			width: 15px
+			height: 15px
+			float: left
+			margin: 1px 9px 0 0
+			background: asset-url('purple/core/trades/cart/icon01.png') no-repeat 0 -24px
+		&.open
+			.icon
+				background-position: 0 0
+	.openinvoice
+		.foldtitle
+			margin-bottom: 5px
+	.closeinvoice
+		position: relative
+		clear: both
+		.foldtitle
+			margin-bottom: 2px
+			.icon
+				background-position: 0 0
+		span
+			font-size: 12px
+			color: #9A9A98
+			white-space: nowrap
+			overflow: hidden
+			width: 250px
+			left: 100px
+			position: absolute
+			top: 0
+	.agreement_box
+		float: right
+		height: 60px
+		*position: absolute
+		*right: 149px
+		*top: 6px
+		margin-right: 149px
+		margin-top: 6px
+		*margin-right: 0
+		*margin-top: 0
+		// width: 725px
+		white-space: nowrap
+		overflow: hidden
+		display: inline-block
+		*display: inline-block
+		*zoom: 1
+		.clause_confirm
+			float: left
+			*float: right
+			color: #979797
+			font-weight: normal
+			padding-right: 19px
+			margin: 30px 0 0
+			overflow: hidden
+			.jqTransformCheckboxWrapper
+				margin-top: 0px
+				margin-right: 14px
+			p
+				color: #979797
+				font-weight: normal
+				// padding-left: 30px
+				padding-top: 2px
+				width: 210px
+				overflow: hidden
+				float: left
+				a
+					color: #979797
+					text-decoration: underline
+		.price_column
+			float: right
+			margin: 20px 0 0
+			max-width: 450px
+			.title
+				font-size: 12px
+				color: #000
+				float: left
+				margin-top: 11px
+				padding-right: 4px
+			.card_total
+				display: inline-block
+				float: left
+				padding-right: 2px
+				span
+					display: inline-block
+					color: #888
+					font-size: 24px
+					font-weight: normal
+					white-space: nowrap
+					text-overflow: ellipsis
+					-o-text-overflow: ellipsis
+					overflow: hidden
+					max-width: 99px
+			.price_total
+				display: inline-block
+				float: left
+				color: #EC7614
+				font-size: 24px
+				font-weight: normal
+				white-space: nowrap
+				text-overflow: ellipsis
+				-o-text-overflow: ellipsis
+				overflow: hidden
+				max-width: 99px
+			.unit
+				float: left
+				color: #999
+				font-size: 10px
+				padding-left: 5px
+				margin-top: 14px
+
+.msn
+	.cartbox .cardbox
+		.cardpassword .tips .icon
+			background: url("/themes/purple/images/common/icons/msn_itips_green.gif") no-repeat 0 0
+		.numberbox,
+		.newpwbox
+			border-radius: 0px
+			box-shadow: none
+			background: #292929
+			.box_top,
+			.box_cont
+				background: none
+			.box_bottom
+				top: 119px
+				height: 5px
+				// background-position: 0 -5px
+		.numberbox
+			.box_bottom
+				background-position: 0 -5px
+		.newpwbox
+			.box_bottom
+				background-position: -232px -5px
+		.errorbox
+			.box_cont
+				height: 31px
+				width: 118px
+				background: #8e2c26
+				border: 1px solid #511f17
+				border-radius: 0px
+				box-shadow: none
+		.cardpassword .cardbtn,
+		.numberbox .box_cont .sure,
+		.newpwbox .box_cont .sure
+			background: #624c14
+			color: #fff
+			line-height: 22px
+			text-align: center
+			&:hover
+				background: #846a24
+		.numberbox .box_cont .sure
+			left: 99px
+@media \0screen
+	.cartbox .cardbox .cardpassword .tips
+		padding-top: 1px
+	.cartbox .cardbox .cardover .addlink
+		top: 8px
+	.msn .cartbox .cardbox .cardpassword .cardbtn,
+	.msn .cartbox .cardbox .numberbox .box_cont .sure
+		line-height: 24px
+
+.cartbox .Invoice .jqTransformInputInner div input
+	*line-height: 14px
+	_line-height: 12px
+

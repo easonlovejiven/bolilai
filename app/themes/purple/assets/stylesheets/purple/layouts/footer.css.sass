@@ -1,0 +1,94 @@
+@import "../lib/function"
+.weimall .footer.website
+  width: 100%
+  min-width: 1178px
+
+.footer.website
+  position: relative
+  overflow: hidden
+  color: #333
+  background: #e1c59b
+  .footer_banner_img
+    background: #e1c59b
+    img
+      vertical-align: middle
+  .footer_banner
+    text-align: center
+    background: #ffffff
+    span
+      display: inline-block
+      width: 16%
+      padding: 15px 0
+      font-size: 14px
+      font-weight: 300
+      text-align: center
+  .layout_footer
+    margin: 0 auto
+    width: 1178px
+  .garden
+    position: relative
+    padding-top: 30px
+    display: block
+    width: 100%
+    overflow: hidden
+    .directory
+      margin-bottom: 50px
+      width: 100%
+      float: left
+      .footer_logo
+        float: left
+        margin-right: 60px
+        img
+          width: 116px
+      .links
+        float: left
+        ul.list
+          float: left
+          min-width: 120px
+          margin-bottom: 10px
+          li
+            display: block
+            margin-bottom: 4px
+          li > span
+            font-size: 14px
+          li > a
+            color: #333
+            font-size: 12px
+            &:hover
+              text-decoration: underline
+      .qrcode
+        float: right
+        img
+          margin-left: 15px
+          width: 100px
+    .inde-master
+      width: 100%
+      text-align: center
+      margin-bottom: 30px
+      p
+        margin-bottom: 15px
+        img
+          margin-top: 10px
+          margin-right: 5px
+          height: 34px
+
+@-moz-document url-prefix()
+  .footer .garden .more_brands .link
+    white-space: nowrap
+
+.layout_comm .footer .garden .footer_icon
+  background: #fcfcfc asset-url('purple/core/layouts/comm/footer_icons.jpg') no-repeat 45px 17px
+
+.layout_weimall .footer .garden .directory .linkblock
+  border-right-color: rgba(255, 255, 255, 0.3)
+
+.layout_weimall .footer .garden .directory .linkblock .list .link,
+.layout_weimall .footer .garden .more_brands .link
+  color: #9f7252
+
+.layout_weimall .footer .garden .footer_icon
+  background-color: rgba(255, 255, 255, 0.3)
+
+.iframe_footer
+  width: 960px
+  margin: 0 auto

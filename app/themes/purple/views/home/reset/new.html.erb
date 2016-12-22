@@ -1,0 +1,38 @@
+<div id="main" class="wrapper">
+  <div class="box">
+    <div class="box_con_top"></div>
+    <div class="box_content signup">
+      <div class="mod">
+        <div class="signup">
+          
+            <div class="mod_alt">
+              <h3 class="title">重置密码</h3>
+            </div>
+            <div>
+              <div class="form_post">
+                <% form_tag :action=>:create do %>
+                <ul>
+                  <li>
+                    <label>电子邮件</label>
+                    <%= text_field_tag "email" %>
+                  </li>
+                  <li>
+                    <label>验证码</label>
+                    <%= show_simple_captcha(:label=>"",:image_style=>"simply_red") %>
+                  </li>
+                  <li>
+                    <label>&nbsp;</label>
+                    <label class="btn_sure"><button type="submit">重置密码</button></label>
+                  </li>
+                </ul>
+                <% end %>
+              </div>
+            </div>
+          
+          <div class="clear"></div>
+        </div>
+      </div>
+    </div>
+    <div class="box_con_buttom"></div>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+<div id="!<%= request.path %>">
+  <div id="header">
+    <strong><%= h @page_title || '珀丽莱官网' %></strong>
+    <a class="back" href="#">
+      <div class="left">&nbsp;</div>
+      <div class="right"><span>返回</span></div>
+    </a>
+    <a class="button" href="#about"><span>关于</span></a>
+  </div>
+
+  <div id="wrapper">
+    <div id="scroller">
+      <%= yield %>
+    </div>
+  </div>
+
+  <div id="footer">
+    <ul>
+      <li><a class="add cube" href="/auction/markets" title="悦购"><span>+</span>首页</a></li>
+      <li><a class="add fade" href="/auction/markets" title="悦购"><span>+</span>悦购</a></li>
+      <li><a class="add pop" href="/auction/markets" title="悦购"><span>+</span>读品</a></li>
+      <li><a class="add swap" href="/auction/markets" title="悦购"><span>+</span>消息</a></li>
+      <li><a class="add" href="/auction/markets" title="悦购"><span>+</span>帐号</a></li>
+    </ul>
+  </div>
+</div>

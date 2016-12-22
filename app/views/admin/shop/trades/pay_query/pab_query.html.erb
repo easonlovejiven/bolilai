@@ -1,0 +1,45 @@
+<h2>查看平安银行付款</h2>
+
+<table class="form-table">
+	<tbody>
+		<tr class="form-field form-required">
+			<th scope="row">ID</th>
+			<td><%= @trade.id %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">商户代码</th>
+			<td><%= h @result['merchantNo'] %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">订单号</th>
+			<td><%= h @result['orderNo'] %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">订单金额</th>
+			<td><%= h @result['orderAmt'] %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">订单状态</th>
+			<td><%= h ({ '1' => '成功', '2' => '失败', '3' => '处理中', })[@result['tranStat']] %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">交易时间</th>
+			<td><%= h @result['tranTime'] %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">订单日期</th>
+			<td><%= @result['orderDate'] %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">卡类别</th>
+			<td><%= h ({'1' => '借记卡', '2' => '信用卡'})[@result['payCardType']] %></td>
+		</tr>
+	</tbody>
+</table>

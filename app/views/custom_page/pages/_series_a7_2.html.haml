@@ -1,0 +1,42 @@
+.seriesbox.series_a7(style="margin-bottom: #{v = (data['style']||{})['margin-bottom']; v.blank? ? 12 : v}px;")
+	.product_top
+		.product_list
+			- data['products'][0..1].compact.each_with_index do |p,i|
+				- product = Shop::Product.where(id: p['id']).first_or_initialize
+				= link_to flash ? "/index.html#subapp=productGrid&category2_id=#{product.category2_id}&keyword=&extid=#{product.id}" : product, :class => "link", :target => "_blank" do
+					= image_tag "#{product.major_pic}.promote.jpg", :alt => "", :class => "pic"
+					%h3.title= h p['title']
+					.linktext
+						.summary
+							%span= h product.brand ? product.brand.name : ''
+							%em= h product.name.to_s.gsub(product.brand ? product.brand.name.to_s.strip : '', '').gsub(product.brand ? product.brand.chinese.to_s.strip : '', '')
+						.value
+							.MarketPrice
+								%em ￥
+								%span= product.price
+							.WeimallPrice
+								%em ￥
+								%span=product.discount
+					.number(class="number#{i+1}")
+						NO.
+						= i+1
+	.product_mod
+		.product_list
+			- data['products'][2..9].compact.each_with_index do |p,i|
+				- product = Shop::Product.where(id: p['id']).first_or_initialize
+				= link_to flash ? "/index.html#subapp=productGrid&category2_id=#{product.category2_id}&keyword=&extid=#{product.id}" : product, :class => "link", :target => "_blank" do
+					= image_tag "#{product.major_pic}.l200.jpg", :alt => "", :class => "pic"
+					%h3.title= h p['title']
+					.linktext
+						.summary
+							%span= h product.brand ? product.brand.name : ''
+							%em= h product.name.to_s.gsub(product.brand ? product.brand.name.to_s.strip : '', '').gsub(product.brand ? product.brand.chinese.to_s.strip : '', '')
+						.value
+							.MarketPrice
+								%em ￥
+								%span= product.price
+							.WeimallPrice
+								%em ￥
+								%span=product.discount
+					.number= i+3
+	= render :partial => 'admin/custom_page/pages/series_preview', :locals => { :data => data }

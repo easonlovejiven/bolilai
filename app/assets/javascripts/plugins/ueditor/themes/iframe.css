@@ -1,0 +1,17 @@
+/*可以在这里添加你自己的css*/
+.view img, .view embed {
+    margin: 6px 0;
+    max-width: 100%;
+    clear: both;
+    /*display: inline-block;*/
+    /*display: -moz-inline-stack;*/
+    /**display: inline;*/
+    /*zoom: 1;*/
+}
+
+p {
+    display: block;
+    margin: 10px 0;
+}
+
+

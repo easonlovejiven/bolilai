@@ -1,0 +1,100 @@
+<% content_for :show_content do %>
+    <div class="user-set userset-lcol">
+      <span class="top_line"></span>
+      <%= form_for @user, as: 'user', url: user_path(@user), html: {method: 'post', class: 'form'} do |f| %>
+          <div class="item">
+            <span class="label"><em>*</em>头像：</span>
+
+            <div class="fl">
+              <div class="avatar-block">
+                <div id="profile_avatar" class="avatar">
+                  <%= image_tag @user.pic_key.try(:url, :thumb), class: 'pic' %>
+                </div>
+                <%= f.hidden_field :pic, id: 'pic_key_input' %>
+                <a id="avatar_upload_btn" class="btn btn-xs brown">选择头像</a>
+              </div>
+              <div class="clr"></div>
+            </div>
+          </div>
+          <div class="item">
+            <span class="label"><em>*</em>姓名：</span>
+
+            <div class="fl">
+              <%= f.text_field :name, class: 'itxt', required: true %>
+              <div class="clr"></div>
+            </div>
+          </div>
+          <div class="item">
+            <span class="label"><em>*</em>性别：</span>
+
+            <div class="fl">
+              <%= f.radio_button :sex, 'male' %><label class="mr10">男</label>
+              <%= f.radio_button :sex, 'female' %><label class="mr10">女</label>
+
+              <div class="clr"></div>
+            </div>
+          </div>
+          <div class="item">
+            <span class="label"><em>*</em>生日：</span>
+
+            <div class="fl">
+              <% birthday = @user.birthday || DateTime.now %>
+              <span class="select_wrapper">
+              <%= select_tag 'year', options_for_select((DateTime.now.year).downto(DateTime.now.year-60).to_a, birthday.year),
+                             id: 'js_info_birthday_year', :class => "select js_info_birthday" %> 年</span>
+              <span class="select_wrapper">
+              <%= select_tag 'month', options_for_select((1..12).to_a, birthday.month),
+                             id: 'js_info_birthday_month', :class => "select js_info_birthday" %> 月</span>
+              <span class="select_wrapper">
+              <%= select_tag 'day', options_for_select(get_day_array(birthday.month), birthday.day),
+                             id: 'js_info_birthday_day', :class => "select js_info_birthday" %> 日</span>
+
+              <div class="clr"></div>
+            </div>
+          </div>
+          <div class="item">
+            <span class="label"><em>*</em>家乡：</span>
+
+            <div class="fl">
+              <% hometown_city = @info.hometown || Data::City.where(name: '北京市').first;hometown_province = hometown_city.province %>
+              <div class="select_group">
+                <%= select_tag 'info[hometown_province_id]', options_for_select([[hometown_province.name, hometown_province.name]], hometown_province.name), include_blank: '选择',
+                               :id => "js_info_hometown_province", :class => "select province" %>
+                <%= select_tag 'info[hometown_id]', options_for_select([[hometown_city.name, hometown_city.name]], hometown_city.name), include_blank: '选择',
+                               :id => "js_info_hometown_city", :class => "select city" %>
+              </div>
+              <div class="clr"></div>
+            </div>
+          </div>
+          <div class="item">
+            <span class="label"><em>*</em>现所在地：</span>
+
+            <div class="fl">
+              <% location_city = @info.location || Data::City.where(name: '北京市').first; location_province = location_city.province %>
+              <div class="select_group">
+                <%= select_tag 'info[location_province_id]', options_for_select([[location_province.name, location_province.name]], location_province.name), include_blank: '选择',
+                               :id => "js_info_location_province", :class => "select province" %>
+                <%= select_tag 'info[location_id]', options_for_select([[location_city.name, location_city.name]], location_city.name), include_blank: '选择',
+                               :id => "js_info_location_city", :class => "select city" %>
+              </div>
+              <div class="clr"></div>
+            </div>
+          </div>
+          <div class="item">
+            <span class="label">&nbsp;</span>
+
+            <div class="fl">
+              <%= f.submit '提交', class: 'btn brown' %>
+              <div class="clr"></div>
+            </div>
+          </div>
+      <% end %>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            initAvatarUpload();
+            $('#js_info_location_province, #js_info_hometown_province').trigger('initialize_options');
+        })
+    </script>
+<% end %>
+<%= render template: 'home/users/show_layout', locals: {user_info: {key: 'edit', value: '个人信息'}} %>

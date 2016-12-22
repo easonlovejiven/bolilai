@@ -1,0 +1,17 @@
+#import(style="display:none;")
+	%h2 导入
+	= form_tag url, :multipart => true do
+		%table.form-table
+			%tbody
+				%tr
+					%th CSV
+					%td= columns
+				%tr
+					%th 文本
+					%td= text_area_tag 'csvs[]', '', :oninput => "if (/\\t/.test($(this).val())) $(this).val($(this).val().replace(/\\t/g, ','))"
+				%tr
+					%th 文件
+					%td
+						%div= file_field_tag 'csvs[]', :id => ''
+						%a(href="#" onclick="$(this).before($(this).prev().outerHTML()); return false;") 添加更多
+		.submit= submit_tag '提交'

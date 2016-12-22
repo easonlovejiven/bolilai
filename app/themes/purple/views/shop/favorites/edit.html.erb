@@ -1,0 +1,6 @@
+<h1>编辑收藏</h1>
+<% form_for :favorite, @favorite, :url => auction_favorite_path(@favorite), :html => { :method=>:put } do |f| -%>
+	<%= f.text_field :product_id %>
+	
+	<%= f.submit "提交", :disable_with => '提交ing...' %>
+<% end -%>

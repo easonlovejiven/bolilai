@@ -1,0 +1,121 @@
+live:
+  site: https://consent.live.com
+  authorize_path: /Connect.aspx
+  access_token_path: /AccessToken.aspx
+  refresh_token_path: /RefreshToken.aspx
+  key:
+  secret:
+
+google:
+  site: https://www.google.com
+  request_token_path: /accounts/OAuthGetRequestToken
+  authorize_path: /accounts/OAuthAuthorizeToken
+  access_token_path: /accounts/OAuthGetAccessToken
+  key:
+  secret:
+
+yahoo:
+  site: https://api.login.yahoo.com
+  request_token_path: /oauth/v2/get_request_token
+  authorize_path: /oauth/v2/request_auth
+  access_token_path: /oauth/v2/get_token
+  key:
+  secret:
+
+facebook:
+  site:
+  request_token_path:
+  authorize_path:
+  access_token_path:
+  key:
+  secret:
+
+twitter:
+  version:
+  site:
+  request_token_path:
+  authorize_path:
+  access_token_path:
+  key:
+  secret:
+
+sina:
+  site: http://api.t.sina.com.cn
+  request_token_path: /oauth/request_token
+  authorize_path: /oauth/authorize
+  access_token_path: /oauth/access_token
+  key:
+  secret:
+
+douban:
+  site: http://www.douban.com
+  request_token_path: /service/auth/request_token
+  authorize_path: /service/auth/authorize
+  access_token_path: /service/auth/access_token
+  key:
+  secret:
+
+alipay:
+  site: https://mapi.alipay.com
+  authorize_path: /gateway.do
+  account:
+  key:
+
+tianji:
+  site: https://login.tianji.com
+  authorize_path: /authz/oauth/authorize
+  access_token_path: /authz/oauth/token
+  key:
+  secret:
+
+comm:
+  # site: http://payment.bankcomm.com/customer/thirdparty/ajaxLogin.html
+  # tpi: '10000013'
+  site: http://club.bankcomm.com/customer/thirdparty/ajaxLogin.html
+  tpi: '000102'
+  salt: '2$ihave&bank^)('
+  public_key: "-----BEGIN RSA PUBLIC KEY-----\nMIGJAoGBANET5nzbz0cpDJK0Kqro/DhTMu8iEaTERur1vaYoQCJadsnGkRYYU7sy\nL0yzuqBNTvfhKIrYFZzARrttIREA+hL0FoTt0xDgcDqoWUfd51DuD8VkZhH65eAQ\neookRlhElxIUoR58GAAR1rGFj5b2ae5KEK80w+db9nBhzctD9QdvAgMBAAE=\n-----END RSA PUBLIC KEY-----\n"
+
+qq:
+  site: https://graph.qq.com
+  request_token_path: /oauth2.0/token
+  authorize_path: /oauth2.0/authorize
+  access_token_path: /oauth2.0/me
+  # key: '100394294'
+  # secret: 'dd45e1dcd67157ead1eaa39bdb62233f'
+  key: '100399382'
+  secret: 'dd45e1dcd67157ead1eaa39bdb62233f'
+
+
+qqcb:
+  key1: 'caibei123test1'
+  key2: 'caibei123test2'
+
+erp:
+  site: erp.qc.weimall.com
+  username: hunk
+  password: Love123!
+
+comm:
+  site: ""
+  tpi: ""
+  salt: ""
+  public_key: ""
+
+qq:
+  site: ''
+  request_token_path: ''
+  authorize_path: ''
+  access_token_path: ''
+  key: ''
+  secret: ''
+
+qqcb:
+  key1: ''
+  key2: ''
+
+wechat:
+  authorize_path: "https://open.weixin.qq.com/connect/oauth2/authorize"
+  access_token_path: "https://api.weixin.qq.com/sns/oauth2/access_token"
+  refresh_token_path: "https://api.weixin.qq.com/sns/oauth2/refresh_token"
+  user_info_path: "https://api.weixin.qq.com/sns/userinfo"

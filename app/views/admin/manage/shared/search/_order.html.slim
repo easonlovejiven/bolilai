@@ -1,0 +1,2 @@
+.form-group
+	= select_tag 'order', options_for_select( [[t('.order'), '']] + (%w[id] + (fields ||= []) + %w[created_at updated_at]).map { |field| [["#{model.human_attribute_name(field)} ↑", "#{field} asc"], ["#{model.human_attribute_name(field)} ↓", "#{field} desc"]] }.reduce(&:+), params[:order]), class: 'form-control'

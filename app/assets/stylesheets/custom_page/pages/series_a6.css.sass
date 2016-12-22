@@ -1,0 +1,363 @@
+@import "compass/css3"
+@import "shared/function"
+
+.series_a6
+	display: block
+	width:  1000px
+	margin: 0 auto
+	position: relative
+	height: 1850px
+	margin-bottom: 12px
+	background: #fff
+	overflow: hidden
+	.product_top
+		display: block
+		height: 470px
+		position: relative
+		a.leftpic
+			display: block
+			width: 397px
+			height: 438px
+			overflow: hidden
+			background: asset-url('auction/pages/template/shared/imgbg_397x438.png') no-repeat 0 0
+			position: absolute
+			top: 17px
+			// left: 11px
+			left: 20px
+			.pic
+				display: block
+				width: 368px
+				height: 410px
+				margin: 14px 0 0 13px
+		.textbox
+			display: block
+			width: 501px
+			height: 132px
+			overflow: hidden
+			position: absolute
+			top: 17px
+			left: 445px
+			border-bottom: 2px solid #999
+			.title
+				position: absolute
+				top: 9px
+				left: 0px
+				width: 100%
+				line-height: 28px
+				font-size: 24px
+				display: block
+				text-align: left
+				height: 30px
+				overflow: hidden
+			.description
+				line-height: 22px
+				font-size: 12px
+				position: absolute
+				left: 0
+				top: 67px
+				width: 100%
+				height: 44px
+				overflow: hidden
+				@include text-justify
+		.link
+			display: block
+			width: 501px
+			height: 300px
+			overflow: hidden
+			position: absolute
+			top: 152px
+			left: 445px
+			border-bottom: 1px solid #d9d9d9
+			.pic
+				display: block
+				width: 290px
+				height: 290px
+				position: absolute
+				left: -20px
+				top: 5px
+			.linktext
+				display: block
+				position: absolute
+				left: 285px
+				top: 58px
+				width: 215px
+				overflow: hidden
+				.title
+					// position: absolute
+					// top: 9px
+					// left: 0px
+					// width: 100%
+					line-height: 28px
+					font-size: 18px
+					display: block
+					text-align: left
+					height: 30px
+					overflow: hidden
+					width: 220px
+				.summary
+					display: block
+					padding-top: 15px
+					span
+						display: block
+						line-height: 20px
+						font-size: 16px
+						height: 20px
+						overflow: hidden
+					em
+						display: block
+						line-height: 22px
+						font-size: 12px
+						height: 40px
+						overflow: hidden
+				.value
+					margin-top: 3px
+					.MarketPrice
+						display: block
+						line-height: 26px
+						font-size: 12px
+						text-decoration: line-through
+						overflow: hidden
+						height: 22px
+						margin-bottom: 4px
+						span
+							min-width: 50px
+							height: 22px
+							text-decoration: line-through
+							@include inline-block
+					.IhaveuPrice
+						display: block
+						line-height: 26px
+						font-size: 18px
+						margin-top: 5px
+						overflow: hidden
+						height: 28px
+						em
+							@include inline-block
+							font-size: 12px
+							height: 30px
+							_float: left
+							_line-height: 24px
+							text-decoration: none
+							margin-bottom: 0
+						span
+							min-width: 50px
+							height: 30px
+							@include inline-block
+				.preferential
+					@include inline-block
+					line-height: 24px
+					font-size: 18px
+					position: absolute
+					right: 4px
+					top: 136px
+					min-width: 50px
+					em
+						font-size: 12px
+				.at_once
+					background: #cc6b27 repeat-x 0 0
+					height: 28px
+					width: 103px
+					line-height: 27px
+					text-align: center
+					color: #FFF
+					font-size: 16px
+					margin: 10px 0 0 4px
+	.product_mod
+		width: 1000px
+		// height: 871px
+		display: block
+		position: relative
+		// position: absolute
+		// top: 26px
+		// left: 280px
+		overflow: hidden
+		.product_list
+			display: block
+			// margin: 18px 0 0 32px
+			overflow: hidden
+			width: 1020px
+			// height: 800px
+			.morelink
+				position: absolute
+				top: 814px
+				left: 0
+				width: 680px
+				height: 55px
+				span
+					@include inline-block
+					position: absolute
+					left: 184px
+					top: 20px
+					font-size: 16px
+					line-height: 20px
+					background: asset-url('auction/pages/template/coffee/more.png') no-repeat left center
+					padding-left: 34px
+			// .list
+			// 	display: block
+			// 	overflow: hidden
+			// 	padding-top: 18px
+			// 	width: 1033px
+			.link
+				display: block
+				width: 250px
+				// height: 395px
+				height: 420px
+				float: left
+				// margin-left: 15px
+				margin-bottom: 29px
+				margin-left: 32px
+				_margin-left: 22px
+				margin-right: 56px
+				position: relative
+				overflow: hidden
+				// position: absolute
+				// top: 219px
+				// left: 0px
+				.label
+					line-height: 18px
+					*line-height: 22px
+					_line-height: 20px
+					font-size: 14px
+					border: 1px solid #ccc
+					@include border-radius(3px)
+					padding: 0 9px
+					position: absolute
+					right: 20px
+					top: 5px
+					height: 20px
+					min-width: 40px
+					overflow: hidden
+					text-align: center
+				.title
+					position: absolute
+					top: 252px
+					left: 19px
+					width: 230px
+					line-height: 28px
+					font-size: 18px
+					display: block
+					text-align: left
+					height: 30px
+					overflow: hidden
+				.pic
+					display: block
+					width: 200px
+					height: 200px
+					// background: #f1f1f1
+					// position: absolute
+					// left: 14px
+					// top: 13px
+					overflow: hidden
+					position: absolute
+					top: 30px
+					left: 25px
+				.linktext
+					display: block
+					position: absolute
+					left: 19px
+					top: 293px
+					width: 230px
+					text-align: left
+					.preferential
+						@include inline-block
+						line-height: 24px
+						font-size: 18px
+						position: absolute
+						right: 18px
+						top: 91px
+						min-width: 50px
+						em
+							font-size: 12px
+					.summary
+						display: block
+						span
+							display: block
+							line-height: 20px
+							font-size: 16px
+							height: 20px
+							overflow: hidden
+						em
+							display: block
+							line-height: 20px
+							font-size: 12px
+							height: 40px
+							width: 211px
+							overflow: hidden
+							text-align: justify
+							text-justify: distribute
+					.value
+						margin-top: 3px
+						.MarketPrice
+							display: block
+							line-height: 26px
+							font-size: 12px
+							text-decoration: line-through
+							overflow: hidden
+							height: 22px
+							margin-bottom: 4px
+							em
+								height: 22px
+								@include inline-block
+							span
+								min-width: 50px
+								height: 22px
+								text-decoration: line-through
+								@include inline-block
+						.IhaveuPrice
+							display: block
+							line-height: 26px
+							font-size: 18px
+							margin-top: 5px
+							overflow: hidden
+							height: 28px
+							em
+								@include inline-block
+								font-size: 12px
+								height: 30px
+								_float: left
+								_line-height: 24px
+								text-decoration: none
+								margin-bottom: 0
+							span
+								min-width: 50px
+								height: 30px
+								@include inline-block
+	.dividing_line_960
+		position: absolute
+		top: 1795px
+		left: 0
+		display: block
+		overflow: hidden
+		height: 14px
+		background: asset-url('auction/pages/template/shared/dividing_line_960.png') no-repeat center top
+		width: 100%
+	.morelink
+		position: absolute
+		top: 1795px
+		left: 0
+		width: 100%
+		height: 55px
+		span
+			@include inline-block
+			position: absolute
+			left: 463px
+			top: 20px
+			font-size: 16px
+			line-height: 20px
+			background: asset-url('auction/pages/template/coffee/more.png') no-repeat left center
+			padding-left: 34px
+
+@media \0screen
+	.series_a6 .product_mod .product_list .link .label
+		line-height: 21px
+	.series_a6 .product_top .link .linktext .at_once
+		line-height: 28px
+
+.ihaveu
+	.series_a6
+		left: -20px
+		// .product_top a.leftpic
+		// 	left: 20px
+.layout_flash
+	.series_a6
+		left: auto

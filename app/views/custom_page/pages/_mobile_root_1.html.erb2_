@@ -1,0 +1,161 @@
+<!-- 调用页面主体 -->
+<script type="text/javascript">
+    views.product_style(0.28);
+    views.category_style();
+    views.new_style();
+    views.store_style(0.9);
+    views.slide_style(4);
+
+    $(function () {
+        app.lasy_load($('img'));
+        var $btn = $('.home_turn a,.btn_zone > div,.home_recommend .item,.home_cate>div, .h_men_pic, .h_men_other p, .h_women_pic, .h_women_other p, .home_other > div, .home_new > div, .home_store > div, .brand_row > div, footer > .box_flex > .to_page, .enter_more, .search_ico, footer h3'),
+                $wrapper = $('.home_turn'),
+                $slide = $wrapper.children('.turn_points'),
+                $body = $('#body');
+        $('.home_turn a:first-child img').on('load', function () {
+            //轮换图
+            home_controller.slide($wrapper, $slide, $body);
+        })
+        home_controller.initialize();
+        app.push_event($btn, 200);
+//        app.app_download($('.client_download'));
+//        app.close_tip_layer($('#wechat_app_tip'));
+    });
+</script>
+<div class="main" id="main">
+  <div>
+    <!-- 轮换图浮层 -->
+    <!-- <div class="slide_layer" id="slide">
+      <div id="content" class="slide_content">
+        <div class="home_turn turn_height turn_width">
+          <div class="clear_fix turn_scroll_width turn_height">
+              <a class="left pro_img img_wrap turn_height turn_width " data-href="">
+                <img class="turn_height turn_width" data-src="" width="305" height="152">
+                <div class="down_shadow"></div>
+              </a>
+          </div>
+          <ul class="turn_points">
+            <li class=""></li>
+          </ul>
+        </div>
+        <div class="turn_btn sprites inner"></div>
+      </div>
+      <div class="slide_other"></div>
+    </div>
+    <div class="turn_btn sprites outer"></div> -->
+    <div class="home_turn turn_height turn_width border_1px">
+      <div class="clear_fix turn_scroll_width turn_height">
+        <% data['covers'].each do |c| %>
+            <a class="left pro_img img_wrap turn_height turn_width " data-href="<%= c["url"] %>">
+              <img class="turn_height turn_width" data-src="<%= c["pic"] %>" width="305" height="152">
+
+              <div class="down_shadow"></div>
+            </a>
+        <% end %>
+      </div>
+      <ul class="turn_points">
+        <% data['covers'].size.times do |i| %>
+            <li class=""></li>
+        <% end %>
+      </ul>
+    </div>
+
+    <!--首页新品/特惠/品牌-->
+    <div class="btn_zone border_1px">
+      <% data["navs"].each do |n| %>
+          <div class="new_btn  box_sizing outer_border" data-href="<%= n["url"] %>">
+            <span class="sprites"></span><%= n["name"] %>
+            <div class="down_shadow"></div>
+          </div>
+      <% end %>
+    </div>
+    <div class="border_1px magrin"></div>
+    <div class="border_1px home_cate">
+      <h1 class="inner_border">产品分类
+        <div class="enter_more right" data-href="/brands">
+          <span class="sprites">
+            <em class="down_shadow"></em>
+          </span>
+        </div>
+      </h1>
+      <% data["categories"].each do |c| %>
+          <div class="cate left inner_border box_sizing" data-href="<%= c["url"] %>">
+            <img class="img" src="" data-src="<%= c["pic"] %>"/>
+
+            <p><%= c["name"] %></p>
+
+            <div class="down_shadow"></div>
+          </div>
+      <% end %>
+    </div>
+    <div class="border_1px magrin"></div>
+    <!-- 今日新品 -->
+    <% product_news=data["products_section2"] %>
+    <div class="border_1px home_new clear_fix">
+      <h1><%= product_news["title"] %>
+        <div class="enter_more right" data-href="<%= product_news['url'] %>">
+          <span class="sprites">
+            <em class="down_shadow"></em>
+          </span>
+        </div>
+      </h1>
+      <% product_news["images"].each_with_index do |p, index| %>
+          <div class="pro_img img_wrap left inner_border index_<%= index %>" data-href="<%= p["url"] %>">
+            <img data-src="<%= p["pic"] %>" data-big-src="" data-small-src="">
+
+            <div class="down_shadow"></div>
+          </div>
+      <% end %>
+    </div>
+    <!--首页精选专场-->
+    <div class="border_1px magrin"></div>
+    <!--首页商品-->
+    <div class="border_1px home_recommend">
+      <h1 class="inner_border"><%= data['products_section1']['title'] %>
+        <div class="enter_more right" data-href="/brands">
+          <span class="sprites">
+            <em class="down_shadow"></em>
+          </span>
+        </div>
+      </h1>
+      <div class="recommend_list">
+        <% data['products_section1']['products'].each do |p| %>
+            <% product = Shop::Product.where(id: p['id']).first_or_initialize
+               p["title"] = (p["title"] || product.name).to_s[0..12]
+               p['pic'] = p['pic'] || product.major_image.url(:medium)
+               p['url'] = p['url'] || product_path(product)
+               p['discount'] = p['discount'] || product.discount
+            %>
+            <div class="item" data-href="<%= product_path(p["id"]) %>">
+              <%= image_tag "", "data-src" => "#{p['pic']}" %>
+              <span class="summary"><span></span><%= p["title"] %></span>
+
+              <p class="del">￥<%= p['discount'] %></p>
+
+              <div class="down_shadow"></div>
+            </div>
+        <% end %>
+      </div>
+    </div>
+    <!-- 首页底部 -->
+    <footer>
+      <!--<h3 data-href="tel:400-6915-695">客服电话：400-6915-695</h3>-->
+      <div class="box_flex">
+        <div class=" to_page" data-href="/about?to=weixin">
+          <span class="border_1px">关注微信</span>
+          <span class="down_shadow"></span>
+        </div>
+        <div class="to_page" data-href="/helps">
+          <span class="border_1px">使用帮助</span>
+
+          <div class="down_shadow"></div>
+        </div>
+        <div class="to_page" data-href="/about">
+          <span class="border_1px">关于珀丽莱</span>
+
+          <div class="down_shadow"></div>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>

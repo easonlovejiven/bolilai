@@ -1,0 +1,59 @@
+<script type="text/javascript" charset="utf-8">
+$(function(){
+	$('.trade_sycn').bind('mousedown', function(){
+		$.ajax({
+			url: $(this).attr('href'),
+			type: "put",
+			data: { '_method': 'put', 'format': 'js' },
+			context: $(this),
+			success: function(){
+				$(this).hide();
+				alert("同步成功");
+			},
+			error: function(){
+				alert("同步失败！");
+			}
+		});
+	});
+});
+</script>
+
+<h2>检查erp同步</h2>
+<table class="widefat">
+	<thead>
+		<tr>
+			<th scope="col" class="check-column"><!-- <input type="checkbox" /> --></th>
+			<th>ID</th>
+			<th>单件</th>
+			<th>状态</th>
+			<th>编号</th>
+			<th>价格</th>
+			<th>备货</th>
+			<th>操作</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @trades.each do |trade| %>
+			<tr>
+				<th scope="row" class="check-column"><!-- <input type="checkbox" name="delete[]" value="1" /> --></th>
+				<td><%= link_to trade.id, 'where[id]' => trade.id %></td>
+				<td style="padding:0;">
+						<% trade.units.each do |unit| %>
+							<div style="white-space:nowrap; <%= %[color:#ddd;] if unit.returned? %>">
+								<%= link_to_if @current_user.can_show_item?, image_tag("#{unit.item.product.major_pic}.thumb145.jpg", :alt => unit.item.product.name, :style => "width:50px; height:50px; margin:0; vertical-align:middle; #{%[opacity:0.2; -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=20)"; filter:alpha(opacity=20);] if unit.returned?}"), admin_shop_item_path(unit.item), :title => unit.item.product.name, "data-target" => "rightPanel" if unit.item && unit.item.product %>
+								&nbsp;<%= unit.prepared? ? '✔' : '✘' %>
+								&nbsp;<%= h unit.prepare_remark %>
+							</div>
+						<% end %>
+				</td>
+				<td><span title="<%= h trade.status %>"><%= h Shop::Trade::STATUS[trade.status] %></span></td>
+				<td><%= trade.identifier %></td>
+				<td><%= trade.price %></td>
+				<td><%= link_to_if @current_user.can_show_editor?, trade.prepare_editor.name, admin_manage_editor_path(trade.prepare_editor), "data-target" => "rightPanel" if trade.prepare_editor %><br /><%= h trade.prepare_at && trade.prepare_at.to_s(:db) %></td>
+				<td class='op'>
+					<%= link_to '同步', sync_admin_shop_trade_path(trade.id), :onclick => "return false;", :class => "trade_sycn" if @current_user.can_manage_trade? %>
+				</td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>

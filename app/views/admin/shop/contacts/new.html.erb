@@ -1,0 +1,130 @@
+<script type="text/javascript" charset="utf-8">
+$(function(){
+	$('#contact_country').live({
+		update_options: function(){
+			country = $('#contact_country')
+			country_val = country.val();
+			countries = document.contact_options.countries.sort(function(a, b){ return a.order-b.order; });
+			country.html(country.html().replace(/^[\s\S]*<select/, '<select').replace(/<option[\s\S]*<\/option>/i, '<option value=""></option>'+$.makeArray($(countries).map(function(){ return '<option'+(this['name'] == country.val() ? ' selected="selected"' : '')+'>'+this['name']+'</option>' })).join('')));
+			country.find('select').val(country_val);
+
+			province = $('#contact_province');
+			province_val = province.val();
+			provinces = country.val() != '' && (a = $(countries).filter(function(){ return this['name'] == country.val(); })[0]) && a['provinces'].sort(function(a, b){ return a.order-b.order; }) || [];
+			province.html(province.html().replace(/^[\s\S]*<select/, '<select').replace(/<option[\s\S]*<\/option>/i, '<option value=""></option>'+$.makeArray($(provinces).map(function(){ return '<option'+(this['name'] == province.val() ? ' selected="selected"' : '')+'>'+this['name']+'</option>' })).join('')));
+			province.find('select').val(province_val);
+
+			city = $('#contact_city');
+			city_val = city.val();
+			cities = province.val() != '' && (a = $(provinces).filter(function(){ return this['name'] == province.val(); })[0]) && a['cities'].sort(function(a, b){ return a.order-b.order; }) || []
+			city.html(city.html().replace(/^[\s\S]*<select/, '<select').replace(/<option[\s\S]*<\/option>/i, '<option value=""></option>'+$.makeArray($(cities).map(function(){ return '<option'+(this['name'] == city.val() ? ' selected="selected"' : '')+'>'+this['name']+'</option>' })).join('')));
+			city.find('select').val(city_val);
+
+			town = $('#contact_town');
+			town_val = town.val();
+			towns = city.val() != '' && (a = $(cities).filter(function(){ return this['name'] == city.val(); })[0]) && a['towns'].sort(function(a, b){ return a.order-b.order; }) || [];
+			town.html(town.html().replace(/^[\s\S]*<select/, '<select').replace(/<option[\s\S]*<\/option>/i, '<option value=""></option>'+$.makeArray($(towns).map(function(){ return '<option'+(this['name'] == town.val() ? ' selected="selected"' : '')+'>'+this['name']+'</option>' })).join('')));
+			town.find('select').val(town_val);
+		}
+	});
+
+	$.ajax({
+		url: '/auction/contacts/options.json',
+		type: 'get',
+		beforeSend: function(){
+			$('#contact_country, #contact_province, #contact_city, #contact_town').attr('disabled', 'disabled');
+		},
+		success: function(data){
+			document.contact_options = data;
+			$('#contact_country, #contact_province, #contact_city, #contact_town').attr('disabled', false);
+			$('#contact_country').trigger('update_options');
+		}
+	});
+
+	$('#contact_country, #contact_province, #contact_city, #contact_town').live({
+		change: function(){
+			$("#contact_country").trigger('update_options');
+		}
+	});
+});
+</script>
+
+<h2><%= { 'show' => '查看', 'new' => '新建', 'edit' => '编辑' }[params[:action]] %>地址</h2>
+<%
+	@from = Admin::Contact.find(params[:from_id]) if params[:from_id]
+	@contact.attributes = %w[user_id name country province city town address postcode phone mobile].map{|field| { field => @from.send(field) } }.inject(&:merge) if @from
+%>
+
+<%= form_for @contact,as: :contact,  :url => @contact.new_record? ? admin_shop_contacts_path : admin_shop_contact_path(@contact), :html => { :method => @contact.new_record? ? :post : :put, :multipart => true } do |f| %>
+	<%= f.error_messages %>
+
+	<table class="form-table">
+		<tbody>
+			<tr class="form-field form-required">
+				<th scope="row"><%= f.label :user_id, "用户ID" %></th>
+				<td>
+					<%= f.text_field :user_id %>
+				</td>
+			</tr>
+
+			<tr class="form-field form-required">
+				<th scope="row"><%= f.label :name, "名字" %></th>
+				<td><%= f.text_field :name %></td>
+			</tr>
+
+			<tr class="form-field form-required">
+				<th scope="row"><%= f.label :country, "国家" %></th>
+				<td>
+					<%= f.select :country, [@contact.country], { :include_blank => "" } %>
+				</td>
+			</tr>
+
+			<tr class="form-field form-required">
+				<th scope="row"><%= f.label :province, "省份" %></th>
+				<td>
+					<%= f.select :province, [@contact.province], { :include_blank => "" } %>
+				</td>
+			</tr>
+
+			<tr class="form-field form-required">
+				<th scope="row"><%= f.label :city, "城市" %></th>
+				<td>
+					<%= f.select :city, [@contact.city], { :include_blank => "" } %>
+				</td>
+			</tr>
+
+			<tr class="form-field form-required">
+				<th scope="row"><%= f.label :town, "地区" %></th>
+				<td>
+					<%= f.select :town, [@contact.town], { :include_blank => "" } %>
+				</td>
+			</tr>
+
+			<tr class="form-field form-required">
+				<th scope="row"><%= f.label :address, "地址" %></th>
+				<td><%= f.text_field :address %></td>
+			</tr>
+
+			<tr class="form-field form-required">
+				<th scope="row"><%= f.label :postcode, "邮编" %></th>
+				<td><%= f.text_field :postcode %></td>
+			</tr>
+
+			<tr class="form-field form-required">
+				<th scope="row"><%= f.label :phone, "电话" %></th>
+				<td><%= f.text_field :phone %></td>
+			</tr>
+
+			<tr class="form-field form-required">
+				<th scope="row"><%= f.label :mobile, "手机" %></th>
+				<td><%= f.text_field :mobile %></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<% if params[:action] != 'show' %>
+		<p class="submit">
+			<input type="submit" value="提交" id="addusersub" name="adduser" />
+		</p>
+	<% end %>
+<% end %>

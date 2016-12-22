@@ -1,0 +1,27 @@
+development:
+  address: cloud.submail.cn
+  domain: barlar.cn
+  port: 25
+  authentication: :login
+  user_name: "10807"
+  password: 92bb4c2388f4bde30523b91dbe9d7bfe
+  enable_starttls_auto: :false
+    #enable_starttls_auto: :false
+  from:
+    default: no-reply@barlar.cn
+    promotion: promotion@barlar.cn
+    activation: no-reply@barlar.cn
+
+production:
+  address: cloud.submail.cn
+  domain: barlar.cn
+  port: 25
+  authentication: :login
+  user_name: "10807"
+  password: 92bb4c2388f4bde30523b91dbe9d7bfe
+  enable_starttls_auto: :false
+    #enable_starttls_auto: :false
+  from:
+    default: no-reply@barlar.cn
+    promotion: promotion@barlar.cn
+    activation: no-reply@barlar.cn

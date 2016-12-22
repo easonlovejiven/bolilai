@@ -1,0 +1,66 @@
+%h2 拆分交易
+= form_for @trade, :url => split_admin_shop_trade_path(@trade) do |f|
+	.baskets
+		.basket
+			- @trade.units.each do |unit|
+				= link_to image_tag("#{unit.item.product.major_pic}.thumb65.jpg"), '#', :title => unit.item.id, 'data-unit_id' => unit.id
+		%br/
+		- @trade.units.size.times do |i|
+			.basket.new(data-group_id="#{i}")
+	.delete
+		= check_box_tag :_destroy
+		= label_tag :_destroy, '删除原始交易'
+	#fields
+	.submit= f.submit "提交"
+:css
+	.delete {
+		padding: 10px;
+	}
+	.baskets {
+		font-size: 0;
+	}
+	.basket {
+		padding: 10px;
+		margin: 10px;
+		min-width: 75px;
+		min-height: 75px;
+		display: inline-block;
+		vertical-align: top;
+	}
+	.basket.new {
+		background-color: #E4F2FD;
+	}
+	.basket a {
+		display: inline-block;
+		vertical-align: top;
+		width: 65px;
+		height: 65px;
+		padding: 5px;
+		-moz-transition-duration: 0s;
+		-webkit-transition-duration: 0s;
+		transition-duration: 0s;
+	}
+	.basket a img {
+		display: inline-block;
+		width: 65px;
+		height: 65px;
+	}
+	.basket a.ui-sortable-helper img {
+		box-shadow: 5px 5px 5px rgba(0,0,0,0.3);
+		opacity: 0.8;
+	}
+	.basket.new.ui-droppable-hover {
+		background-color: #C6D9E9;
+	}
+:javascript
+	$(function(){
+		$('.basket').sortable({
+			connectWith: '.basket',
+			stop: function(){
+				$('#fields').html($.makeArray($('.basket.new').map(function(){ return $.makeArray($(this).find('a').map(function(){ return '<input type="hidden" name="groups['+$(this).parent().data('group_id')+'][]" value="'+$(this).data('unit_id')+'" />'; })).join(''); })).join(''));
+			}
+		});
+		$('.basket').droppable({
+			hoverClass: 'ui-droppable-hover'
+		});
+	});

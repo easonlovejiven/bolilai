@@ -1,0 +1,28 @@
+<%= stylesheet_inline_tag 'pages/info' %>
+<% user_info||={} %>
+<div class="info_content">
+  <ol class="breadcrumb">
+    <li><%= link_to '首页', '/' %></li>
+    <li><%= link_to '个人中心', users_account_path %></li>
+    <li><%= user_info[:value] %></li>
+  </ol>
+  <div class="main_info">
+    <div class="left_side">
+      <span class="top_line"></span>
+      <dl class="left_menu">
+        <dt><%= link_to '个人中心', users_account_path, class: "#{'on' if user_info[:key] == 'show'}" %></dt>
+        <dt>订单中心</dt>
+        <dd><%= link_to '我的订单', shop_trades_path, class: "#{'on' if user_info[:key] == 'trades'}" %></dd>
+        <dd><%= link_to '优惠券', shop_vouchers_path, class: "#{'on' if user_info[:key] == 'vouchers'}" %></dd>
+        <dd><%= link_to '评价晒单', user_comments_path(@current_user), class: "#{'on' if user_info[:key] == 'comments'}" %></dd>
+        <dt>设置</dt>
+        <dd><%= link_to '个人信息', edit_user_path(@current_user), class: "#{'on' if user_info[:key] == 'edit'}" %></dd>
+        <dd><%= link_to '修改密码', password_core_accounts_path, class: "#{'on' if user_info[:key] == 'password'}" %></dd>
+        <dd><%= link_to '收货地址', shop_contacts_path, class: "#{'on' if user_info[:key] == 'contactes'}" %></dd>
+      </dl>
+    </div>
+    <div class="right_side">
+      <%= yield(:show_content) %>
+    </div>
+  </div>
+</div>

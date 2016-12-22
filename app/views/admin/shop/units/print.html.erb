@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <title>退货单</title>
+  <style type="text/css">
+      body, div, span, h1 {
+          padding: 0;
+          margin: 0;
+          list-style: none;
+          border: 0;
+          font-size: 14px;
+          font-family: "宋体";
+          color: #000;
+      }
+
+      .bill {
+          margin-top: 20px;
+          padding: 25px;
+      }
+
+      .tittle {
+          overflow: hidden;
+          margin-bottom: 6px;
+      }
+
+      .tittle h1 {
+          display: block;
+          text-align: center;
+          background: url(<%=asset_path("admin/logo.png")%>) left center no-repeat;
+          width: 100%;
+          font-size: 18px;
+          height: 60px;
+          line-height: 60px;
+          font-weight: bold;
+      }
+
+      table {
+          border-collapse: collapse;
+          width: 100%;
+      }
+
+      table tr {
+          height: 35px;
+      }
+
+      table tr .jg {
+          letter-spacing: 3px;
+      }
+
+      table tr .jg02 {
+          letter-spacing: 5px;
+      }
+
+      table tr .jg03 {
+          letter-spacing: 2px;
+      }
+
+      table tr .td01 {
+          width: 99px;
+      }
+
+      table tr .td02 {
+          width: 150px;
+      }
+
+      table tr .line {
+          letter-spacing: -1px;
+      }
+
+      table tr .td04 {
+          width: 130px;
+          letter-spacing: -1px;
+      }
+
+      table tr .td06 {
+          width: 82px;
+      }
+
+      table tr .td03 {
+          width: 72px;
+      }
+
+      table tr .td05 {
+          width: 72px;
+      }
+
+      table tr .td07 {
+          width: 94px;
+      }
+
+      table tr .td08 {
+          width: 15px;
+      }
+
+      table tr .td09 {
+          width: 74px;
+      }
+
+      table tr .td10 {
+          width: 40px;
+      }
+
+      table tr.teshu {
+          text-align: center;
+          font-weight: bold;
+          font-family: "Arial";
+          font-size: 12px;
+      }
+
+      table tr .num {
+          width: 55px;
+      }
+
+      table tr .price {
+          width: 70px;
+      }
+
+      table tr .size {
+          width: 35px;
+      }
+
+      .confirm {
+          margin-top: 30px;
+          font-size: 16px;
+          height: 22px;
+      }
+
+      .confirm i {
+          float: left;
+          line-height: 22px;
+          font-style: normal;
+      }
+
+      .confirm span {
+          float: left;
+          width: 110px;
+          height: 1px;
+          background: #000;
+          margin-top: 22px;
+          margin-left: 8px;
+      }
+
+      table.store {
+          border-collapse: collapse;
+          padding-left: 30px;
+          margin-top: 10px;
+      }
+
+      td, th {
+          padding: 3px;
+      }
+
+      /*.store .teshu td { word-break: keep-all;}*/
+  </style>
+</head>
+<body>
+<div class="bill">
+  <div class="tittle">
+    <h1>线下退货单</h1>
+  </div>
+  <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+      <td class="td01 jg02">交易编号：</td>
+      <td class="td02"><%= @unit.trade.id %></td>
+      <td class="td03">退货时间：</td>
+      <td class="td04"><%= @unit.created_at.to_s(:db) %></td>
+      <td class="td05 jg">经办人：</td>
+      <td class="td06"><%= @unit.audit_editor.try(:name) %></td>
+      <td class="td07 jg03">商品数量：</td>
+      <td class="td08">1</td>
+      <td class="td09 black">退货金额：</td>
+      <td class="td10"><%= @unit.trade.payment_price %></td>
+    </tr>
+    <tr>
+      <td class="td01 line">线下退货单号：<%= @unit.id %></td>
+      <td class="td06"><%= @unit.trade.shop_identifier %></td>
+      <td class="td07 td04">退货小票号：</td>
+      <td class="td08"><%= @unit.receipt_number %></td>
+      <td class="td05 line"></td>
+      <td class="td02"></td>
+    </tr>
+    <tr>
+      <td class="td01 jg02">购物用户：</td>
+      <td class="td02"><%= @unit.trade.user.try(:name) %></td>
+      <td class="td03">退货备注：</td>
+      <td colspan="7"><%= @unit.remark %></td>
+    </tr>
+  </table>
+  <table border="1" cellpadding="0" cellspacing="0" class="store">
+    <tr class="teshu">
+      <td>序号</td>
+      <td>商品编号</td>
+      <td>商品名称</td>
+      <td>SKU</td>
+      <td class="price">商品价</td>
+      <td class="price">成交价</td>
+      <td class="shape">品类</td>
+      <td>品牌</td>
+      <td class="size">尺码</td>
+    </tr>
+    <tr class="teshu">
+      <td class="num"><%= @unit.id %></td>
+      <td><%= @unit.item.identifer %></td>
+      <td><%= @unit.item.product.name %></td>
+      <td><%= @unit.item.product.id %></td>
+      <td><%= @unit.item.product.shop_price || @unit.item.product.discount %></td>
+      <td><%= @unit.price %></td>
+      <td><%#= @unit.item.product.category1.name %>-<%#= @unit.item.product.category2.name %></td>
+      <td><%#= @unit.item.product.brand.name %></td>
+      <td><%= @unit.item.measure %></td>
+    </tr>
+  </table>
+  <div class="confirm">
+    <i>确认签字</i>
+    <span></span>
+  </div>
+</div>
+</body>
+</html>

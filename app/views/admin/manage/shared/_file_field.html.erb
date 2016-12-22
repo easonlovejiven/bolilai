@@ -1,0 +1,18 @@
+<fieldset>
+	<div class="col-md-8">
+		<% if show %>
+			<% if record.pic.blank? %>
+				<label class="control-label">无</label>
+			<% else %>
+				<%= link_to (image_tag record.pic || "img-blank.gif", width: image[:width], height: image[:height], alt: ""), record.pic.url, target: '_blank' %>
+			<% end %>
+		<% else %>
+			<%= f.file_field :pic, id: 'fileUpload', class: 'form-control btn btn-default' %>
+			<p class="help-block">
+				请选择格式为jpeg/jpg/pjpeg/png/x-png/gif的图片!
+			</p>
+			<img id="preview"/>
+		<% end %>
+	</div>
+</fieldset>
+<%= javascript_include_tag 'modal/_file_field' %>

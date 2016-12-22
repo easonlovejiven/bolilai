@@ -1,0 +1,234 @@
+<% @record = @unit %>
+<% @show = !%w[new edit].include?(params[:action]) && @record.valid? %>
+<div class="modal-header">
+  <%= render "admin/modal/header" %>
+</div>
+<%= render 'admin/shared/prompt' %>
+<div class="modal-body">
+  <%= form_for @unit, as: :unit, :url => @unit.new_record? ? admin_shop_units_path : admin_shop_unit_path(@unit),
+               :html => {:method => @unit.new_record? ? :post : :put, class: "form-horizontal"} do |f| %>
+      <div class="form-body">
+        <% unless @unit.new_record? %>
+            <div class="form-group">
+              <%= f.label :id, 'ID', {class: 'col-md-3 control-label'} %>
+              <div class="col-md-6 form-control-static">
+                <strong><%= @unit.id %></strong>
+              </div>
+            </div>
+        <% end %>
+
+        <div class="form-group">
+          <%= f.label :status, '状态', {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8 form-control-static">
+            <%= Shop::Unit::STATUS[@unit.status] %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :trade_id, '交易', {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8 form-control-static">
+            <%#= link_to_if @current_user.can_show_trade?, @unit.trade.id, admin_shop_trade_path(@unit.trade), :rel => "facebox" if @unit.trade %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :status, '单件', {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8 form-control-static">
+            <%= render :partial => "admin/shop/items/item", :object => @unit.item %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :returned, '退货', {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8 form-control-static">
+            <%= @unit.returned? ? '✔' : '✘' %>
+          </div>
+        </div>
+
+
+        <div class="form-group">
+          <%= f.label :request_editor_id, "申请编辑", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8 form-control-static">
+            <%= link_to_if @current_user.can_show_editor?, @unit.request_editor.name, admin_manage_editor_path(@unit.request_editor), :rel => "facebox" if @unit.request_editor %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :request_at, "申请时间", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8 form-control-static">
+            <%= @unit.request_at && @unit.request_at.to_s(:db) %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :audit_editor_id, "审核编辑", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8 form-control-static">
+            <%= link_to_if @current_user.can_show_editor?, @unit.audit_editor.name, admin_manage_editor_path(@unit.audit_editor), :rel => "facebox" if @unit.audit_editor %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :audit_at, "审核时间", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8 form-control-static">
+            <%= @unit.audit_at && @unit.audit_at.to_s(:db) %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :receive_editor_id, "收货编辑", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8 form-control-static">
+            <%= link_to_if @current_user.can_show_editor?, @unit.receive_editor.name, admin_manage_editor_path(@unit.receive_editor), :rel => "facebox" if @unit.receive_editor %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :receive_at, "收货时间", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8 form-control-static">
+            <%= @unit.receive_at && @unit.receive_at.to_s(:db) %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :receive_editor_id, "退款编辑", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8 form-control-static">
+            <%= link_to_if @current_user.can_show_editor?, @unit.transfer_editor.name, admin_manage_editor_path(@unit.transfer_editor), :rel => "facebox" if @unit.transfer_editor %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :receive_at, "退款时间", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8 form-control-static">
+            <%= @unit.transfer_at && @unit.transfer_at.to_s(:db) %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :freeze_editor_id, "冻结编辑", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8 form-control-static">
+            <%= link_to_if @current_user.can_show_editor?, @unit.freeze_editor.name, admin_manage_editor_path(@unit.freeze_editor), :rel => "facebox" if @unit.freeze_editor %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :receive_at, "收货时间", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8 form-control-static">
+            <%= @unit.receive_at && @unit.receive_at.to_s(:db) %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :return_phone, "退款电话", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8 form-control-static">
+            <%= h @unit.return_phone %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :return_province, "退款省份", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8 form-control-static">
+            <%= h @unit.return_province %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :return_city, "退款城市", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8 form-control-static">
+            <%= h @unit.return_city %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :return_bank, "退款银行", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8 form-control-static">
+            <%= h @unit.return_bank %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :return_branch, "退款支行", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8 form-control-static">
+            <%= h @unit.return_branch %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :return_name, "退款姓名", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8 form-control-static">
+            <%= h @unit.return_name %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :return_account, "退款帐号", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8 form-control-static">
+            <%= h @unit.return_account %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :return_reason, "退货原因", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-6">
+            <% if @show %>
+                <div class="form-control-static">
+                  <%= h @unit.return_reason %>
+                </div>
+            <% else %>
+                <%= f.select :return_reason, grouped_options_for_select(Shop::Unit::RETURN_REASONS, @unit.return_reason),
+                             {include_blank: true}, class: 'form-control' %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :remark, "退货备注", {class: 'col-md-3 control-label'} %>
+
+          <div class="col-md-8">
+            <% if @show %>
+                <div class="form-control-static">
+                  <%= simple_format h @unit.remark %>
+                </div>
+            <% else %>
+                <%= f.text_area :remark, class: 'form-control' %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :receipt_number, '收据编号', {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8">
+            <% if @show %>
+                <div class="form-control-static">
+                  <%= @unit.receipt_number %>
+                </div>
+            <% else %>
+                <%= f.text_field :receipt_number, class: 'form-control' %>
+            <% end %>
+          </div>
+        </div>
+
+        <% if !@unit.new_record? %>
+            <div class="form-group">
+              <%= f.label :created_at, '创建时间', {class: 'col-md-3 control-label'} %>
+              <div class="col-md-6 form-control-static">
+                <%= @unit.created_at && @unit.created_at.to_s(:db) %>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <%= f.label :updated_at, '修改时间', {class: 'col-md-3 control-label'} %>
+              <div class="col-md-6 form-control-static">
+                <%= @unit.updated_at && @unit.updated_at.to_s(:db) %>
+              </div>
+            </div>
+        <% end %>
+      </div>
+      <div class="form-actions">
+        <% if @show %>
+            <%= link_to '查看', admin_shop_unit_path(@unit), "data-target" => "rightPanel", class: 'btn btn-success' if can?(:show, @unit) %>
+            <%= link_to '编辑', edit_admin_shop_unit_path(@unit), "data-target" => "rightPanel", class: 'btn btn-success' if can?(:update, @unit) %>
+        <% else %>
+            <%= f.submit "提交", class: "btn btn-primary" %>
+        <% end %>
+      </div>
+  <% end %>
+</div>

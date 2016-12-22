@@ -1,0 +1,1 @@
+<%- data =  [%w[bid category_id category_name category_pid isfinal]] + @categories.map { |category| [1005, category.id, category.name, category.parent_id.to_i, category.children.empty? ? 'TRUE' : 'FALSE' ] } %><%= raw "\357\273\277#{data.map(&:to_csv).join}" -%>

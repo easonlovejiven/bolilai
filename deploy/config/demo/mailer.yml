@@ -1,0 +1,25 @@
+development:
+  address: cloud.submail.cn
+  domain: malltest.weiyatech.com
+  port: 25
+  authentication: :login
+  user_name: "10973"
+  password: 7a683396f26a4e2bedc3aeb547e89e27
+  enable_starttls_auto: :false
+  from:
+    default: no-reply@malltest.weiyatech.com
+    promotion: promotion@malltest.weiyatech.com
+    activation: no-reply@malltest.weiyatech.com
+
+production:
+  address: cloud.submail.cn
+  domain: malltest.weiyatech.com
+  port: 25
+  authentication: :login
+  user_name: "10973"
+  password: 7a683396f26a4e2bedc3aeb547e89e27
+  enable_starttls_auto: :false
+  from:
+    default: no-reply@malltest.weiyatech.com
+    promotion: promotion@malltest.weiyatech.com
+    activation: no-reply@malltest.weiyatech.com

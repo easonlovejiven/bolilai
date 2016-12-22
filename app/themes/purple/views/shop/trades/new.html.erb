@@ -1,0 +1,583 @@
+<%
+   @page_title = "购物车"
+   @trade.contact = @current_user && @current_user.contacts.active.order("created_at DESC").first || Shop::Contact.new
+%>
+<div id="popup_window_original" class="no_popup" style=" padding: 20px;">
+  <!-- div_popup_window_begin -->
+  <div class="cartbox">
+    <!--[if lte IE 8]>
+    <div class="pop_left"></div>
+    <div class="pop_center"></div>
+    <div class="pop_right"></div><![endif]-->
+    <!--[if lte IE 8]>
+    <iframe></iframe><![endif]-->
+    <a href="#" class="closelog js_facebox_close" title="关闭">&nbsp;</a>
+    <%= form_for @trade, as: :trade, :html => {:class => "weimall_form", :id => "trade_new_form", :onsubmit => "event.returnValue = false; return false;", 'data-options' => @options.to_json} do |f| %>
+        <%= hidden_field_tag 'trade[client]', 'html5' %>
+        <h4 class="box_title">购物车</h4>
+        <!--购物车列表-->
+        <div class="js_trade_new_module" id="trade_new_cart" style="">
+          <% if @current_user %>
+              <div class="cartnav">
+                <a href="#" class="step01 current" id="trade_new_nav_cart">购物车</a>
+                <span class="icons icon01"></span>
+                <a href="#" class="step02" id="trade_new_nav_confirm">确认订单</a>
+                <span class="icons icon02"></span>
+                <a href="#" class="step03">付款</a>
+              </div>
+          <% else %>
+              <div class="cartnav userfalse">
+                <a href="#" class="step01 current">购物车</a>
+                <span class="icons icon01"></span>
+                <a href="#" class="step02">登录</a>
+                <span class="icons icon02"></span>
+                <a href="#" class="step03">确认订单</a>
+                <span class="icons icon03"></span>
+                <a href="#" class="step04">付款</a>
+              </div>
+          <% end %>
+          <% if @cart.blank? %>
+              <div class="emptycart">
+                <h3>您还没有选购商品！</h3>
+                <%= link_to Shop::Product.new do %>
+                    <span>现在就去购物</span>
+                <% end %>
+              </div>
+          <% else %>
+              <div class="CartList">
+                <div class="listtitle">
+                  <span class="bgLine01"></span>
+                  <span class="bgLine02"></span>
+                  <span class="bgLine03"></span>
+                  <span class="bgLine04"></span>
+                  <a class="allselect" href="#" id="trade_new_cart_checkall">全选</a>
+                  <span class="pname">商品名称</span>
+                  <span class="price">参考价格</span>
+                  <span class="uprice">珀丽莱价格</span>
+                  <span class="set">操作</span>
+                </div>
+                <ul class="upinlist">
+                  <% @cart.reverse.each_with_index do |unit, i| %>
+                      <% product = Shop::Product.acquire(unit['product_id']) %>
+                      <% sold_out = (ActiveSupport::JSON.decode(product.measures_unsold_count) rescue {})[unit['measure']||''].to_i == 0 %>
+                      <li class="upincont <%= 'psoldout' if sold_out %>" id="trade_new_cart_<%= i %>">
+                        <div class="cancel_zindex">
+                          <div class="cancel_box js_trade_new_cart_delete_box" id="trade_new_cart_<%= i %>_delete_box" style="display:none;">
+                            <div class="cancel_box_top">&nbsp;</div>
+                            <div class="cancel_box_cont">
+                              <h6>确认删除该商品?</h6>
+                              <a href="#" class="sure js_trade_new_cart_delete_confirm" data-i="<%= i %>">确定</a>
+                              <a href="#" class="cancle js_trade_new_cart_delete_cancel" data-i="<%= i %>">取消</a>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="upin_zindex">
+                          <span class="bgLine01"></span>
+                          <span class="bgLine02"></span>
+                          <span class="bgLine03"></span>
+                          <span class="bgLine04"></span>
+                          <input type="checkbox" class="js_trade_new_cart_checkbox" id="trade_new_cart_<%= i %>_checkbox" data-i="<%= i %>" data-unit='<%= h unit.slice(*%w[product_id measure]).to_json %>' data-price="<%= product.discount %>" <%= 'checked=checked' unless sold_out %> <%= 'disabled="disabled"' if sold_out %> />
+                          <% if sold_out %>
+                              <span class="link"><%= image_tag("#{product.major_image.url(:thumb)}", :alt => product.name, :class => 'pic') %></span>
+                          <% else %>
+                              <%= link_to image_tag("#{product.major_image.url(:thumb)}", :alt => product.name, :class => 'pic'), product, :target => '_blank', :class => 'link' %>
+                          <% end %>
+                          <span class="pname"><%= link_to_unless sold_out, h(product.name), product, :target => '_blank' %></span>
+
+                          <div class="psize">
+                            <h6>颜色:</h6><span><%= h product.color_name %></span>
+                            <% unless unit['measure'].blank? %>
+                                <h6>尺寸:</h6><span><em><%= h unit['measure'] %></em></span>
+                            <% end %>
+                          </div>
+                          <span class="price"><%= h product.price %><em>RMB</em></span>
+                          <span class="uprice"><%= h product.discount %><em>RMB</em></span>
+                          <a href="#" class="del js_trade_new_cart_delete" data-i="<%= i %>"><em class="delete"></em><span>删除</span></a>
+                          <% if sold_out %><span class="product_tag_soldout">售完</span>
+                          <% end %>
+                        </div>
+                      </li>
+                  <% end %>
+                </ul>
+                <span class="poniter_event_none"></span>
+              </div>
+              <!--<div class="top_tips">-->
+              <!--<span>使用基因值最高可享受10%的折扣优惠</span>-->
+              <!--</div>-->
+              <% total_price = @cart.map { |u| p = Shop::Product.acquire(u['product_id']); (ActiveSupport::JSON.decode(p.measures_unsold_count) rescue {})[u['measure']||''].to_i == 0 ? 0 : p.discount }.inject(0, &:+) %>
+              <div class="sendlink">
+                <a href="#" class="settlement <%= 'disabled' if total_price == 0 %> <%= 'login' unless @current_user %>" id="trade_new_cart_confirm">
+                  <div>总价<strong id="trade_new_cart_total"><%= total_price %></strong><em>RMB</em>结算</div>
+                </a>
+                <a href="#" class="continue js_facebox_close" id="trade_new_cart_continue"><span><span>继续选购</span></span></a>
+              </div>
+          <% end %>
+        </div>
+
+        <% if @current_user %>
+            <div class="js_trade_new_module" id="trade_new_contact" style="display:none;">
+              <div class="cartnav">
+                <a href="#" class="step01" id="trade_new_nav_cart">购物车</a>
+                <span class="icons icon01"></span>
+                <a href="#" class="step02 current" id="trade_new_nav_confirm">确认订单</a>
+                <span class="icons icon02"></span>
+                <a href="#" class="step03">付款</a>
+              </div>
+              <div class="wAddress">
+                <h3 class="Retitle">填写收货信息</h3>
+                <input type="hidden" id="trade_new_contact_id" name="trade[contact][id]" value="<%= @trade.contact.id %>"/>
+                <ol class="formbox Recont">
+                  <li class="fli">
+                    <label for="trade_new_contact_name">收货人：</label>
+                    <input type="text" id="trade_new_contact_name" name="trade[contact][name]" value="<%= h @trade.contact.name %>" size="13.7"/>
+
+                    <div class="name_tip error" id="trade_new_contact_name_error">
+                      <em class="error_icon"></em>
+                      请输入收货人姓名
+                    </div>
+                  </li>
+                  <li class="fli">
+                    <label for="trade_new_contact_mobile">手机：</label>
+                    <input type="text" id="trade_new_contact_mobile" name="trade[contact][mobile]" value="<%= h @trade.contact.mobile %>" size="13.7"/>
+                    <!--<input type="text" id="trade_new_contact_area" size="4.7"/>-->
+                    <!--<input type="text" id="trade_new_contact_local" size="8.6"/>-->
+
+                    <div class="mobil_tip error" id="trade_new_contact_mobile_error">
+                      <em class="error_icon"></em>
+                      请输入正确联系方式
+                    </div>
+                  </li>
+                  <li class="fli">
+                    <label style="cursor: default;">送货地址：</label>
+                    <% contact = @trade.contact %>
+                    <%= hidden_field_tag 'trade[contact][country]', '中国', :id => "trade_new_contact_country" %>
+                    <%= hidden_field_tag 'trade[contact][province]', contact.province, :id => "trade_new_contact_province" %>
+                    <%= hidden_field_tag 'trade[contact][city]', contact.city, :id => "trade_new_contact_city" %>
+                    <%= hidden_field_tag 'trade[contact][town]', contact.town, :id => "trade_new_contact_town" %>
+                    <span class="select_wrapper">
+							<%= select_tag '', options_for_select(contact.province.blank? ? [['选择省份', '']] : [[contact.province, contact.province]], contact.province), :id => "trade_new_contact_province_init", :style => "", :class => "js_contact_province js_contact_province_init jqTransformHidden select", 'data-id' => "init" %>
+							</span>
+							<span class="select_wrapper">
+							<%= select_tag '', options_for_select(contact.city.blank? ? [['选择城市', '']] : [[contact.city, contact.city]], contact.city), :disabled => !contact.province, :id => "trade_new_contact_city_init", :style => "", :class => "js_contact_city js_contact_city_init jqTransformHidden select", 'data-id' => "init" %>
+							</span>
+							<span class="select_wrapper">
+							<%= select_tag '', options_for_select(contact.town.blank? ? [['选择区', '']] : [[contact.town, contact.town]], contact.town), :disabled => !contact.province, :id => "trade_new_contact_town_init", :style => "", :class => "js_contact_town js_contact_town_init jqTransformHidden select", 'data-id' => "init" %>
+							</span>
+
+                    <div class="txt">*省份和城市为必选项</div>
+                  </li>
+                  <li class="fli">
+                    <label for="trade_new_contact_address">详细地址：</label>
+                    <input type="text" id="trade_new_contact_address" name="trade[contact][address]" value="<%= h @trade.contact.address %>" size="40.2"/>
+
+                    <div class="detail_tip error" id="trade_new_contact_address_error">
+                      <em class="error_icon"></em>
+                      请输入正确地址
+                    </div>
+                  </li>
+                  <li class="fli">
+                    <label for="trade_new_contact_postcode">邮政编码：</label>
+                    <input type="text" id="trade_new_contact_postcode" name="trade[contact][postcode]" value="<%= h @trade.contact.postcode %>" size="6.7"/>
+
+                    <div class="post_tip error" id="trade_new_contact_postcode_error">
+                      <em class="error_icon"></em>
+                      请输入六位邮政编码
+                    </div>
+                  </li>
+                </ol>
+                <h3 class="Edtitle">填写快递方式</h3>
+                <ol class="formbox Edcont">
+                  <li class="fli">
+                    <label style="cursor: default;">快递公司：</label>
+                    <span class="txt">珀丽莱会根据具体商品的不同情况通过顺丰或EMS发送货品。</span>
+                  </li>
+                  <li class="fli">
+                    <label style="cursor: default;">送货时间：</label>
+                    <select id="trade_new_contact_delivery_time" class="jqTransformHidden select">
+                      <option value="all">所有日期皆可</option>
+                      <option value="workday">仅工作日</option>
+                      <option value="playday">仅休息日</option>
+                    </select>
+                    <span class="txt">送货</span>
+                  </li>
+                  <li class="fli">
+                    <label>运费：</label>
+                    <span class="txt">0 RMB</span><em class="txt">（免运费）</em>
+                  </li>
+                </ol>
+              </div>
+              <div class="sendlink ConfirmOrder">
+                <a herf="#" class="sPbtn disabled" id="trade_new_contact_confirm" style=" position: absolute; top: 0; left: 681px;"><span><span>确认收货信息及快递方式</span></span></a>
+              </div>
+            </div>
+
+            <!--修改收货地址-->
+            <div class="js_trade_new_module" id="trade_new_contacts" style="display:none;">
+              <div class="cartnav">
+                <a href="#" class="step01" id="trade_new_nav_cart">购物车</a>
+                <span class="icons icon01"></span>
+                <a href="#" class="step02 current" id="trade_new_nav_confirm">确认订单</a>
+                <span class="icons icon02"></span>
+                <a href="#" class="step03">付款</a>
+              </div>
+              <div class="Receiving">
+                <div class="RScroll">
+                  <% (((@current_user && @current_user.contacts.active.order("created_at DESC").limit(10)) || [])+[Shop::Contact.new]).each_with_index do |contact, i| %>
+                      <div class="ReceivingInfo <%= "open" if contact.new_record? %>" id="trade_new_contacts_<%= contact.id %>">
+                        <input type="radio" name="trade_contact_id" class="title_checkbox js_trade_new_contacts_radio" id="trade_new_contacts_<%= contact.id %>_radio" data-id="<%= contact.id %>" value="<%= contact.id %>" <%= 'checked="checked"' if i == 0 %> />
+
+                        <div class="no_edit">
+                          <div class="editinfo">
+                            <span><%= h contact.name %></span>
+                            <span><%= h contact.mobile %> <%= h contact.phone %></span>
+                            <span><%= h contact.province %><%= h contact.city %><%= h contact.town %><%= h contact.address %></span>
+                            <span><%= h contact.postcode %></span>
+                          </div>
+                          <a href="#" class="set_delete js_trade_new_contacts_delete" id="trade_new_contacts_<%= contact.id %>_delete" data-id="<%= contact.id %>">删除</a>
+                          <a href="#" class="set_edit js_trade_new_contacts_edit" id="trade_new_contacts_<%= contact.id %>_edit" data-id="<%= contact.id %>">编辑</a>
+
+                          <div class="box_zindex">
+                            <div class="cancel_box js_trade_new_contacts_delete_box" style="display:none;" id="trade_new_contacts_<%= contact.id %>_delete_box">
+                              <div class="cancel_box_top">&nbsp;</div>
+                              <div class="cancel_box_cont">
+                                <h6>确认删除该地址?</h6>
+                                <a href="#" class="sure js_trade_new_contacts_delete_confirm" data-id="<%= contact.id %>">确定</a>
+                                <a href="#" class="cancle js_trade_new_contacts_delete_cancel" data-id="<%= contact.id %>">取消</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="edit" id="trade_new_contacts_<%= contact.id %>_edit_area">
+                          <input type="hidden" id="trade_new_contacts_<%= contact.id %>_id" value="<%= contact.id %>"/>
+                          <ol class="formbox disabled">
+                            <li class="fli">
+                              <label for="trade_new_contacts_<%= contact.id %>_name">收货人：</label>
+                              <input type="text" value="<%= h contact.name %>" id="trade_new_contacts_<%= contact.id %>_name" class="js_trade_new_contacts_name" size="14"/>
+
+                              <div class="name_tip error js_trade_new_contacts_error" id="trade_new_contacts_<%= contact.id %>_name_error">
+                                <em class="error_icon"></em>
+                                请输入收货人姓名
+                              </div>
+                            </li>
+                            <li class="fli">
+                              <label for="trade_new_contacts_<%= contact.id %>_mobile">手机：</label>
+                              <input type="text" value="<%= h contact.mobile %>" id="trade_new_contacts_<%= contact.id %>_mobile" class="js_trade_new_contacts_mobile" size="14"/>
+                              <input type="hidden" id="trade_new_contacts_<%= contact.id %>_phone" value="<%= h contact.phone %>"/>
+                              <% nothing, area, local = contact.phone.to_s.gsub('-', '').match(/^(0[12]\d|0[3456789]\d{2})(\d+)$/).to_a %>
+                              <div class="mobil_tip error js_trade_new_contacts_error" id="trade_new_contacts_<%= contact.id %>_mobile_error">
+                                <em class="error_icon"></em>请输入正确联系方式
+                              </div>
+                            </li>
+                            <li class="fli">
+                              <label style="cursor: default;">送货地址：</label>
+										<span class="select_wrapper">
+										<%= select_tag '', options_for_select(contact.province.blank? ? [['选择省份', '']] : [[contact.province, contact.province]], contact.province), :id => "trade_new_contacts_#{contact.id}_province", :style => "", :class => "select js_contact_province js_contact_province_#{contact.id || 'add'} js_trade_new_contacts_province", 'data-id' => contact.id || 'add' %>
+										</span>
+										<span class="select_wrapper">
+										<%= select_tag '', options_for_select(contact.city.blank? ? [['选择城市', '']] : [[contact.city, contact.city]], contact.city), :disabled => !contact.province, :id => "trade_new_contacts_#{contact.id}_city", :style => "", :class => "select js_contact_city js_contact_city_#{contact.id || 'add'} js_trade_new_contacts_city", 'data-id' => contact.id || 'add' %>
+										</span>
+										<span class="select_wrapper">
+										<%= select_tag '', options_for_select(contact.town.blank? ? [['选择区', '']] : [[contact.town, contact.town]], contact.town), :disabled => !contact.city, :id => "trade_new_contacts_#{contact.id}_town", :style => "", :class => "select js_contact_town js_contact_town_#{contact.id || 'add'} js_trade_new_contacts_town", 'data-id' => contact.id || 'add' %>
+										</span>
+
+                              <div class="txt">*省份和城市为必选项</div>
+                            </li>
+                            <li class="fli">
+                              <label for="trade_new_contacts_<%= contact.id %>_address">详细地址：</label>
+                              <input type="text" id="trade_new_contacts_<%= contact.id %>_address" class="js_trade_new_contacts_address" value="<%= h contact.address %>" size="40.2"/>
+
+                              <div class="detail_tip error js_trade_new_contacts_error" id="trade_new_contacts_<%= contact.id %>_address_error">
+                                <em class="error_icon"></em>请输入正确地址
+                              </div>
+                            </li>
+                            <li class="fli">
+                              <label for="trade_new_contacts_<%= contact.id %>_postcode">邮政编码：</label>
+                              <input type="text" id="trade_new_contacts_<%= contact.id %>_postcode" class="js_trade_new_contacts_postcode" value="<%= h contact.postcode %>" size="6.7"/>
+
+                              <div class="post_tip error js_trade_new_contacts_error" id="trade_new_contacts_<%= contact.id %>_postcode_error">
+                                <em class="error_icon"></em>请输入六位邮政编码
+                              </div>
+                            </li>
+                          </ol>
+                        </div>
+                      </div>
+                  <% end %>
+                  <div class="clear"></div>
+                </div>
+              </div>
+              <div class="sendlink">
+                <a herf="#" class="sPbtn" id="trade_new_contacts_confirm" style=" position: absolute; top: 0; left: 745px;"><span><span>确认并保存</span></span></a>
+              </div>
+            </div>
+
+            <!--收货及快递信息-->
+            <div class="js_trade_new_module" id="trade_new_summary" style="display:none;">
+              <div class="cartnav">
+                <a href="#" class="step01" id="trade_new_nav_cart">购物车</a>
+                <span class="icons icon01"></span>
+                <a href="#" class="step02 current" id="trade_new_nav_confirm">确认订单</a>
+                <span class="icons icon02"></span>
+                <a href="#" class="step03">付款</a>
+              </div>
+              <div class="Receivcont">
+                <div class="Receivscroll" id="trade_new_summary_area">
+                  <div class="infotitle">
+                    <h3>收货及快递信息</h3>
+                    <a href="#" class="tedit" id="trade_new_summary_change_contact"><em></em>选择其它收货地址</a>
+                  </div>
+                  <div class="SReceiving">
+                    <p class="address_info" id="trade_new_summary_contact_text">
+                      <span><%= h @trade.contact.name %></span>
+                      <span><%= h @trade.contact.mobile %></span>
+                      <span><%= h @trade.contact.province %><%= h @trade.contact.city %><%= h @trade.contact.town %><%= h @trade.contact.address %></span>
+                      <span><%= h @trade.contact.postcode %></span>
+                    </p>
+
+                    <div class="send_time">
+                      <select name="trade[delivery_time]" id="trade_new_summary_delivery_time" class="jqTransformHidden select">
+                        <option value="all">所有日期皆可</option>
+                        <option value="workday">仅工作日</option>
+                        <option value="playday">仅休息日</option>
+                      </select>
+                      <em>送货</em>
+                    </div>
+                    <div class="mobile_notice">
+                      <strong>确认订单与发货通知使用:</strong>
+                      <span style="display:none;"><input type="radio" name="delivery_phone"/></span>
+                      <input type="hidden" name="trade[delivery_phone]" value="<%= h @trade.contact.mobile %>" id="trade_new_summary_phone_field"/>
+                      <input type="radio" name="delivery_phone" <%= %[checked="checked"] unless @trade.contact.mobile.blank? %> id="trade_new_summary_phone_contact"/>
+                      <label for="trade_new_summary_phone_contact">收货人手机</label>
+                      <input type="radio" name="delivery_phone" id="trade_new_summary_phone_other"/>
+                      <label for="trade_new_summary_phone_other">其它手机</label>
+                      <input type="text" disabled="disabled" id="trade_new_summary_phone_new"/>
+                      <div class="mobil_tip error js_trade_new_contacts_error" id="trade_delivery_phone_error" style="width: 180px">
+                        <em class="error_icon"></em>请输入正确的手机号
+                      </div>
+                    </div>
+                  </div>
+                  <div class="Carttitle"><h3>商品列表</h3>
+                    <span class="ctips" style="display: none;">您可以使用的积分为：<em id="trade_new_summary_total_point" data-original="<%= Core::Info.find(@current_user.id).point %>" data-vouchers='<%= h @vouchers.map { |voucher| {:id => voucher.id, :name => "满#{voucher.event.limitation}减#{voucher.event.amount}"} }.to_json %>'><%= Core::Info.find(@current_user.id).point %></em></span>
+                  </div>
+                  <div class="ReceivList">
+                    <div class="newlisttitle">
+                      <span class="pname">商品名称</span>
+                      <span class="bgLine01"></span>
+                      <span class="uprice">珀丽莱价格</span>
+                      <span class="bgLine02"></span>
+                      <span class="discount">折扣减免</span>
+                      <span class="bgLine03"></span>
+                      <span class="paymoney">需要支付</span>
+                    </div>
+                    <ul class="upinlist">
+                      <% @cart.reverse.each_with_index do |unit, i| %>
+                          <% product = Shop::Product.acquire(unit['product_id']) %>
+                          <li id="trade_new_summary_unit_<%= i %>" class="js_trade_new_summary_unit newupincont" data-i="<%= i %>">
+                            <%= hidden_field_tag "units[#{i}][product_id]", product.id %>
+                            <%= hidden_field_tag "units[#{i}][measure]", unit['measure'] unless unit['measure'].blank? %>
+                            <%= hidden_field_tag "units[#{i}][point_percent]", '' %>
+                            <%= hidden_field_tag "units[#{i}][level_percent]", '' %>
+                            <%= hidden_field_tag "units[#{i}][voucher_id]", '' %>
+
+                            <div class="lepmod">
+                              <div class="link">
+                                <img class="pic" src="<%= image_path "#{product.major_image.url(:thumb)}" %>"/></div>
+                              <span class="pname"><%= h product.name %></span>
+										<span class="psize">
+                                          <% unless  product.color_name.blank? %>
+											<h6>颜色:</h6><span><%= h product.color_name %></span>
+                                          <%end%>
+                                          <% unless unit['measure'].blank? %>
+											<h6>尺寸:</h6><span><%= h unit['measure'] %></span>
+											<% end %>
+										</span>
+                            </div>
+                            <span class="bgLine01"></span>
+
+                            <div class="uprice">
+                              <span class="pdigital" id="trade_new_summary_unit_<%= i %>_original_price"><%= h product.discount %>
+                                <em>RMB</em></span></div>
+                            <span class="bgLine02"></span>
+                            <%
+                               percent = @current_user.percent || @current_user.level && @current_user.level.percent || 0
+                               # percent = product.mall.percent if product.mall && product.mall.percent && product.mall.percent.to_i < percent
+                               point = Core::Info.find(@current_user.id).point
+                               current_vouchers = @vouchers.reject { |voucher| voucher.event && voucher.event.limitation.to_i > product.discount }
+                               options = []
+                            %>
+                            <% options << capture do %>
+                                <div class="reduce01">
+                                  <strong>VIP折扣 :</strong>
+                                  <select class="select js_trade_new_summary_discount_percent" id="trade_new_summary_discount_<%= i %>_percent" data-index="<%= i %>">
+                                    <option value="">请选择</option>
+                                    <option value="<%= percent %>"><%= "VIP折扣#{percent}%" %></option>
+                                  </select>
+                                </div>
+                            <% end if product.minimum_price.to_i == 0 && percent > 0 %>
+                            <% options << capture do %>
+                                <div class="reduce03">
+                                  <strong>优惠券 :</strong>
+                                  <select class="select js_trade_new_summary_discount_voucher" id="trade_new_summary_discount_<%= i %>_voucher" data-index="<%= i %>" <%= %[disabled="disabled"] if current_vouchers.empty? %>>
+                                    <option value="">请选择</option>
+                                    <% current_vouchers.each do |voucher| %>
+                                        <option value="<%= voucher.id %>">满<%= voucher.event.limitation %>减<%= voucher.event.amount %></option>
+                                    <% end %>
+                                  </select>
+                                </div>
+                            <% end if product.minimum_price.to_i == 0 %>
+                            <% options << raw(%[<div class="reduce01"><div style="text-align:center;">无</div></div>]) if options.empty? %>
+                            <div class="discount_reduce discount_reduce0<%= options.size %>">
+                              <% options.each_with_index do |option, index| %>
+                                  <%= option %>
+                              <% end %>
+                            </div>
+                            <span class="bgLine03"></span>
+
+                            <div class="paymoney">
+                              <span class="pdigital"><span id="trade_new_summary_unit_<%= i %>_price" class="js_trade_new_summary_unit_price"><%= h product.discount %></span><em>RMB</em></span>
+                            </div>
+                          </li>
+                      <% end %>
+                    </ul>
+                  </div>
+                  <div class="Message">
+                    <label class="demandsmessage" for="trade_new_summary_comment">如您对订单有特殊需求,请在此处留言:</label><input type="text" name="trade[comment]" id="trade_new_summary_comment"/>
+                  </div>
+                  <div class="openinvoice">
+                    <a href="#" id="trade_new_summary_invoice_open" class="foldtitle" onclick="event.returnValue = false; return false;"><em class="icon"></em>开据发票</a>
+                  </div>
+                  <div class="Invoice" id="trade_new_summary_invoice_area" style="display:none;">
+                    <div class="closeinvoice">
+                      <a href="#" id="trade_new_summary_invoice_cancel" class="foldtitle" onclick="event.returnValue = false; return false;"><em class="icon"></em>取消发票</a><span>确认订单后发票信息将自动保存</span>
+                    </div>
+                    <ol class="formbox">
+                      <li class="fli Invomod">
+                        <label class="ititle">发票抬头</label>
+
+                        <div class="kind">
+                          <input type="radio" name="trade[invoice_type]" value="personal" id="trade_new_summary_invoice_type_personal" class="js_trade_new_summary_invoice_input"/><label class="company">个人</label><input type="text" name="trade[invoice_title]" placeholder="请输入姓名" size="15" id="trade_new_summary_invoice_title_personal" disabled="disabled" class="person_name js_trade_new_summary_invoice_input"/>
+                        </div>
+                        <div class="other_kind">
+                          <input type="radio" name="trade[invoice_type]" value="company" id="trade_new_summary_invoice_type_company" class="js_trade_new_summary_invoice_input"/><label class="company">单位</label><input type="text" name="trade[invoice_title]" placeholder="请输入请输入单位名称" size="40" id="trade_new_summary_invoice_title_company" disabled="disabled" class="company_name js_trade_new_summary_invoice_input"/>
+                        </div>
+                      </li>
+                      <li class="fli Invomod">
+                        <label class="ititle">发票内容</label>
+
+                        <div class="kind">
+                          <span style="display:none;"><input type="radio" name="trade[invoice_content]"/></span>
+                          <input type="radio" name="trade[invoice_content]" value="present" class="js_trade_new_summary_invoice_input" id="trade_invoice_content_1"/>
+                          <label for="trade_invoice_content_1" class="company">礼品</label>
+                        </div>
+                        <div class="other_kind">
+                          <input type="radio" name="trade[invoice_content]" value="detail" class="js_trade_new_summary_invoice_input" id="trade_invoice_content_2"/>
+                          <label for="trade_invoice_content_2" class="company">商品明细</label>
+                        </div>
+                      </li>
+                      <li class="fli Invocont">
+                        <label class="ititle">寄送地址</label>
+                        <%= hidden_field_tag "trade[invoice_contact][id]", "", :id => "trade_new_summary_invoice_contact_id", :class => "js_trade_new_summary_invoice_input", :disabled => true %>
+                        <%= hidden_field_tag "trade[invoice_contact][name]", "", :id => "trade_new_summary_invoice_contact_name", :class => "js_trade_new_summary_invoice_input", :disabled => true %>
+                        <%= hidden_field_tag "trade[invoice_contact][mobile]", "", :id => "trade_new_summary_invoice_contact_mobile", :class => "js_trade_new_summary_invoice_input", :disabled => true %>
+                        <%= hidden_field_tag "trade[invoice_contact][phone]", "", :id => "trade_new_summary_invoice_contact_phone", :class => "js_trade_new_summary_invoice_input", :disabled => true %>
+                        <%= hidden_field_tag "trade[invoice_contact][country]", "", :value => "中国", :id => "trade_new_summary_invoice_contact_country", :class => "js_trade_new_summary_invoice_input", :disabled => true %>
+                        <%= hidden_field_tag "trade[invoice_contact][province]", "", :id => "trade_new_summary_invoice_contact_province", :class => "js_trade_new_summary_invoice_input", :disabled => true %>
+                        <%= hidden_field_tag "trade[invoice_contact][city]", "", :id => "trade_new_summary_invoice_contact_city", :class => "js_trade_new_summary_invoice_input", :disabled => true %>
+                        <%= hidden_field_tag "trade[invoice_contact][town]", "", :id => "trade_new_summary_invoice_contact_town", :class => "js_trade_new_summary_invoice_input", :disabled => true %>
+                        <%= hidden_field_tag "trade[invoice_contact][address]", "", :id => "trade_new_summary_invoice_contact_address", :class => "js_trade_new_summary_invoice_input", :disabled => true %>
+                        <%= hidden_field_tag "trade[invoice_contact][postcode]", "", :id => "trade_new_summary_invoice_contact_postcode", :class => "js_trade_new_summary_invoice_input", :disabled => true %>
+                        <div class="kind">
+                          <span style="display:none;"><input type="radio" name="invoice_contact"/></span>
+                          <input type="radio" name="invoice_contact" id="trade_new_summary_invoice_contact_same" class="js_trade_new_summary_invoice_input"/>
+                          <label for="trade_new_summary_invoice_contact_same" class="company">与收货地址相同<em></em></label>
+                        </div>
+                        <div class="other_address">
+                          <div class="other_kind">
+                            <input type="radio" name="invoice_contact" id="trade_new_summary_invoice_contact_different" class="js_trade_new_summary_invoice_input"/>
+                            <label for="trade_new_summary_invoice_contact_different" class="company">其它地址</label>
+                          </div>
+                          <ol class="formbox disabled">
+                            <li class="fli">
+                              <label for="trade_new_summary_invoice_different_name">收货人：</label>
+                              <input type="text" value="" size="13.7" disabled="disabled" id="trade_new_summary_invoice_different_name" class="js_trade_new_summary_invoice_input js_trade_new_summary_invoice_contact_input"/>
+
+                              <div class="name_tip error" id="trade_new_summary_invoice_different_name_error">
+                                <em class="error_icon"></em>请输入收货人姓名
+                              </div>
+                            </li>
+                            <li class="fli">
+                              <label for="trade_new_summary_invoice_different_mobile">手机：</label>
+                              <input type="text" size="13.7" disabled="disabled" id="trade_new_summary_invoice_different_mobile" class="js_trade_new_summary_invoice_input js_trade_new_summary_invoice_contact_input"/>
+                              <!--<label for="trade_new_summary_invoice_different_area" class="orl">或固定电话：</label>-->
+                              <!--<input type="text" value="" size="4.6" disabled="disabled" class="js_trade_new_summary_invoice_input js_trade_new_summary_invoice_contact_input" id="trade_new_summary_invoice_different_area"/>-->
+                              <!--<input type="text" value="" size="8.6" disabled="disabled" class="js_trade_new_summary_invoice_input js_trade_new_summary_invoice_contact_input" id="trade_new_summary_invoice_different_local"/>-->
+
+                              <div class="mobil_tip error" id="trade_new_summary_invoice_different_mobile_error">
+                                <em class="error_icon"></em>请输入正确联系方式
+                              </div>
+                            </li>
+                            <li class="fli">
+                              <label style="cursor: default;">送货地址：</label>
+												<span class="select_wrapper">
+												<%= select_tag '', options_for_select(contact.province.blank? ? [['选择省份', '']] : [[contact.province, contact.province]], contact.province), :id => "trade_new_summary_invoice_different_province", :style => "", :class => "js_trade_new_summary_invoice_input js_trade_new_summary_invoice_contact_input js_contact_province js_contact_province_in select", 'data-id' => "in", :disabled => true %>
+												</span>
+												<span class="select_wrapper">
+												<%= select_tag '', options_for_select(contact.city.blank? ? [['选择城市', '']] : [[contact.city, contact.city]], contact.city), :id => "trade_new_summary_invoice_different_city", :style => "", :class => "js_trade_new_summary_invoice_input js_trade_new_summary_invoice_contact_input js_contact_city js_contact_city_in select", 'data-id' => "in", :disabled => true %>
+												</span>
+												<span class="select_wrapper">
+												<%= select_tag '', options_for_select(contact.town.blank? ? [['选择区', '']] : [[contact.town, contact.town]], contact.town), :id => "trade_new_summary_invoice_different_town", :style => "", :class => "js_trade_new_summary_invoice_input js_trade_new_summary_invoice_contact_input js_contact_town js_contact_town_in select", 'data-id' => "in", :disabled => true %>
+												</span>
+
+                              <div class="txt">*省份和城市为必选项</div>
+                            </li>
+                            <li class="fli">
+                              <label for="trade_new_summary_invoice_different_address">详细地址：</label>
+                              <input type="text" value="" size="40.2" disabled="disabled" id="trade_new_summary_invoice_different_address" class="js_trade_new_summary_invoice_input js_trade_new_summary_invoice_contact_input"/>
+
+                              <div class="detail_tip error" id="trade_new_summary_invoice_different_address_error">
+                                <em class="error_icon"></em>请输入正确地址
+                              </div>
+                            </li>
+                            <li class="fli">
+                              <label for="trade_new_summary_invoice_different_postcode">邮政编码：</label>
+                              <input type="text" size="6.7" disabled="disabled" id="trade_new_summary_invoice_different_postcode" class="js_trade_new_summary_invoice_input js_trade_new_summary_invoice_contact_input"/>
+
+                              <div class="post_tip error" id="trade_new_summary_invoice_different_postcode_error">
+                                <em class="error_icon"></em>请输入六位邮政编码
+                              </div>
+                            </li>
+                          </ol>
+                        </div>
+                      </li>
+                    </ol>
+                  </div>
+                </div>
+                <div class="sendlink">
+                  <div class="agreement_box">
+                    <div class="price_column">
+                      <span class="title">合计：</span>
+                      <span id="trade_new_summary_total_price" class="price_total"><%= total_price %></span>
+                      <em class="unit">RMB</em>
+                    </div>
+                    <div class="clause_confirm">
+                      <input type="checkbox" style="display: none" checked="checked" id="trade_new_summary_term"/>
+
+                      <!--<p>我已阅读<a target="_blank" href="">购买须知</a>，并同意所有条款。</p>-->
+                    </div>
+                  </div>
+                  <a herf="#" class="sPbtn" id="trade_new_summary_confirm" data-target="popup"><span><span>确认订单并支付</span></span></a>
+
+                  <div class="warn" id="trade_new_summary_confirm_tip" style="display:none;">
+                    <p><span>部分商品已售完订单当前无法提交。</span></p>
+                    <!--[if IE]>
+                    <div class="wat"></div>
+                    <div class="wab"></div><![endif]-->
+                    <em></em>
+                  </div>
+                </div>
+              </div>
+            </div>
+        <% end %>
+    <% end %>
+  </div>
+  <!-- div_popup_window_end -->
+</div>

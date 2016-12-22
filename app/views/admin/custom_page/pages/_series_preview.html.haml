@@ -1,0 +1,17 @@
+- if params[:action] == 'preview'
+	%style
+		:sass
+			.series_preview
+				position: absolute
+				top: 10px
+				right: 10px
+				width: 20px
+				height: 20px
+				border-radius: 999px
+				line-height: 20px
+				font-size: 18px
+				color: white
+				text-align: center
+	= javascript_include_tag "admin/custom_page/series_preview.js"
+	-#.series_preview(style="background-color: #{{ 'coffee' => '#DA6223' }[data['theme']] || data['theme']};")= data['arrange']
+	= hidden_field_tag nil,page.content,id: "auction_page_content_#{page.id}","data-page-id"=>page.id

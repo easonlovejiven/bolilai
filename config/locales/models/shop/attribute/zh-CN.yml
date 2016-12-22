@@ -1,0 +1,12 @@
+zh-CN:
+  activerecord:
+    models:
+      shop/attribute: 商品属性
+    attributes:
+      shop/attribute:
+        editor_id:  编辑ID
+        name:  名称
+        option_list:  选项列表，用换行分隔
+        searchable?:  可搜索？
+        active?:  有效？
+

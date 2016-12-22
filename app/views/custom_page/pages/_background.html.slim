@@ -1,0 +1,79 @@
+sass:
+	@-moz-keyframes fade
+		0%
+			opacity: 1.0
+		50%
+			opacity: 0.7
+		100%
+			opacity: 1.0
+	@-webkit-keyframes fade
+		0%
+ 			opacity: 1.0
+		50%
+			opacity: 0.7
+		100%
+			opacity: 1.0
+	@-o-keyframes fade
+		0%
+ 			opacity: 1.0
+		50%
+			opacity: 0.7
+		100%
+			opacity: 1.0
+	@-ms-keyframes fade
+		0%
+			opacity: 1.0
+		50%
+			opacity: 0.7
+		100%
+			opacity: 1.0
+	@keyframes fade
+		0%
+ 			opacity: 1.0
+		50%
+			opacity: 0.7
+		100%
+			opacity: 1.0
+	.background
+		width: 1000px
+		margin: 0 auto
+		.link
+			width: 333px
+			min-height: 260px
+			background: #666
+			display: inline-block
+			*display: inline
+			*zoom: 1
+			position: relative
+			vertical-align: top
+			&:hover
+				-moz-animation-name: fade
+				-moz-animation-duration: 1s
+				-webkit-animation-name: fade
+				-webkit-animation-duration: 1s
+				-o-animation-name: fade
+				-o-animation-duration: 1s
+				-ms-animation-name: fade
+				-ms-animation-duration: 1s
+				animation-name: fade
+				animation-duration: 1s
+			.image
+				width: 100%
+				display: block
+			.name
+				display: block
+				color: #fff
+				font-size: 18px
+				padding: 10px 20px
+				position: absolute
+				right: 0
+				bottom: 0
+				left: 0
+				text-align: right
+				text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5)
+.background
+	- data = RecursiveOpenStruct.new(data, recurse_over_arrays: true)
+	- data.backgrounds.each do |bg|
+		a.link href=bg.url target="_blank" style=("background-color: #{bg.color};" unless bg.color.blank?)
+			= image_tag bg.image, class: 'image', alt: ''
+			span.name= bg.name

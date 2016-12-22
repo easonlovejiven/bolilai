@@ -1,0 +1,26 @@
+<h2>查看建行付款</h2>
+
+<table class="form-table">
+	<tbody>
+
+		<tr class="form-field form-required">
+			<th scope="row">ID</th>
+			<td><%= @trade.id %></td>
+		</tr>
+	
+		<tr class="form-field form-required">
+			<th scope="row">状态</th>
+			<td><%= h @result['STATUS'] %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">金额</th>
+			<td><%= h @result['AMOUNT'] %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">时间</th>
+			<td><%= h @result["ORDERDATE"] %></td>
+		</tr>
+	</tbody>
+</table>

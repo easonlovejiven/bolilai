@@ -1,0 +1,8 @@
+<%if !@page.blank?%>
+    <%@page_title=@page.name %>
+<%else%>
+    <%@page_title=@category.name%>
+<%end%>
+<div class="info_content">
+  <%= raw @category.body %>
+</div>

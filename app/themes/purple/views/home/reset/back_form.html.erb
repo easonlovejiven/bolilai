@@ -1,0 +1,5 @@
+<% form_tag '/reset/back',:method=>:get do %>
+        <%= hidden_field_tag  "email",@email %>
+    <%= text_field_tag "n",'' %>
+ <%= submit_tag "提交"  %>
+<% end %>

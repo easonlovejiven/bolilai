@@ -1,0 +1,253 @@
+<% dom_id ||= rand(999999)
+   is_large ||= true
+   rel ||= nil
+%>
+<div id="product_banner">
+  <%#= image_tag 'shop/product-banner.png'%>
+</div>
+<% measures = (ActiveSupport::JSON.decode(@product.measures_unsold_count.to_s) || {}).sort_by { |m| @product.category2 && @product.category2.measures.split(',').index(m[0]).to_i || 0 }; selected_measure = (measures.find { |k, v| v>0 }||[nil])[0] %>
+
+<div class="pro-item list_block large js_product" data-id="<%= ::Temple::Utils.escape_html((@product.id)) %>"
+     id="product_<%= ::Temple::Utils.escape_html((dom_id)) %>" xmlns="http://www.w3.org/1999/html">
+  <div class="pro-well">
+    <div class="product-introduce">
+      <div class="pi_left">
+        <div class="pics" id="productPic">
+          <% images = @product.images.order('COALESCE(sequence, 1000000) ASC, id ASC')
+             pic = (@product.major_image.present? ? @product.major_image : images.any? && images.first.large_image)
+             has_pics = !!pic
+             pic = @product.images.build.large_image unless has_pics
+          %>
+          <div class="spec-preview">
+            <span class="jqzoom"><%= image_tag(pic.url(:cover400), jqimg: pic.url(:big800), alt: 'pic') %></span>
+          </div>
+          <!--缩图开始-->
+          <% if has_pics.present? %>
+              <div class="spec-scroll">
+                <a class="next">&gt;</a><a class="prev">&lt;</a>
+
+                <div class="items">
+                  <ul>
+                    <% if @product.major_image.present? %>
+                        <li><%= image_tag @product.major_image.url(:thumb),
+                                          bimg: @product.major_image.url(:cover400),
+                                          jqimg: @product.major_image.url(:big800), alt: "图片" %>
+                        </li>
+                    <% end %>
+                    <% images.each do |image| %>
+                        <li><%= image_tag image.large_image.url(:thumb),
+                                          bimg: image.large_image.url(:cover400),
+                                          jqimg: image.large_image.url(:big800), alt: "图片" %>
+                        </li>
+                    <% end %>
+                  </ul>
+                </div>
+              </div>
+          <% end %>
+          <!--缩图结束-->
+        </div>
+      </div>
+
+      <div class="attrs">
+        <h1 class="title">
+          <% unless @product.label.blank? %>
+              <div class="label"><%= @product.label %></div>
+          <% end %>
+          <%= @product.name %>
+          <% unless @product.identifier.blank? %>
+              <br/><span class="no">编号：<%= @product.identifier %></span>
+          <% end %>
+        </h1>
+        <div class="prices">
+          促销价 <span class="mk-price">￥<%= @product.discount %></span>
+          <!--预付订价<span class="mk-price">￥1000</span>-->
+          原价 <span class="del-price">￥<%= @product.price %></span>
+        </div>
+        <div class="attr-list">
+          <% basic_values=@product.basic_values.group_by(&:attribute_id).sort_by { |k, g| g.size }.reverse %>
+          <% basic_values.each do |attribute_id, values| %>
+              <ul>
+                <li class="name"><%= values[0].attribute_name %></li>
+                <li><%= values.map(&:content).join(' ') %></li>
+              </ul>
+          <% end %>
+          <ul>
+            <% if !@product.relate_product_ids.blank? %>
+                <li class="name">选择</li>
+                <li class="color">
+                  <ul class="color-list">
+                    <li>
+                      <% color_name= !@product.color_name.blank? ? @product.color_name : @product.name %>
+                      <%= link_to shop_product_path(@product), "data-dom_id" => "product_#{dom_id}", "data-id" => "#{@product.id}", :class => "js_product_relate", :title => "#{h color_name}", "data-prevent" => "1", "class" => "current" do %>
+                          <%= image_tag(!@product.color_pic.blank? ? @product.color_image.url(:tiny) : @product.major_image.url(:tiny), :alt => "#{@product.name}") %><%= color_name %>
+                      <% end %>
+                    </li>
+                    <% @product.relate_products.each do |p| %>
+                        <li>
+                          <% color_name= !p.color_name.blank? ? p.color_name : p.name %>
+                          <%= link_to shop_product_path(p), "data-dom_id" => "product_#{dom_id}", "data-id" => "#{p.id}", :class => "js_product_relate", :title => "#{h color_name}" do %>
+                              <%= image_tag(!p.color_pic.blank? ? p.color_image.url(:tiny) : p.major_image.url(:tiny).to_s, :alt => "#{p.name}") %><%= color_name %>
+                          <% end %>
+                        </li>
+                    <% end %>
+                  </ul>
+                </li>
+            <% end %>
+          </ul>
+        </div>
+        <div class="order-btns">
+          <% if selected_measure %>
+              <%= link_to '', '#', "data-measure" => "#{h selected_measure}", "data-id" => "#{@product.id}",
+                          :class => "order BuyBtn js_product_buynow", :id => "product_#{dom_id}_buynow",
+                          "data-dom_id" => "product_#{dom_id}" %>
+          <% else %>
+              <%= link_to '', '#', class: "BuyBtnBisabled" %>
+          <% end %>
+          <%#= link_to '预付定金', '#', class: 'order' %>
+          <%#= link_to '全额付款', '#', class: 'order' %>
+          <%#= link_to '免息分期', '#', class: 'order' %>
+          <%= render partial: 'shop/products/shared_btns' %>
+        </div>
+        <!--<div class="info-tips">-->
+        <!--<%#= link_to '<i class="fa fa-user"></i>自取'.html_safe, '#', class: 'tip' %>-->
+        <!--<%#= link_to '免费调货', '#', class: 'tip' %>-->
+        <!--<%#= link_to '免运费', '#', class: 'tip' %>-->
+        <!--</div>-->
+      </div>
+    </div>
+    <div class="clear-height"></div>
+  </div>
+  <div class="product-content">
+    <div class="tabs">
+      <ul class="nav nav-tabs">
+        <li class="active">
+          <a data-tab="#proInfo"> 商品详情 </a>
+        </li>
+        <li class="">
+          <a data-tab="#proAttr"> 商品参数 </a>
+        </li>
+        <% if !@product.match_product_ids.blank? %>
+            <li>
+              <a data-tab="#proStyle"> 搭配商品 </a>
+            </li>
+        <% end %>
+        <li class="review">
+          <a data-tab="#proReview" href="<%= comments_shop_product_path(@product) %>" data-remote="true">
+            评论<span></span></a>
+        </li>
+        <!--<li>-->
+        <!--<a href="#proService"> 售后服务 </a>-->
+        <!--</li>-->
+      </ul>
+      <div id="proInfo" class="tab-content" name="proInfo">
+        <div class="pro-well neatness">
+          <%= raw @product.body %>
+          <div class="clear-height"></div>
+        </div>
+        <div class="clear-height" style="height: 30px">
+          <hr style="border:none;border-top:1px dotted #ccc;"/>
+        </div>
+      </div>
+      <div class="clear-height" style="height: 15px"></div>
+      <div id="proAttr" class="tab-content" name="proAttr">
+        <!----->
+        <!--.details_mod.open id="product_#{dom_id}_panel_#{attribute_id}"-->
+        <!--a href="#" class="js_product_panel_link" data-dom_id="product_#{dom_id}" data-attribute_id="#{attribute_id}"-->
+        <!--= h values[0].attribute_name-->
+        <!--/[if IE]-->
+        <!--.dot-->
+        <!--.dob-->
+        <!--.text id="product_#{dom_id}_panel_#{attribute_id}_expando"-->
+        <!--= h values.map(&:content).join(' ')-->
+        <% values=@product.values.group_by(&:attribute_id).sort_by { |k, g| g.size }.reverse %>
+        <% column_size=3 %>
+        <% two_columns_array(values, column_size).each do |group_values| %>
+            <dl class="f_cont_sys_lst">
+              <% group_values.each do |attribute_id, values| %>
+                  <div class="attr_item">
+                    <dt><span><%= values[0].attribute_name %></span></dt>
+                    <dd><span><%= values.map(&:content).join(' ') %></span></dd>
+                  </div>
+              <% end %>
+              <% if group_values.size%column_size!=0 %>
+                  <% (column_size-group_values.size).times.each do |i| %>
+                      <div class="attr_item">
+                        <dt></dt>
+                        <dd></dd>
+                      </div>
+                  <% end %>
+              <% end %>
+            </dl>
+        <% end %>
+      </div>
+      <% if !@product.match_product_ids.blank? %>
+          <div id="proStyle" class="tab-content" name="proStyle">
+            <div class="pro-well">
+              <!--<div class="pro-well-title">-->
+              <%#= image_tag 'shop/pro-nail.png' %>
+              <!--<h2><%#= @product.name %></h2>-->
+              <!--</div>-->
+              <div class="accessories">
+                <div class="list">
+                  <% @product.match_products[0..3].each do |product| %>
+                      <div class="item">
+                        <%= link_to image_tag(product.major_image.url(:medium)), shop_product_path(product) %>
+                        <div class="info">
+                          <h3><%= product.name %></h3>
+
+                          <div class="">
+                            <div class="radio-list">
+                              <label class="radio-inline">
+                                <!--<input type="radio" name="optionsRadios" checked=""> 白18k金-->
+                                <b class="mk-price">￥<%= product.discount %></b>
+                                <b class="del-price gray">￥<%= product.price %></b>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  <% end %>
+                </div>
+                <div class="clear-height"></div>
+              </div>
+            </div>
+          </div>
+      <% end %>
+      <div id="proReview" class="tab-content" name="proReview">
+      </div>
+      <div id="proService" class="tab-content" name="proService">
+        <%= @product.remark || '售后服务' %>
+      </div>
+      <!--<div id="proMore" name="proMore"></div>-->
+    </div>
+  </div>
+</div>
+<!-- div_product_<%= ::Temple::Utils.escape_html((dom_id)) %>_end -->
+<script type="text/javascript">
+    $(function () {
+        $(".tabs").tabslet({attribute: "data-tab"}).on("_after", function () {
+            var link = $(this).find(".active a");
+            if (link.attr("data-remote")) {
+                if ($.trim($(link.data("tab")).html()).length == "") {
+                    $.ajax({
+                        url: link.attr("href"),
+                        content_type: "html",
+                        success: function (html) {
+                            $(link.data("tab")).html(html);
+                        }
+                    })
+                }
+            }
+        })
+        $(document).on("ajax:complete", ".review-list .pagination li:not(.disabled,.active) a", function (event, data) {
+            $("#proReview").html(data.responseText);
+        })
+        $('.images', '#proReview').on('click', 'div.small, div.big', function () {
+            if ($(this).hasClass('small')) {
+                $(this).hide().siblings('.big').show()
+            } else {
+                $(this).hide().siblings('.small').show()
+            }
+        })
+    })
+</script>

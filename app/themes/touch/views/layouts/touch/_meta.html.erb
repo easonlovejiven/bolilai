@@ -1,0 +1,66 @@
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title><%= @page_title.blank? ? '珀丽莱商城' : %[#{@page_title}_珀丽莱商城] %></title>
+<% unless @page_keywords.blank? %>
+    <meta name="keywords" content="<%= @page_keywords.join(',') %>">
+<% end %>
+
+<% unless @page_description.blank? %>
+    <meta name="description" content="<%= @page_description %>">
+<% end %>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" id="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+<meta name="format-detection" content="telephone=no">
+<!-- 防止跨域攻击 -->
+<meta content="authenticity_token" name="csrf-param">
+<meta content="KT7gvfo1yBe+vYg5UEi30g591KH3IJ/Sszr8ttAp1Ew=" name="csrf-token">
+
+<!-- dns 预取 -->
+<link rel="dns-prefetch" href="http://www.barlar.cn">
+<%= stylesheet_link_tag "touch/module" %>
+<%= stylesheet_link_tag "touch/module_respond" %>
+
+<!-- 动态选择jquery或zepto -->
+<%= javascript_include_tag "touch/listen.min" %>
+<%= javascript_include_tag "touch/library.min" %>
+<%= javascript_include_tag "touch/fv.min" %>
+<%= javascript_include_tag "touch/iscroll.min" %>
+<%= javascript_include_tag "touch/config" %>
+<%= javascript_include_tag "touch/module.min" %>
+<%= javascript_include_tag "touch/model.min" %>
+
+<script type="text/javascript">
+    // 解决js异步请求rails session重置问题
+    var ajax_before_send = function (xhr) {
+        xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
+    };
+    // 绑定事件
+    var click_event = 'safari' == 'ie' ? 'click' : 'tap';
+    var itap_event = 'safari' == 'ie' ? 'click' : 'itap';
+
+    var ratio = DeviceInfo.ratio;
+
+    var add_ratio_class = function () {
+        var class_name = 'ratio' + ratio;
+        $('#body').removeClass('ratio1').addClass(class_name.replace('.', '_'));
+    };
+
+    if (DeviceInfo.os == 'wp' && DeviceInfo.browser == 'ie') {
+    } else {
+        $(function () {
+            // 更新cookie
+            set_cookie('ratio', ratio, 365);
+            // body上添加class
+            add_ratio_class();
+        });
+    }
+    //ga
+    <%if Rails.env=="production"%>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?d9ef9c397ebdaed74c3066c48935679a";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+    <%end%>
+</script>

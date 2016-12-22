@@ -1,0 +1,7 @@
+zh-CN:
+  activerecord:
+    models:
+      shop/unit: 退货
+    attributes:
+      shop/unit:
+        receipt_number: 收据编号

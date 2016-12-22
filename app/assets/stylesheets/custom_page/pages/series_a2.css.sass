@@ -1,0 +1,158 @@
+// 文字段落对齐
+@mixin text-justify
+	text-align: justify
+	text-justify: distribute
+// 文字溢出省略“...”
+@mixin overflow-ellipsis
+	white-space: nowrap
+	text-overflow: ellipsis
+	-o-text-overflow: ellipsis
+	overflow: hidden
+@mixin inline-block
+	display: inline-block
+	*display: inline
+	zoom: 1
+
+
+
+.series_a2
+	display: block
+	width:  1000px
+	margin: 0 auto
+	position: relative
+	height: 454px
+	margin-bottom: 12px
+	background: #fff
+	overflow: hidden
+	.pic_detail
+		width: 370px
+		height: 350px
+		position: absolute
+		top: 47px
+		left: 26px
+		img
+			width: 370px
+			height: 350px
+	.rightlink
+		width: 575px
+		height: 361px
+		position: absolute
+		top: 36px
+		left: 396px
+		display: block
+	.pic_title
+		width: 350px
+		height: 350px
+		position: absolute
+		top: 8px
+		left: 0px
+		img
+			width: 350px
+			height: 350px
+	.product_info
+		display: block
+		position: absolute
+		top: 0px
+		left: 351px
+		width: 218px
+		z-index: 2
+		.textbox
+			height: 182px
+			border-bottom: 1px solid #ccc
+			@include text-justify
+			.title
+				line-height: 30px
+				font-size: 24px
+				display: block
+				text-align: left
+				height: 62px
+				overflow: hidden
+				@include text-justify
+			.description
+				margin-top: 16px
+				line-height: 22px
+				font-size: 12px
+				display: block
+				text-align: left
+				height: 88px
+				overflow: hidden
+				@include text-justify
+		.link
+			position: absolute
+			top: 205px
+			left: 0px
+			width: 218px
+			.linktext
+				display: block
+				position: relative
+				.summary
+					display: block
+					span
+						display: block
+						line-height: 20px
+						font-size: 16px
+						height: 20px
+						overflow: hidden
+					em
+						display: block
+						line-height: 20px
+						font-size: 12px
+						height: 40px
+						overflow: hidden
+				.value
+					margin-top: 3px
+					.MarketPrice
+						display: block
+						line-height: 26px
+						font-size: 12px
+						text-decoration: line-through
+						overflow: hidden
+						height: 22px
+						margin-bottom: 4px
+						em
+							height: 22px
+							@include inline-block
+						span
+							min-width: 50px
+							height: 22px
+							text-decoration: line-through
+							@include inline-block
+					.IhaveuPrice
+						display: block
+						line-height: 26px
+						font-size: 22px
+						margin-top: 5px
+						overflow: hidden
+						height: 30px
+						em
+							@include inline-block
+							font-size: 12px
+							height: 30px
+							_float: left
+							_line-height: 28px
+							text-decoration: none
+							margin-bottom: 0
+						span
+							min-width: 50px
+							height: 30px
+							@include inline-block
+				.at_once
+					background: #cc6b27 repeat-x 0 0
+					height: 28px
+					width: 103px
+					line-height: 27px
+					text-align: center
+					color: #FFF
+					font-size: 16px
+					margin: 13px 0 0 2px
+
+@media \0screen
+	.series_a2 .product_info .link .linktext .at_once
+		line-height: 28px
+
+.ihaveu
+	.series_a2
+		left: -20px
+.layout_flash
+	.series_a2
+		left: auto

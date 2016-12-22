@@ -1,0 +1,20 @@
+= stylesheet_inline_tag "custom_page/pages/series_link.css"
+- flash = request.fullpath.match(/\?flash$/)
+
+.seriesbox.series_link(style="margin-bottom: #{v = (data['style']||{})['margin-bottom']; v.blank? ? 12 : v}px;" class="widget" data-widget-id="link_widget_#{page.id}")
+	- if flash && data['flash'] && !data['flash']['src'].blank?
+		%div( style="position: relative; width: #{data['flash']['width']}px; #{data['flash']['width'].blank? ? "" : "left: 50%;"} margin-left: -#{data['flash']['width'].to_i/2}px;")
+			%object(classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" height="#{data['flash']['height']}" width="#{data['flash']['width']}")
+				%param(name="movie" value="#{data['flash']['src']}")
+				%param(name="allowfullscreen" value="true")
+				%param(name="allowscriptaccess" value="always")
+				%param(name="wmode" value="Transparent")
+				%embed(type="application/x-shockwave-flash" src="#{data['flash']['src']}" allowscriptaccess="always" wmode="Transparent" allowfullscreen="true" height="#{data['flash']['height']}" width="#{data['flash']['width']}")
+	- elsif data['image'] && !data['image']['pic'].blank?
+		%div( style="position: relative; width: #{data['image']['width']}px; #{data['image']['width'].blank? ? "" : "left: 50%;"} margin-left: -#{data['image']['width'].to_i/2}px;")
+			- if data['image']['url'].blank?
+				= image_tag data['image']['pic'], :class => 'pic', :alt => data['image']['name'], :style => " width: #{data['image']['width']}px; height: #{data['image']['height']}px;"
+			- else
+				= link_to legacy_url(data['image']['url'], flash), :class => "", :target => "_blank" do
+					= image_tag data['image']['pic'], :class => 'pic', :alt => data['image']['name'], :width => data['image']['width'], :height => data['image']['height']
+= render :partial => 'admin/custom_page/pages/series_preview', :locals => { :data => data,page: page }

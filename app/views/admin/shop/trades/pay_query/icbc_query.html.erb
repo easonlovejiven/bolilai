@@ -1,0 +1,102 @@
+<h2>查看中国工商银行付款</h2>
+
+<table class="form-table">
+	<tbody>
+	
+		<tr class="form-field form-required">
+			<th scope="row">ID</th>
+			<td><%= @trade.id %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">接口名称</th>
+			<td><%= @result.xpath('ICBCAPI/pub/APIName').try(:text) %></td>
+		</tr>
+	
+		<tr class="form-field form-required">
+			<th scope="row">接口版本号</th>
+			<td><%= @result.xpath('ICBCAPI/in/APIVersion').try(:text) %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">订单号</th>
+			<td><%= @result.xpath('ICBCAPI/in/orderNum').try(:text) %></td>
+		</tr>
+	
+		<tr class="form-field form-required">
+			<th scope="row">交易日期</th>
+			<td><%= @result.xpath('ICBCAPI/in/tranDate').try(:text) %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">商家号码</th>
+			<td><%= @result.xpath('ICBCAPI/in/ShopCode').try(:text) %></td>
+		</tr>
+	
+		<tr class="form-field form-required">
+			<th scope="row">商城账号</th>
+			<td><%= @result.xpath('ICBCAPI/in/ShopAccount').try(:text) %></td>
+		</tr>
+	
+		<tr class="form-field form-required">
+			<th scope="row">指令序号</th>
+			<td><%= @result.xpath('ICBCAPI/out/tranSerialNum').try(:text) %></td>
+		</tr>
+	
+		<tr class="form-field form-required">
+			<th scope="row">订单处理状态</th>
+			<td><%= @result.xpath('ICBCAPI/out/tranStat').try(:text) %></td>
+		</tr>
+	
+		<tr class="form-field form-required">
+			<th scope="row">指令错误信息</th>
+			<td><%= @result.xpath('ICBCAPI/out/bankRem').try(:text) %></td>
+		</tr>
+	
+		<tr class="form-field form-required">
+			<th scope="row">订单总金额（分）</th>
+			<td><%= @result.xpath('ICBCAPI/out/amount').try(:text) %></td>
+		</tr>
+	
+		<tr class="form-field form-required">
+			<th scope="row">支付币种</th>
+			<td><%= @result.xpath('ICBCAPI/out/currType').try(:text) %></td>
+		</tr>
+	
+		<tr class="form-field form-required">
+			<th scope="row">返回通知日期时间</th>
+			<td><%= @result.xpath('ICBCAPI/out/tranTime').try(:text) %></td>
+		</tr>
+	
+		<tr class="form-field form-required">
+			<th scope="row">商城账号</th>
+			<td><%= @result.xpath('ICBCAPI/out/ShopAccount').try(:text) %></td>
+		</tr>
+	
+		<tr class="form-field form-required">
+			<th scope="row">商城户名</th>
+			<td><%= @result.xpath('ICBCAPI/out/PayeeName').try(:text) %></td>
+		</tr>
+	
+		<tr class="form-field form-required">
+			<th scope="row">校验联名标志</th>
+			<td><%= @result.xpath('ICBCAPI/out/JoinFlag').try(:text) %></td>
+		</tr>
+	
+		<tr class="form-field form-required">
+			<th scope="row">客户联名标志</th>
+			<td><%= @result.xpath('ICBCAPI/out/CustJoinFlag').try(:text) %></td>
+		</tr>
+	
+		<tr class="form-field form-required">
+			<th scope="row">联名会员号</th>
+			<td><%= @result.xpath('ICBCAPI/out/CustJoinNum').try(:text) %></td>
+		</tr>
+	
+		<tr class="form-field form-required">
+			<th scope="row">商户签名证书id</th>
+			<td><%= @result.xpath('ICBCAPI/out/CertID').try(:text) %></td>
+		</tr>
+	<tbody>
+</table>
+

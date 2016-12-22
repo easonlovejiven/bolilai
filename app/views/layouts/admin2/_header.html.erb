@@ -1,0 +1,44 @@
+<div class="page-header navbar">
+  <div class="container">
+  <div class="page-header-inner row">
+    <div class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
+    </div>
+    <div class="page-logo">
+      <%= link_to image_tag(logo_pic), root_path %>
+      <div class="menu-toggler sidebar-toggler hide"></div>
+    </div>
+    <div class="page-title"><%= yield :manager_title %></div>
+    <div class="top-menu">
+      <% if @current_user %>
+          <ul class="nav navbar-nav pull-right">
+            <% if @current_user.normal? || @current_user.proxy? %>
+                <li class="dropdown dropdown-notification" id="currentCart">
+                  <a href="/carts" class="dropdown-toggle">
+                    <i class="fa fa-shopping-cart"></i>
+                  </a>
+                </li>
+            <% end %>
+            <li class="dropdown dropdown-user">
+              <%= link_to '#', class: "dropdown-toggle", data: {toggle: "dropdown", 'close-others' => true} do %>
+                  <%= image_tag @current_user.pic_image.url(:tiny), alt: "avatar", class: "img-circle", width: '28px', height: '28px' %>
+                  <span class="username"><%= @current_user.name %></span>
+                  <i class="fa fa-angle-down"></i>
+              <% end %>
+              <ul class="dropdown-menu">
+                <li>
+                  <%= link_to '<i class="fa fa-user"></i> 个人信息'.html_safe, account_users_path %>
+                </li>
+                <li>
+                  <%= link_to '<i class="fa fa-key"></i> 修改密码'.html_safe, passwd_users_path %>
+                </li>
+                <li>
+                  <%= link_to '<i class="fa fa-power-off"></i> 退出'.html_safe, destroy_user_session_path, method: 'delete' %>
+                </li>
+              </ul>
+            </li>
+          </ul>
+      <% end %>
+    </div>
+  </div>
+</div>
+</div>

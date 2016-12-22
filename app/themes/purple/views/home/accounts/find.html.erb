@@ -1,0 +1,44 @@
+<div id='popup_window'>
+  <!-- div_popup_window_begin -->
+  <div class="loginbox">
+    <div class="box_cont">
+      <a class="closelog" href="#"></a>
+
+      <div class="box_mod pwResetbox">
+        <h4 class="box_title">密码重置！</h4>
+        <%#= render :partial => 'popup_nav' %>
+        <%# form_for :account, :url => reset_accounts_path do |f|, :class => 'weimall_form' -%>
+        <% form_for :account, :url => reset_accounts_path, :html => {:class => 'weimall_form'} do |f| %>
+            <ol class="formbox">
+              <li class="fli">
+                <strong>账号：</strong>
+                <%= f.text_field :email, :size => 20 %>
+                <!--<div class="error"><em class="error_icon"></em>该帐号不存在！</div>-->
+              </li>
+              <li class="fli">
+                <strong>验证码：</strong>
+
+                <div class="validation simple_captcha">
+                  <input type="text" size="6" name='captcha'/>
+
+                  <div class="code_img">
+                    <img src='/accounts/captcha_image'/>
+                    <a title="重新获取验证码" id='simple_captcha' href="#"></a>
+                  </div>
+                </div>
+              </li>
+            </ol>
+
+            <div class="fli logsends">
+              <button class="jqTransformButton" type="submit" name="" id=""><span><span>发送</span></span></button>
+            </div>
+        <% end %>
+      </div>
+    </div>
+    <!--[if IE]>
+    <div class="lboxt"></div>
+    <div class="lboxb"></div><![endif]-->
+  </div>
+
+  <!-- div_popup_window_end -->
+</div>

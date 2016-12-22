@@ -1,0 +1,95 @@
+ruby:
+  params[:where].delete(:unsold_count) if (params[:format] || 'html') == 'html' && params[:where][:unsold_count].is_a?(Hash) && params[:where][:unsold_count][:gteq]
+  params[:where][:target] = {'男' => 'men', '女' => 'women', '儿童' => 'children', '无性别' => 'nogender'}[params[:where][:target]] || params[:where][:target] if params[:where][:target]
+  params[:where][:target].map! { |t| {'男' => 'men', '女' => 'women', '儿童' => 'children', '无性别' => 'nogender'}[t] || t } if params[:where][:target].is_a?(Array)
+  params[:where][:color] = Shop::Product::COLORS[params[:where][:color]] || params[:where][:color] if params[:where][:color]
+  params[:where][:color].map! { |c| Shop::Product::COLORS[c] || c } if params[:where][:color].is_a?(Array)
+  @targets = [
+          {:name => '女士', :value => 'women'},
+          {:name => '男士', :value => 'men'},
+          {:name => '儿童', :value => 'children'},
+          {:name => '无性别', :value => 'nogender'},
+  ]
+  @target ||= params[:where][:target]
+  @color ||= params[:where][:color]
+  @measure ||= params[:where][:measure]
+  @brand ||= params[:where][:brand_id] && Shop::Brand.find_by_id(params[:where][:brand_id])
+  @category1 ||= params[:where][:category1_id] && Shop::Category.find_by_id(params[:where][:category1_id])
+  @category2 ||= params[:where][:category2_id] && Shop::Category.find_by_id(params[:where][:category2_id])
+
+  @page_title = ""
+  if @brand
+    c_ids = (@products_facet[:category1_id]||[]).map { |p| p[:value] }
+    _categories = c_ids.blank? ? [] : Shop::Category.where(["id IN (?)", c_ids]).order("FIELD(id,#{c_ids.join(',')})").map
+    @page_title += [params[:where_brand_id] ? '2013新款' : '网购', @brand.name, @brand.chinese, @brand.abbreviation].reject(&:blank?).map(&:strip).compact.uniq.join
+    @page_title += (@targets.find { |o| o[:value] == @target }||{})[:name] || "" if @target
+    @page_title += "#{Shop::Product::COLORS.map { |k, v| {v => k} }.inject(&:merge)[@color]}色" if @color
+    @page_title += "#{@measure}号" if @measure
+    @page_title += params[:values].values.map(&:to_sz).inject([], &:+).join unless params[:values].blank?
+    @page_title += params[:where_brand_id] ? _categories.map(&:name)[0..1].join(',') : @category2 ? @category2.name : @category1 ? @category1.name : "奢侈品"
+    @page_title += (!params[:where_brand_id].blank? ? ",价格,图片,官方正品行货," : "_官方正品_价格_图片_") + "网上专卖店"
+    @page_keywords = []
+    if params[:where_brand_id]
+      _categories.first(3).map(&:name).map { |c_name| @page_keywords << @brand.name + c_name }
+    else
+      @page_keywords << @brand.name + (@category1 ? @category1.name : @category2.parent.name) if @category1 || @category2.try(:parent)
+      @page_keywords << @brand.chinese + @category2.name if @category2
+      @page_keywords << (@targets.find { |o| o[:value] == @target }||{})[:name].to_s + (@category1 ? @category1.name : @category2.parent.name) if (@category1 || @category2.try(:parent)) && @target
+      @page_keywords << (@targets.find { |o| o[:value] == @target }||{})[:name].to_s + @category2.name if @category2 && @target
+      @page_keywords = @page_keywords.first(3)
+    end
+    @page_description = if params[:where_brand_id]
+                          "珀丽莱官方网站为您提供2013新款#{@brand.name}#{@brand.chinese}#{_categories.first(3).map(&:name).join('，')}等的价格，图片及介绍，与#{@brand.name}#{@brand.chinese}网上专卖店同步发售，保证100%正品行货。"
+                        else
+                          ranges = params[:where] && params[:where][:price] && (gt = params[:where][:price][:gt] || params[:where][:price][:gteq]) && (gt = gt.to_i) && (lt = params[:where][:price][:lt] || params[:where][:price][:lteq]) && (lt = lt.to_i) && "￥#{h gt}~#{h lt}"
+                          "珀丽莱官方网站网购#{@brand.name}#{@brand.chinese}#{ranges}#{(@targets.find { |o| o[:value] == @target }||{})[:name]}#{ @category2 ? @category2.name : @category1 ? @category1.name : '商品'}，为您提供最全面的#{@brand.name}#{@brand.chinese}价格，图片，介绍等推荐信息，与#{@brand.name}#{@brand.chinese}网上专卖店同步发售，保证100%正品行货。"
+                        end
+  elsif @category1 || @category2
+    @page_title += (@targets.find { |o| o[:value] == @target }||{})[:name] || "" if @target
+    @page_title += "#{Shop::Product::COLORS.map { |k, v| {v => k} }.inject(&:merge)[@color]}色" if @color
+    @page_title += "#{@measure}号" if @measure
+    @page_title += params[:values].values.map(&:to_sz).inject([], &:+).join unless params[:values].blank?
+    @page_title += @category2 ? @category2.name : @category1 ? @category1.name : "珠宝"
+    @page_title = "网购#{@page_title}_品牌,价格,正品,网上专卖店"
+    c2_ids = (@products_facet[:category2_id]||[]).map { |p| p[:value] }
+    _categories ||= c2_ids.blank? ? [] : Shop::Category.where("id IN (?)", c2_ids).order("FIELD(id,#{c2_ids.join(',')})").map
+    @page_keywords = (@category1 ? _categories.first(3).map(&:name) : [@category2.name, @category2.parent.name])
+    @page_description = "珀丽莱#{@category1 ? @category1.name : @category2.name }栏目为您提供2013新款#{@category1 ? ('品牌'+@category1.name+'网上专卖店及品牌'+@category1.name+'的') : ('男士、女士品牌'+@category2.name+'产品')}推荐信息，包括男士、女士#{@category1 ? @category1.name : @category2.name }价格，#{'图片，' if @category2 }简介等。"
+  else
+    params[:name].blank?
+    @page_title += [@brand.name, @brand.chinese, @brand.abbreviation].reject(&:blank?).map(&:strip).compact.uniq.join if @brand
+    @page_title += (@targets.find { |o| o[:value] == @target }||{})[:name] || "" if @target
+    @page_title += "#{Shop::Product::COLORS.map { |k, v| {v => k} }.inject(&:merge)[@color]}色" if @color
+    @page_title += "#{@measure}号" if @measure
+    @page_title += params[:values].values.map(&:to_sz).inject([], &:+).join unless params[:values].blank?
+    @page_title += @category2 ? @category2.name : @category1 ? @category1.name : "珠宝"
+    _ids = (@products_facet[:brand_id]||[]).map { |p| p[:value] }
+    _brands ||= _ids.blank? ? [] : Shop::Brand.where("id IN (?)", _ids)
+    # .order("FIELD(id,#{_ids.join(',')})").map
+    @page_description = '官网正品:' + _brands.map { |brand| [brand.name, brand.chinese, brand.abbreviation].uniq.join.gsub(/\s+/, '') }.flatten.reject(&:blank?).map(&:strip).uniq.compact[0..29].join(' ')
+  end
+
+  def conditions_path(options = {})
+    param = params.slice(*%w[where order keyword values]).deep_merge(options).to_param.split('&').reject { |p| !p.match(/^.+=.+$/) }.sort.join('&')
+    '/shop/products' + (param.blank? ? '' : '?') + param
+  end
+
+  @products = @products.includes(:image, :brand)
+
+.product_box
+  /= render 'index_brand'
+  = render 'index_condition'
+  = render 'index_facet'
+  #product_list.pbox_list
+    <!-- div_product_list_begin -->
+    - if @products_count == 0
+      .fbox_zero
+        .mtext
+          h3 没有找到符合您要求的商品
+          | 您可以尝试减少或者改变已选条件来发现更多商品
+    = render :partial => 'shop/products/index_order'
+    #pagination.paginations
+      = render(partial: 'shop/products/product', collection: (@products||[]), as: 'product')
+      .pageber.pageber-b.prefetch
+        = paginate(Kaminari.paginate_array([], total_count: @products_count).page(params[:page]).per(params[:per_page]||70), views_prefix: "shared", :theme => 'shop')
+    <!-- div_product_list_end -->

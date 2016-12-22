@@ -1,0 +1,37 @@
+zh-CN:
+  activerecord:
+    models:
+      shop/category: 类别
+    attributes:
+      shop/category:
+          user_id:  编辑ID
+          parent_id:  父类ID
+          name:  名称
+          description:  描述
+          pic:  图片
+          measures:  尺码列表
+          ranges:  价格区间
+          male?:  男士？
+          female?:  女士？
+          attribute_ids:  属性ID列表，用英文逗号分隔
+          order:  顺序
+          measure_properties:  尺寸参数
+          measure_pic:  尺寸图片
+          contrast_pic:  对照图片
+          bust_offset:  胸围偏移
+          bust_error:  胸围误差
+          waistline_offset:  腰围偏移
+          waistline_error:  腰围误差
+          hip_offset:  臀围偏移
+          hip_error:  臀围误差
+          shoulder_offset:  肩宽偏移
+          shoulder_error:  肩宽误差
+          arm_offset:  臂长偏移
+          arm_error:  臂长误差
+          leg_offset:  腿长偏移
+          leg_error:  腿长误差
+          published?:  发布？
+          active?:  有效？
+          banner_pic: 海报图片
+          editor_id: 编辑ID
+          banner_pic_link: 海报图片链接

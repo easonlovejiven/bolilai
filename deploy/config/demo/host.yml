@@ -1,0 +1,36 @@
+# development:
+#   asset: localhost
+#   photo: localhost
+#   image: [i0.weimall, i1.weimall, i2.weimall]
+#   audio: music.weimall.com
+#   video: video.weimall.com
+#   dynamic: local.weimall.com
+
+# development:
+#   asset:
+#   photo: malltest.weiyatech.com:3000
+#   image: i0.weimall.com:3000
+#   audio: i0.weimall.com:3000
+#   video: i0.weimall.com:3000
+#   static: malltest.weiyatech.com:3000
+#   dynamic: dww.weimall.com:3000
+
+# development:
+#   image: [i0.weimall, i1.weimall, i2.weimall, i3.weimall]
+#   dynamic: malltest.weiyatech.com
+
+development:
+  asset:
+  photo: malltest.weiyatech.com
+  image: [i0.weimall, i1.weimall, i2.weimall]
+  audio: malltest.weiyatech.com
+  video: malltest.weiyatech.com
+  static: malltest.weiyatech.com
+  dynamic: malltest.weiyatech.com
+
+  # http://hyy.msn.weimall.com:3000
+
+production:
+  asset:
+  image: [i0.weimall, i1.weimall, i2.weimall, i3.weimall]
+  dynamic: malltest.weiyatech.com

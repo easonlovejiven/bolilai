@@ -1,0 +1,30 @@
+zh-CN:
+  activerecord:
+    models:
+      shop/brand: 品牌
+    attributes:
+      shop/brand:
+       editor_id: 编辑ID
+       name: 英文名
+       chinese: 中文名
+       abbreviation: 缩写
+       initial: 首字母
+       genre: 类型
+       pic: 图片（130x90）
+       material: 材质（190x100）
+       swf: swf文件
+       link: 圣经链接
+       shop_link: 旗舰店链接
+       title: 标题
+       summary: 概要
+       description: 描述
+       pronunciation: 发音
+       country_id: 国家ID
+       year: 年份
+       keywords: 关键字，用英文逗号分隔
+       special_product_ids: 特殊产品ID列表，用英文逗号分隔
+       order: 排序
+       recommend: 推荐，可以为 { 'featured' => '精选', 'newest' => '最新', 'hot' => '热门' } 之一
+       introduced?: 介绍？
+       published?: 发布？
+       active?: 有效？

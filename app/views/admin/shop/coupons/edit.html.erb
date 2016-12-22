@@ -1,0 +1,199 @@
+<% @record = @coupon %>
+<% @show = !%w[new edit].include?(params[:action]) && @record.valid? %>
+<div class="modal-header">
+  <%= render "admin/modal/header" %>
+</div>
+<%= render 'admin/shared/prompt' %>
+<div class="modal-body">
+  <%= form_for @coupon, as: :coupon, :url => @coupon.new_record? ? admin_shop_coupons_path : admin_shop_coupon_path(@coupon),
+               :html => {:method => @coupon.new_record? ? :post : :put, :multipart => true, class: "form-horizontal"} do |f| %>
+
+      <% if @show %>
+          <div class="form-group">
+            <%= f.label :id, 'ID', {class: 'col-md-3 control-label'} %>
+            <div class="form-control-static">
+              <strong><%= @record.send(:id) %></strong>
+            </div>
+          </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= f.label :code, '<sup>*</sup>代码'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= h @record.code %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <%= f.text_field :code, {class: 'form-control', required: true} %>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :name, '<sup>*</sup>名称'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= h @record.name %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <%= f.text_field :name, {class: 'form-control', required: true} %>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :description, '<sup>*</sup>描述'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= h @record.description %>
+            </div>
+        <% else %>
+            <div class="col-md-8">
+              <%= f.text_area :description, {class: 'form-control', required: true} %>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :started_at, '<sup>*</sup>开始时间'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= @coupon.started_at && @coupon.started_at.to_s(:db) %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <div class="input-group">
+                <%= f.text_field :started_at, {class: 'form-control hasDatepicker', required: true} %>
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+              </div>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :ended_at, '<sup>*</sup>结束时间'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= @coupon.ended_at && @coupon.ended_at.to_s(:db) %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <div class="input-group">
+                <%= f.text_field :ended_at, {class: 'form-control hasDatepicker', required: true} %>
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+              </div>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :limitation, '<sup>*</sup>限制次数'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= h @record.limitation %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <%= f.text_field :limitation, {class: 'form-control', required: true} %>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :function, '<sup>*</sup>功能'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= h @coupon.function %>><%= h Shop::Coupon::FUNCTION[@coupon.function] %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <%= f.select :function, Shop::Coupon::FUNCTION.map { |k, v| [v, k] }, {:include_blank => true}, {class: 'form-control', required: true} %>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :point, '<sup>*</sup>积分'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= h @record.point %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <%= f.text_field :point, {class: 'form-control', required: true} %>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :event_id, '<sup>*</sup>券种'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%#= link_to_if @current_user.can_show_event?, @coupon.event.name, admin_shop_event_path(@coupon.event), :rel => 'facebox' if @coupon.event %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <%#= f.select :event_id, Auction::Event.active.unexpired.map{|e| [%[#{e.id} - #{e.name} - 满#{e.limitation}减#{e.amount} - #{e.started_at && e.started_at.to_date.to_s(:db)}~#{e.started_at && e.ended_at.to_date.to_s(:db)}], e.id] }, { :include_blank => "" } %>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :event_ids, '<sup>*</sup>多项券种'.html_safe, class: 'col-md-3 control-label' %>
+        <%# events = (@coupon.event_ids || '').split.map(&:to_i).compact.map{|id| Auction::Event.active.find_by_id(id)}.compact %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%# events.each do |e| %>
+              <%#= link_to_if @current_user.can_show_event?, e.name, admin_shop_event_path(e), :rel => 'facebox' %>
+              <!--<br>-->
+              <%# end %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <%#= select_tag 'coupon[event_ids]', options_for_select([['', nil]]+Auction::Event.active.unexpired.map{|eve| ["#{eve.id} - #{eve.name} - 满#{eve.limitation}减#{eve.amount} - #{eve.started_at && eve.started_at.to_date.to_s(:db)}~#{eve.started_at && eve.ended_at.to_date.to_s(:db)}", eve.id]}, events.map(&:id)), :multiple => true, :style => "height:450px;" %>
+            </div>
+        <% end %>
+      </div>
+
+      <% if !@coupon.new_record? %>
+          <div class="form-group">
+            <%= f.label :created_at, '创建时间', class: 'col-md-3 control-label' %>
+            <div class="form-control-static">
+              <strong><%= @coupon.created_at && @coupon.created_at.to_s(:db) %></strong>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :updated_at, '修改时间', class: 'col-md-3 control-label' %>
+            <div class="form-control-static">
+              <strong><%= @coupon.updated_at && @coupon.updated_at.to_s(:db) %></strong>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :editor, '编辑', class: 'col-md-3 control-label' %>
+            <div class="form-control-static">
+              <% link_to_if can?(:show, @coupon.editor), @coupon.editor.name, admin_manage_editor_path(@coupon.editor), "data-target" => "rightPanel" if @coupon.editor %>
+            </div>
+          </div>
+      <% end %>
+      <div class="form-actions">
+        <% if @show %>
+            <%= link_to '查看', admin_shop_coupon_path(@coupon), "data-target" => "rightPanel", class: 'btn btn-success' if can?(:show, @coupon) %>
+            <%= link_to '编辑', edit_admin_shop_coupon_path(@coupon), "data-target" => "rightPanel", class: 'btn btn-success' if can?(:update, @coupon) %>
+            <%= link_to '删除', delete_admin_shop_coupon_path(@coupon), "data-target" => "rightPanel", class: 'btn btn-success' if can?(:destroy, @coupon) %>
+        <% else %>
+            <p class="submit">
+              <input type="submit" value="提交" class="btn btn-primary"/>
+            </p>
+        <% end %>
+      </div>
+  <% end %>
+</div>
+<script type="text/javascript">
+    $(function () {
+        App.handleDatePickers()
+    })
+</script>

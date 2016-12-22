@@ -1,0 +1,517 @@
+<!--  支付浮层 -->
+<div class="pay_layer hide" id="pay_layer">
+  <div class="pay_other left"></div>
+  <div class="pay_body right">
+    <div class="down_pay hide">
+      <div class="cash_pay pay" data-name="货到付款">
+        <span class="sprites downline_ico"></span>
+        <p>货到付款</p>
+      </div>
+      <p class="line"></p>
+    </div>
+    <p class="time_tip">请在2小时之内完成支付</p>
+    <div class="on_pay">
+      <div class="wechat_pay mode_pay" data-name="微信">
+        <span class="sprites s_wechat_ico"></span>
+        <p>微信支付</p>
+      </div>
+      <!--<div class="zhaoshang banks mode_pay" data-name="招商银行"></div>-->
+      <div class="zhifubao banks mode_pay" data-name="支付宝"></div>
+      <!--<div class="zhongguo banks mode_pay hide" data-name="中国银联"></div>-->
+    </div>
+  </div>
+</div>
+<!-- 支付提示浮层 -->
+<div class="success_order_layer hide" id="cash_pay">
+  <div class="success_order_body">
+    <h1><span class="sprites success_ico"></span>货到付款请求已提交</h1>
+    <p>珀丽莱客服将尽快联系您确认订单信息</p>
+    <div class="btn scan_order">
+      <p>查看订单</p>
+      <div class="down_shadow"></div>
+    </div>
+  </div>
+</div>
+<div class="success_order_layer hide" id="no_pay">
+  <div class="success_order_body">
+    <h1><span class="sprites success_ico"></span>已全部使用U元支付订单</h1>
+    <p>珀丽莱客服将尽快联系您确认订单信息</p>
+    <div class="btn scan_order">
+      <p>查看订单</p>
+      <div class="down_shadow"></div>
+    </div>
+  </div>
+</div>
+<div class="success_order_layer hide" id="online_pay">
+  <div class="success_layer"></div>
+  <div class="success_order_body">
+    <h1></h1>
+    <p>请前往新窗口完成付款</p>
+    <div class="btn go_pay hide">
+      <p>去付款</p>
+      <div class="down_shadow"></div>
+    </div>
+    <div class="btn go_pay no_border">
+      <p>正在获取支付页面地址信息</p>
+      <p class="round hide">.</p>
+      <p class="round hide">.</p>
+      <p class="round hide">.</p>
+    </div>
+  </div>
+</div>
+<div class="fail_order_layer hide" id="check_pay">
+  <div class="fail_order_body">
+    <h1><span class="sprites fail_ico"></span>付款完成前请不要关闭此窗口</h1>
+    <p>完成付款后请根据您的情况点击按钮</p>
+    <div class="btn ignore_order ignore_round">
+      <span>重新支付</span>
+      <style type="text/css">
+          /*body{
+            -webkit-transform: translate(0,0,0);
+            -webkit-backface-visibility:hidden;
+          }*/
+          .loading16{
+              top:-31px;
+              width: 100px;
+              height: 100px;
+              position: relative;
+              left: 50%;
+              margin:0;
+              margin-left: -50px;
+              border-radius: 100px;
+              -webkit-border-radius: 100px;
+              -webkit-animation-duration:1.5s;
+              -webkit-animation-iteration-count:infinite;
+              -webkit-animation-timing-function:linear;
+              -webkit-animation-name: rotateThis16;
+              -moz-border-radius: 100px;
+              -moz-animation-duration:1.5s;
+              -moz-animation-iteration-count:infinite;
+              -moz-animation-timing-function:linear;
+              -moz-animation-name: rotateThis16;
+          }
+          @-webkit-keyframes rotateThis16{
+              from {-webkit-transform: scale(0.18) rotate(0deg);}
+              to {-webkit-transform: scale(0.18) rotate(360deg);}
+          }
+          @-moz-keyframes rotateThis16{
+              from {-moz-transform: scale(0.18) rotate(0deg);}
+              to {-moz-transform: scale(0.18) rotate(360deg);}
+          }
+          .loading16 > div{
+              width: 18px;
+              height: 18px;
+              background-color: #fff;
+              -webkit-border-radius: 30px;
+              -moz-border-radius: 30px;
+              -o-border-radius: 30px;
+              border-radius: 30px;
+              position: absolute;
+              left: 41px;
+              top: 41px;
+          }
+
+          .bar1{
+              opacity: 0.3;
+              -webkit-transform: rotate(0deg) translate(0, -42px);
+              -moz-transform: rotate(0deg) translate(0, -42px);
+          }
+          .bar2{
+              opacity: 0.4;
+              -webkit-transform: rotate(45deg) translate(0, -42px);
+              -moz-transform: rotate(45deg) translate(0, -42px);
+          }
+          .bar3{
+              opacity: 0.5;
+              -webkit-transform: rotate(90deg) translate(0, -42px);
+              -moz-transform: rotate(90deg) translate(0, -42px);
+          }
+          .bar4{
+              opacity: 0.6;
+              -webkit-transform: rotate(135deg) translate(0, -42px);
+              -moz-transform: rotate(135deg) translate(0, -42px);
+          }
+          .bar5{
+              opacity: 0.7;
+              -webkit-transform: rotate(180deg) translate(0, -42px);
+              -moz-transform: rotate(180deg) translate(0, -42px);
+          }
+          .bar6{
+              opacity: 0.8;
+              -webkit-transform: rotate(225deg) translate(0, -42px);
+              -moz-transform: rotate(225deg) translate(0, -42px);
+          }
+          .bar7{
+              opacity: 0.9;
+              -webkit-transform: rotate(270deg) translate(0, -42px);
+              -moz-transform: rotate(270deg) translate(0, -42px);
+          }
+          .bar8{
+              opacity: 1;
+              -webkit-transform: rotate(315deg) translate(0, -42px);
+              -moz-transform: rotate(315deg) translate(0, -42px);
+          }
+      </style>
+      <div class="order_load">
+        <div class="loading16">
+          <div class="bar1"></div>
+          <div class="bar2"></div>
+          <div class="bar3"></div>
+          <div class="bar4"></div>
+          <div class="bar5"></div>
+          <div class="bar6"></div>
+          <div class="bar7"></div>
+          <div class="bar8"></div>
+        </div>
+      </div>
+
+    </div>
+    <div class="btn purple_bg re_submit_order">
+      <span>完成付款</span>
+      <style type="text/css">
+          /*body{
+            -webkit-transform: translate(0,0,0);
+            -webkit-backface-visibility:hidden;
+          }*/
+          .loading16{
+              top:-31px;
+              width: 100px;
+              height: 100px;
+              position: relative;
+              left: 50%;
+              margin:0;
+              margin-left: -50px;
+              border-radius: 100px;
+              -webkit-border-radius: 100px;
+              -webkit-animation-duration:1.5s;
+              -webkit-animation-iteration-count:infinite;
+              -webkit-animation-timing-function:linear;
+              -webkit-animation-name: rotateThis16;
+              -moz-border-radius: 100px;
+              -moz-animation-duration:1.5s;
+              -moz-animation-iteration-count:infinite;
+              -moz-animation-timing-function:linear;
+              -moz-animation-name: rotateThis16;
+          }
+          @-webkit-keyframes rotateThis16{
+              from {-webkit-transform: scale(0.18) rotate(0deg);}
+              to {-webkit-transform: scale(0.18) rotate(360deg);}
+          }
+          @-moz-keyframes rotateThis16{
+              from {-moz-transform: scale(0.18) rotate(0deg);}
+              to {-moz-transform: scale(0.18) rotate(360deg);}
+          }
+          .loading16 > div{
+              width: 18px;
+              height: 18px;
+              background-color: #fff;
+              -webkit-border-radius: 30px;
+              -moz-border-radius: 30px;
+              -o-border-radius: 30px;
+              border-radius: 30px;
+              position: absolute;
+              left: 41px;
+              top: 41px;
+          }
+
+          .bar1{
+              opacity: 0.3;
+              -webkit-transform: rotate(0deg) translate(0, -42px);
+              -moz-transform: rotate(0deg) translate(0, -42px);
+          }
+          .bar2{
+              opacity: 0.4;
+              -webkit-transform: rotate(45deg) translate(0, -42px);
+              -moz-transform: rotate(45deg) translate(0, -42px);
+          }
+          .bar3{
+              opacity: 0.5;
+              -webkit-transform: rotate(90deg) translate(0, -42px);
+              -moz-transform: rotate(90deg) translate(0, -42px);
+          }
+          .bar4{
+              opacity: 0.6;
+              -webkit-transform: rotate(135deg) translate(0, -42px);
+              -moz-transform: rotate(135deg) translate(0, -42px);
+          }
+          .bar5{
+              opacity: 0.7;
+              -webkit-transform: rotate(180deg) translate(0, -42px);
+              -moz-transform: rotate(180deg) translate(0, -42px);
+          }
+          .bar6{
+              opacity: 0.8;
+              -webkit-transform: rotate(225deg) translate(0, -42px);
+              -moz-transform: rotate(225deg) translate(0, -42px);
+          }
+          .bar7{
+              opacity: 0.9;
+              -webkit-transform: rotate(270deg) translate(0, -42px);
+              -moz-transform: rotate(270deg) translate(0, -42px);
+          }
+          .bar8{
+              opacity: 1;
+              -webkit-transform: rotate(315deg) translate(0, -42px);
+              -moz-transform: rotate(315deg) translate(0, -42px);
+          }
+      </style>
+      <div class="order_load">
+        <div class="loading16">
+          <div class="bar1"></div>
+          <div class="bar2"></div>
+          <div class="bar3"></div>
+          <div class="bar4"></div>
+          <div class="bar5"></div>
+          <div class="bar6"></div>
+          <div class="bar7"></div>
+          <div class="bar8"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="success_order_layer hide" id="success_pay">
+  <div class="success_order_body">
+    <h1></h1>
+    <p>珀丽莱客服将尽快为您发货</p>
+    <div class="btn scan_order">
+      <p>查看订单</p>
+      <div class="down_shadow"></div>
+    </div>
+  </div>
+</div>
+<div class="fail_order_layer hide" id="fail_orderlayer">
+  <div class="fail_order_body">
+    <h1></h1>
+    <p>您可以根据情况选择下面的操作</p>
+    <div class="btn ignore_order">
+      <p>稍后再说</p>
+      <div class="down_shadow"></div>
+    </div>
+    <div class="btn purple_bg re_submit_order">
+      <span>重新提交</span>
+      <style type="text/css">
+          /*body{
+            -webkit-transform: translate(0,0,0);
+            -webkit-backface-visibility:hidden;
+          }*/
+          .loading16{
+              top:-31px;
+              width: 100px;
+              height: 100px;
+              position: relative;
+              left: 50%;
+              margin:0;
+              margin-left: -50px;
+              border-radius: 100px;
+              -webkit-border-radius: 100px;
+              -webkit-animation-duration:1.5s;
+              -webkit-animation-iteration-count:infinite;
+              -webkit-animation-timing-function:linear;
+              -webkit-animation-name: rotateThis16;
+              -moz-border-radius: 100px;
+              -moz-animation-duration:1.5s;
+              -moz-animation-iteration-count:infinite;
+              -moz-animation-timing-function:linear;
+              -moz-animation-name: rotateThis16;
+          }
+          @-webkit-keyframes rotateThis16{
+              from {-webkit-transform: scale(0.18) rotate(0deg);}
+              to {-webkit-transform: scale(0.18) rotate(360deg);}
+          }
+          @-moz-keyframes rotateThis16{
+              from {-moz-transform: scale(0.18) rotate(0deg);}
+              to {-moz-transform: scale(0.18) rotate(360deg);}
+          }
+          .loading16 > div{
+              width: 18px;
+              height: 18px;
+              background-color: #fff;
+              -webkit-border-radius: 30px;
+              -moz-border-radius: 30px;
+              -o-border-radius: 30px;
+              border-radius: 30px;
+              position: absolute;
+              left: 41px;
+              top: 41px;
+          }
+
+          .bar1{
+              opacity: 0.3;
+              -webkit-transform: rotate(0deg) translate(0, -42px);
+              -moz-transform: rotate(0deg) translate(0, -42px);
+          }
+          .bar2{
+              opacity: 0.4;
+              -webkit-transform: rotate(45deg) translate(0, -42px);
+              -moz-transform: rotate(45deg) translate(0, -42px);
+          }
+          .bar3{
+              opacity: 0.5;
+              -webkit-transform: rotate(90deg) translate(0, -42px);
+              -moz-transform: rotate(90deg) translate(0, -42px);
+          }
+          .bar4{
+              opacity: 0.6;
+              -webkit-transform: rotate(135deg) translate(0, -42px);
+              -moz-transform: rotate(135deg) translate(0, -42px);
+          }
+          .bar5{
+              opacity: 0.7;
+              -webkit-transform: rotate(180deg) translate(0, -42px);
+              -moz-transform: rotate(180deg) translate(0, -42px);
+          }
+          .bar6{
+              opacity: 0.8;
+              -webkit-transform: rotate(225deg) translate(0, -42px);
+              -moz-transform: rotate(225deg) translate(0, -42px);
+          }
+          .bar7{
+              opacity: 0.9;
+              -webkit-transform: rotate(270deg) translate(0, -42px);
+              -moz-transform: rotate(270deg) translate(0, -42px);
+          }
+          .bar8{
+              opacity: 1;
+              -webkit-transform: rotate(315deg) translate(0, -42px);
+              -moz-transform: rotate(315deg) translate(0, -42px);
+          }
+      </style>
+      <div class="order_load">
+        <div class="loading16">
+          <div class="bar1"></div>
+          <div class="bar2"></div>
+          <div class="bar3"></div>
+          <div class="bar4"></div>
+          <div class="bar5"></div>
+          <div class="bar6"></div>
+          <div class="bar7"></div>
+          <div class="bar8"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="fail_order_layer hide" id="fail_url">
+  <div class="fail_order_body">
+    <h1>抱歉,无法进入支付页面</h1>
+    <p>您可以根据情况选择下面的操作</p>
+    <div class="btn ignore_order">
+      <p>稍后再说</p>
+      <div class="down_shadow"></div>
+    </div>
+    <div class="btn purple_bg re_submit_order">
+      <span>重试一次</span>
+      <style type="text/css">
+          /*body{
+            -webkit-transform: translate(0,0,0);
+            -webkit-backface-visibility:hidden;
+          }*/
+          .loading16{
+              top:-31px;
+              width: 100px;
+              height: 100px;
+              position: relative;
+              left: 50%;
+              margin:0;
+              margin-left: -50px;
+              border-radius: 100px;
+              -webkit-border-radius: 100px;
+              -webkit-animation-duration:1.5s;
+              -webkit-animation-iteration-count:infinite;
+              -webkit-animation-timing-function:linear;
+              -webkit-animation-name: rotateThis16;
+              -moz-border-radius: 100px;
+              -moz-animation-duration:1.5s;
+              -moz-animation-iteration-count:infinite;
+              -moz-animation-timing-function:linear;
+              -moz-animation-name: rotateThis16;
+          }
+          @-webkit-keyframes rotateThis16{
+              from {-webkit-transform: scale(0.18) rotate(0deg);}
+              to {-webkit-transform: scale(0.18) rotate(360deg);}
+          }
+          @-moz-keyframes rotateThis16{
+              from {-moz-transform: scale(0.18) rotate(0deg);}
+              to {-moz-transform: scale(0.18) rotate(360deg);}
+          }
+          .loading16 > div{
+              width: 18px;
+              height: 18px;
+              background-color: #fff;
+              -webkit-border-radius: 30px;
+              -moz-border-radius: 30px;
+              -o-border-radius: 30px;
+              border-radius: 30px;
+              position: absolute;
+              left: 41px;
+              top: 41px;
+          }
+
+          .bar1{
+              opacity: 0.3;
+              -webkit-transform: rotate(0deg) translate(0, -42px);
+              -moz-transform: rotate(0deg) translate(0, -42px);
+          }
+          .bar2{
+              opacity: 0.4;
+              -webkit-transform: rotate(45deg) translate(0, -42px);
+              -moz-transform: rotate(45deg) translate(0, -42px);
+          }
+          .bar3{
+              opacity: 0.5;
+              -webkit-transform: rotate(90deg) translate(0, -42px);
+              -moz-transform: rotate(90deg) translate(0, -42px);
+          }
+          .bar4{
+              opacity: 0.6;
+              -webkit-transform: rotate(135deg) translate(0, -42px);
+              -moz-transform: rotate(135deg) translate(0, -42px);
+          }
+          .bar5{
+              opacity: 0.7;
+              -webkit-transform: rotate(180deg) translate(0, -42px);
+              -moz-transform: rotate(180deg) translate(0, -42px);
+          }
+          .bar6{
+              opacity: 0.8;
+              -webkit-transform: rotate(225deg) translate(0, -42px);
+              -moz-transform: rotate(225deg) translate(0, -42px);
+          }
+          .bar7{
+              opacity: 0.9;
+              -webkit-transform: rotate(270deg) translate(0, -42px);
+              -moz-transform: rotate(270deg) translate(0, -42px);
+          }
+          .bar8{
+              opacity: 1;
+              -webkit-transform: rotate(315deg) translate(0, -42px);
+              -moz-transform: rotate(315deg) translate(0, -42px);
+          }
+      </style>
+      <div class="order_load">
+        <div class="loading16">
+          <div class="bar1"></div>
+          <div class="bar2"></div>
+          <div class="bar3"></div>
+          <div class="bar4"></div>
+          <div class="bar5"></div>
+          <div class="bar6"></div>
+          <div class="bar7"></div>
+          <div class="bar8"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="fail_order_layer hide" id="wechat_app_tip">
+  <div class="go_pic"></div>
+  <div class="font_pic"></div>
+</div>
+<div class="fail_order_layer hide" id="wechat_share_tip">
+  <div class="go_pic"></div>
+  <div class="wechat_share_font"></div>
+</div>

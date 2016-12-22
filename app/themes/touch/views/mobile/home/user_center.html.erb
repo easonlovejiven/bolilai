@@ -1,0 +1,99 @@
+<!-- CSS -->
+<%= stylesheet_link_tag "touch/frame" %>
+<%= stylesheet_link_tag "touch/frame_respond" %>
+<!-- 压缩的model/view/controller -->
+<%= javascript_include_tag "touch/controller" %>
+<!-- body -->
+<body id="body" class="clear_fix safari ratio2 ios ">
+<!-- header -->
+<% content_for :header do %>
+    <header class="border_1px">
+      <!-- <div class="left_option left"> -->
+      <div class="ico_wrapper back_ico left hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <!-- </div> -->
+      <div class="title ">
+        个人中心
+      </div>
+      <div class="ico_wrapper add_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+    </header>
+<% end %>
+
+<!-- 调用页面主体 -->
+<script type="text/javascript">
+  $(function () {
+    var $item = $('.first .user_item, .logout_ico');
+    user_center_controller.initialize($item);
+  })
+</script>
+<!--个人中心-->
+<div class="main" id="main">
+  <div>
+    <div class="user_detail">
+      <p class="user_name ellipsis"><%= @current_user.name %></p>
+
+      <div>
+        <p class="user_level left">等级<span><%= @current_user.level.present? ? @current_user.level.name : "普通" %></span>用户
+        </p>
+
+        <p class="user_gene left">积分</p>
+        <span class="ellipsis left genes"><%= @current_account.info.point %></span>
+      </div>
+      <span class="right logout_ico" data-href="/logout">
+        <span class="sprites"></span>
+      </span>
+    </div>
+    <div class="user_wrapper outer_border first">
+      <% if !@current_account.has_password %>
+          <div class="user_item outer_border account">
+            <p>帐号管理</p>
+            <span class="enter_ico sprites"></span>
+
+            <div class="down_shadow"></div>
+          </div>
+      <% end %>
+      <div class="user_item outer_border voucher" data-href="/trades?status=pay">
+        <p>订单管理</p>
+        <span class="enter_ico sprites"></span>
+
+        <div class="down_shadow"></div>
+      </div>
+      <div class="user_item voucher outer_border" data-href="/vouchers">
+        <p>我的代金券</p>
+        <% if @current_user.vouchers.avalable.count>0 %>
+            <em><%= @current_user.vouchers.avalable.count %></em>
+        <% end %>
+        <span class="enter_ico sprites"></span>
+
+        <div class="down_shadow"></div>
+      </div>
+      <div class="user_item outer_border" data-href="/favorites">
+        <p>商品收藏</p>
+        <span class="enter_ico sprites"></span>
+
+        <div class="down_shadow"></div>
+      </div>
+    </div>
+    <div class="user_wrapper last outer_border">
+      <div class="user_item outer_border" data-href="/mhelp">
+        <p>使用帮助</p>
+        <span class="enter_ico sprites"></span>
+
+        <div class="down_shadow"></div>
+      </div>
+      <div class="user_item" data-href="/mabout">
+        <p>关于珀丽莱</p>
+        <span class="enter_ico sprites"></span>
+
+        <div class="down_shadow"></div>
+      </div>
+    </div>
+  </div>
+</div>

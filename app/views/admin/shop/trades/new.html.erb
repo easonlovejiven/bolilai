@@ -1,0 +1,354 @@
+<%#= render template: 'admin/shop/trades/new', handlers: [:slim] %>
+
+<%
+   units = params[:auction_trade].try(:[], 'units')
+   units = units.values if units.is_a?(Hash)
+   @original = Shop::Trade.find(params[:id]) if params[:id]
+   units ||= @original.units.map { |unit| unit.attributes.slice(*%w[percent guide_percent level_percent point_percent multibuy_id voucher_id level_id]).merge(product_id: unit.item.product.id, measure: unit.item.measure) } if @original
+%>
+
+<% @record = @trade %>
+<% @show = !%w[new edit].include?(params[:action]) && @record.valid? %>
+<div class="modal-header">
+  <%= render "admin/modal/header" %>
+</div>
+<%= render 'admin/shared/prompt' %>
+<div class="modal-body">
+  <%= form_for @trade, url: admin_shop_trades_path, method: @trade.new_record? ? :post : :put, html: {multipart: true, class: "form-horizontal"} do |f| %>
+      <% unless @trade.new_record? %>
+          <div class="form-group">
+            <%= f.label :id, 'ID', {class: 'col-md-3 control-label'} %>
+            <div class="form-control-static">
+              <strong><%= @record.id %></strong>
+            </div>
+          </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= f.label :user_id, '<sup>*</sup>代码'.html_safe, class: 'col-md-3 control-label' %>
+        <div class="col-md-8">
+          <%= h @record.user_id %>
+          <div id='account_query'>
+            <div class="input-group">
+              <%= text_field_tag :auction_trade_user_query, @trade.user_id, class: 'form-control' %>
+              <div class="input-group-btn">
+                <%= f.button t('confirm'), class: 'btn btn-default' %>
+              </div>
+            </div>
+          </div>
+
+          <div id='account_text' style='display: none;'>
+            <%= check_box_tag :account_select, size: 30 %>
+            <%= f.button t('confirm'), class: 'btn btn-default' %>
+          </div>
+          <span id='account_id'>
+            <small><strong> &nbsp;&nbsp;ID：</strong></small>
+          </span>
+          <span id='account_user_name'>
+            <small><strong> &nbsp;&nbsp;姓名：</strong></small>
+          </span>
+          <span id='account_user_sex'>
+            <small><strong> &nbsp;&nbsp;性别：</strong></small>
+          </span>
+          <span id='account_phone'>
+            <small><strong> &nbsp;&nbsp;手机：</strong></small>
+          </span>
+          <span id='account_email'>
+            <small><strong> &nbsp;&nbsp;邮箱：</strong></small>
+          </span>
+          <span id='account_level'>
+            <small><strong> &nbsp;&nbsp;等级：</strong></small>
+          </span>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= f.label :units, '<sup>*</sup>商品'.html_safe, class: 'col-md-3 control-label' %>
+        <div class="col-md-8">
+          <div class="input-group">
+            <div class="input-group-addon">
+              <span>产品</span>
+            </div>
+            <%= text_field_tag :product_id, '', class: "form-control" %>
+          </div>
+
+          <div class="input-group">
+            <div class="input-group-addon">
+              <span>尺寸</span>
+            </div>
+            <%= select_tag :product_measure, [], class: "form-control" %>
+            <span class="input-group-btn">
+              <%= button_tag t('confirm'), class: 'btn btn-default', id: 'product_confirm' %>
+            </span>
+          </div>
+
+          <div class="input-group">
+            <div class="input-group-addon">
+              <span>单件</span>
+            </div>
+            <%= text_field_tag :item_id, '', class: "form-control" %>
+          </div>
+
+          <div class="input-group">
+            <div class="input-group-addon">
+              <span>编号</span>
+            </div>
+            <%= text_field_tag :item_identifer, '', class: "form-control" %>
+          </div>
+
+          <div class="input-group">
+            <div class="input-group-addon">
+              <span>条码</span>
+            </div>
+            <%= text_field_tag :item_barcode, '', class: "form-control" %>
+            <span class="input-group-btn">
+              <%= button_tag t('confirm'), class: 'btn btn-default', id: 'item_confirm' %>
+            </span>
+          </div>
+
+          <div class="input-group">
+            <div class="input-group-addon">
+              <span>条码</span>
+            </div>
+            <%= text_field_tag :item_barcode, '', class: "form-control" %>
+            <span class="input-group-btn">
+              <%= button_tag t('confirm'), class: 'btn btn-default', id: 'item_confirm' %>
+            </span>
+          </div>
+          <table class="form-table">
+            <thead>
+            <tr class="units_selector">
+              <th></th>
+            </tr>
+            <tr>
+              <th style="width: 2em"></th>
+              <th>产品</th>
+              <th>产品ID</th>
+              <th>产品尺寸</th>
+              <th>单件ID</th>
+              <th>单件编号</th>
+              <th>单件条码</th>
+              <th>市场价</th>
+              <th>店铺价</th>
+              <th>销售价</th>
+              <th>最低价</th>
+              <th>成交价</th>
+              <th>等级折扣</th>
+              <th>连拍折扣</th>
+              <th>店铺折扣</th>
+              <th>积分折扣</th>
+              <th>代金券</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <div> 总价：<span class='price_total'></span></div>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :price, class: 'col-md-3 control-label' %>
+        <div id="auction_trade_price" class="col-md-8">
+        </div>
+      </div>
+      <div class="form-group">
+        <%= f.label :need_delivery, class: 'col-md-3 control-label' %>
+        <div class="col-md-8">
+          <label class="radio radio-inline"><%= f.check_box :need_delivery %> 需要</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= f.label :delivery_time, class: 'col-md-3 control-label' %>
+        <div class="col-md-8">
+          <% Shop::Trade::DELIVERY_TIMES.keys.each do |delivery_time| %>
+              <label class="radio radio-inline">
+                <%= f.radio_button :delivery_time, delivery_time %>
+                <span><%= t("activerecord.enums.auction/trade.delivery_time.#{delivery_time}") %></span>
+              </label>
+          <% end %>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= f.label :delivery_phone, class: 'col-md-3 control-label' %>
+        <div class="col-md-8">
+          <%= f.text_field :delivery_phone, class: 'form-control' %>
+        </div>
+      </div>
+      <!--
+            tr.contact
+				th = f.label :contact
+				td
+					#contact_form
+						= f.fields_for :contact, trade.contact || Shop::Contact.new do |sf|
+							table.form-table
+								tbody
+									tr
+										td = sf.label :id
+										td = sf.label :name
+										td = sf.label :mobile
+										td = sf.label :phone
+										td = sf.label :country
+										td = sf.label :province
+										td = sf.label :city
+										td = sf.label :town
+										td = sf.label :address
+										td = sf.label :postcode
+									tr
+										td = sf.select :id, []
+										td = sf.text_field :name
+										td = sf.text_field :mobile
+										td = sf.text_field :phone
+										td = sf.text_field :country
+										td = sf.text_field :province
+										td = sf.text_field :city
+										td = sf.text_field :town
+										td = sf.text_field :address
+										td = sf.text_field :postcode
+					#contact_list
+      -->
+      <div class="form-group">
+        <%= f.label :need_invoice, class: 'col-md-3 control-label' %>
+        <div class="col-md-8">
+          <label class="radio radio-inline"> <%= f.check_box :need_invoice %> 发票</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :invoice_type, class: 'col-md-3 control-label' %>
+        <div class="col-md-8">
+          <% Shop::Trade::INVOICE_TYPES.keys.each do |invoice_type| %>
+              <label class="radio radio-inline">
+                <%= f.radio_button :invoice_type, invoice_type %>
+                <span><%= t("activerecord.enums.auction/trade.invoice_type.#{invoice_type}") %></span>
+              </label>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :invoice_content, class: 'col-md-3 control-label' %>
+        <div class="col-md-8">
+          <% Shop::Trade::INVOICE_CONTENTS.keys.each do |invoice_content| %>
+              <label class="radio radio-inline">
+                <%= f.radio_button :invoice_content, invoice_content %>
+                <span><%= t("activerecord.enums.auction/trade.invoice_content.#{invoice_content}") %></span>
+              </label>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :invoice_title, class: 'col-md-3 control-label' %>
+        <div class="col-md-8">
+          <%= f.text_field :invoice_title, class: 'form-control' %>
+        </div>
+      </div>
+
+      <!--
+      tr.invoice_contact
+				th = f.label :invoice_contact
+				td
+					#invoice_contact_form
+						= f.fields_for :invoice_contact, trade.invoice_contact || Shop::Contact.new do |sf|
+							table.form-table
+								tbody
+									tr
+										td = sf.label :id
+										td = sf.label :name
+										td = sf.label :mobile
+										td = sf.label :phone
+										td = sf.label :country
+										td = sf.label :province
+										td = sf.label :city
+										td = sf.label :town
+										td = sf.label :address
+										td = sf.label :postcode
+									tr
+										td = sf.select :id, []
+										td = sf.text_field :name
+										td = sf.text_field :mobile
+										td = sf.text_field :phone
+										td = sf.text_field :country
+										td = sf.text_field :province
+										td = sf.text_field :city
+										td = sf.text_field :town
+										td = sf.text_field :address
+										td = sf.text_field :postcode
+					#invoice_contact_list
+			tr.mall_promotion_id
+				th = f.label :mall_promotion_id
+				td
+					= f.collection_select :mall_promotion_id, trade.shop.mall_promotions.where(':current BETWEEN started_at AND ended_at', current: Time.current).order('code ASC'), :id, :code, include_blank: true if trade.shop
+					= f.error_message_on
+      -->
+
+      <div class="form-group">
+        <%= f.label :shop_identifier, class: 'col-md-3 control-label' %>
+        <div class="col-md-8">
+          <%= f.text_field :shop_identifier, class: 'form-control' %>
+          <span class="note"><%= f.error_message_on :shop_identifier %></span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :comment, class: 'col-md-3 control-label' %>
+        <div class="col-md-8">
+          <%= f.text_field :comment, class: 'form-control' %>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= f.label :remark, class: 'col-md-3 control-label' %>
+        <div class="col-md-8">
+          <%= f.text_field :remark, class: 'form-control' %>
+        </div>
+      </div>
+      <!--<div class="form-group">-->
+      <!--<%#= f.label :package_from, class: 'col-md-3 control-label' %>-->
+      <!--<div class="col-md-8">-->
+      <!--<%#= f.text_field :package_from, class: 'form-control' %>-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--<div class="form-group">-->
+      <!--<%#= f.label :package_to, class: 'col-md-3 control-label' %>-->
+      <!--<div class="col-md-8">-->
+      <!--<%#= f.text_field :package_to, class: 'form-control' %>-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--<div class="form-group">-->
+      <!--<%#= f.label :package_content, class: 'col-md-3 control-label' %>-->
+      <!--<div class="col-md-8">-->
+      <!--<%#= f.text_field :package_content, class: 'form-control' %>-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--<div class="form-group">-->
+      <!--<%#= f.label :whisper_style, class: 'col-md-3 control-label' %>-->
+      <!--<div class="col-md-8">-->
+      <!--<%#= f.select :whisper_style, options_for_select(["", "清新素雅", "温馨迷人", "炫彩阳光"]), class: 'form-control' %>-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--<div class="form-group">-->
+      <!--<%#= f.label :whisper_from, class: 'col-md-3 control-label' %>-->
+      <!--<div class="col-md-8">-->
+      <!--<%#= f.text_field :whisper_from, class: 'form-control' %>-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--<div class="form-group">-->
+      <!--<%#= f.label :whisper_to, class: 'col-md-3 control-label' %>-->
+      <!--<div class="col-md-8">-->
+      <!--<%#= f.text_field :whisper_to, class: 'form-control' %>-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--<div class="form-group">-->
+      <!--<%#= f.label :whisper_content, class: 'col-md-3 control-label' %>-->
+      <!--<div class="col-md-8">-->
+      <!--<%#= f.text_field :whisper_content, class: 'form-control' %>-->
+      <!--</div>-->
+      <!--</div>-->
+      <% unless @show %>
+          <div class="form-actions">
+            <%= f.submit '提交', class: 'btn btn-primary' %>
+          </div>
+      <% end %>
+  <% end %>
+</div>

@@ -1,0 +1,24 @@
+development:
+  high:
+    gateway: "http://sdk999ws.eucp.b2m.cn:8080/sdk/SDKService?wsdl"
+    serial: ""
+    key: ""
+    password: ""
+  normal:
+    gateway: "http://sdkhttp.eucp.b2m.cn/sdk/SDKService?wsdl"
+    serial: ""
+    key: ""
+    password: ""
+    
+
+production:
+  high:
+    gateway: ""
+    serial: ""
+    key: ""
+    password: ""
+  normal:
+    gateway: ""
+    serial: ""
+    key: ""
+    password: ""

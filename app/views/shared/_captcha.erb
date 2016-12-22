@@ -1,0 +1,17 @@
+<div class='captcha_image'>
+  <label>输入验证码</label>
+
+  <div class="input-group">
+    <%= text_field_tag :captcha, '', class: 'form-control' %>
+    <span class="input-group-btn">
+      <img alt="captcha" src="" id="captcha_image" style="display: none">
+      <a href="javascript:;" id="nextCaptcha" class="next-captcha">换一张</a>
+    </span>
+  </div>
+</div>
+
+<% content_for :page_javascript do %>
+    <script type="text/javascript">
+        App.simpleCaptcha();
+    </script>
+<% end %>

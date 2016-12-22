@@ -1,0 +1,120 @@
+<div class="row">
+  <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+    <!--<h1 class="page-title txt-color-blueDark">-->
+      <!--<i class="fa-fw fa fa-home"></i>-->
+      <!--<%#= @current_user.try(:name) %>-->
+    <!--</h1>-->
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-6 col-md-6">
+    <div class="jarviswidget">
+      <header>
+        <h2> 业务概览 </h2>
+      </header>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">订单</h3>
+        </div>
+        <div class="panel-body">
+          <label class='lk'>
+            <%= link_to_if can?(:show, Shop::Trade), "今日订单<b>(#{@tody_trades.count})</b>".html_safe,
+                           admin_shop_trades_path(where: {created_at: {gteq: Date.today, lteq: Date.today.end_of_day}}),
+                           remote: true, class: "#{'active' if @tody_trades.count>0}" %></label>
+          <label class='lk'>
+            <%= link_to_if can?(:show, Shop::Trade), "昨日订单<b>(#{@yestoday_trades.count})</b>".html_safe,
+                           admin_shop_trades_path(where: {created_at: {gteq: Date.today-1.day, lteq: (Date.today-1.day).end_of_day}}),
+                           remote: true, class: "#{'active' if @yestoday_trades.count>0}" %></label>
+          <label class='lk'>
+            <%= link_to_if can?(:show, Shop::Trade), "今日已付款<b>(#{@tody_pay_trades.count})</b>".html_safe,
+                           admin_shop_trades_path(where: {created_at: {gteq: Date.today, lteq: (Date.today).end_of_day}, status: "complete"}),
+                           remote: true, class: "#{'active' if @tody_pay_trades.count>0}" %></label>
+          <label class='lk'>
+            <%= link_to_if can?(:show, Shop::Trade), "昨日已付款<b>(#{@yestoday_pay_trades.count})</b>".html_safe,
+                           admin_shop_trades_path(where: {created_at: {gteq: Date.today-1.day, lteq: (Date.today-1.day).end_of_day}, status: "complete"}),
+                           remote: true, class: "#{'active' if @yestoday_pay_trades.count>0}" %></label>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">会员</h3>
+        </div>
+        <div class="panel-body">
+          <label class='lk'>
+            <%= link_to_if can?(:show, Shop::User), "今日新增<b>(#{@tody_users.count})</b>".html_safe,
+                           admin_shop_users_path(where: {created_at: {gteq: Date.today, lteq: Date.today.end_of_day}}),
+                           remote: true, class: "#{'active' if @tody_users.count>0}" %></label>
+          <label class='lk'>
+            <%= link_to_if can?(:show, Shop::User), "昨日新增<b>(#{@yestoday_users.count})</b>".html_safe,
+                           admin_shop_users_path(where: {created_at: {gteq: Date.today-1.day, lteq: (Date.today-1.day).end_of_day}}),
+                           remote: true, class: "#{'active' if @yestoday_users.count>0}" %></label>
+          <label class='lk'>
+            <%= link_to_if can?(:show, Shop::User), "会员总数<b>(#{@all_users.count})</b>".html_safe,
+                           admin_shop_users_path, remote: true, class: 'active' %></label>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">商品</h3>
+        </div>
+        <div class="panel-body">
+          <label class='lk'>
+            <%= link_to_if can?(:show, Shop::Product), "在线商品<b>(#{@online_products.count})</b>".html_safe,
+                           admin_shop_products_path(where: {published: true}),
+                           remote: true, class: 'active' %></label>
+          <label class='lk'>
+            <%= link_to_if can?(:show, Shop::Product), "已下线商品<b>(#{@offline_products.count})</b>".html_safe,
+                           admin_shop_products_path(where: {published: false}),
+                           remote: true, class: "#{'active' if @offline_products.count>0}" %></label>
+          <label class='lk'>
+            <%= link_to_if can?(:show, Shop::Product), "缺货商品<b>(#{@short_products.size})</b>".html_safe,
+                           admin_shop_products_path(status: "out_store"),
+                           remote: true, class: "#{'active' if @short_products.size>0}" %></label>
+          <label class='lk'>
+            <%= link_to_if can?(:show, Shop::Product), "库存量<b>(#{@product_items.count})</b>".html_safe,
+                           admin_shop_products_path(status: "in_store"),
+                           remote: true, class: 'active' %></label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-md-6">
+    <div class="jarviswidget">
+      <header>
+        <h2> 待处理事项 </h2>
+      </header>
+      <div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">订单</h3>
+          </div>
+          <div class="panel-body">
+            <label class='lk'>
+              <%= link_to_if can?(:show, Shop::Trade), "审核订单<b>(#{@audit_trades.count})</b>".html_safe,
+                             admin_shop_trades_path(where: {status: "audit"}), remote: true,
+                             class: "#{'active' if @audit_trades.count>0}" %></label>
+            <label class='lk'>
+              <%= link_to_if can?(:show, Shop::Trade), "未发货<b>(#{@ship_trades.count})</b>".html_safe,
+                             admin_shop_trades_path(where: {status: "ship"}), remote: true,
+                             class: "#{'active' if @ship_trades.count>0}" %></label>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">商品</h3>
+          </div>
+          <div class="panel-body">
+            <label class='lk'>
+              <%= link_to_if can?(:show, Shop::Product), "缺货商品<b>(#{@short_products.size})</b>".html_safe,
+                             admin_shop_products_path(status: "out_store"), remote: true,
+                             class: "#{'active' if @short_products.size>0}" %></label>
+            <label class='lk'>
+              <%= link_to_if can?(:show, Shop::Product), "库存量<b>(#{@product_items.count})</b>".html_safe,
+                             admin_shop_products_path(status: "in_store"), remote: true,
+                             class: 'active' %></label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,75 @@
+<!-- CSS -->
+<%= stylesheet_link_tag "touch/frame" %>
+<%= stylesheet_link_tag "touch/frame_respond" %>
+<!-- 压缩的model/view/controller -->
+<%= javascript_include_tag "touch/controller" %>
+<!-- header -->
+<% content_for :header do %>
+    <header class="border_1px">
+      <!-- <div class="left_option left"> -->
+      <div class="ico_wrapper back_ico left hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <!-- </div> -->
+      <div class="title ">
+        我的代金券
+      </div>
+    </header>
+<% end %>
+
+<!-- 调用页面主体 -->
+<div class="main" id="main">
+  <div>
+    <!-- 页面主主体 -->
+    <!--<form id="voucher_form" class="border_1px">-->
+    <!--<div class="voucher_input_bg">-->
+    <!--<div class="voucher_input left">-->
+    <!--<input class="voucher" type="text" placeholder="输入代金券序列号">-->
+    <!--<span class="del sprites right hide"><em class="down_shadow"></em></span>-->
+    <!--</div>-->
+    <!--<div class="add_voucher_btn right btn black push">-->
+    <!--<input type="submit" value="添加" id="add_vouchers">-->
+
+    <!--<div class="down_shadow"></div>-->
+    <!--</div>-->
+    <!--</div>-->
+
+    <script type="text/javascript">
+      views.empty_style();
+      $(function () {
+        //              voucher_controller.initialize($('#voucher_form'), $('.del.sprites'), $('.add_voucher_btn'));
+        app.push_event($(".up_page.use, .down_page.use"));
+      });
+    </script>
+    </form>
+
+    <div class="voucher_title border_1px">
+      <span class="voucher_role">名称和规则</span>
+      <span class="end_data right right_border_1px left_border_1px">截止日期</span>
+    </div>
+    <div class="vouchers <%= "border_1px" if !@vouchers.blank? %>">
+      <% if @vouchers.blank? %>
+          <div class="voucher_empty">
+            <p>暂无优惠券</p>
+          </div>
+      <% end %>
+      <% @vouchers.each do |voucher| %>
+          <div class="<%= (!voucher.available?) ? "useless push" : "useful" %> border_1px">
+            <div class="voucher_detail">
+              <span class="voucher_name ellipsis"><%= voucher.event.name %></span>
+              <span class="voucher_info ellipsis"> <%= voucher.event.view_display %></span>
+              <span class="voucher_date voucher_info ellipsis right"><%= voucher.event.ended_at.to_s(:db) && voucher.event.ended_at.to_s(:db) %></span>
+            </div>
+            <% if !voucher.available? %>
+                <div class="down_shadow"></div>
+                <div class="voucher_outdate"><p><%= voucher.used? ? "已使用" : "已过期" %></p></div>
+            <% end %>
+      <% end %>
+      </div>
+    </div>
+    <!-- 分页 -->
+    <%= paginate @vouchers, views_prefix: "mobile", :theme => 'shop' %>
+  </div>
+</div>

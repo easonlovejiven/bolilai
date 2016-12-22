@@ -1,0 +1,5 @@
+en:
+  activerecord:
+    models:
+      shop/trade: Trade
+      shop/unit: Unit

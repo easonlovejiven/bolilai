@@ -1,0 +1,233 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <%= render :partial => "layouts/touch/meta" %>
+  <%= javascript_include_tag "touch/view.min" %>
+</head>
+
+<!-- body -->
+<body id="body" class="clear_fix safari ratio2 ios ">
+<!-- header -->
+<% if content_for?(:header) %>
+    <%= yield(:header) %>
+<% else %>
+    <header class="border_1px">
+      <!-- <div class="left_option left"> -->
+      <div class="ico_wrapper back_ico left hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <!-- </div> -->
+      <div class="title logo sprites"></div>
+      <div class="ico_wrapper add_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper edit_ico right hide">
+        <span class="">编辑
+          <em class="down_shadow"></em>
+        </span>
+        <span class="">完成
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper info_ico right hide text">
+        详情<em class="down_shadow"></em>
+      </div>
+      <div class="ico_wrapper filter_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper mode_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper search_ico right hide" data-href="/search">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+    </header>
+<% end %>
+<!-- end header -->
+<!--  nav  -->
+<div class="nav_layer hide" id="nav_layer">
+  <div class="nav_body left">
+    <div class="nav_auto">
+      <div data-href="/" class="nav_enter nav_home">
+        <div class="left box_sizing">
+          <span class="sprites"></span>
+        </div>
+        <p>首页</p>
+      </div>
+      <div data-href="/categories?target=male" class="nav_enter nav_sort">
+        <div class="left box_sizing">
+          <span class="sprites"></span>
+        </div>
+        <p>分类</p>
+      </div>
+      <div data-href="/carts" class="nav_enter nav_cart">
+        <div class="left box_sizing">
+          <span class="sprites"></span>
+        </div>
+        <p>购物车</p>
+      </div>
+      <div data-href="" class="nav_enter nav_account">
+        <div class="left box_sizing">
+          <span class="sprites"></span>
+        </div>
+        <p>用户</p>
+      </div>
+      <div data-href="/search" class="nav_enter nav_search">
+        <div class="left box_sizing">
+          <span class="sprites"></span>
+        </div>
+        <p>搜索</p>
+      </div>
+    </div>
+  </div>
+  <div class="nav_other right"></div>
+</div>
+<!--  end nav  -->
+<!-- nav_control -->
+<div class="nav_fix" id="nav">
+  <div class="nav_circle sprites"></div>
+  <div class="down_shadow"></div>
+</div>
+<!-- end nav_control -->
+<script type="text/javascript">
+    views.nav_style();
+    $(function () {
+        var h = 51;
+        if ($('.bottom_fix').length === 1) {
+            h = 100;
+        }
+        if ($('body').hasClass('android')) {
+            app.reset_height();
+        }
+        var $nav = $('#nav'),
+                $nav_layer = $('.nav_layer'),
+                $nav_other = $('.nav_other'),
+                $nav_body = $nav_layer.find('.nav_body'),
+                $nav_link = $nav_body.find('.nav_enter'),
+                $back_btn = $('.back_ico');
+
+        sidebar.initialize($nav, $nav_layer, $nav_body, $nav_other, $nav_link, $back_btn);
+        login_register_controller.initialize();
+        contact_index_controller.auto_address();
+        app.close_app($('.app_del'));
+        if (window.location.search.indexOf('from=ulife_app') > -1 && get_cookie('ulife_app') === undefined) {
+            set_cookie('ulife_app', true);
+        }
+        $('#main').css('height', DeviceInfo.height - h);
+        $('.login_box, .register_box, .address_box').css('max-height', DeviceInfo.height - 51);
+        $('body, .pay_layer, .nav_layer, .success_order_layer, .fail_order_layer').css('height', DeviceInfo.height);
+        <!-- 滚动条 -->
+        app.scroll();
+        setTimeout(function () {
+            if (app.iscroll) app.iscroll.refresh();
+        }, 300);
+    })
+</script>
+<div class="small_tip btn hide" id="small_tip"></div>
+<%= render :partial => "layouts/touch/contact" %>
+<%= render :partial => "layouts/touch/payment" %>
+<%= render :partial => "layouts/touch/login" %>
+<%= render :partial => "layouts/touch/account" %>
+
+<!-- 筛选 -->
+<div class="page_layer hide" id="filter_layer">
+  <div class="filter_layer">
+    <div class="border_1px layer_head">
+      <div class="ico_wrapper left cancel_ico text">清除
+        <em class="down_shadow"></em>
+      </div>
+      <div class="title"></div>
+      <div class="ico_wrapper right confirm_ico text">完成
+        <em class="down_shadow"></em>
+      </div>
+    </div>
+    <div class="filter_main">
+      <div class="content"></div>
+      <div class="filter_none_txt hide">
+        <p><span class="sprites left"></span>暂无可筛选条件</p>
+      </div>
+    </div>
+    <div id="loading" class="hide pro_height pro_width">
+    </div>
+  </div>
+</div>
+
+<!-- 调用页面主体 -->
+<script type="text/javascript">
+    $(function () {
+        app.lasy_load($('img'));
+        var $btn = $('.home_turn a,.btn_zone>div.new_btn,.home_other>div,' +
+                        '.home_new>div,footer>.box_flex>.to_page,' +
+                        'header .search_ico,.home_cate>div.cate,.recommend_list>.item, .enter_more, .search_ico, footer h3'),
+                $wrapper = $('.home_turn'),
+                $slide = $wrapper.children('.turn_points'),
+                $body = $('#body');
+        $('.home_turn a:first-child img').on('load', function () {
+            //轮换图
+            home_controller.slide($wrapper, $slide, $body);
+        });
+        home_controller.initialize();
+        app.push_event($btn, 200);
+        app.app_download($('.client_download'));
+        app.close_tip_layer($('#wechat_app_tip'));
+    });
+</script>
+<%= yield %>
+<script type="text/javascript">
+    $(function () {
+        // 微信标识
+        if (window.location.href.match(/entrance=wechat/)) {
+            set_cookie('wechat', true, 365);
+        } else {
+            app.app_download($('.download_app'));
+            if (get_cookie('app') != 'true') {
+                $('#app').removeClass('hide');
+                setTimeout(function () {
+                    $('#app').addClass('hide');
+                    app.handle_cookie('app', 'true');
+                }, 90000);
+            }
+        }
+        // nav 位置调整
+        var x = get_cookie('x'), y = get_cookie('y');
+        if (x && y) {
+            $('#nav').css({'left': x + 'px', 'top': y + 'px'});
+        }
+        // firefox 中阻止页面大小变换
+        if ($('#body').hasClass('firefox')) {
+            $('body').css('height', 100 + 'px !important');
+        }
+        // ulife 页面显示
+        if ((get_cookie('ulife_app') === "true" || window.location.search.indexOf('from=ulife_app') > -1)) {
+            //导航隐藏
+            $('#nav').addClass('hide');
+            // app隐藏
+            $('#app').addClass('hide');
+            set_cookie('app', true, 365);
+        }
+
+        //显示app提示
+        var ua = navigator.userAgent.toLowerCase();
+
+        if (ua.match(/MicroMessenger/i) == "micromessenger") {
+            $('#app').addClass('hide');
+            set_cookie('app', true, 365);
+        }
+        if (document.cookie.indexOf('sns_session_id') == -1 || window.location.search == '?login=wechat') {
+            user.set_cookie(function (res) {
+            });
+        }
+    })
+</script>
+</body>
+</html>

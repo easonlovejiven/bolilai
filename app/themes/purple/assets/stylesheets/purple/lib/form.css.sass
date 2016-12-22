@@ -1,0 +1,249 @@
+@import '../lib/function'
+
+.fillin
+  position: absolute
+  max-height: 189px
+  overflow: hidden
+  top: 24px
+  left: 64px
+  z-index: 555
+  background: #b8935c
+  color: #fff
+  font-size: 12px
+  padding: 1px
+  border-radius: 3px
+  input
+    -webkit-writing-mode: horizontal-tb
+
+form.jqtransformdone
+  .fillin li
+    padding: 2px 5px
+    overflow: hidden
+    color: #fff
+    display: block
+    @include overflow-ellipsis
+    -moz-transition-duration: 0.4s
+    -webkit-transition-duration: 0.4s
+    -ms-transition-duration: 0.4s
+    transition-duration: 0.4s
+    &.fillin_hover
+      background-color: #fff
+      cursor: pointer
+      color: #b8935c
+      -moz-transition-duration: 0.1s
+      -webkit-transition-duration: 0.1s
+      -ms-transition-duration: 0.1s
+      transition-duration: 0.1s
+    &:last-child
+      border-bottom-right-radius: 3px
+      border-bottom-left-radius: 3px
+    &:first-child
+      border-top-right-radius: 3px
+      border-top-left-radius: 3px
+
+.loginbox .fillin
+  left: 70px
+  top: 28px
+
+.layout_msn
+  .fillin,
+  form.jqtransformdone .fillin li:first-child,
+  form.jqtransformdone .fillin li:last-child
+    border-bottom-right-radius: 0px
+    border-bottom-left-radius: 0px
+    border-top-right-radius: 0px
+    border-top-left-radius: 0px
+
+.jqeraform
+  select
+    border-top: 1px solid #D5D5D5
+    border-right: 1px solid #D5D5D5
+    border-bottom: 1px solid #C3C3C3
+    border-left: 1px solid #DADADA
+    @include border-radius(3px)
+    background: asset-url('purple/core/form/selectbg.jpg') repeat-x 0 0
+    @include gradient(top, #fff, #e3e3e4)
+    // background: asset-url('purple/core/form/selectbg.jpg') repeat-x 0 0
+    // *background: none
+    height: 26px
+    padding: 3px 5px
+    margin: 0 5px 0 0
+  .jqeraformInputWrapper
+    float: left
+    height: 24px
+    padding: 0 5px
+    border: 1px solid #d5d5d5
+    background: #fff
+    // overflow: hidden
+    position: relative
+    @include border-radius(3px)
+    @include box-shadow(inset 1px 1px 1px rgba(0, 0, 0, 0.12))
+    box-shadow: none
+    background: asset-url('purple/core/form/input_text.jpg') repeat-x 0 -53px
+    .jqeraformInputInner
+      display: block
+      height: 24px
+      overflow: hidden
+    input
+      display: block
+      height: 16px
+      padding: 5px 0
+      border: 0px
+      background: none
+      font-size: 12px
+      color: #999
+    input[disabled]
+      color: #ccc
+    &.jqeraformInputWrapper_hover
+      @include inset-box-shadow(inset 1px 1px 1px rgba(0, 0, 0, 0.12), 0px 0px 5px #eaeaea)
+      box-shadow: none
+      input
+        color: #666
+    &.jqeraformInputWrapper_focus
+      @include inset-box-shadow(inset 1px 1px 1px rgba(0, 0, 0, 0.1), 0px 0px 5px #e7e5e0)
+      border-color: #bdb7a9
+      background-color: #fffcf4
+      input
+        color: #000
+    &.jqeraformInputWrapper_disabled
+      border-color: #eaeaea
+      @include box-shadow(inset 1px 1px 1px rgba(0, 0, 0, 0.05))
+      input
+        color: #666
+    .formleft,
+    .formright
+      display: block
+      width: 5px
+      height: 26px
+      position: absolute
+      top: -1px
+      background: asset-url('purple/core/form/input_text.jpg') no-repeat 0 0
+    .formleft
+      left: -1px
+      background-position: 0 0
+    .formright
+      right: -1px
+      background-position: 0 -26px
+    &.jqeraformInputWrapper_focus
+      background-position: 0 -131px
+      .formleft
+        background-position: 0 -78px
+      .formright
+        background-position: 0 -104px
+  .jqeraformHidden
+    display: none
+  .jqeraformCheckboxWrapper
+    display: block
+    float: left
+    margin: 0
+    padding: 0
+    height: 16px
+    width: 16px
+    overflow: hidden
+    .jqeraformCheckbox
+      background: asset-url('purple/core/form/checkbox.jpg') no-repeat 0 -50px
+      display: block
+      height: 16px
+      width: 16px
+      vertical-align: middle
+      &.jqeraformChecked
+        background-position: 0 -75px
+    &.jqeraformCheckboxWrapper_disabled
+      .jqeraformCheckbox
+        background-position: 0 -1px
+        &.jqeraformChecked
+          background-position: 0 -26px
+
+  .jqeraformRadioWrapper
+    display: block
+    float: left
+    margin: 0
+    padding: 0
+    height: 17px
+    width: 17px
+    overflow: hidden
+    .jqeraformRadio
+      background: asset-url('purple/core/form/radio.jpg') no-repeat 0 -49px
+      display: block
+      height: 17px
+      width: 17px
+      vertical-align: middle
+      &.jqeraformChecked
+        background-position: 0 -75px
+    &.jqeraformRadioWrapper_disabled
+      .jqeraformRadio
+        background-position: 0 0
+        &.jqeraformChecked
+          background-position: 0 -25px
+
+  .jqeraformTextarea
+    float: left
+    padding: 0 5px
+    border: 1px solid #d5d5d5
+    background: #fff
+    overflow: hidden
+    @include border-radius(3px)
+    @include box-shadow(inset 1px 1px 1px rgba(0, 0, 0, 0.12))
+    textarea
+      display: block
+      padding: 5px 0
+      border: 0px
+      background: none
+      font-size: 12px
+      color: #999
+    &.jqeraformTextarea_hover
+      @include inset-box-shadow(inset 1px 1px 1px rgba(0, 0, 0, 0.12), 0px 0px 5px #eaeaea)
+      textarea
+        color: #666
+    &.jqeraformTextarea_focus
+      @include inset-box-shadow(inset 1px 1px 1px rgba(0, 0, 0, 0.1), 0px 0px 5px #e7e5e0)
+      border-color: #bdb7a9
+      background: #fffcf4
+      textarea
+        color: #000
+
+@-moz-document url-prefix()
+  .jqeraform .jqeraformInputWrapper
+    background: #fff
+
+@media screen and (-webkit-min-device-pixel-ratio: 0)
+  .jqeraform .jqeraformInputWrapper
+    background: #fff
+
+.msn .jqeraform
+  select
+    @include border-radius(0px)
+    @include gradient(top, #fff, #fff)
+  .jqeraformInputWrapper
+    @include border-radius(0px)
+    @include box-shadow(none)
+    background: #fff
+    &.jqeraformInputWrapper_hover,
+    &.jqeraformInputWrapper_focus,
+    &.jqeraformInputWrapper_disabled
+      @include box-shadow(none)
+    &.jqeraformInputWrapper_focus
+      background: #fffcf4
+    .formleft,
+    .formright
+      display: none
+  .jqeraformCheckboxWrapper
+    .jqeraformCheckbox
+      background-image: asset-url('purple/core/form/checkbox_msn.jpg')
+  .jqeraformRadioWrapper
+    .jqeraformRadio
+      background-image: asset-url('purple/core/form/radio_msn.jpg')
+  .jqeraformTextarea
+    @include border-radius(0px)
+    @include box-shadow(none)
+    &.jqeraformTextarea_hover
+      @include box-shadow(none)
+    &.jqeraformTextarea_focus
+      @include box-shadow(none)
+
+
+
+
+
+
+

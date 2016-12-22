@@ -1,0 +1,235 @@
+<% @record = @user %>
+<% @show = !%w[new edit].include?(params[:action]) && @record.valid? %>
+<div class="modal-header">
+  <%= render "admin/modal/header" %>
+</div>
+<%= render 'admin/shared/prompt' %>
+<div class="modal-body">
+  <%= form_for @user, as: :user, :url => @user.new_record? ? admin_shop_users_path : admin_shop_user_path(@user),
+               :html => {:method => @user.new_record? ? :post : :put, :multipart => true, class: "form-horizontal"} do |f| %>
+      <% if !@record.new_record? %>
+          <div class="form-group">
+            <%= f.label :id, 'ID', {class: 'col-md-3 control-label'} %>
+            <div class="form-control-static">
+              <strong><%= @user.id %></strong>
+            </div>
+          </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= f.label :name, '<sup>*</sup>姓名'.html_safe, class: 'col-md-3 control-label' %>
+        <div class="col-md-8">
+          <% if @show %>
+              <div class="form-control-static">
+                <%= @record.name %>
+              </div>
+          <% else %>
+              <%= f.text_field :name, {class: 'form-control', required: true} %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :sex, '性别'.html_safe, class: 'col-md-3 control-label' %>
+        <div class="col-md-4">
+          <% if @show %>
+              <div class="form-control-static">
+                <%= Manage::User::GENDER[@record.sex.to_s.to_sym] %>
+              </div>
+          <% else %>
+              <%= f.select :sex, Manage::User::GENDER.invert, {include_blank: t('helpers.select.prompt')}, {class: 'form-control'} %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :birthday, "生日", class: 'col-md-3 control-label' %>
+        <div class="col-md-6">
+          <% if @show %>
+              <div class="form-control-static">
+                <%= @record.birthday %>
+              </div>
+          <% else %>
+              <div class="input-group">
+                <%= f.text_field :birthday, class: "form-control hasDatepicker" %>
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+              </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :id_number, '身份证号'.html_safe, class: 'col-md-3 control-label' %>
+        <div class="col-md-8">
+          <% if @show %>
+              <div class="form-control-static">
+                <%= @record.id_number %>
+              </div>
+          <% else %>
+              <%= f.text_field :id_number, {class: 'form-control'} %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :card_number, '卡号'.html_safe, class: 'col-md-3 control-label' %>
+        <div class="col-md-8">
+          <% if @show %>
+              <div class="form-control-static">
+                <%= @record.card_number %>
+              </div>
+          <% else %>
+              <%= f.text_field :card_number, {class: 'form-control'} %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :label, '标签', class: 'col-md-3 control-label' %>
+        <div class="col-md-8">
+          <% if @show %>
+              <div class="form-control-static">
+                <%= @record.label %>
+              </div>
+          <% else %>
+              <%= f.text_field :label, {class: 'form-control'} %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :label, '余额', class: 'col-md-3 control-label' %>
+        <div class="form-control-static">
+          <strong><%= h @user.balance %></strong>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :trades_price_sum, '交易总额', class: 'col-md-3 control-label' %>
+        <div class="form-control-static">
+          <strong><%= h @user.trades_price_sum %></strong>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :trades_point, '交易积分', class: 'col-md-3 control-label' %>
+        <div class="form-control-static">
+          <strong><%= h @user.trades_point %></strong>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :level_id, '等级', class: 'col-md-3 control-label' %>
+        <div class="col-md-4">
+          <% if @show %>
+              <div class="form-control-static">
+                <%= @record.level_id %>
+              </div>
+          <% else %>
+              <%= f.collection_select :level_id, Shop::Level.active, :id, :name, {:include_blank => '请选择'}, {class: 'form-control'} %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :level_modified_at, '等级修改时间', class: 'col-md-3 control-label' %>
+        <div class="form-control-static">
+          <%= @user.level_modified_at && @user.level_modified_at.to_s(:db) %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :percent, '折扣'.html_safe, class: 'col-md-3 control-label' %>
+        <div class="col-md-4">
+          <% if @show %>
+              <div class="form-control-static">
+                <%= @record.percent %>
+              </div>
+          <% else %>
+              <%= f.select :percent, [0, 5, 10, 15, 20, 25, 30].map { |i| [i, i] }, {:include_blank => '请选择'}, {class: 'form-control'} %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :remark, '备注'.html_safe, class: 'col-md-3 control-label' %>
+        <div class="col-md-8">
+          <% if @show %>
+              <div class="form-control-static">
+                <%= @record.remark %>
+              </div>
+          <% else %>
+              <%= f.text_area :remark, {class: 'form-control'} %>
+          <% end %>
+        </div>
+      </div>
+
+      <% if @account = Core::Account.find(@user.id) %>
+          <div class="form-group">
+            <%= f.label :account_email, '帐号邮箱', class: 'col-md-3 control-label' %>
+            <div class="form-control-static">
+              <strong><%= h @account.email %></strong>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :account_phone, '帐号手机', class: 'col-md-3 control-label' %>
+            <div class="form-control-static">
+              <strong><%= h @account.phone %></strong>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :account_point, '帐号积分', class: 'col-md-3 control-label' %>
+            <div class="form-control-static">
+              <strong><%= h @account.user.info.point %></strong>
+            </div>
+          </div>
+          <script>
+              $(function () {
+                  $('#setting_receive_promotion_email').live('change', function () {
+                      if ($(this).attr('checked') == undefined) {
+                          $('.js_option').attr('disabled', 'disabled').map(function () {
+                              $(this).prev().val($(this).attr('checked') == undefined ? 0 : 1)
+                          });
+                      } else {
+                          $('.js_option').removeAttr('disabled').map(function () {
+                              $(this).prev().val(0)
+                          });
+                      }
+                  })
+              });
+          </script>
+      <% end %>
+
+      <% if !@user.new_record? %>
+
+          <div class="form-group">
+            <%= f.label :created_at, '创建时间', class: 'col-md-3 control-label' %>
+            <div class="form-control-static">
+              <strong><%= @user.created_at && @user.created_at.to_s(:db) %></strong>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :updated_at, '修改时间', class: 'col-md-3 control-label' %>
+            <div class="form-control-static">
+              <strong><%= @user.updated_at && @user.updated_at.to_s(:db) %></strong>
+            </div>
+          </div>
+      <% end %>
+      <div class="form-actions">
+        <% if @show %>
+            <%= link_to '查看', admin_shop_user_path(@user), class: "btn btn-primary", "data-target" => "rightPanel" if can?(:show, @user) %>
+            <%= link_to '编辑', edit_admin_shop_user_path(@user), class: "btn btn-primary", "data-target" => "rightPanel" if can?(:update, @user) %>
+        <% else %>
+            <input type="submit" value="提交" class="btn btn-primary"/>
+        <% end %>
+      </div>
+  <% end %>
+</div>
+<script type="text/javascript">
+    $(function () {
+        App.handleDatePickers();
+    })
+</script>

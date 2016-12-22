@@ -1,0 +1,56 @@
+#old_pages
+  .page
+    label
+      display: none
+      opacity: 0
+
+.pages_panel
+  float: left
+  width: 340px
+  margin-right: 20px
+.pages
+  min-height: 800px
+  float: left
+  &#old_pages
+    background-color: #ddd
+    text-align: center
+    padding: 0px 10px
+    padding-top: 10px
+    width: 340px
+  &#new_pages
+    background-color: #ddd
+    text-align: center
+    padding: 0px 10px
+    padding-top: 10px
+    width: 340px
+  .page
+    position: relative
+    display: inline-block
+    cursor: move
+    margin: 0 0 10px
+    box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.1)
+    -moz-transition: opacity 3s ease !important
+    -webkit-transition: opacity 3s ease !important
+    transition: opacity 3s ease !important
+    img
+      display: inline-block
+    label
+      position: absolute
+      right: 10px
+      bottom: 10px
+      padding: 5px
+      line-height: 14px
+      vertical-align: middle
+      color: black
+      background-color: white
+      cursor: default
+      opacity: 1
+      -moz-transition: opacity 3s ease !important
+      -webkit-transition: opacity 3s ease !important
+      transition: opacity 3s ease !important
+.tablenav
+  margin-left: 10px
+  input,select
+    width: 90px
+  .input-group
+    display: inline-block

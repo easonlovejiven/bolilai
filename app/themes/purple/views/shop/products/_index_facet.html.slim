@@ -1,0 +1,116 @@
+- if @products_facet
+  - facet_fields = []
+  - @category1 || @category2 || (f = (@products_facet[:category1_id]||[]).reject { |p| p[:value].blank? }).size <= 1 ? nil : facet_fields << capture do
+    .BoxMod.js_product_facet_field_category
+      h4.title
+        | 分类&nbsp;
+        span= h "(#{f.size})"
+        | ：
+      .list.open.js_product_facet_list_category.category2_pic
+        - _ids = (@products_facet[:category1_id]||[]).map { |p| p[:value] }
+        - @categories ||= Shop::Category.where("id IN (?)", _ids).order("FIELD(id,#{_ids.join(',')})")
+        - f.each_with_index do |p, i|
+          - next unless category = @categories[i]
+          a.link href="#{conditions_path('where' => { 'category1_id' => category.id, 'category2_id' => nil })}"
+            = image_tag("#{category.pic_image.url(:thumb)}", :alt => category.name)
+            .tips_text
+              span
+                = h category.name
+                | (
+                = p[:count]
+                | )
+              i.icon
+        a.listmore.js_product_facet_more_category href="#" style="display:none;" 更多
+  - !(@category1 || ((@products_facet[:category1_id]||[]).reject { |p| p[:value].blank? }).size <= 1) || @category2 || (f = (@products_facet[:category2_id]||[]).reject { |p| p[:value].blank? }).size <= 1 ? nil : facet_fields << capture do
+    .BoxMod.js_product_facet_field_category
+      h4.title
+        | 分类&nbsp;
+        span= h "(#{f.size})"
+        | ：
+      .list.open.js_product_facet_list_category.category2_pic
+        - _ids = (@products_facet[:category2_id]||[]).map { |p| p[:value] }
+        - @categories ||= Shop::Category.where("id IN (?)", _ids).order("FIELD(id,#{_ids.join(',')})")
+        - f.each_with_index do |p, i|
+          - next unless category = @categories[i]
+          a.link href="#{conditions_path('where' => { 'category1_id' => nil, 'category2_id' => category.id })}"
+            = image_tag("#{category.pic_image.url(:thumb)}", :alt => category.name)
+            .tips_text
+              span
+                = h category.name
+                | (
+                = p[:count]
+                | )
+              i.icon
+        a.listmore.js_product_facet_more_category href="#" style="display:none;" 更多
+  - @brand || (f = (@products_facet[:brand_id]||[]).reject { |p| p[:value].blank? }[0..49]).size <= 1 ? nil : facet_fields << capture do
+    .BoxMod.js_product_facet_field
+      h4.title
+        | 品牌&nbsp;
+        span= h "(#{f.size})"
+        | ：
+      .list.open.js_product_facet_list
+        - _ids = (@products_facet[:brand_id]||[]).map { |p| p[:value] }.compact
+        - @brands ||= Shop::Brand.where("id IN (?)", _ids).order("FIELD(id,#{_ids.join(',')})")
+        - f.each_with_index do |p, i|
+          - next unless brand = @brands[i]
+          a.link href="#{conditions_path('where' => { 'brand_id' => brand.id })}"
+            = h brand.name
+            | &nbsp;
+            span= h "(#{p[:count]})"
+        a.listmore.js_product_facet_more href="#" style="display:none;" 更多
+  - params[:where][:price] || (f = (@products_facet[:price]||[]).reject { |p| p[:value].blank? }).size <= 1 ? nil : facet_fields << capture do
+    ruby:
+      high = f.find_all { |a| a[:value][0] >= 18000 }
+      f = f.reject { |a| a[:value][0] >= 18000 }.push({:value => [high.map { |a| a[:value][0] }.min, high.map { |a| a[:value][1] }.max], :count => high.sum { |a| a[:count] }}) unless high.empty?
+    .BoxMod.js_product_facet_field
+      h4.title 价格 ：
+      .list.open.js_product_facet_list
+        - f.each do |p|
+          a.link href="#{conditions_path('where' => { 'price' => { 'gteq' => p[:value][0], 'lteq' => p[:value][1] } })}"
+            = h "#{p[:value][0]}~#{p[:value][1]}"
+            | &nbsp;
+            span= h "(#{p[:count]})"
+        a.listmore.js_product_facet_more href="#" style="display:none;" 更多
+  - @measure || (f = (@products_facet[:measure]||[]).reject { |p| p[:value].blank? }).size <= 1 ? nil : facet_fields << capture do
+    .BoxMod.js_product_facet_field
+      h4.title 尺码 ：
+      .list.open.js_product_facet_list
+        - f.each do |p|
+          a.link href="#{conditions_path("where" => { "measure" => p[:value] })}"
+            = h p[:value]
+            | &nbsp;
+            span= h "(#{p[:count]})"
+        a.listmore.js_product_facet_more href="#" style="display:none;" 更多
+  - @color || (f = (@products_facet[:color]||[]).reject { |p| p[:value].blank? }).size <= 1 ? nil : facet_fields << capture do
+    .BoxMod.js_product_facet_field
+      h4.title
+        | 颜色&nbsp;
+        span= h "(#{f.size})"
+        | ：
+      .list.open.js_product_facet_list
+        - f.each do |p|
+          a.link href="#{conditions_path('where' => { 'color' => Shop::Product::COLORS[p[:value]] })}"
+            em.color style="background-color:#{({"黑" => "#000000", "白" => "#fafafa", "蓝" => "#2e659e", "灰" => "#999999", "粉" => "#ea4d8a", "棕" => "#9b6824", "紫" => "#9831a0", "绿" => "#3a9a0a", "红" => "#cc3629", "黄" => "#ffcf00", "橙" => "#ff6900"})[p[:value]]};"
+            = h "#{p[:value]}色"
+            | &nbsp;
+            span= h "(#{p[:count]})"
+        a.listmore.js_product_facet_more href="#" style="display:none;" 更多
+  - (@products_facet[:values]||[]).each do |p|
+    - (params[:values]||{})[p[:name]] || (f = (p[:options]||[]).reject { |a| a[:value].blank? }).size <= 1 ? nil : facet_fields << capture do
+      .BoxMod.js_product_facet_field
+        h4.title= h "#{p[:name]} ："
+        .list.open.js_product_facet_list
+          - f.each do |option|
+            a.link href="#{conditions_path("values[#{p[:name]}]" => option[:value])}"
+              = h option[:value]
+              | &nbsp;
+              span= h "(#{option[:count]})"
+          a.listmore.js_product_facet_more href="#" style="display:none;" 更多
+  - unless facet_fields.empty?
+    .SearchBox.prefetch
+      .BoxMod_first= raw facet_fields[0]
+      = raw facet_fields[1..3].compact.join
+      - if facet_fields.size > 4
+        #product_facet_expand_area style="display:none;" = raw facet_fields[4..-1].compact.join
+        a.more#product_facet_expand href="#"
+          span 更多

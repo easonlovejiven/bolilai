@@ -1,0 +1,7 @@
+<div class="joybuySteps">
+	<strong class="<%= 'current' if ['pay', 'audit', 'ship', 'receive', 'contribute', 'complete'].include?(trade.status) %>"><span><em>01</em>、付款</span></strong>
+	<strong class="<%= 'current' if ['ship', 'receive', 'contribute', 'complete'].include?(trade.status) %>"><span><em>02</em>、发货</span></strong>
+	<strong class="<%= 'current' if ['contribute', 'complete'].include?(trade.status) %>"><span><em>03</em>、交易成功</span></strong>
+	<strong class="<%= 'current' if trade.status == 'complete' %>"><span><em>04</em>、分享</span></strong>
+	<span class="OrderSet"><a href="<%= auction_trades_path %>"><span class="icons19x19 icons_021"></span><em>订单管理</em></a></span>
+</div>

@@ -1,0 +1,34 @@
+- unless @products.empty?
+  .pageber.pageber-t.prefetch
+    .topsort
+      .sort
+        label 排序：
+        ul
+          li class="nav_first #{!params[:order] || params[:order].blank? || params[:order].values.inject(&:|).blank? ? 'current nav_first_current' : ''}"
+            = link_to "默认", conditions_path('order' => {'price' => nil, 'readings_count' => nil, 'scarcity' => nil, 'percent' => nil, 'arrived_at' => nil}), :rel => "nofollow"
+          li class="#{params[:order] && params[:order][:price] == 'asc' ? 'current' : ''}"
+            = link_to "最低价格", conditions_path('order' => {'price' => 'asc', 'readings_count' => nil, 'scarcity' => nil, 'percent' => nil, 'arrived_at' => nil}), :rel => "nofollow"
+          li class="#{params[:order] && params[:order][:price] == 'desc' ? 'current' : ''}"
+            = link_to "最高价格", conditions_path('order' => {'price' => 'desc', 'readings_count' => nil, 'scarcity' => nil, 'percent' => nil, 'arrived_at' => nil}), :rel => "nofollow"
+          li class="#{params[:order] && params[:order][:readings_count] ? 'current' : ''}"
+            = link_to "人气", conditions_path('order' => {'price' => nil, 'readings_count' => 'desc', 'scarcity' => nil, 'percent' => nil, 'arrived_at' => nil}), :rel => "nofollow"
+          li class="#{params[:order] && params[:order][:scarcity] ? 'current' : ''}"
+            = link_to "限量", conditions_path('order' => {'price' => nil, 'readings_count' => nil, 'scarcity' => 'desc', 'percent' => nil, 'arrived_at' => nil}), :rel => "nofollow"
+          li class="#{params[:order] && params[:order][:percent] ? 'current' : ''}"
+            = link_to "折扣", conditions_path('order' => {'price' => nil, 'readings_count' => nil, 'scarcity' => nil, 'percent' => 'asc', 'arrived_at' => nil}), :rel => "nofollow"
+          li class="nav_last #{params[:order] && params[:order][:arrived_at] ? 'current nav_last_current' : ''}"
+            = link_to "上架时间", conditions_path('order' => {'price' => nil, 'readings_count' => nil, 'scarcity' => nil, 'percent' => nil, 'arrived_at' => 'desc'}), :rel => "nofollow"
+      .ASales
+        - show_all = params[:where] && params[:where][:unsold_count] && params[:where][:unsold_count][:gt] == '0'
+        = link_to "仅显示有货", conditions_path('where' => {'unsold_count' => {'gt' => show_all ? nil : 0}}), :class => "#{show_all ? 'current' : ''}", :rel => "nofollow"
+    /- if (@products_count - 1) / (params[:per_page] || 80).to_i > 0
+      .pagination
+        span.page_number <em>#{(params[:page]||1).to_i}</em>/#{Array.new(@products_count,1).paginate(:page => params[:page], :per_page => params[:per_page] || 80).total_pages}
+        - if (params[:page] || 1).to_i == 1
+          span.disabled.prev_page «
+        - else
+          = link_to "«", params.slice(*%w[where order keyword values]).reject { |k, v| v.blank? }.merge(:page => (params[:page] || 1).to_i - 1), :class => "prev_page", :rel => "prev", 'data-target' => "product_list"
+        - if (@products_count + 79) / (params[:per_page] || 80).to_i - (params[:page] || 1).to_i <= 0
+          span.disabled.next_page 下一页 »
+        - else
+          = link_to "下一页 »", params.slice(*%w[where order keyword values]).reject { |k, v| v.blank? }.merge(:page => (params[:page] || 1).to_i + 1), :class => "next_page", :rel => "next", 'data-target' => "product_list"

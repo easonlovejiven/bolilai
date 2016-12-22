@@ -1,0 +1,59 @@
+@import "../lib/function"
+.auction_pages,
+.layout_body
+	background: #ccc7bc
+.auction_pages
+	display: block
+	overflow: hidden
+	*zoom: 1
+	min-height: 100%
+	background: repeat center top
+.images_plain
+	position: relative
+	margin: 0 auto 60px auto
+	display: block
+	width: 880px
+	overflow: hidden
+	.top
+		position: relative
+		margin-top: 45px
+		height: 280px
+		.link
+			position: absolute
+			width: 880px
+			height: 280px
+			display: block
+			background: #FFF
+			.pic
+				width: 880px
+				height: 280px
+				display: block
+	.contentbox
+		position: relative
+		width: 880px
+		height: auto
+		display: block
+		overflow: hidden
+		.list
+			position: relative
+			width: 960px
+			clear: both
+			display: block
+			overflow: hidden
+			li
+				position: relative
+				height: 215px
+				@include inline-block
+				margin: 35px 35px 0px 0
+				.link
+					position: relative
+					width: 270px
+					height: 220px
+					display: block
+					float: left
+					background: #FFF
+					@include inline-block
+					.pic
+						width: 270px
+						height: 220px
+						display: block

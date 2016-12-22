@@ -1,0 +1,60 @@
+<% content_for :show_content do %>
+    <div class="voucher_index">
+      <span class="top_line"></span>
+
+      <div class="voucher_thead">
+        <p class="th1">优惠券序列号</p>
+
+        <p class="th2">名称</p>
+
+        <p class="th3">面值</p>
+
+        <p class="th4">使用条件</p>
+
+        <p class="th5">截止日期</p>
+
+        <p class="th6">状态</p>
+        <!--[if IE]
+          <span class="thleft"></span>
+          <span class="thright"></span>
+        -->
+      </div>
+      <div class="voucher_list">
+        <% if  @vouchers.blank? %>
+            <div class="list_empty">
+              <h3>暂无优惠券！</h3>
+            </div>
+        <% end %>
+        <% @vouchers.each do |voucher| %>
+            <div class="item_block close open">
+              <div class="th th1">
+                <%= voucher.identifier || "系统自动生成" %>
+              </div>
+              <div class="th th2">
+                <%= voucher.event.name %>
+              </div>
+              <div class="th th3">
+                    <span>
+                    <%= voucher.event.amount %>
+                      <em>RMB</em>
+                    </span>
+              </div>
+              <div class="th th4">
+                <%= voucher.event.view_display %>
+              </div>
+              <div class="th th5">
+                <%= voucher.event.ended_at.to_s(:db) && voucher.event.ended_at.to_s(:db) %>
+              </div>
+              <div class="th th6">
+                <%= voucher.trade_id ? "已使用" : "未使用" %>
+              </div>
+            </div>
+        <% end %>
+      </div>
+      <div class="fr">
+        <%= paginate @vouchers, views_prefix: "shared", :theme => 'shop'%>
+      </div>
+    </div>
+
+<% end %>
+<%= render template: 'home/users/show_layout', locals: {user_info: {key: 'vouchers', value: '代金券'}} %>

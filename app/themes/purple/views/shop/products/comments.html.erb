@@ -1,0 +1,39 @@
+<div class="review-list">
+  <div class="title">
+    <h2>顾客评价
+      <div class="info">
+        共<b class="count"><%= @comments.count %></b>条评价
+      </div>
+    </h2>
+  </div>
+  <% @comments.each do |comment| %>
+      <div class="item">
+        <div class="star-list">
+          <% comment.score.to_i.times do %>
+              <span class="star"><%= image_tag("purple/core/products/star_show.jpg") %></span>
+          <% end %>
+        </div>
+        <div class="avatar"><%= image_tag comment.user.pic_key.url %></div>
+        <div class="content">
+          <div class="user"><%= comment.user_info %> · <%= comment.created_at.to_s(:db) %></div>
+          <div class="info"><span>商品点评：</span><%= comment.body %></div>
+          <% if comment.comment_images.any? %>
+              <div class="images"><span>商品晒图：</span>
+
+                <div class="small">
+                  <% comment.comment_images.each do |img| %>
+                      <%= image_tag img.pic_image.url(:tiny) %>
+                  <% end %>
+                </div>
+                <div class="big" style="display: none">
+                  <% comment.comment_images.each do |img| %>
+                      <%= image_tag img.pic_image.url(:big) %>
+                  <% end %>
+                </div>
+              </div>
+          <% end %>
+        </div>
+      </div>
+  <% end %>
+  <%= paginate @comments, remote: true, views_prefix: "shared", :theme => 'shop' %>
+</div>

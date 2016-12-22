@@ -1,0 +1,18 @@
+﻿{
+    "development": {
+        "mysql":{
+            "host": "127.0.0.1",
+            "user": "root",
+            "password": "root",
+            "database": "damentu"
+        }
+    },
+   "production": {
+        "mysql":{
+            "host": "rdsyaeiaayaeiaa.mysql.rds.aliyuncs.com",
+            "user": "damentu",
+            "password": "damentu123",
+            "database": "damentu_production"
+        }
+    }
+}

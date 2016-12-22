@@ -1,0 +1,43 @@
+:ruby
+  @page_title = "退货申请"
+  @unit ||= Shop::Unit.find(params[:id])
+
+.trade_index
+  .return
+    .return_title 退货申请
+    .contbox
+      %p.return_text
+        自签收日7日内，如出现国家三包所规定的质量问题，经由售后服务中心检验属实，您可以选择退货、换货或维修。<br />
+        请留下您的信息以便我们完成退款登记，客服将会通过电话与您联系退款事宜。<br />
+        开户人、开户行支行名称、银行账号需填写准确，否则可能导致退款失败。
+      %form.jqeraform(id="trade_unit_form" data-id="#{@unit.id}" data-trade_id="#{@unit.trade_id}" onsubmit="return event.returnValue = false;")
+        #trade_unit_return
+          .li_group
+            %label(for="unit_return_phone") 联系电话：
+            %input(type="text" size="19" name="unit[return_phone]" id="unit_return_phone" value="#{@unit.return_phone}")
+          .li_group
+            %label(for="unit_return_name") 开户人：
+            %input(type="text" size="19" name="unit[return_name]" id="unit_return_name" value="#{@unit.return_name}")
+          .li_group
+            %label(for="unit_return_province") 开户行地址：
+            %span.select_wrapper= select_tag 'unit[return_province]', options_for_select(@unit.return_province.blank? ? [['选择省份', '']] : [[@unit.return_province, @unit.return_province]], @unit.return_province), :class => "js_contact_province js_contact_province_u", 'data-id' => "u"
+            %span.select_wrapper= select_tag 'unit[return_city]', options_for_select(@unit.return_city.blank? ? [['选择城市', '']] : [[@unit.return_city, @unit.return_city]], @unit.return_city), :class => "js_contact_city js_contact_city_u", 'data-id' => "u"
+          .li_group
+            %label(for="unit_return_branch") 开户行支行：
+            %input(type="text" size="40.8" name="unit[return_branch]" id="unit_return_branch" value="#{@unit.return_branch}")
+          .li_group
+            %label(for="unit_return_account") 银行账号：
+            %input(type="text" size="40.8" name="unit[return_account]" id="unit_return_account" value="#{@unit.return_account}")
+          %input.send(type="submit" value="确 定" onclick="return event.returnValue = false;" id="trade_unit_confirm")
+  .return.return_ok(id="trade_unit_success" style="display:none;")
+    .return_title 退货申请
+    .contbox
+      .okinfo
+        %h3 退货申请已经提交。
+        %p 您也可直接拨打售后热线与客服联系确认退换货事宜。
+      %a.send.jqeraformButton(href="/shop/trades") <span><span>返 回</span></span>
+:javascript
+  $(function(){
+    $('form.jqeraform').jqeraform({});
+    $('.js_contact_province').trigger('initialize_options');
+  });

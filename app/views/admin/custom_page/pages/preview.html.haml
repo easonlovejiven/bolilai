@@ -1,0 +1,35 @@
+!!! 5
+%html
+  %head
+    - @page_mode = 'landing'
+    - @page_title ||= @page.title
+    - @version = (JSON.parse(@page.content) rescue {})['version'].to_s.gsub(/\W+/, '')
+    - if @version.match /mobile/
+      = javascript_include_tag 'core/jquery-1.9.1.min'
+      = render :partial => 'layouts/touch/meta'
+      = javascript_include_tag "admin/custom_page/#{@version}"
+      = javascript_include_tag "admin/custom_page/preview/#{@version}"
+      :css
+        .main {max-width: 640px;margin: 0 auto;min-width: 300px;}
+        .home_turn{overflow: hidden}
+    - else
+      = render :partial => 'layouts/purple/meta'
+      - if @page.engine == 'template' && !(@version).blank?
+        = javascript_include_tag "admin/custom_page/#{@version}"
+    = stylesheet_link_tag 'admin/custom_page/preview'
+    = javascript_include_tag 'admin/custom_page/preview'
+  %body.preview_layout
+    = render :file => 'custom_page/pages/show',locals: {preview: true}
+    - if @page.engine == 'template'
+      #widget_editor
+        .toolbar
+          %a.btn.btn-primary.edit_btn 编辑
+        .content
+      #preview_toolbar
+        = form_for @page, :url => update_batch_admin_page_path(@page), :method => :put, :html => { :id => 'preview_form' } do |f|
+          = f.hidden_field :content,id: "auction_page_content"
+          .submit
+            %button#preview_submit 提交
+            &nbsp;
+            %button#preview_cancel 取消
+            %button#preview_edit(style="display:none;") 编辑

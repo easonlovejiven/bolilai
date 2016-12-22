@@ -1,0 +1,66 @@
+- @enable_lazyload = false
+- @page_keywords = %W[珀丽莱 奢侈品购物网站]
+- @page_description = "珀丽莱（www.weimall.com）提供最便捷最尊贵体验的时尚奢侈品购物网站，集时尚资讯媒体、社交网站、电子商务的媒体，关于精英人群的生活品味体验与消费分享的平台。"
+
+
+= stylesheet_inline_tag 'custom_page/pages/root_3.css'
+style type="text/css"
+	| .layout_weimall .layout_frame { background: transparent;}
+	| .layout_weimall .home_root3 { background: transparent !important; margin: 20px auto 0 !important;}
+	| .layout_weimall .home_root3 .categories { background: rgba(255, 255, 255, 0.5);}
+	| .layout_weimall .layout_body,
+	| .layout_weimall home_root3 .specials,
+	| .layout_weimall .home_root3 .specials .list { overflow: inherit !important;}
+	| .layout_weimall .home_root3 .covers,
+	| .layout_weimall .home_root3 .imgblock .link,
+	| .layout_weimall .home_root3 .specials .imgitem .imgli,
+	| .layout_weimall .home_root3 .People .pic,
+	| .layout_weimall .home_root3 .categories { box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);}
+	| .layout_weimall .footer { width: 960px;}
+	| @media \0screen { .layout_weimall .home_root3 .categories { background: #fff;} .layout_weimall .home_root3 .hbrands { background: #853f67;} .layout_weimall .footer .garden { background: #fff;} .layout_weimall .footer .garden .footer_icon { background-color: #fcfcfc;} }
+
+.home_root3
+	.categories
+		.list style="background-image: url('#{image_path((data['category']||{})['background'].to_s)}')"
+			- (data['category']||{})['ids'].to_sz.map { |id| Shop::Category.find_by_id(id) }.compact.each_with_index do |category, index|
+				= link_to category.name, category, :class => "link link#{index+1}", :target => "_blank"
+	.covers.slides data-options='{ "effect": "slide, fade", "play": 3000, "pause": 2500 }'
+		.list.slides_container
+			- (data['covers'] || []).each do |cover|
+				= link_to legacy_url(cover['url']), :style => "", :class => "link", :target => "_blank" do
+					= image_tag cover['pic'].to_s, :alt => "", :style => "width:100%; height:100%;"
+		a.prev.slides_prev href="#"
+		a.next.slides_next href="#"
+	.hbrands
+		a.title href="/auction/brands" target="_blank"
+			h3
+				| Brands
+				span 品牌
+		.brand_cont
+			.list
+				- (data['brand']||{})['ids'].to_sz[0..15].map{|id|Shop::Brand.find_by_id(id) }.compact.each_with_index do |brand, index|
+					= link_to brand.name, brand, :class => "link link#{index+1}", :target => "_blank"
+	.specials
+		a.title href="#{data.try(:[], 'specials_title').try(:[], 'url').blank? ? 'http://www.weimall.com/#subapp=productGrid&channel=theme' : legacy_url(data.try(:[], 'specials_title').try(:[], 'url'))}" target="_blank"
+			h3= data.try(:[], 'specials_title').try(:[], 'en_name').blank? ? "Special" : data.try(:[], 'specials_title').try(:[], 'en_name')
+			span= data.try(:[], 'specials_title').try(:[], 'cn_name').blank? ? "买手推荐" : data.try(:[], 'specials_title').try(:[], 'cn_name')
+			.more
+		.slides data-options='{ "effect": "fade", "play": 3000, "pause": 2500 }'
+			.list.slides_container
+				- (data['specials']||[]).each_slice(2).each do |specials|
+					ul.imgitem
+						- specials.each do |special|
+							li.imgli
+								a.link target="_blank" href="#{legacy_url(special['url'])}"
+									= image_tag "#{special['pic']}", :alt => " ", :class => "pic"
+	.People
+		a.title href="#{data['people'].try(:[], 'title').try(:[], 'url').blank? ? '/about/people' : legacy_url(data['people'].try(:[], 'title').try(:[], 'url'))}" target="_blank"
+			h3= data['people'].try(:[], 'title').try(:[], 'en_name').blank? ? "People" : data['people'].try(:[], 'title').try(:[], 'en_name')
+			span= data['people'].try(:[], 'title').try(:[], 'cn_name').blank? ? "人物" : data['people'].try(:[], 'title').try(:[], 'cn_name')
+			.more
+		- people = data['people'] || {}
+		= link_to image_tag(people['pic'].to_s, :alt => ''), legacy_url(people['url']), :class => 'pic', :target => "_blank"
+	.imgblock
+		- (data['images'] || []).each_with_index do |image, index|
+			a href=legacy_url(image['url']) class="link link#{index+1}" target="_blank"
+				= image_tag image['pic'].to_s, :alt => ""

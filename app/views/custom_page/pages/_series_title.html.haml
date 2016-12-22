@@ -1,0 +1,7 @@
+= stylesheet_inline_tag "custom_page/pages/series_title/#{data['theme']}.css" unless data['theme'].blank?
+-# stylesheet_inline_tag "custom_page/pages/series_title/#{data['arrange']}.css" unless data['arrange'].blank?
+.seriesbox.series_title
+	.bgside
+	.title
+		%h3= h data['title']
+	= render :partial => 'admin/custom_page/pages/series_preview', :locals => { :data => data }

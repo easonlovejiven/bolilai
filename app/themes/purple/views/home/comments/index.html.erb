@@ -1,0 +1,154 @@
+<% content_for :show_content do %>
+    <div class="comments_list">
+      <span class="top_line"></span>
+      <% if @units.total_count ==0 %>
+          <div class="list_empty">
+            <h3>暂无商品评价！</h3>
+            <a href="/shop/products">
+              <span>现在就去购物</span>
+            </a>
+          </div>
+      <% else %>
+          <div class="mc">
+            <div class="comt-plists">
+              <div class="comt-head">
+                <ul>
+                  <li class="col1">商品信息</li>
+                  <li class="col2">评价状态</li>
+                </ul>
+              </div>
+              <% @units.each do |unit| %>
+                  <%
+                     product = unit.item.product
+                     trade = unit.trade
+                  %>
+                  <div class="comt-plist">
+                    <div class="pro-info" oid="<%= trade.id %>" pid="<%= product.id %>">
+                      <ul>
+                        <li class="fore1">
+                          <div class="p-item">
+                            <div class="p-img">
+                              <%= image_tag product.major_image.url(:thumb), width: 60, height: 60, alt: '' %>
+                            </div>
+                            <div class="p-msg">
+                              <div class="p-name">
+                                <%= link_to product.name, shop_product_path(product), target: '_blank' %>
+                              </div>
+                              <div class="p-tiem ftx-03">
+                                购买时间：<%= trade.created_at.to_s(:db) %>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                        <li class="fore2 forem">
+                          <div class="op-wrap">
+                            <div class="op-cont">
+                              <div class="op-btns">
+                                <% if unit.comment_added %>
+                                    <%= link_to '已经评价', 'javascript:0;', class: "btn btn-xs" %>
+                                <% else %>
+                                    <%= link_to '点击评价', '#', class: 'btn btn-xs brown trigger_form', target: '_blank' %>
+                                <% end %>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div class="comt-box hide" oid="<%= trade.id %>" pid="<%= product.id %>">
+                      <div class="box-t"></div>
+                      <div class="comt-tip hide"></div>
+                      <% @record = Comment.new %>
+                      <%= form_for @record, as: 'comment', url: user_comments_path(@current_user), remote: true, method: 'post',
+                                   html: {class: 'form', id: 'commentPro'} do |f| %>
+                          <%= hidden_field_tag :commentable_id, product.id %>
+                          <%= hidden_field_tag :unit_id, unit.id %>
+                          <%= hidden_field_tag :commentable_type, 'Shop::Product' %>
+                          <div class="item">
+                            <span class="label"><em>*</em>评分：</span>
+
+                            <div class="fl">
+                                <span class="commstar">
+                                    <a href="#" class="star1" _val="1"></a>
+                                    <a href="#" class="star2" _val="2"></a>
+                                    <a href="#" class="star3" _val="3"></a>
+                                    <a href="#" class="star4" _val="4"></a>
+                                    <a href="#" class="star5" _val="5"></a>
+                                  <%= f.hidden_field :score, id: "scoreInput" %>
+                                </span>
+
+                              <div class="hide errors">
+                                <span class="comt-error">请打分数</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="item">
+                            <span class="label"><em>*</em>心得：</span>
+
+                            <div class="fl">
+                              <div class="summary-cont">
+                                <div class="sumy-area">
+                                  <%= f.text_area :body, class: "area", rows: "10", required: "true", placeholder: "商品是否给力？快分享你的购买心得吧~" %>
+
+                                  <div class="area-count">0-500字</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="item">
+                            <span class="label">晒图</span>
+
+                            <div class="fl">
+                              <%= render :partial => "shared/image_field",
+                                         locals: {field_name: 'comment[comment_images_attributes]', field: :pic, nested_filed: 'comment_images',
+                                                  field_key: 'pic_image', max_files: 6, required: true} %>
+                            </div>
+                          </div>
+                          <div class="item">
+                            <span class="label">&nbsp;</span>
+
+                            <div class="fl">
+                              <input type="submit" class="btn btn-xs brown" value="发表评价">
+                            </div>
+                          </div>
+                      <% end %>
+                    </div>
+                  </div>
+              <% end %>
+            </div>
+            <%= paginate @units, views_prefix: "shared", :theme => 'shop' %>
+          </div>
+      <% end %>
+    </div>
+<% end %>
+<%= render template: 'home/users/show_layout', locals: {user_info: {key: 'comments', value: '评价晒单'}} %>
+<script type="text/javascript">
+    $(function () {
+        $('.commstar').on('click', '>a', function () {
+            var $this = $(this);
+            $this.siblings('a').removeClass('active');
+            $this.siblings('input').val($this.attr('_val'));
+            $this.addClass('active')
+            return false;
+        });
+        $('.trigger_form', '.comt-plist').on('click', function () {
+            var $this = $(this);
+            var $comtBox = $this.parents('.comt-plist').find('.comt-box');
+            if ($comtBox.hasClass('hide')) {
+                $comtBox.removeClass('hide')
+            } else {
+                $comtBox.addClass('hide')
+            }
+            return false;
+        });
+        $('.comt-plists .comt-box').each(function () {
+            App.handleRjsCb($(this));
+            $("form", $(this)).on("ajax:success", function () {
+                window.location.reload();
+            })
+        })
+    })
+</script>

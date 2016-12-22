@@ -1,0 +1,80 @@
+.sort-filter {
+  font-size: 13px;
+  margin-top: 20px;
+  .sf-filter {
+    padding: 10px;
+    padding-top: 20px;
+    border: 1px solid #f2f2f2;
+    .sf-filter-item {
+      padding: 5px 0;
+      min-height: 32px;
+      border-top: 1px dotted #ddd;
+      &:first-child {
+        border-top: none;
+      }
+      span {
+        float: left;
+        padding: 0 7px;
+        color: #888;
+        font-size: 14px;
+      }
+      a {
+        display: inline-block;
+        margin-bottom: 10px;
+        padding: 0 8px;
+        color: #616161;
+        text-decoration: none;
+        &:hover {
+          color: #19A7F0;
+        }
+        &.active {
+          color: #fff;
+          background: #19A7F0;
+        }
+      }
+    }
+  }
+  .sf-category, .sf-tag {
+    padding: 2px 0;
+    margin-left: 50px;
+    background: #fff;
+  }
+  .sf-sort {
+    margin-top: 10px;
+    background: #f2f2f2;
+    border: 1px solid #f2f2f2;
+    a {
+      display: inline-block;
+      padding: 10px 12px;
+      color: #616161;
+      text-decoration: none;
+      .fa {
+        font-size: 12px;
+        margin-left: 3px;
+      }
+      &:hover {
+        color: #19A7F0;
+      }
+      &.active {
+        color: #19A7F0;
+        background: #fff;
+      }
+    }
+  }
+}
+
+.filter-warp {
+  margin: 10px 0;
+  input {
+    height: 28px;
+  }
+  .btn-filter {
+    color: #333333;
+    background-color: white;
+    border: 1px solid #e5e5e5;
+    padding: 3px 12px;
+  }
+  .input-group-addon {
+    padding: 3px 12px;
+  }
+}

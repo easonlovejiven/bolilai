@@ -1,0 +1,11 @@
+<ol class="breadcrumb">
+  <li><%= link_to '首页', '/' %></li>
+  <% category = @page.category
+     if category.present? %>
+      <% category.ancestors.each do |cate| %>
+          <li><%= link_to cate.name, cms_cate_link(cate) %></li>
+      <% end %>
+      <li><%= link_to category.name, cms_cate_link(category) %></li>
+  <% end %>
+  <li><%= @page.name %></li>
+</ol>

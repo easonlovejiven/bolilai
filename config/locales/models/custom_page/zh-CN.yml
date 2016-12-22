@@ -1,0 +1,19 @@
+zh-CN:
+  activerecord:
+    models:
+      custom_page/page: 页面
+    attributes:
+      custom_page/page:
+          name:  名称
+          series:  系列
+          position:  位置
+          snapshot: 快照
+          images_pic: 图片列表
+          title:  标题
+          keywords:  关键字
+          description:  描述
+          engine:  引擎
+          content:  内容
+          editor_id:  编辑
+          published?:  发布
+          active?:  有效

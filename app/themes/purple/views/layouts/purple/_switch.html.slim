@@ -1,0 +1,76 @@
+javascript:
+	$(function(){
+		$('.layout_switch_button').on('mousedown', function(){
+			$('body').removeClass('layout_weimall msn layout_msn cmbc layout_cmbc comm layout_comm qqcb layout_qqcb layout_jiayuan layout_cmb layout_icbc layout_sohu layout_360 layout_baidu layout_flash').addClass($(this).text().toLowerCase()+' layout_'+$(this).text().toLowerCase());
+			$(this).addClass('current').siblings().removeClass('current');
+		});
+	});
+ruby:
+	theme = case
+	when request.url =~ /msn\.weimall\.com/; msn = true
+	when request.url =~ /cmbc\.weimall\.com/; cmbc = true
+	when request.url =~ /comm\.weimall\.com/; comm = true
+	when request.url =~ /qqcb\.weimall\.com/; qqcb = true
+	when request.url =~ /jiayuan\.weimall\.com/; jiayuan = true
+	when request.url =~ /cmb\.weimall\.com/; cmb = true
+	when request.url =~ /icbc\.weimall\.com/; icbc = true
+	when request.url =~ /sohu\.weimall\.com/; sohu = true
+	when request.url =~ /360\.weimall\.com/; lux360 = true
+	when request.url =~ /baidu\.weimall\.com/; baidu = true
+	when request.url =~ /\?flash$/; flash = true
+	else; weimall = true
+	end
+.layout_switch
+	style type="text/css" scoped="scoped"
+		|
+			.layout_switch { z-index: 99999; position: fixed; left: 0; bottom: 0; font-size: 0; background-color: white; box-shadow: 0 0 10px rgba(0,0,0,0.2); }
+			.layout_switch .layout_switch_button { display: inline-block; width: 70px; height: 30px; line-height: 30px; font-size: 14px; text-align: center; }
+			.layout_switch .layout_switch_button.current { color: white !important; cursor: default; -moz-transition: all ease-in-out 0.5s; -webkit-transition: all ease-in-out 0.5s; -ms-transition: all ease-in-out 0.5s; transition: all ease-in-out 0.5s; }
+			.layout_switch .layout_switch_button.weimall { color: #44122B; }
+			.layout_switch .layout_switch_button.weimall.current { background-color: #44122B; }
+			.layout_switch .layout_switch_button.weimall:hover { box-shadow: 0 0 8px #44122B inset; }
+			.layout_switch .layout_switch_button.msn { color: #0071B5; }
+			.layout_switch .layout_switch_button.msn.current { background-color: #0071B5; }
+			.layout_switch .layout_switch_button.msn:hover { box-shadow: 0 0 8px #0071B5 inset; }
+			.layout_switch .layout_switch_button.cmbc { color: #339999; }
+			.layout_switch .layout_switch_button.cmbc.current { background-color: #339999; }
+			.layout_switch .layout_switch_button.cmbc:hover { box-shadow: 0 0 8px #339999 inset; }
+			.layout_switch .layout_switch_button.comm { color: #002261; }
+			.layout_switch .layout_switch_button.comm.current { background-color: #002261; }
+			.layout_switch .layout_switch_button.comm:hover { box-shadow: 0 0 8px #002261 inset; }
+			.layout_switch .layout_switch_button.qqcb { color: #f84600; }
+			.layout_switch .layout_switch_button.qqcb.current { background-color: #f84600; }
+			.layout_switch .layout_switch_button.qqcb:hover { box-shadow: 0 0 8px #f84600 inset; }
+			.layout_switch .layout_switch_button.layout_jiayuan { color: #f03b6e; }
+			.layout_switch .layout_switch_button.layout_jiayuan.current { background-color: #f03b6e; }
+			.layout_switch .layout_switch_button.layout_jiayuan:hover { box-shadow: 0 0 8px #f03b6e inset; }
+			.layout_switch .layout_switch_button.layout_cmb { color: #b61f00; }
+			.layout_switch .layout_switch_button.layout_cmb.current { background-color: #b61f00; }
+			.layout_switch .layout_switch_button.layout_cmb:hover { box-shadow: 0 0 8px #b61f00 inset; }
+			.layout_switch .layout_switch_button.layout_icbc { color: #BD000A; }
+			.layout_switch .layout_switch_button.layout_icbc.current { background-color: #BD000A; }
+			.layout_switch .layout_switch_button.layout_icbc:hover { box-shadow: 0 0 8px #BD000A inset; }
+			.layout_switch .layout_switch_button.layout_sohu { color: #FDD000; }
+			.layout_switch .layout_switch_button.layout_sohu.current { background-color: #FDD000; }
+			.layout_switch .layout_switch_button.layout_sohu:hover { box-shadow: 0 0 8px #FDD000 inset; }
+			.layout_switch .layout_switch_button.layout_360 { color: #360e0a; }
+			.layout_switch .layout_switch_button.layout_360.current { background-color: #360e0a; }
+			.layout_switch .layout_switch_button.layout_360:hover { box-shadow: 0 0 8px #360e0a inset; }
+			.layout_switch .layout_switch_button.layout_baidu { color: #192be4; }
+			.layout_switch .layout_switch_button.layout_baidu.current { background-color: #192be4; }
+			.layout_switch .layout_switch_button.layout_baidu:hover { box-shadow: 0 0 8px #192be4 inset; }
+			.layout_switch .layout_switch_button.flash { color: #666; }
+			.layout_switch .layout_switch_button.flash.current { background-color: #666; }
+			.layout_switch .layout_switch_button.flash:hover { box-shadow: 0 0 8px #666 inset; }
+	= link_to 'WEIMALL', '#', :class => "layout_switch_button weimall layout_weimall #{'current' if weimall}"
+	= link_to 'MSN', '#', :class => "layout_switch_button msn layout_msn #{'current' if msn}"
+	= link_to 'CMBC', '#', :class => "layout_switch_button cmbc layout_cmbc #{'current' if cmbc}"
+	= link_to 'COMM', '#', :class => "layout_switch_button comm layout_comm #{'current' if comm}"
+	= link_to 'QQCB', '#', :class => "layout_switch_button qqcb layout_qqcb #{'current' if qqcb}"
+	= link_to 'JiaYuan', '#', :class => "layout_switch_button layout_jiayuan #{'current' if jiayuan}"
+	= link_to 'CMB', '#', :class => "layout_switch_button layout_cmb #{'current' if cmb}"
+	= link_to 'ICBC', '#', :class => "layout_switch_button layout_icbc #{'current' if icbc}"
+	= link_to 'SOHU', '#', :class => "layout_switch_button layout_sohu #{'current' if sohu}"
+	= link_to '360', '#', :class => "layout_switch_button layout_360 #{'current' if lux360}"
+	= link_to 'baidu', '#', :class => "layout_switch_button layout_baidu #{'current' if baidu}"
+	= link_to 'FLASH', '#', :class => "layout_switch_button flash layout_flash #{'current' if flash}"

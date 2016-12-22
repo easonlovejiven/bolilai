@@ -1,0 +1,44 @@
+<% case trade.payment_service
+     when nil %>
+    <%= link_to "?", "#payment_service_#{trade.id}", "data-target" => "rightPanel" %>
+    <div id="payment_service_<%= trade.id %>" style="display:none;">
+      <% Shop::Trade::INDEPENDENT_BANKS.each do |bank| %>
+          <a href="<%= self.send("#{bank[:name]}_query_admin_shop_trade_path", trade) %>" data-target="rightPanel" class="express_icon express-<%= bank[:name] %>">
+            <div class='tips_text'><span><%= bank[:title] %></span><i class='icon'></i></div>
+          </a>
+      <% end %>
+    </div>
+<% when /^alipay/ %>
+    <a href="<%= alipay_query_admin_shop_trade_path(trade) %>" data-target="rightPanel" class="payment_icon payment-alipay">
+      <div class='tips_text'>
+        <span><%= Shop::Trade::PAYMENT_SERVICES[trade.payment_service] %></span><i class='icon'></i></div>
+    </a>
+<% when /^bill99/ %>
+    <a href="<%= bill99_query_admin_shop_trade_path(trade) %>" data-target="rightPanel" class="payment_icon payment-bill99">
+      <div class='tips_text'>
+        <span><%= Shop::Trade::PAYMENT_SERVICES[trade.payment_service] %></span><i class='icon'></i></div>
+    </a>
+<% when /^yeepay/ %>
+    <a href="<%= yeepay_query_admin_shop_trade_path(trade) %>" data-target="rightPanel" class="payment_icon payment-yeepay">
+      <div class='tips_text'>
+        <span><%= Shop::Trade::PAYMENT_SERVICES[trade.payment_service] %></span><i class='icon'></i></div>
+    </a>
+<% when 'shop' %>
+    <span class="payment_icon payment-shop"><div class="tips_text"><span>店铺</span><i class="icon"></i></div></span>
+<% when 'wechat' %>
+    微信<br/>
+    <%#= link_to Shop::Trade::PAYMENT_SERVICES[trade.payment_service], wechat_admin_shop_trade_path(trade), "data-target" => "rightPanel", :title => trade.payment_service %>
+<% else %>
+    <% path = self.respond_to?("#{trade.payment_service}_query_admin_shop_trade_path") && self.send("#{trade.payment_service}_query_admin_shop_trade_path", trade) %>
+    <% if path %>
+        <% if @current_user.try(:can_show_trade?)=="111" %>
+            <a href="<%= path %>" data-target="rightPanel" class="payment_icon payment-<%= trade.payment_service %>">
+              <div class='tips_text'>
+                <span><%= Shop::Trade::PAYMENT_SERVICES[trade.payment_service] %></span><i class='icon'></i></div>
+            </a>
+        <% end %>
+    <% else %>
+        <span class="payment_icon payment-<%= trade.payment_service %>"><div class="tips_text">
+          <span><%= Shop::Trade::PAYMENT_SERVICES[trade.payment_service] %></span><i class="icon"></i></div></span>
+    <% end %>
+<% end %>

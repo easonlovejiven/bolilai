@@ -1,0 +1,10 @@
+SOLR_CONFIG = YAML::load_file("#{Rails.root}/config/solr.yml")[Rails.env]
+REDIS_CONFIG = YAML::load_file("#{Rails.root}/config/redis.yml")[Rails.env]
+SMS_CONFIG = YAML::load_file("#{Rails.root}/config/sms.yml")[Rails.env]
+PAYMENT_CONFIG = YAML.load(File.open("#{Rails.root}/config/payment.yml"))
+DELIVERY_CONFIG = YAML.load(File.open("#{Rails.root}/config/delivery.yml"))
+OAUTH_CONFIG = YAML.load(File.open("#{Rails.root}/config/oauth.yml"))
+CDN_CONFIG = YAML.load(File.open("#{Rails.root}/config/cdn.yml"))[Rails.env]
+CALLCENTER_CONFIG = YAML.load(File.open("#{Rails.root}/config/callcenter.yml"))[Rails.env]
+LDAP_CONFIG = YAML.load(File.open("#{Rails.root}/config/ldap.yml"))[Rails.env]
+MAILER_CONFIG = YAML.load(File.open("#{Rails.root}/config/mailer.yml"))[Rails.env]

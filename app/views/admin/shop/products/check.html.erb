@@ -1,0 +1,62 @@
+<h2>产品检查</h2>
+
+<table class="widefat">
+	<thead>
+		<tr>
+			<th scope="col" class="check-column"><!-- <input type="checkbox" /> --></th>
+			<th>ID</th>
+			<th>标注</th>
+			<th>前缀</th>
+			<th>名称</th>
+			<th>备注</th>
+			<th>操作</th>
+			<th>发布</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% [
+			{ :message => "未填写标题", :scope => Shop::Product.where("name IS NULL OR name = ''") },
+			{ :message => "未填写描述", :scope => Shop::Product.where("description IS NULL OR description = ''") },
+			{ :message => "未填写原价", :scope => Shop::Product.where("price IS NULL") },
+			{ :message => "未填写售价", :scope => Shop::Product.where("discount IS NULL") },
+			{ :message => "价格大小不正确", :scope => Shop::Product.where("price IS NOT NULL AND discount IS NOT NULL AND price < discount") },
+			{ :message => "未选择商城", :scope => Shop::Product.where("mall_id IS NULL") },
+			{ :message => "未选择品牌", :scope => Shop::Product.where("brand_id IS NULL") },
+			{ :message => "未选择一级分类", :scope => Shop::Product.where("category1_id IS NULL") },
+			{ :message => "未选择二级分类", :scope => Shop::Product.where("category2_id IS NULL") },
+			{ :message => "两级分类不一致", :scope => Shop::Product.where("c1.id != c2.parent_id").joins("JOIN `#{Shop::Category.table_name}` c1 ON c1.id = `#{Shop::Product.table_name}`.category1_id JOIN `#{Shop::Category.table_name}` c2 ON c2.id = `#{Shop::Product.table_name}`.category2_id") },
+			{ :message => "未选择对象", :scope => Shop::Product.where("target IS NULL OR target = ''") },
+			{ :message => "未选择颜色", :scope => Shop::Product.where("color IS NULL OR color = ''") },
+			{ :message => "未填写颜色名称", :scope => Shop::Product.where("color_name IS NULL OR color_name = ''") },
+			{ :message => "未上传颜色图片", :scope => Shop::Product.where("color_pic IS NULL") },
+			{ :message => "未上传主图片", :scope => Shop::Product.where("major_pic IS NULL") },
+			{ :message => "未上传封面图片", :scope => Shop::Product.where("image_id IS NULL") },
+			{ :message => "未上传详细图片", :scope => Shop::Product.joins("JOIN `#{Shop::Image.table_name}` ON `#{Shop::Image.table_name}`.product_id = `#{Shop::Product.table_name}`.id AND `#{Shop::Image.table_name}`.active = TRUE AND `#{Shop::Image.table_name}`.large IS NULL") },
+			# { :message => "未发布所有单件", :scope => { :joins => "JOIN `#{Shop::Item.table_name}` ON `#{Shop::Item.table_name}`.product_id = `#{Shop::Product.table_name}`.id AND `#{Shop::Item.table_name}`.active = TRUE AND `#{Shop::Item.table_name}`.published = FALSE") },
+		].each do |group| %>
+        <% products = group[:scope].active.published.select("DISTINCT "+%w[id image_id major_pic label prefix name color remark published].map{|field| "`#{Shop::Product.table_name}`.`#{field}`" }.join(',')).map %>
+			<tr>
+				<td colspan="9"><%= h group[:message] %> (<%= products.size %>)</td>
+			</tr>
+			<% products.each do |product| %>
+				<tr>
+					<th scope="row" class="check-column"><!-- <input type="checkbox" name="delete[]" value="1" /> --></th>
+					<td><%= link_to product.id, { 'where[id]' => product.id, :action => 'index' }, remote: true,:style => "color:#{Shop::Product::COLORS[product.color]};" %></td>
+					<td><span class="<%= 'e' if @current_user.can?(:update,product) %>" data-url="<%= admin_shop_product_path(product) %>" data-field="product[label]"><%= h product.label %></span></td>
+					<td><span class="<%= 'e' if @current_user.can?(:update,product) %>" data-url="<%= admin_shop_product_path(product) %>" data-field="product[prefix]"><%= h product.prefix %></span></td>
+					<td><span class="<%= 'e' if @current_user.can?(:update,product) %>" data-url="<%= admin_shop_product_path(product) %>" data-field="product[name]"><%= h product.name %></span></td>
+					<td><span class="<%= 'e' if @current_user.can?(:update,product) %>" data-url="<%= admin_shop_product_path(product) %>" data-field="product[remark]"><%= h product.remark %></span></td>
+					<td class="op">
+						<%= link_to '查看', admin_shop_product_path(product) if @current_user.can_show_product? %>
+						<%= link_to '编辑', edit_admin_shop_product_path(product) if @current_user.can_update_product? %>
+						<%= link_to '删除', delete_admin_shop_product_path(product), "data-target" => "rightPanel" if @current_user.can_destroy_product? %>
+					</td>
+					<td><a href="javascript:void(0);" onfocus="this.blur();" class="status_button <%= 'active' if product.published? %> <%= 'enable' if @current_user.can_publish_product? %>" onmousedown="if(!$(this).hasClass('enable')) return false; that<%= r = rand(99999) %> = $(this); jQuery.ajax({data:'_method=put', dataType:'script', success: function(request){that<%= r %>.hasClass('active') ? that<%= r %>.removeClass('active') : that<%= r %>.addClass('active');}, type:'post', url:'/admin/shop/products/<%= product.id %>/'+($(this).hasClass('active') ? 'unpublish' : 'publish')});"></a></td>
+				</tr>
+			<% end %>
+			<% (products.size%2+1).times do %>
+				<tr></tr>
+			<% end %>
+		<% end %>
+	</tbody>
+</table>

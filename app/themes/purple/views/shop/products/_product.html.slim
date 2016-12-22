@@ -1,0 +1,28 @@
+ruby:
+  dom_id ||= rand(999999)
+  is_large ||= nil
+  rel ||= nil
+
+.item class="list_block #{ is_large ? 'large' : 'small' } " data-id="#{product.id}" id="product_#{dom_id}"
+  /a.item_mod rel=rel href="#{shop_product_path(product)}" data-target="product_#{dom_id}" class="prefetch" id="product_#{dom_id}_link" data-dom_id="product_#{dom_id}" data-id="#{product.id}" data-pic="#{image_path "#{product.image && product.image.large_image(:medium)}"}" title=product.name
+  a.item_mod rel=rel href="#{shop_product_path(product)}" class="prefetch" id="product_#{dom_id}_link" data-dom_id="product_#{dom_id}" data-id="#{product.id}" data-pic="#{image_path "#{product.image && product.image.large_image(:medium)}"}" title=product.name
+    .link
+      = image_tag "#{product.major_image.url(:thumb220)}", :alt => [product.brand.try(:name), product.name.to_s.gsub(product.brand.try(:name).to_s.strip, '').gsub(product.brand.try(:chinese).to_s.strip, '')].compact.join(' '), :class => "img"
+      span.current
+        | ￥
+        = h product.price
+      span.del
+        | ￥
+        = h product.discount
+      span.summary
+        span= h product.brand ? product.brand.name : ''
+        = h product.name.to_s.gsub(product.brand ? product.brand.name.to_s.strip : '', '').gsub(product.brand ? product.brand.chinese.to_s.strip : '', '')
+      - if product.unsold_count == 0
+        span.product_tag_soldout 售完
+      - elsif product.label.present?
+        span.product_tag_label
+          = h product.label
+      - elsif product.percent_text && product.percent_text.to_f <= 3
+        span.product_tag_discount
+          span.product_tag_discount_num= h product.percent_text
+          span.product_tag_discount_text 折

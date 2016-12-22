@@ -1,0 +1,71 @@
+<% @barlar = "http://#{ENV["FIX_DEV_URL"]}www.barlar.cn/" %>
+<% @s0 = "http://#{ENV["FIX_DEV_URL"] ? "dev.www" : "s0"}.barlar.cn/statics/mail/notification/" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>激活成功</title>
+</head>
+<body>
+<table width="98%" cellspacing="0" cellpadding="40" border="0">
+  <tbody>
+  <tr>
+    <td width="100%" bgcolor="#313131" align="center" style="font-family:'微软雅黑','Microsoft YaHei',verdana;">
+      <table width="600" cellspacing="0" cellpadding="0" border="0">
+        <tbody>
+        <tr>
+          <td style="background: #000; color: #fff; vertical-align: middle; overflow:hidden; height:25px; text-align: left; padding:5px;">
+            <!--header 开始-->
+            <table width="601" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#000" style="background:#000; width:601px; height:34px;">
+              <tr>
+                <td style="background:#000;">
+                  <a href="http://www.barlar.cn" target="_blank" title="barlar 珀丽莱 轻奢珠宝时尚品牌" style=" outline:none; text-decoration:none;" hidefocus="true"><span  height="34"  border="0" style="margin: 0 auto;display: block;color:#fff; font-size:12px;width: 570px">珀丽莱商城(www.barlar.cn)</span></a>
+                </td>
+              </tr>
+            </table>
+            <!--header 结束-->
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" style="background-color: #fff; border-bottom: 1px solid #ebebeb; font-family:'微软雅黑','Microsoft YaHei',verdana; padding: 15px;" colspan="2">
+            <table width="100%">
+              <tbody>
+              <tr>
+                <td width="470px" valign="top" align="left" style="font-size: 12px; padding:10px;">
+                  <div style="margin-bottom: 15px; font-size: 14px; font-weight:bold; color:#000;">尊敬的
+                    <strong style="color:#7f1e95;"><%= @account.user.name %></strong>， 您好：
+                  </div>
+                  <div style="font-family:'微软雅黑','Microsoft YaHei',verdana; color:#000; margin-bottom:5px;">您已经成功激活了珀丽莱账户。</div>
+                  <div style="font-family:'微软雅黑','Microsoft YaHei',verdana; color:#000; margin-bottom:5px;">您的登录账号是：<a href="#" style="color:#7f1e95;"><%= @account.email %></a>
+                  </div>
+
+                </td>
+                <td width="150" valign="top" align="left" style="padding:10px 10px 0 20px;">
+                  <table cellspacing="0" cellpadding="0" width="100%" style="border-collapse: collapse;">
+                    <tbody>
+                    <tr>
+                      <td align="center" style="padding:10px 0; background-color:#7f1e95;">
+                        <a target="_blank" href="<%= @barlar %>" title="立即查看" style="color:#fff; text-decoration:none; font-weight:bold;">立即查看</a>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td align="center" style="color:#555; padding: 10px; font-size: 12px; font-family:'微软雅黑','Microsoft YaHei',verdana; font-weight:bold;">
+            珀丽莱
+            <a target="_blank" href="<%= @barlar %>" title="WWW.BARLAR.COM" style="color:#555; font-size: 12px; font-family:'微软雅黑','Microsoft YaHei',verdana; text-decoration:none; font-weight:bold;">WWW.BARLAR.COM</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

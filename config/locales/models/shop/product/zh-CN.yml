@@ -1,0 +1,72 @@
+zh-CN:
+  activerecord:
+    models:
+      shop/product: 商品
+    attributes:
+      shop/product:
+        user_id: 编辑ID
+        label: 标注
+        prefix: 前缀
+        name: 名称
+        description: 描述
+        major_pic: 主图片（1000x1000）
+        model_pic: 模特图片（1000x1000）
+        detail_pic: 详情图片（不限）
+        pic_pic: 列表页图片（145x145）
+        cart_pic: 订单图片（80x80）
+        fitting_pic: 试衣间图片（不限）
+        download_pic: 下载图片（不限）
+        spec_pic: 尺寸说明图片（不限）
+        measure_table: 尺寸表格
+        measure_description: 尺寸描述
+        measure_style: 尺寸款型
+        color_pic: 颜色图片（35x35）
+        color_name: 颜色名称
+        match_pic: 搭配图片（200x370）
+        match_product_ids: 搭配产品ID列表，用英文逗号分隔
+        identifier: 编号
+        keywords: 关键字，用英文逗号分隔
+        styles: 款式，用英文逗号分隔
+        brand_link: 品牌链接
+        brand_description: 品牌描述
+        material: 材料
+        accelerator: 配件
+        percent: 最大折扣（0-20）
+        point: 积分
+        zoom: 缩放
+        image_id: 主图片ID
+        video_id: 主视频ID
+        market_id: 专场ID
+        category_id: 分类ID
+        mall_id: 商城ID
+        category1_id: 一级分类ID
+        category2_id: 二级分类ID
+        category3_id: 三级分类ID
+        images_large: 图片列表
+        brand_id: 品牌ID
+        multibuy_id: 连拍ID
+        attribute_data: 属性数据
+        relate_product_ids: 相关产品ID列表，用英文逗号分隔
+        rec?: 推荐？
+        rec_pic: 推荐图片
+        target: 对象
+        thickness: 厚度
+        elasticity: 弹力
+        pliability: 柔软，可以为%w[柔软 适中 偏硬]之一
+        recommend: 推荐
+        color: 颜色
+        order: 排序
+        price: 市场价
+        discount: 销售价
+        discount_history: 销售价历史
+        original_price: 原始价
+        minimum_price: 最低价
+        shop_price: 店铺价
+        sold_count: 已售出数
+        unsold_count: 未售出数
+        measures_unsold_count: 各尺寸未售出数
+        scarcity: 稀缺
+        readings_count: 浏览数
+        storage_location: 仓库地点
+        published?: 发布？
+        active?: 有效？

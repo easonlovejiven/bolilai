@@ -1,0 +1,107 @@
+<h2>地址列表（<%= @contacts.count %>）</h2>
+
+<form action="/admin/shop/contacts" method="get" id="search_form">
+  <div class="tablenav">
+    <div class="alignleft op">
+      <%= link_to '创建', new_admin_shop_contact_path if @current_user.can_create_contact? %>
+      &nbsp;|&nbsp;
+      <%= label_tag "where[id]", "ID" %><%= text_field_tag "where[id]", params[:where] && params[:where][:id], :size => 4 %>
+      <%= label_tag "where[user_id]", "用户ID" %><%= text_field_tag "where[user_id]", params[:where] && params[:where][:user_id], :size => 4 %>
+      <%= label_tag "where[name][like]", "姓名" %><%= text_field_tag "where[name][like]", params[:where] && params[:where][:name] && params[:where][:name][:like].to_s.gsub('%', ''), :size => 10 %>
+      <%= label_tag "where[country][like]", "国家" %><%= text_field_tag "where[country][like]", params[:where] && params[:where][:country] && params[:where][:country][:like].to_s.gsub('%', ''), :size => 10 %>
+      <%= label_tag "where[province][like]", "省份" %><%= text_field_tag "where[province][like]", params[:where] && params[:where][:province] && params[:where][:province][:like].to_s.gsub('%', ''), :size => 10 %>
+      <%= label_tag "where[city][like]", "城市" %><%= text_field_tag "where[city][like]", params[:where] && params[:where][:city] && params[:where][:city][:like].to_s.gsub('%', ''), :size => 10 %>
+      <%= label_tag "where[town][like]", "区县" %><%= text_field_tag "where[town][like]", params[:where] && params[:where][:town] && params[:where][:town][:like].to_s.gsub('%', ''), :size => 10 %>
+      <%= label_tag "where[address][like]", "地址" %><%= text_field_tag "where[address][like]", params[:where] && params[:where][:address] && params[:where][:address][:like].to_s.gsub('%', ''), :size => 10 %>
+      <%= label_tag "where[postcode][like]", "邮编" %><%= text_field_tag "where[postcode][like]", params[:where] && params[:where][:postcode] && params[:where][:postcode][:like].to_s.gsub('%', ''), :size => 10 %>
+      <%= label_tag "where[phone][like]", "电话" %><%= text_field_tag "where[phone][like]", params[:where] && params[:where][:phone] && params[:where][:phone][:like].to_s.gsub('%', ''), :size => 10 %>
+      <%= label_tag "where[mobile][like]", "手机" %><%= text_field_tag "where[mobile][like]", params[:where] && params[:where][:mobile] && params[:where][:mobile][:like].to_s.gsub('%', ''), :size => 10 %>
+      <%= label_tag "where[delivery_service]", "快递" %><%= select "where", "delivery_service", options_for_select(Shop::Trade.delivery_coms_arr.map { |s| [s[:title], s[:name]] }, params[:where] && params[:where][:delivery_service]), {:prompt => ""} %><%= text_field_tag "where[delivery_identifier][like]", params[:where] && params[:where][:delivery_identifier] && params[:where][:delivery_identifier][:like].to_s.gsub('%', ''), :size => 8 %>
+      <%= label_tag "where[remark][like]", "备注" %><%= text_field_tag "where[remark][like]", params[:where] && params[:where][:remark] && params[:where][:remark][:like].to_s.gsub('%', ''), :size => 10 %>
+      <%= label_tag "where[created_at][gteq]", "创建时间" %><%= text_field_tag "where[created_at][gteq]", params[:where] && params[:where][:created_at] && params[:where][:created_at][:gteq], :size => 10, :class => "datepicker" %>
+      ~<%= text_field_tag "where[created_at][lteq]", params[:where] && params[:where][:created_at] && params[:where][:created_at][:lteq], :size => 10, :class => "datepicker" %>
+      <%= label_tag "order[id]", "ID" %><%= select_tag "order[id]", options_for_select([['', nil], ['↑', 'asc'], ['↓', 'desc']], !params[:order].blank? && params[:order][:id]), :style => "width:40px;" %>
+      <%= label_tag "order[created_at]", "创建时间" %><%= select_tag "order[created_at]", options_for_select([['', nil], ['↑', 'asc'], ['↓', 'desc']], !params[:order].blank? && params[:order][:created_at]), :style => "width:40px;" %>
+      <%= label_tag "per_page", "每页" %><%= select_tag "per_page", options_for_select([['', nil]]+[10, 20, 30, 50, 100, 200, 300, 500].map { |i| [i, i] }, params[:per_page].to_i), :style => "width:50px;" %>
+      <input type="submit" id="post-query-submit" value="搜索" class="button-secondary"/>
+      <%= link_to t(:reset), request.path, class: 'btn search-xs btn-default', data: {remote: true} %>
+    </div>
+    <br class="clear"/>
+  </div>
+</form>
+
+<br class="clear"/>
+
+<table class="widefat">
+  <thead>
+  <tr>
+    <th scope="col" class="check-column"><!-- <input type="checkbox" /> --></th>
+    <th>
+      ID
+      <%= link_to_unless !params[:order].blank? && params[:order][:id].to_s.downcase == 'asc', "↑", :overwrite_params => {:order => {:id => 'asc'}} %>
+      <%= link_to_unless !params[:order].blank? && params[:order][:id].to_s.downcase == 'desc', "↓", :overwrite_params => {:order => {:id => 'desc'}} %>
+    </th>
+    <th>用户</th>
+    <th>成功交易</th>
+    <th>姓名</th>
+    <th>国家</th>
+    <th>省份</th>
+    <th>城市</th>
+    <th>区县</th>
+    <th>地址</th>
+    <th>邮编</th>
+    <th>电话</th>
+    <th>手机</th>
+    <th>快递服务</th>
+    <th>备注</th>
+    <th>
+      创建时间
+      <%= link_to_unless !params[:order].blank? && params[:order][:created_at].to_s.downcase == 'asc', "↑", :overwrite_params => {:order => {:created_at => 'asc'}} %>
+      <%= link_to_unless !params[:order].blank? && params[:order][:created_at].to_s.downcase == 'desc', "↓", :overwrite_params => {:order => {:created_at => 'desc'}} %>
+    </th>
+    <th class="table_set">操作</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @contacts.each do |contact| %>
+      <tr>
+        <th scope="row" class="check-column"><!-- <input type="checkbox" name="delete[]" value="1" /> --></th>
+        <td><%= link_to contact.id, 'where[id]' => contact.id %></td>
+        <td><%= render :partial => "admin/shop/users/user", :object => contact.user %></td>
+        <td><%= (c = Shop::Trade.count(:conditions => ["status IN('ship','receive','complete') AND user_id = ?", contact.user_id])); link_to_if(@current_user.can_show_trade?, c.to_i, admin_shop_trades_path('where[user_id]' => contact.user_id)) %></td>
+        <td><%= contact.name %></td>
+        <td><%= contact.country %></td>
+        <td><%= contact.province %></td>
+        <td><%= contact.city %></td>
+        <td><%= contact.town %></td>
+        <td><span title="<%= contact.address %>"><%= contact.address %></span></td>
+        <td><%= contact.postcode %></td>
+        <td>
+          <%= contact.phone %>
+          &nbsp;&nbsp;<%= contact.phone %>
+        </td>
+        <td>
+          <%= contact.mobile %>
+          <%= link_to '✎', new_admin_shop_sms_path('sms[phone]' => contact.mobile), :rel => "facebox", :style => "font-size:18px; line-height:14px; display:inline-block;" if @current_user.can_create_sms? && !contact.mobile.blank? %>
+          &nbsp;&nbsp;<%= contact.mobile %>
+        </td>
+        <td><%= (s = Shop::Trade.delivery_coms_arr.find { |d| d[:name] == contact.delivery_service }) && s[:title] %></td>
+        <td>
+          <span class="<%= 'editable' if @current_user.can_update_contact? %>" data-url="<%= admin_shop_contact_path(contact) %>" data-field="contact[remark]"><%= contact.remark %></span>
+        </td>
+        <td><%= contact.created_at && contact.created_at.to_s(:db) %></td>
+        <td class="op">
+          <%= link_to '查看', admin_shop_contact_path(contact), class: 'btn search-xs btn-success', :rel => "facebox" if @current_user.can_show_contact? %>
+          <%= link_to '编辑', edit_admin_shop_contact_path(contact), class: 'btn search-xs btn-success' if @current_user.can_update_contact? %>
+          <%= link_to '复制', new_admin_shop_contact_path(:from_id => contact.id), class: 'btn search-xs btn-success' if @current_user.can_create_contact? %>
+        </td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<script type="text/javascript">
+    $(function () {
+        App.handleDatePickers(undefined, false);
+    })
+</script>

@@ -1,0 +1,67 @@
+%h2 页面列表（#{@pages.total_count}）
+= form_tag request.path, :method => "get", :id => "search_form" do
+	.tablenav
+		.alignleft
+			= link_to '新建', new_admin_page_path if can?(:create, CustomPage::Page.new)
+			= link_to '定制', customizer_admin_pages_path if can?(:create, CustomPage::Page.new)
+			&nbsp;|&nbsp;
+			= label_tag "where[id][]", "ID"
+			= render :partial => 'admin/shared/search', :locals => { :name => 'id', :title => 'ID', :multiple => true }
+			= label_tag "where[name][like]", "名称"
+			= text_field_tag "where[name][like]", params[:where] && params[:where][:name] && params[:where][:name][:like].to_s.gsub('%', '')
+			= label_tag "where[series]", "系列"
+			= text_field_tag "where[series]", params[:where] && params[:where][:series]
+			= label_tag "where[position]", "位置"
+			= select_tag "where[position]", options_for_select([nil] + CustomPage::Page::POSITIONS.map { |p| [p[:name], p[:value]] }, params[:where] && params[:where][:position])
+			= label_tag "where[title][like]", "标题"
+			= text_field_tag "where[title][like]", params[:where] && params[:where][:title] && params[:where][:title][:like].to_s.gsub('%', '')
+			= label_tag "where[engine]", "引擎"
+			= select_tag "where[engine]", options_for_select([nil] + CustomPage::Page::ENGINES, params[:where] && params[:where][:engine])
+			= label_tag "where[created_at]", "创建时间"
+			= text_field_tag "where[created_at][gteq]", params[:where] && params[:where][:created_at] && params[:where][:created_at][:gteq], :class => "datepicker"
+			\ ~
+			= text_field_tag "where[created_at][lteq]", params[:where] && params[:where][:created_at] && params[:where][:created_at][:lteq], :class => "datepicker"
+			= label_tag "where[published]", "发布"
+			= select_tag "where[published]", options_for_select([nil, ['✔', 'true'], ['✘', 'false']], params[:where] ? params[:where][:published] : nil)
+			= label_tag "where[editor_id]", "编辑ID"
+			= text_field_tag "where[editor_id]", params[:where] && params[:where][:editor_id]
+			= label_tag "order", "排序"
+			= select_tag "order", options_for_select([nil] + [%w[id ID], %w[created_at 创建时间], %w[updated_at 更新时间]].map { |name, title| [["#{title} ↑", "#{name} asc"], ["#{title} ↓", "#{name} desc"]] }.inject([], &:+), params[:order])
+			= label_tag "per_page", "每页"
+			= select_tag "per_page", options_for_select([nil, 10, 20, 30, 50, 100, 200, 300, 500, 1000, 2000, 3000, 5000], params[:per_page].to_i)
+			= label_tag "page", "页数"
+			= text_field_tag "page", params[:page]
+			= submit_tag '搜索', :name => nil, :class => "button-secondary"
+		%br.clear
+%br.clear
+%table.widefat
+	%thead
+		%tr
+			- %w[ID 名称 快照 系列 位置 标题 引擎 创建时间 编辑 操作 发布].each do |name|
+				%th= name
+	%tbody
+		- @pages.each do |page|
+			%tr
+				%td= link_to page.id, 'where[id]' => page.id
+				%td
+					%span(class="#{'editable' if can?(:update, page)}" data-url="#{admin_page_path(page)}" data-field="#{page.class.name.underscore.gsub('/', '_')}[name]")= h page.name
+				%td(style="padding:0;")= link_to image_tag(page.snapshot.to_s, :alt => '', :style => "max-width: 64px; max-height: 128px;"), image_path(page.snapshot.to_s), :rel => 'facebox' if page.snapshot
+				%td
+					%span(class="#{'editable' if can?(:update, page)}" data-url="#{admin_page_path(page)}" data-field="#{page.class.name.underscore.gsub('/', '_')}[series]")= h page.series
+				%td= CustomPage::Page::POSITIONS.map { |p| { p[:value] => p[:name] } }.inject(&:merge)[page.position]
+				%td
+					%span(class="#{'editable' if can?(:update, page)}" data-url="#{admin_page_path(page)}" data-field="#{page.class.name.underscore.gsub('/', '_')}[title]")= h page.title
+				%td= page.engine
+				%td= page.created_at && page.created_at.to_s(:db)
+				%td= link_to_if can?(:show, page.editor), h(page.editor.name), admin_manage_editor_path(page.editor), "data-target" => "rightPanel" if page.editor
+				%td
+					= link_to '查看', admin_page_path(page) if can?(:show, page)
+					= link_to '编辑', edit_admin_page_path(page) if can?(:update, page)
+					= link_to '删除', delete_admin_page_path(page), :rel => 'facebox' if can?(:destroy, page)
+					= link_to '复制', new_admin_page_path(:id => page.id) if can?(:create, page)
+					= link_to '预览', preview_admin_page_path(page) if can?(:show, page)
+					= link_to '刷新', clear_admin_products_path('urls' => [url_for(page).to_str]), :method => :post if can?(:show, :product)
+					= link_to '访问', page
+					-# link_to '快照', snapshoot_admin_page_path(page), :confirm => "确定吗？", :method => :put if can?(:show, page)
+				%td(style="padding:0;")= render :partial => "auction/admin/shared/publish", :object => page
+= render :partial => "admin/shared/pagination"

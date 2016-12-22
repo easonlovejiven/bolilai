@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>产品装箱单</title>
+		<%= stylesheet_link_tag 'admin/shop/print', :media => 'screen, print' %>
+	</head>
+	<style type="text/css" media="print">
+		.noprint{ display : none }
+	</style>
+	<script type="text/javascript">window.print();</script>
+	<body>
+		<div class="content">
+			<!--<span class="barcode">条形码黏贴处</span>-->
+			<%#= image_tag "", alt: "", class: "logo" %>
+			<h1 class="headertitle">珀丽莱产品装箱单</h1>
+			<% contact = @trade.contact %>
+			<div class="detailsinfo">
+				<p class="root">
+					<span><strong>客户代表：</strong> 珀丽莱客服</span>
+					<span class="youbian"><strong>客户所在地邮政编码：</strong> <%= h contact.try(:postcode)  %></span>
+				</p>
+				<p><strong>收件人：</strong><%= h contact.try(:name)  %></p>
+				<p><strong>订单号：</strong><%= h @trade.identifier %></p>
+			</div>
+			<div class="listinfo">
+				<h2>产品清单：</h2>[
+				<table>
+					<thead>
+						<tr>
+							<th class="box1">商品编号</th>
+							<th class="box2">商品名称</th>
+							<th class="box3">数量</th>
+							<th class="box4">产品单价</th>
+							<th class="box6">产品金额</th>
+							<th class="box7">备注</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% @trade.units.each do |unit| %>
+
+						<tr>
+							<td class="<%= h unit.status == 'complete' ? 'elimination' : '' %>"><%= h unit.item.identifer %></td>
+							<td class="<%= h unit.status == 'complete' ? 'elimination' : '' %>"><%= h unit.item.product.name %></td>
+							<td class="<%= h unit.status == 'complete' ? 'elimination' : '' %>">1</td>
+							<td class="<%= h unit.status == 'complete' ? 'elimination' : '' %>"><%= h unit.discount unless @trade.is_present %></td>
+							<td class="<%= h unit.status == 'complete' ? 'elimination' : '' %>"><%= h unit.price unless @trade.is_present %></td>
+							<td><%= h unit.status == 'complete' ? '已退货' : '正常' %></td>
+						</tr>
+						<% end %>
+						<tr>
+							<td>小计</td>
+							<td></td>
+							<td><%= h @trade.units.reject{|u| u.status == 'complete' }.size %></td>
+							<td><%= h @trade.units.reject{|u| u.status == 'complete' }.map(&:discount).sum unless @trade.is_present %></td>
+							<td><%= h @trade.units.reject{|u| u.status == 'complete' }.map(&:price).sum unless @trade.is_present %></td>
+							<td></td>
+				        </tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="helpinfo">
+				<p>(1)客户已认真检查，确认商品外包装完好无破损后签收</p>
+				<p>(2)如产品无本身严重缺陷和质量问题，客户已认可不退不换</p>
+				<p>(3)如商品上的珀丽莱防伪标记（吊牌等）被撕毁或移除，客户已认可不退不换</p>
+				<p>(4)如发票遗失，客户已认可不退不换</p>
+			</div>
+			<div class="pymentinfo">
+				<table>
+					<tr>
+						<td><strong>支付方式：</strong><span><%= h Shop::Trade::PAYMENT_SERVICES[@trade.payment_service] %></span></td>
+						<td class="amount"><strong>本次应付金额总计：</strong><span><%= h @trade.payment_price unless @trade.is_present %> RMB</span></td>
+					</tr>
+				</table>
+			</div>
+			<div class="footerinfo">
+				<!--<div class="code_pic">-->
+					<!--<div class="title">-->
+					<!--</div>-->
+					<!--<div class="pic"><img src="http://s.jiathis.com/qrcode.php?url=http%3A%2F%2Fbarlar.cn%3Ffrom%3Dplist" /></div>-->
+				<!--</div>-->
+				<p>如果您有任何问题，请及时与我们联系</p>
+				<p>客服热线：400-6915-695</p>
+				<p>官方网站：www.barlar.cn</p>
+			</div>
+		</div>
+
+		<div class="button noprint">
+			<input type="button" value="打印" onclick="window.print();"/>
+		</div>
+
+	</body>
+</html>

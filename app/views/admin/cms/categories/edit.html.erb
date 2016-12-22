@@ -1,0 +1,150 @@
+<% @record = @category %>
+<% @show = !%w[new edit].include?(params[:action]) && @record.valid? %>
+<div class="modal-header">
+  <%= render "admin/modal/header" %>
+</div>
+<%= render 'admin/shared/prompt' %>
+<div class="modal-body">
+  <%= form_for @category, as: :category, url: @category.new_record? ? admin_cms_categories_path : admin_cms_category_path(@category),
+               html: {class: "form-horizontal"} do |f| %>
+      <% if @show %>
+          <div class="form-group">
+            <%= f.label :id, 'ID', {class: 'col-md-3 control-label'} %>
+            <div class="form-control-static">
+              <%= f.hidden_field :id %>
+              <strong><%= @category.send(:id) %></strong>
+            </div>
+          </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= f.label :name, '<sup>*</sup>名称'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= h @category.name %>
+            </div>
+        <% else %>
+            <div class="col-md-8">
+              <%= f.text_field :name, {class: 'form-control', required: true} %>
+            </div>
+        <% end %>
+      </div>
+
+
+      <div class="form-group">
+        <%= f.label :description, '描述'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= h @category.description %>
+            </div>
+        <% else %>
+            <div class="col-md-8">
+              <%= f.text_area :description, {class: 'form-control'} %>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :parent_id, '父类'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= h @category.parent_id %>
+            </div>
+        <% else %>
+            <div class="col-md-8">
+              <%= f.select :parent_id, cms_options_category_select(@category.parent && @category.parent.id), {:include_blank => 'root'}, {class: 'form-control'} %>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :template_type, '<sup>*</sup>模板类型'.html_safe, class: 'col-md-3 control-label' %>
+        <div class="col-md-8">
+          <% if @show %>
+              <div class="form-control-static">
+                <%= Cms::Category::TEMPLATE_TYPE[@category.template_type] %>
+              </div>
+          <% else %>
+              <%= f.select :template_type, Cms::Category::TEMPLATE_TYPE.invert, {:include_blank => false}, {class: 'form-control', required: true} %>
+              <span class="note"><%= f.error_message_on :template_type %></span>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :url, '网址', class: 'col-md-3 control-label' %>
+        <div class="col-md-8">
+          <% if @show %>
+              <div class="form-control-static">
+                <strong><%= @record.url %></strong>
+              </div>
+          <% else %>
+              <%= f.text_field :url, {class: 'form-control'} %>
+              <span class="note">必须用 "/" 符号开头，例如：/about_us<%= f.error_message_on :url %></span>
+          <% end %>
+        </div>
+      </div>
+
+      <% if @show %>
+          <div class="form-group">
+            <%= f.label :url, '是否单独页', class: 'col-md-3 control-label' %>
+            <div class="col-md-8">
+
+              <div class="form-control-static">
+                <strong><%= @record.is_page ? "是" : "否" %></strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :body, '页面内容', class: 'col-md-3 control-label' %>
+            <div class="col-md-8">
+              <div class="form-control-static">
+                <%= @record.body %>
+              </div>
+            </div>
+          </div>
+      <% else %>
+          <div class="form-group">
+            <%= f.label :url, '是否单独页', class: 'col-md-3 control-label' %>
+            <div class="col-md-8">
+              <label class="radio radio-inline">
+                <%= f.radio_button :is_page, false %><span>否</span>
+              </label>
+              <label class="radio radio-inline">
+                <%= f.radio_button :is_page, true %><span>是</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group body_field" style="<%= 'display:none' unless @record.is_page %>">
+            <%= f.label :body, '页面内容', class: 'col-md-3 control-label' %>
+            <div class="col-md-8">
+              <%= f.text_area :body, id: "ueditorContent" %>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <input type="submit" value="提交" class="btn btn-primary"/>
+          </div>
+      <% end %>
+  <% end %>
+</div>
+
+<%= javascript_include_tag "plugins/ueditor/ueditor.all" %>
+<script type="text/javascript">
+    $(function () {
+        UE.getEditor("ueditorContent", {
+            autoFloatEnabled: true,
+            initialFrameWidth: "100%",
+            initialFrameHeight: 240
+        });
+        $("[name='category[is_page]']").on("change", function () {
+            if ($(this).val() == "true") {
+                $('.form-group.body_field').show();
+            } else {
+                $('.form-group.body_field').hide();
+            }
+        })
+    })
+</script>

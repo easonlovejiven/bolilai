@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <title>注册成功</title>
+</head>
+<body style="background-color:#f8f8f8;font-family:'微软雅黑',Microsoft YaHei,verdana;margin:0; padding:0;">
+<table width="100%" align="center" cellspacing="0" cellpadding="0" border="0" bgcolor="#e2e2e2" style="background-color:#d7d7d7; margin:0 auto; width:100%; ">
+  <tbody>
+  <tr>
+    <td style="border:none; background-color:#f8f8f8; width:100%; font-family:'微软雅黑',Microsoft YaHei,verdana; " width="100%" bgcolor="#f8f8f8">
+      <!--header 开始-->
+      <table width="601" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#000" style="background:#000; width:601px; height:34px;">
+        <tr>
+          <td style="background:#000;">
+            <a href="http://www.barlar.cn" target="_blank" title="barlar 珀丽莱 轻奢珠宝时尚品牌" style=" outline:none; text-decoration:none;" hidefocus="true"><span height="34" border="0" style="margin: 0 auto;display: block;color:#fff; font-size:12px;width: 570px">珀丽莱商城(www.barlar.cn)</span></a>
+          </td>
+        </tr>
+      </table>
+      <!--header 结束-->
+      <!--content 开始-->
+      <table width="601" border="0" cellspacing="0" cellpadding="0" bgcolor="#fff" style="background:#fff;" align="center">
+        <tr>
+          <td>
+            <table width="526" border="0" cellspacing="0" cellpadding="0" align="center">
+              <tr>
+                <td height="76" colspan="2" valign="bottom" style="font-size:16px; font-weight:bold; border-bottom:3px solid #e5e5e5;">
+                  <p style="padding:0; margin:5px 0;">注册成功</p></td>
+              </tr>
+              <tr>
+                <td width="381" valign="bottom" style="font-size:12px; color:#333333; line-height:24px;" height="124">尊敬的
+                  <span style="color:#cfa972;"><%= h @user.name %></span>， 您好：<br/>
+                  <span style="padding:0; margin:0; font-size:14px;">您已经成功注珀丽莱（www.barlar.cn）账户！<br/>欢迎您的加入！<br/></span>
+                  请点击右侧的链接查看您的账户。
+                </td>
+                <td width="145" align="right" valign="top" style=" padding-top:34px; padding-right:2px;">
+                  <a href="http://www.barlar.cn" target="_blank" style=" outline:none;" hidefocus="ture" title="立即查看">
+                    <img src="<%= asset_url("purple/mailer/look_btn.jpg") %>" alt="立即查看" width="106" height="33" border="0" style=" font-size:15px; color:#000; "/>
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" valign="bottom" height="83">
+                  <p style="font-size:15px; text-align:center; height:18px; width:515px; margin:0 5px; line-height:18px; padding:18px 0; background:#fffff7; border:1px solid #eeeeee; ">您的登录账号是：<a href="http://www.barlar.cn" target="_blank" style=" color:#e0519a; "><%= h @user.account.email %></a>
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td height="73">&nbsp;</td>
+        </tr>
+      </table>
+      <!--content 结束-->
+      <!--footer 开始-->
+      <table width="601" border="0" cellspacing="0" cellpadding="0" align="center">
+        <tr>
+          <td height="31" colspan="3" align="center" valign="bottom" style="font-size:12px;background-color: #eee;padding: 20px;">珀丽莱郑重承诺，所有商品均为正品出售。</td>
+        </tr>
+      </table>
+      <!--footer 结束-->
+    </td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,20 @@
+h2 查看微信支付付款
+table.form-table
+	tbody
+		tr.form-field.form-required
+			th scope="row" ID
+			td
+				= @trade.id
+		tr.form-field.form-required
+	 		th scope="row" 状态
+			td
+				= @result["errcode"].to_i == 0 ? '调用成功' : '调用失败'
+		tr.form-field.form-required
+	 		th scope="row" 信息
+			td
+				= @result["errmsg"]
+		- { "ret_code" => "查询结果状态码", "ret_msg" => "查询结果出错信息", "input_charset" => "编码方式", "trade_state" => "订单状态", "trade_mode" => "交易模式", "partner" => "财付通商户号", "bank_type" => "银行类型", "bank_billno" => "银行订单号", "total_fee" => "总金额(分)", "fee_type" => "币种", "transaction_id" => "财付通订单号", "out_trade_no" => "第三方订单号", "is_split" => "是否分账", "is_refund" => "是否退款", "attach" => "商家数据包", "time_end" => "支付完成时间", "transport_fee" => "物流费用(分)", "product_fee" => "物品费用(分)", "discount" => "折扣价格(分)", "rmb_total_fee" => "换算成人民币之后的总金额(分)" }.each do |k,v|
+			tr.form-field.form-required
+		 		th scope="row" #{v}
+				td
+					= @result.try(:[], 'order_info').try(:[], k).to_s

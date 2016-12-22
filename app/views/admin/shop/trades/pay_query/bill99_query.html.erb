@@ -1,0 +1,67 @@
+<h2>查看快钱付款</h2>
+
+<table class="form-table">
+	<tbody>
+
+		<tr class="form-field form-required">
+			<th scope="row">ID</th>
+			<td><%= @trade.id %></td>
+		</tr>
+	
+		<tr class="form-field form-required">
+			<th scope="row">商户订单号</th>
+			<td><%= @result.orderId if @result %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">商户订单金额</th>
+			<td><%= @result.orderAmount.to_i*0.01 if @result %>元</td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">商户订单提交时间</th>
+			<td><%= @result.orderTime if @result %></td>
+		</tr>
+	
+		<tr class="form-field form-required">
+			<th scope="row">快钱交易时间</th>
+			<td><%= @result.dealTime if @result %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">支付结果</th>
+			<td><%= @result && @result.payResult == '10' ? "支付成功" : "支付失败"  %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">支付方式</th>
+			<td>
+				<% case @result.payType  
+				when '10' %>
+				银行卡支付
+				<% when '11' %>
+				电话银行支付
+				<% when '12' %>
+				快钱人民币账户支付
+				<% when '13' %>
+				线下支付
+				<% when '14' %>
+				B2B 支付
+				<% end if @result %>
+			</td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">订单实际支付金额</th>
+			<td><%= @result.payAmount.to_i*0.01 if @result %>元</td>
+		</tr>
+		<tr class="form-field form-required">
+			<th scope="row">费用</th>
+			<td><%= @result.fee.to_i*0.01 if @result %>元</td>
+		</tr>
+		<tr class="form-field form-required">
+			<th scope="row">快钱交易号</th>
+			<td><%= @result.dealId if @result %></td>
+		</tr>
+	</tbody>
+</table>

@@ -1,0 +1,10 @@
+= stylesheet_inline_tag "custom_page/pages/series_topics/#{data['theme']}.css" unless data['theme'].blank?
+-# stylesheet_inline_tag "custom_page/pages/series_topics/#{data['arrange']}.css" unless data['arrange'].blank?
+- flash = request.fullpath.match(/\?flash$/)
+.seriesbox.series_topics(style="margin-bottom: #{v = (data['style']||{})['margin-bottom']; v.blank? ? 12 : v}px;")
+	.imagebox
+		.list
+			- data['links'][0..2].each do |p|
+				%a.link(href="#{legacy_url(p['url'], flash)}" title="#{p['name']}")
+					= image_tag p['pic'], :class => 'pic', :alt => p['name']
+	= render :partial => 'admin/custom_page/pages/series_preview', :locals => { :data => data }

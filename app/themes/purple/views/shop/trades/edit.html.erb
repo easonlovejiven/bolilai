@@ -1,0 +1,89 @@
+<div id='popup_window'>
+	<!-- div_popup_window_begin -->
+	<style>#facebox .content { width:850px; }</style>
+	<div class="popupBox gs850">
+		<div class="clear">
+			<h5 class="title"><span class="icons17x17 icon_07"></span>悦购</h5>
+			<a href="#" class="close_icon close"><span class="icons17x17 icon_28"></span></a>
+		</div>
+		<div class="clear popup_cont">
+			<%= form_for :trade, @trade, :url => auction_trade_path(@trade), :html => { :method => :put } do |f| %>
+			<div class="popup_main popup_tips">
+				<h6 class="Shopping_title">所选商品：</h6>
+				
+				<div class="Shopping_info">
+					<div style="background-image:url(<%= image_path @trade.item.product.cart_pic || '' %>);">
+						<h5><%= @trade.item.product.name %></h5>
+						<p>单价：<span class="Shopping_Unit"><%=  @trade.item.product.discount %></span>RMB</p>
+						<p>尺码：<span><%=  @trade.item.measure %></span></p>
+						<p>数量：<span>1</span></p>
+
+					</div>
+				</div>
+				
+				<h6 class="Shopping_title">收货地址：<span></span></h6>
+				<div class="HRborder"></div>
+				<div class="Shopping_form">
+					<%= f.fields_for :contact, @trade.contact do |cf| -%>
+					<ul class="form01">
+						<li>
+							<label>收货人姓名：</label>
+							<%= cf.text_field :name %>
+						</li>
+						<li>
+							<label>电话：</label>
+							<input type="text" style="width:60px;" />
+							<%= cf.text_field :phone, :style=>"width:182px;"%>
+						</li>
+						<li>
+							<label>手机：</label>
+							<%= cf.text_field :mobile, :style=>"width:250px;" %>
+						</li>
+					</ul>
+					<ul class="form02">
+						<li>
+							<label>地区：</label>
+							<select name="contact[province]">
+								<option>选择省</option>
+								<% Auction::Province.active.published.each do |province| %>
+									<option><%= province.name %></option>
+								<% end %>
+							</select>
+							
+							<select>
+								<option>选择市</option>
+							</select>
+							<select>
+								<option>选择区</option>
+							</select>
+						</li>
+						<li>
+							<label>详细地址：</label>
+							<%= cf.text_field :address %>
+						</li>
+						<li>
+							<label>邮政编码：</label>
+							<%= cf.text_field :postcode, :style=>"width:100px;" %>
+							<strong>快递方式：</strong>
+							<span>联邦快递</span>
+						</li>
+					</ul>
+					<% end %>
+				</div>
+				<div class="HRborder"></div>
+				<h6 class="Shopping_title">订单备注：<%= f.text_field :comment %></h6>
+			</div>
+				
+			<div class="popup_sub">
+				<ul>
+					<li class="Notes"><input type="checkbox" />我已阅读购买须知，并同意其中所有的条款。  <span>应付款：<strong>3728</strong>RMB</span></li>
+					<li><!-- <input class="Confirmation_btn" type="button" value="确认订单"  /> -->
+						<%= f.submit "确认订单", :class => 'Confirmation_btn' %>
+					</li>
+				</ul>
+			</div>
+			<% end -%>
+		</div>
+	</div>
+	<!-- div_popup_window_end -->
+</div>

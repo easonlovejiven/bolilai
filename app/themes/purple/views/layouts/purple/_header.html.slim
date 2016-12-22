@@ -1,0 +1,90 @@
+ruby:
+  current = case
+              when %w[/ /shop /shop/ /core /core/ /home /home/].include?(request.path);
+                'root'
+              when request.path == '/shop/pages/store';
+                'store'
+              when params[:controller] == 'shop/products' && params[:where] && params[:where][:mall_id] == '20';
+                'sale'
+              when params[:controller] == 'shop/products' && params[:where] && params[:where][:category1_id] == '5';
+                '5'
+              when params[:controller] == 'shop/products' && params[:where] && params[:where][:category1_id] == '12';
+                '12'
+              when params[:controller] == 'shop/products' && params[:where] && params[:where][:category1_id] == '13';
+                '13'
+              when params[:controller] == 'shop/products' && params[:where] && params[:where][:category1_id] == '14';
+                '14'
+              when params[:controller] == 'shop/products' && params[:where] && params[:where][:category1_id] == '27';
+                '27'
+              when params[:controller] == 'shop/products' && params[:where] && params[:where][:category1_id] == '20';
+                '20'
+              when params[:controller] == 'shop/brands' || params[:controller] == 'shop/products' && params[:where] && params[:where][:brand_id];
+                'brand'
+              when params[:controller] == 'shop/categories' || params[:controller] == 'shop/products' && params[:where] && (params[:where][:category1_id] || params[:where][:category2_id]);
+                'category'
+              when params[:controller] == 'shop/products' && params[:where] && params[:where][:target] == 'men';
+                'men'
+              when params[:controller] == 'shop/products' && params[:where] && params[:where][:target] == 'women';
+                'women'
+              when params[:keyword] == '新品';
+                'news'
+            end
+div.layout_container
+  .top_nav
+    span.back_home 欢迎进入珀丽莱商城
+    div.login_info
+      #right_menu_not_login style="display:none;"
+        = link_to '登录', new_core_session_path(params[:controller] !~ /(sessions|accounts)$/ || !params[:redirect].blank? ? {:redirect => params[:redirect] || request.fullpath} : nil), :class => "ulogin", "data-target" => "popup", :rel => "nofollow"
+        = link_to '注册', new_core_account_path(params[:controller] !~ /(sessions|accounts)$/ || !params[:redirect].blank? ? {:redirect => params[:redirect] || request.fullpath} : nil), :class => "usignup", "data-target" => "popup", :rel => "nofollow"
+      #right_menu_login(style="display:none;")
+        span.uname rel="nofollow"
+        a.ulogout#logout_button href="#" data-redirect="#{request.fullpath}" 注销
+    ul.quick_menu
+      li.menu_item.ucart_item
+        a.ucart href="/shop/trades/new" rel="nofollow" data-target="popup"
+          div.cartamount id="user_orders_count" style="display: none;"
+            span.numerical
+          div.carttext 购物车
+      li.menu_item
+        a rel="nofollow" href="/shop/trades" 我的订单
+      li.menu_item
+        a rel="nofollow" href="/users/account" 我的账户
+      li.menu_item
+        a rel="nofollow" href="/lesson" 琥珀课堂
+      li.menu_item
+        a rel="nofollow" href="#{Rails.application.secrets.mobile_domain}" 手机官网
+      li.menu_item
+        a helf="###" onclick="App.addFavorite(this)" 收藏本站
+  .top_header
+    a.logo.prefetch href="/"
+      span 珀丽莱
+    div.SearchInput
+      = form_tag shop_products_path(:keyword => '___'), :method => 'get', :id => 'product_search_form' do
+        input.text type="text" placeholder="搜索关键词" name="keyword" value="#{params[:keyword]}"
+        - unless params[:keyword].blank?
+          a.clear_text href="#{conditions_path(:keyword => nil)}"
+        input.btn type="submit" value="搜索" title="搜索"
+    a.header_order href="/retail_shop" target="_blank">在线预约进店
+
+  .purple_header
+    .header_bg
+      .header_bg_center
+    .purplegold
+      .menu.prefetch
+        = link_to '首页', '/', :class => "#{'current' if current == 'root'}"
+        = link_to '新品推荐', URI.encode('/shop/products?keyword=新品'), :class => "#{'current' if current == 'news'}"
+        = link_to '琥珀蜜蜡', '/shop/categories/5', :class => "#{'current' if current == '5'}"
+        = link_to '原创镶嵌', '/shop/categories/12', :class => "#{'current' if current == '12'}"
+        = link_to '寓意雕刻', '/shop/categories/20', :class => "#{'current' if current == '20'}"
+      .page_links
+        = link_to '品牌故事', '/brand_story', target: '_blank'
+        = link_to '新闻资讯', '/news', target: '_blank'
+          /.userinfo
+        /a href="/shop/trades/new" class="ucart" rel="nofollow"
+        /  .cartamount#user_orders_count style="display: none;"
+        /    span.numerical
+        /  .carttext 购物车
+        /.uline
+        /#right_menu_login(style="display:none;")
+        /  a.umy rel="nofollow" href="/shop/trades" 订单管理
+        /  a.ulogout#logout_button href="#" data-redirect="#{request.fullpath}" 注销

@@ -1,0 +1,268 @@
+<!-- 添加地址浮层 -->
+<div class="page_layer hide" id="address_layer">
+  <div class="address_layer">
+    <div class="border_1px layer_head">
+      <div class="ico_wrapper turnoff_ico left">
+    <span class="sprites">
+      <em class="down_shadow"></em>
+    </span>
+      </div>
+      <div class="title">添加地址</div>
+    </div>
+    <%= javascript_include_tag "touch/area.min" %>
+    <div class="address_box">
+      <form id="address" method="post">
+        <input type="hidden" name="contact[country]" value="中国">
+
+        <p class="read_in">
+          <span class="left">收货人</span>
+          <input class="left" id="name" type="text" name="contact[name]" placeholder="收货人姓名" data-msg="收件人不能为空">
+          <span class="clear_txt hide"><em class="sprites"></em></span>
+          <em class="hide right_ico sprites"></em>
+        </p>
+
+        <div class="clear"></div>
+        <p></p>
+
+        <p class="read_in">
+          <span class="left">联系电话</span>
+          <input class="left tel" id="phone" type="tel" name="contact[mobile]" placeholder="有效的手机号码" data-msg="手机号码为1开头的11位数字">
+          <span class="clear_txt hide"><em class="sprites"></em></span>
+          <em class="hide right_ico sprites"></em>
+        </p>
+
+        <div class="clear"></div>
+        <p></p>
+
+        <p class="read_in">
+          <span class="left">省份</span>
+          <select class="left" type="text" name="contact[province]" id="province_select" data-msg="请选择省份">
+            <option value="北京市"> 北京市</option>
+            <option value="上海市"> 上海市</option>
+            <option value="天津市"> 天津市</option>
+            <option value="重庆市"> 重庆市</option>
+            <option value="广东省"> 广东省</option>
+            <option value="江苏省"> 江苏省</option>
+            <option value="山东省"> 山东省</option>
+            <option value="浙江省"> 浙江省</option>
+            <option value="河南省"> 河南省</option>
+            <option value="河北省"> 河北省</option>
+            <option value="辽宁省"> 辽宁省</option>
+            <option value="四川省"> 四川省</option>
+            <option value="湖南省"> 湖南省</option>
+            <option value="湖北省"> 湖北省</option>
+            <option value="福建省"> 福建省</option>
+            <option value="山西省"> 山西省</option>
+            <option value="内蒙古自治区"> 内蒙古自治区</option>
+            <option value="吉林省"> 吉林省</option>
+            <option value="黑龙江省"> 黑龙江省</option>
+            <option value="安徽省"> 安徽省</option>
+            <option value="江西省"> 江西省</option>
+            <option value="广西壮族自治区"> 广西壮族自治区</option>
+            <option value="海南省"> 海南省</option>
+            <option value="贵州省"> 贵州省</option>
+            <option value="云南省"> 云南省</option>
+            <option value="西藏自治区"> 西藏自治区</option>
+            <option value="陕西省"> 陕西省</option>
+            <option value="甘肃省"> 甘肃省</option>
+            <option value="青海省"> 青海省</option>
+            <option value="宁夏回族自治区"> 宁夏回族自治区</option>
+            <option value="新疆维吾尔自治区"> 新疆维吾尔自治区</option>
+          </select>
+          <em class="right_ico sprites"></em>
+        </p>
+        <div class="clear"></div>
+        <p></p>
+
+        <p class="read_in">
+          <span class="left">城市</span>
+          <select class="left" type="text" name="contact[city]" id="city_select" data-msg="请选择城市">
+            <option value="北京市">北京市</option>
+          </select>
+          <em class="right_ico sprites"></em>
+        </p>
+        <div class="clear"></div>
+        <p></p>
+
+        <p class="read_in">
+          <span class="left">地区</span>
+          <select class="left" type="text" name="contact[town]" id="area_select" data-msg="请选择地区">
+            <option value="东城区">东城区</option>
+            <option value="西城区">西城区</option>
+            <option value="崇文区">崇文区</option>
+            <option value="宣武区">宣武区</option>
+            <option value="朝阳区">朝阳区</option>
+            <option value="丰台区">丰台区</option>
+            <option value="石景山区">石景山区</option>
+            <option value="海淀区">海淀区</option>
+            <option value="门头沟区">门头沟区</option>
+            <option value="房山区">房山区</option>
+            <option value="通州区">通州区</option>
+            <option value="顺义区">顺义区</option>
+            <option value="昌平区">昌平区</option>
+            <option value="大兴区">大兴区</option>
+            <option value="怀柔区">怀柔区</option>
+            <option value="平谷区">平谷区</option>
+            <option value="密云县">密云县</option>
+            <option value="延庆县">延庆县</option>
+          </select>
+          <em class="right_ico sprites"></em>
+        </p>
+        <div class="clear"></div>
+        <p></p>
+
+        <p class="detail clear_fix read_in">
+          <span class="left">详细地址</span>
+          <textarea class="left address_txt" type="text" name="contact[address]" placeholder="收货地址" data-msg="详细地址不能为空"></textarea>
+          <em class="hide right_ico sprites"></em>
+        </p>
+
+        <div class="clear"></div>
+        <p></p>
+
+        <p class="read_in">
+          <span class="left">邮编</span>
+          <input class="left" id="zipcode" type="text" name="contact[postcode]" placeholder="六位邮编数字" data-msg="6位邮编格式错误">
+          <span class="clear_txt hide"><em class="sprites"></em></span>
+          <em class="right_ico sprites"></em>
+        </p>
+
+        <div class="clear"></div>
+        <p></p>
+
+        <p class="read_in">
+          <span class="left">身份证号</span>
+          <input class="left idcardnum" id="idcard" type="text" name="contact[id_number]" maxlength="18" placeholder="请输入身份证号码" data-msg="身份证号码格式错误">
+          <span class="clear_txt hide"><em class="sprites"></em></span>
+          <em class="hide right_ico sprites"></em>
+        </p>
+
+        <div class="clear"></div>
+        <p></p>
+
+        <div class="affirm btn black_bg submit_order">
+          <span>确定</span>
+          <style type="text/css">
+            /*body{
+              -webkit-transform: translate(0,0,0);
+              -webkit-backface-visibility:hidden;
+            }*/
+            .loading16 {
+              top: -31px;
+              width: 100px;
+              height: 100px;
+              position: relative;
+              left: 50%;
+              margin: 0;
+              margin-left: -50px;
+              border-radius: 100px;
+              -webkit-border-radius: 100px;
+              -webkit-animation-duration: 1.5s;
+              -webkit-animation-iteration-count: infinite;
+              -webkit-animation-timing-function: linear;
+              -webkit-animation-name: rotateThis16;
+              -moz-border-radius: 100px;
+              -moz-animation-duration: 1.5s;
+              -moz-animation-iteration-count: infinite;
+              -moz-animation-timing-function: linear;
+              -moz-animation-name: rotateThis16;
+            }
+
+            @-webkit-keyframes rotateThis16 {
+              from {
+                -webkit-transform: scale(0.18) rotate(0deg);
+              }
+              to {
+                -webkit-transform: scale(0.18) rotate(360deg);
+              }
+            }
+
+            @-moz-keyframes rotateThis16 {
+              from {
+                -moz-transform: scale(0.18) rotate(0deg);
+              }
+              to {
+                -moz-transform: scale(0.18) rotate(360deg);
+              }
+            }
+
+            .loading16 > div {
+              width: 18px;
+              height: 18px;
+              background-color: #fff;
+              -webkit-border-radius: 30px;
+              -moz-border-radius: 30px;
+              -o-border-radius: 30px;
+              border-radius: 30px;
+              position: absolute;
+              left: 41px;
+              top: 41px;
+            }
+
+            .bar1 {
+              opacity: 0.3;
+              -webkit-transform: rotate(0deg) translate(0, -42px);
+              -moz-transform: rotate(0deg) translate(0, -42px);
+            }
+
+            .bar2 {
+              opacity: 0.4;
+              -webkit-transform: rotate(45deg) translate(0, -42px);
+              -moz-transform: rotate(45deg) translate(0, -42px);
+            }
+
+            .bar3 {
+              opacity: 0.5;
+              -webkit-transform: rotate(90deg) translate(0, -42px);
+              -moz-transform: rotate(90deg) translate(0, -42px);
+            }
+
+            .bar4 {
+              opacity: 0.6;
+              -webkit-transform: rotate(135deg) translate(0, -42px);
+              -moz-transform: rotate(135deg) translate(0, -42px);
+            }
+
+            .bar5 {
+              opacity: 0.7;
+              -webkit-transform: rotate(180deg) translate(0, -42px);
+              -moz-transform: rotate(180deg) translate(0, -42px);
+            }
+
+            .bar6 {
+              opacity: 0.8;
+              -webkit-transform: rotate(225deg) translate(0, -42px);
+              -moz-transform: rotate(225deg) translate(0, -42px);
+            }
+
+            .bar7 {
+              opacity: 0.9;
+              -webkit-transform: rotate(270deg) translate(0, -42px);
+              -moz-transform: rotate(270deg) translate(0, -42px);
+            }
+
+            .bar8 {
+              opacity: 1;
+              -webkit-transform: rotate(315deg) translate(0, -42px);
+              -moz-transform: rotate(315deg) translate(0, -42px);
+            }
+          </style>
+          <div class="order_load">
+            <div class="loading16">
+              <div class="bar1"></div>
+              <div class="bar2"></div>
+              <div class="bar3"></div>
+              <div class="bar4"></div>
+              <div class="bar5"></div>
+              <div class="bar6"></div>
+              <div class="bar7"></div>
+              <div class="bar8"></div>
+            </div>
+          </div>
+
+          <input type="submit" id="affirm" class="affirm_submit hide">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

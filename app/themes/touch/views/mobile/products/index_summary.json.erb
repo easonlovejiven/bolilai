@@ -1,0 +1,1 @@
+<%= raw "[#{cache_items(@products.map { |p| p.assign_options(Shop::Product.xml_options_for(params[:response]).merge(major_pic: p.major_image.url)) }, "views//shop/products/%i/response_summary", 'product', 'json').values.join(',')}]" %>

@@ -1,0 +1,26 @@
+<% menus.each_with_index do |menu, index| %>
+    <% state=!menu.children.blank? ? "open" : "" %>
+    <li class="<%= "start" if index==0 %> <%= state %>">
+      <% if menu_can?(menu) %>
+          <%= link_to !menu.children.blank? ? "javascript:;" : menu.url do %>
+              <span class='title'><%= menu.name %></span>
+              <% if menu.children.any? %>
+                  <span class="arrow open"></span>
+              <% end %>
+          <% end %>
+      <% end %>
+      <% if !menu.children.blank? %>
+          <ul class="sub-menu" style="display: block">
+            <% menu.children.each do |submenu| %>
+                <li>
+                  <% if menu_can?(menu) %>
+                      <%= link_to submenu.url do %>
+                          <%= submenu.name %>
+                      <% end %>
+                  <% end %>
+                </li>
+            <% end %>
+          </ul>
+      <% end %>
+    </li>
+<% end %>

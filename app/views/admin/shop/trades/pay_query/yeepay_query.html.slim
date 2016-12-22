@@ -1,0 +1,46 @@
+h2 查看易宝支付付款
+table.form-table
+	tbody
+		tr.form-field.form-required
+			th scope="row" ID
+			td
+				= @trade.id
+		tr.form-field.form-required
+	 		th scope="row" 状态
+			td
+				= @result["r1_Code"].to_i == 1 ? '正常' : '订单不存在'
+		tr.form-field.form-required
+	 		th scope="row" 易宝支付易流水号
+			td
+				= @result["r2_TrxId"]
+
+		tr.form-field.form-required
+	 		th scope="row" 支付金额
+			td
+				= @result["r3_Amt"]
+
+		tr.form-field.form-required
+	 		th scope="row" 交易币种
+			td
+				= @result["r4_Cur"]
+
+		tr.form-field.form-required
+	 		th scope="row" 商品名称
+			td
+				= @result["r5_Pid"]
+
+		tr.form-field.form-required
+	 		th scope="row" 商户订单号
+			td
+				= @result["r6_Order"]
+
+		tr.form-field.form-required
+	 		th scope="row" 订单状态
+			td
+				- case @result["rb_PayStatus"]
+				-	when 'INIT'
+					未支付
+				-	when 'CANCELED' 
+					已取消
+				-	when 'SUCCESS'
+					已支付

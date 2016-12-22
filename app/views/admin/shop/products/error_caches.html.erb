@@ -1,0 +1,25 @@
+<h2>查看异常缓存</h2>
+<table class="widefat">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>名称</th>
+			<th>xml缓存</th>
+			<th>json缓存</th>
+			<th>summary_xml缓存</th>
+			<th>summary_json缓存</th>
+		</tr>
+	</thead>
+	<tbody>
+	<% @abnormal_caches.each do |cache| %>
+		<tr>
+			<td><%= cache[:id] %></td>
+			<td><%= h cache[:name] %></td>
+			<% %w[xml json summary_xml summary_json].each do |k| %>
+				<td><font color='green'><%= cache["#{k}_database"] && "数据:#{cache["#{k}_database"].to_s(:db)}" %><font><br><font color='red'><%= cache["#{k}_cache"] && "缓存:#{cache["#{k}_cache"].to_s(:db)}" %><font></td>
+			<% end %>
+			
+		</tr>
+	<% end %>
+	</tbody>
+</table>

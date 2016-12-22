@@ -1,0 +1,110 @@
+<!-- CSS -->
+<%= stylesheet_link_tag "touch/frame" %>
+<%= stylesheet_link_tag "touch/frame_respond" %>
+<%= javascript_include_tag "touch/controller" %>
+<% content_for :header do %>
+    <header class="border_1px">
+      <!-- <div class="left_option left"> -->
+      <div class="ico_wrapper back_ico left hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="title ">
+        产品分类
+      </div>
+      <!-- </div> -->
+      <!--<div class="title cate_item">-->
+      <!--男士-->
+      <!--<span class="sprites down_ico"></span>-->
+      <!--</div>-->
+      <div class="ico_wrapper add_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper edit_ico right hide">
+        <span class="">编辑
+          <em class="down_shadow"></em>
+        </span>
+        <span class="">完成
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper info_ico right hide text">
+        详情<em class="down_shadow"></em>
+      </div>
+      <div class="ico_wrapper filter_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper mode_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+    </header>
+<% end %>
+<!-- 调用页面主体 -->
+<script type="text/javascript">
+    $(function () {
+        var $fix_layer = $('#array_fixed'),
+                $blank = $('.bottom_blank, .left_blank, .right_blank'),
+                $title = $('.cate_item'),
+                $item = $('.array_item'),
+                $second_cate = $('.second_cate');
+        category_index_controller.initialize($fix_layer, $blank, $title, $item, $second_cate);
+    });
+</script>
+<div class="main" id="main">
+  <div>
+    <!-- 品类项 -->
+    <% @data["children"].each_with_index do |category, index| %>
+        <div class="cate_list" data-index="<%= index %>">
+          <div class="second_cate">
+            <div class="second_cate_pic"></div>
+            <p class="right second_cate_name"><%= category["name"] %></p>
+            <div class="border_1px"></div>
+            <div class="clear"></div>
+          </div>
+          <% category["children"].each do |category2| %>
+              <div class="third_cate">
+                <div class="border_1px" data-href="/products?where[category2_id]=<%= category2["id"] %>">
+                  <%= category2["name"] %>
+                  <span class="sprites enter_ico right"></span>
+
+                  <div class="down_shadow"></div>
+                  <div class="clear"></div>
+                </div>
+              </div>
+          <% end %>
+        </div>
+    <% end %>
+  </div>
+  <!-- 品类切换项 -->
+  <div class="array_fixed hide" id="array_fixed">
+    <div class="left_blank left"></div>
+    <span class="array_arrow"></span>
+
+    <!--<div class="array_box cate_box left">-->
+    <!--<div class="array_item one active" data-href="/categories?target=male">-->
+    <!--<p>男士</p>-->
+    <!--</div>-->
+    <!--<div class="array_item " data-href="/categories?target=female">-->
+    <!--<p>女士</p>-->
+    <!--</div>-->
+    <!--<div class="array_item" data-href="/categories/103">-->
+    <!--<p>家居</p>-->
+    <!--</div>-->
+    <!--<div class="array_item" data-href="/categories/193">-->
+    <!--<p>户外</p>-->
+    <!--</div>-->
+    <!--<div class="array_item" data-href="/categories/203">-->
+    <!--<p>东方奢侈品</p>-->
+    <!--</div>-->
+    <!--</div>-->
+    <div class="right_blank right"></div>
+    <div class="bottom_blank left"></div>
+  </div>
+</div>

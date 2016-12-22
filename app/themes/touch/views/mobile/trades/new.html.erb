@@ -1,0 +1,283 @@
+<!-- CSS -->
+<%= stylesheet_link_tag "touch/frame" %>
+<%= stylesheet_link_tag "touch/frame_respond" %>
+<!-- 压缩的model/view/controller -->
+<%= javascript_include_tag "touch/controller" %>
+<% content_for :header do %>
+    <header class="border_1px">
+      <!-- <div class="left_option left"> -->
+      <div class="ico_wrapper back_ico left">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <!-- </div> -->
+      <div class="title ">
+        确认订单
+      </div>
+    </header>
+<% end %>
+
+<!-- 调用页面主体 -->
+<script type="text/javascript">
+  if (false) {
+    views.product_style(0.1875);
+  } else {
+    views.product_style(0.28);
+  }
+  $(function () {
+    app.lasy_load($('img'));
+    var $form = $('form.order_form'),
+      $submit_order = $('.submit_order.add_cart'),
+      $li = $('.order_box > div');
+    trades_new_controller.initialize($form, $submit_order, $li);
+    app.push_event($(".bag_name"), 200)
+  });
+</script>
+<div class="main" id="main" style="height: 521px;">
+  <div style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); -webkit-transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; -webkit-transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);">
+    <!-- 订单失败提示浮层-->
+    <!-- 页面主体 -->
+    <form class="order_form" data-ulife="false" data-hwg="" data-delivery="5" data-needelivery="false">
+      <input type="hidden" id="trade_client" name="trade[client]" value="">
+      <input type="hidden" id="paymode" name="trade[payment_service]" value="">
+      <% if @trade.contact.new_record? %>
+          <div class="receive_info border_1px">
+            <h1>收货信息</h1>
+
+            <div class="empty_address">
+              <p>前往添加收货信息</p>
+              <span class="sprites add_address_ico right"></span>
+            </div>
+          </div>
+      <% else %>
+          <div class="receive_info border_1px">
+            <input type="hidden" name="trade[contact][id]" value="<%= @trade.contact.id %>">
+            <input type="hidden" name="trade[contact][name]" value="<%= @trade.contact.name %>">
+            <input type="hidden" name="trade[contact][country]" value="<%= @trade.contact.country %>">
+            <input type="hidden" name="trade[contact][province]" value="<%= @trade.contact.province %>">
+            <input type="hidden" name="trade[contact][city]" value="<%= @trade.contact.city %>">
+            <input type="hidden" name="trade[contact][town]" value="<%= @trade.contact.town %>">
+            <input type="hidden" name="trade[contact][address]" value="<%= @trade.contact.address %>">
+            <input type="hidden" name="trade[contact][postcode]" value="<%= @trade.contact.postcode %>">
+            <input type="hidden" name="trade[contact][mobile]" value="<%= @trade.contact.mobile %>">
+            <input type="hidden" name="trade[contact][user_id]" value="<%= @trade.contact.user_id %>">
+
+            <div class="clear_fix">
+              <h1 class="left">收货信息</h1>
+            </div>
+            <div class="receive_detail ">
+              <p class="re_name left ellipsis"><%= h @trade.contact.name %></p>
+
+              <p class="re_tel left"><%= h @trade.contact.mobile %></p>
+
+              <div class="clear"></div>
+              <p class="re_address"><%= h @trade.contact.province %><%= h @trade.contact.city %><%= h @trade.contact.town %><%= h @trade.contact.address %></p>
+              <span class="sprites enter_ico right"></span>
+            </div>
+          </div>
+      <% end %>
+      <div class="pay_select border_1px">
+        <h1>付款方式</h1>
+
+        <div class="left cash_pay pay active">
+          <span class="sprites downline_ico"></span>
+
+          <p>货到付款</p>
+        </div>
+        <div class="left online_pay pay">
+          <span class="sprites online_ico"></span>
+
+          <p>在线支付</p>
+        </div>
+        <div class="clear"></div>
+      </div>
+      <!-- 商品区 -->
+      <div class="order_box border_1px ">
+        <% @cart.reverse.each_with_index do |unit, i| %>
+            <% product = Shop::Product.acquire(unit['product_id']) %>
+            <div class="clear_fix pro_height border_1px order_product usable " data-id="<%= product.id %>" data-discount="<%= product.discount %>" data-price="<%= product.discount %>" data-voucher="" data-gene="0" data-vip="0" data-multibuy-id="">
+              <input type="hidden" name="units[][product_id]" value="<%= product.id %>">
+              <input type="hidden" name="units[][measure]" value="<%= unit['measure'] %>">
+
+              <div class="pro_img img_wrap left pro_height pro_width loaded">
+                <img class="pro_height pro_width" width="90" height="90" data-src="<%= product.major_image.url(:thumb) %>" src="<%= product.major_image.url(:thumb) %>">
+              </div>
+
+              <div class="bag_info right pro_height">
+                <p class="bag_name" data-href="/products/<%=product.id%>"><%= h product.name %></p>
+
+                <div class="bag_detail ">
+                  <!--<span class="bag_size">XXXL/110</span>-->
+                  <span class="bag_color"><%= h product.color_name %></span>
+                  <span class="right bag_price">￥<%= product.discount %><em class="ele_logo"></em>
+                    <span class="underline"></span>
+                  </span>
+                </div>
+                <div class="discount ">
+                  <p></p>
+                  <select class="select_tap" name="units[][voucher_id]">
+                  </select>
+                  <div><p><span class="sprites s_add_ico left"></span><span>不可使用折扣</span></p></div>
+                </div>
+                <div class="now_price hide"> ￥<%= product.discount %></div>
+              </div>
+            </div>
+        <% end %>
+      </div>
+    </form>
+
+    <div class="hide user_msg">
+      <!-- 用户信息 -->
+      <span id="user_info" data-id="<%=@current_user.id%>" data-name="<%=@current_user.name%>" data-point="<%=@current_user.trades_point.to_i%>" data-auction-user-percent="<%=@current_user.percent%>" data-auction-user-level-percent="<%=@current_user.level.percent%>" data-level-id="<%=@current_user.level_id%>"></span>
+
+      <!-- 代金券信息 -->
+      <% @vouchers.each do |voucher| %>
+         <%=raw "<span class='voucher usable' data-id='#{voucher.id}' data-user-id='#{voucher.user_id}' data-event-id='#{voucher.event_id}' data-event-amount='#{voucher.event.amount}' data-event-limitation='#{voucher.event.limitation}' data-ended-at='#{voucher.event.ended_at.to_s(:db)}'></span>"%>
+      <% end %>
+    </div>
+  </div>
+  <div class="iScrollVerticalScrollbar iScrollLoneScrollbar" style="position: absolute; z-index: 9999; width: 7px; bottom: 2px; top: 2px; right: 1px; overflow: hidden; pointer-events: none; transform: translateZ(0px); transition-duration: 0ms; -webkit-transition-duration: 0ms; opacity: 0;">
+    <div class="iScrollIndicator" style="box-sizing: border-box; position: absolute; border: 1px solid rgba(255, 255, 255, 0.901961); border-radius: 3px; width: 100%; transition-duration: 0ms; -webkit-transition-duration: 0ms; display: none; height: 513px; transform: translate(0px, 0px) translateZ(0px); transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); -webkit-transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); background: rgba(0, 0, 0, 0.498039);"></div>
+  </div>
+</div>
+<!-- 底部提交订单按钮 -->
+<div class="bottom_fix clear_fix border_1px">
+  <div class="left">
+    <p class="pro_price clear_fix new_trade" data-price="<%= @total_price %>">
+      <span class="left money">￥<%= @total_price %></span>
+      <span class="zhe left derate ellipsis">已减免￥</span>
+    </p>
+
+    <p class="payment_mode_txt ellipsis">货到付款
+      <span class="transport_free">（免运费）</span>
+    </p>
+  </div>
+  <!--  提交 -->
+  <div class="add_cart btn purple_bg right submit_order ">
+    <span>提交</span>
+
+    <div class="down_shadow"></div>
+    <style type="text/css">
+      /*body{
+        -webkit-transform: translate(0,0,0);
+        -webkit-backface-visibility:hidden;
+      }*/
+      .loading16 {
+        top: -31px;
+        width: 100px;
+        height: 100px;
+        position: relative;
+        left: 50%;
+        margin: 0;
+        margin-left: -50px;
+        border-radius: 100px;
+        -webkit-border-radius: 100px;
+        -webkit-animation-duration: 1.5s;
+        -webkit-animation-iteration-count: infinite;
+        -webkit-animation-timing-function: linear;
+        -webkit-animation-name: rotateThis16;
+        -moz-border-radius: 100px;
+        -moz-animation-duration: 1.5s;
+        -moz-animation-iteration-count: infinite;
+        -moz-animation-timing-function: linear;
+        -moz-animation-name: rotateThis16;
+      }
+
+      @-webkit-keyframes rotateThis16 {
+        from {
+          -webkit-transform: scale(0.18) rotate(0deg);
+        }
+        to {
+          -webkit-transform: scale(0.18) rotate(360deg);
+        }
+      }
+
+      @-moz-keyframes rotateThis16 {
+        from {
+          -moz-transform: scale(0.18) rotate(0deg);
+        }
+        to {
+          -moz-transform: scale(0.18) rotate(360deg);
+        }
+      }
+
+      .loading16 > div {
+        width: 18px;
+        height: 18px;
+        background-color: #fff;
+        -webkit-border-radius: 30px;
+        -moz-border-radius: 30px;
+        -o-border-radius: 30px;
+        border-radius: 30px;
+        position: absolute;
+        left: 41px;
+        top: 41px;
+      }
+
+      .bar1 {
+        opacity: 0.3;
+        -webkit-transform: rotate(0deg) translate(0, -42px);
+        -moz-transform: rotate(0deg) translate(0, -42px);
+      }
+
+      .bar2 {
+        opacity: 0.4;
+        -webkit-transform: rotate(45deg) translate(0, -42px);
+        -moz-transform: rotate(45deg) translate(0, -42px);
+      }
+
+      .bar3 {
+        opacity: 0.5;
+        -webkit-transform: rotate(90deg) translate(0, -42px);
+        -moz-transform: rotate(90deg) translate(0, -42px);
+      }
+
+      .bar4 {
+        opacity: 0.6;
+        -webkit-transform: rotate(135deg) translate(0, -42px);
+        -moz-transform: rotate(135deg) translate(0, -42px);
+      }
+
+      .bar5 {
+        opacity: 0.7;
+        -webkit-transform: rotate(180deg) translate(0, -42px);
+        -moz-transform: rotate(180deg) translate(0, -42px);
+      }
+
+      .bar6 {
+        opacity: 0.8;
+        -webkit-transform: rotate(225deg) translate(0, -42px);
+        -moz-transform: rotate(225deg) translate(0, -42px);
+      }
+
+      .bar7 {
+        opacity: 0.9;
+        -webkit-transform: rotate(270deg) translate(0, -42px);
+        -moz-transform: rotate(270deg) translate(0, -42px);
+      }
+
+      .bar8 {
+        opacity: 1;
+        -webkit-transform: rotate(315deg) translate(0, -42px);
+        -moz-transform: rotate(315deg) translate(0, -42px);
+      }
+    </style>
+    <div class="order_load">
+      <div class="loading16">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+        <div class="bar4"></div>
+        <div class="bar5"></div>
+        <div class="bar6"></div>
+        <div class="bar7"></div>
+        <div class="bar8"></div>
+      </div>
+    </div>
+
+    <input type="submit" value="" id="submit_order">
+  </div>
+</div>
+
+

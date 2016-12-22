@@ -1,0 +1,140 @@
+@import "shared/function"
+
+.series_a4
+	display: block
+	width:  1000px
+	margin: 0 auto
+	position: relative
+	height: 1080px
+	margin-bottom: 12px
+	background: #fff
+	overflow: hidden
+	.morelink
+		position: absolute
+		top: 1025px
+		left: 0
+		width: 100%
+		height: 55px
+		background: asset-url('auction/pages/template/shared/dividing_line_960.png') no-repeat center top
+		span
+			@include inline-block
+			position: absolute
+			left: 463px
+			top: 20px
+			font-size: 16px
+			line-height: 20px
+			background: asset-url('auction/pages/template/coffee/more.png') no-repeat left center
+			padding-left: 34px
+	.product_list
+		display: block
+		overflow: hidden
+		height: 995px
+		.list
+			display: block
+			overflow: hidden
+			padding-top: 18px
+			width: 1033px
+		.link
+			display: block
+			width: 290px
+			height: 480px
+			float: left
+			margin-left: 15px
+			margin-right: 32px
+			margin-bottom: 35px
+			position: relative
+			.title
+				position: absolute
+				top: 309px
+				left: 0px
+				width: 100%
+				line-height: 28px
+				font-size: 18px
+				display: block
+				text-align: center
+				height: 30px
+				overflow: hidden
+			.pic
+				display: block
+				width: 290px
+				height: 290px
+				// background: #f1f1f1
+				// position: absolute
+				// left: 14px
+				// top: 13px
+				overflow: hidden
+			.linktext
+				display: block
+				position: absolute
+				left: 37px
+				top: 351px
+				width: 220px
+				.summary
+					display: block
+					span
+						display: block
+						line-height: 20px
+						font-size: 16px
+						height: 20px
+						overflow: hidden
+					em
+						display: block
+						line-height: 20px
+						font-size: 12px
+						height: 40px
+						overflow: hidden
+				.value
+					margin-top: 3px
+					.MarketPrice
+						display: block
+						line-height: 26px
+						font-size: 12px
+						text-decoration: line-through
+						overflow: hidden
+						height: 22px
+						margin-bottom: 4px
+						em
+							height: 22px
+							@include inline-block
+						span
+							min-width: 50px
+							height: 22px
+							text-decoration: line-through
+							@include inline-block
+					.IhaveuPrice
+						display: block
+						line-height: 26px
+						font-size: 18px
+						margin-top: 5px
+						overflow: hidden
+						height: 28px
+						em
+							@include inline-block
+							font-size: 12px
+							height: 30px
+							_float: left
+							_line-height: 24px
+							text-decoration: none
+							margin-bottom: 0
+						span
+							min-width: 50px
+							height: 30px
+							@include inline-block
+				.preferential
+					@include inline-block
+					line-height: 24px
+					font-size: 18px
+					position: absolute
+					right: 0
+					top: 90px
+					min-width: 50px
+					em
+						font-size: 12px
+
+
+.ihaveu
+	.series_a4
+		left: -20px
+.layout_flash
+	.series_a4
+		left: auto

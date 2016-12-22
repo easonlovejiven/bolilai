@@ -1,0 +1,77 @@
+<!-- CSS -->
+<%= stylesheet_link_tag "touch/frame" %>
+<%= stylesheet_link_tag "touch/frame_respond" %>
+<%= javascript_include_tag "touch/controller" %>
+
+<% content_for :header do %>
+    <header class="border_1px">
+      <!-- <div class="left_option left"> -->
+      <div class="ico_wrapper back_ico left hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <!-- </div> -->
+      <div class="title ">
+        我的收藏
+      </div>
+      <div class="ico_wrapper add_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper edit_ico right hide">
+        <span class="">编辑
+          <em class="down_shadow"></em>
+        </span>
+        <span class="">完成
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+    </header>
+<% end %>
+<!-- 调用页面主体 -->
+<script type="text/javascript">
+  views.recommend_style(0.344);
+  views.product_style(0.25);
+  views.empty_style();
+  $(function () {
+    app.lasy_load($('img'));
+    var $open = $('.edit_ico'),
+      $cancel = $('.fav_delete_ico'),
+      $estop = $('.estop');
+    favorite_index_controller.initialize($open, $cancel, $estop);
+    app.push_event($(".up_page.use, .down_page.use"));
+  });
+</script>
+<div class="main" id="main">
+  <div>
+    <div class="favorites">
+      <% if @favorites.blank? %>
+          <div class="fav_empty">
+            <p>暂无收藏商品</p>
+          </div>
+      <% end %>
+      <% @favorites.each do |favorite| %>
+          <div class="favorite_pro" data-href="/products/<%= favorite.product_id %>">
+            <div class="pro_height pro_width img_wrap pro_img">
+              <img class="pro_height pro_width" width="80" height="80" data-src="<%= favorite.product.major_image.url(:thumb220) %>">
+
+              <div class="down_shadow"></div>
+            </div>
+            <p class="pro_width ellipsis"><%= favorite.product.name %></p>
+            <span class="pro_width ellipsis">￥<%= favorite.product.discount %></span>
+
+            <div class="estop hide">
+              <div class="fav_delete_ico">
+                <span class="sprites" data-id="<%= favorite.id %>"></span>
+              </div>
+              <div class="down_shadow"></div>
+            </div>
+          </div>
+      <% end %>
+    </div>
+    <!-- 分页 -->
+    <%= paginate @favorites, views_prefix: "mobile", :theme => 'shop' %>
+  </div>
+</div>

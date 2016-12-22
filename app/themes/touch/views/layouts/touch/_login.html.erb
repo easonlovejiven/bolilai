@@ -1,0 +1,493 @@
+<!-- 登录注册浮层 -->
+<div class="page_layer hide" id="login_register_layer">
+  <div id="login_layer" class="hide">
+    <div class="border_1px layer_head">
+      <div class="ico_wrapper turnoff_ico left">
+    <span class="sprites">
+      <em class="down_shadow"></em>
+    </span>
+      </div>
+      <div class="title">登录</div>
+    </div>
+    <div class="login_box">
+      <!-- <div class="wechat_zone clear_fix">
+        <p>绑定珀丽莱帐号，使用已有地址和特权</p>
+      </div> -->
+      <form id="login" method="post">
+        <div class="suffix_tip hide">
+          <div class="tip_angle"></div>
+          <span class="left">sina.com</span>
+          <span class="left">qq.com</span>
+          <span class="left">163.com</span>
+          <span class="left">yahoo.com</span>
+          <span class="left">126.com</span>
+          <span class="left">sohu.com</span>
+
+          <div class="clear"></div>
+        </div>
+        <p class="email read_in">
+          <span class="left">帐号</span>
+          <input class="left" type="email" name="username" placeholder="邮箱或者手机号码">
+          <span class="clear_txt hide"><em class="sprites"></em></span>
+        </p>
+
+        <div class="clear"></div>
+        <p></p>
+
+        <p class="psd read_in">
+          <span class="left">密码</span>
+          <input class="left" type="password" name="password" placeholder="您的密码">
+          <span class="clear_txt hide"><em class="sprites"></em></span>
+        </p>
+
+        <div class="clear"></div>
+        <p></p>
+
+        <div class="login_btn btn" id="login_submit">
+          <span>登录</span>
+          <style type="text/css">
+              /*body{
+                -webkit-transform: translate(0,0,0);
+                -webkit-backface-visibility:hidden;
+              }*/
+              .loading16 {
+                  top: -31px;
+                  width: 100px;
+                  height: 100px;
+                  position: relative;
+                  left: 50%;
+                  margin: 0;
+                  margin-left: -50px;
+                  border-radius: 100px;
+                  -webkit-border-radius: 100px;
+                  -webkit-animation-duration: 1.5s;
+                  -webkit-animation-iteration-count: infinite;
+                  -webkit-animation-timing-function: linear;
+                  -webkit-animation-name: rotateThis16;
+                  -moz-border-radius: 100px;
+                  -moz-animation-duration: 1.5s;
+                  -moz-animation-iteration-count: infinite;
+                  -moz-animation-timing-function: linear;
+                  -moz-animation-name: rotateThis16;
+              }
+
+              @-webkit-keyframes rotateThis16 {
+                  from {
+                      -webkit-transform: scale(0.18) rotate(0deg);
+                  }
+                  to {
+                      -webkit-transform: scale(0.18) rotate(360deg);
+                  }
+              }
+
+              @-moz-keyframes rotateThis16 {
+                  from {
+                      -moz-transform: scale(0.18) rotate(0deg);
+                  }
+                  to {
+                      -moz-transform: scale(0.18) rotate(360deg);
+                  }
+              }
+
+              .loading16 > div {
+                  width: 18px;
+                  height: 18px;
+                  background-color: #fff;
+                  -webkit-border-radius: 30px;
+                  -moz-border-radius: 30px;
+                  -o-border-radius: 30px;
+                  border-radius: 30px;
+                  position: absolute;
+                  left: 41px;
+                  top: 41px;
+              }
+
+              .bar1 {
+                  opacity: 0.3;
+                  -webkit-transform: rotate(0deg) translate(0, -42px);
+                  -moz-transform: rotate(0deg) translate(0, -42px);
+              }
+
+              .bar2 {
+                  opacity: 0.4;
+                  -webkit-transform: rotate(45deg) translate(0, -42px);
+                  -moz-transform: rotate(45deg) translate(0, -42px);
+              }
+
+              .bar3 {
+                  opacity: 0.5;
+                  -webkit-transform: rotate(90deg) translate(0, -42px);
+                  -moz-transform: rotate(90deg) translate(0, -42px);
+              }
+
+              .bar4 {
+                  opacity: 0.6;
+                  -webkit-transform: rotate(135deg) translate(0, -42px);
+                  -moz-transform: rotate(135deg) translate(0, -42px);
+              }
+
+              .bar5 {
+                  opacity: 0.7;
+                  -webkit-transform: rotate(180deg) translate(0, -42px);
+                  -moz-transform: rotate(180deg) translate(0, -42px);
+              }
+
+              .bar6 {
+                  opacity: 0.8;
+                  -webkit-transform: rotate(225deg) translate(0, -42px);
+                  -moz-transform: rotate(225deg) translate(0, -42px);
+              }
+
+              .bar7 {
+                  opacity: 0.9;
+                  -webkit-transform: rotate(270deg) translate(0, -42px);
+                  -moz-transform: rotate(270deg) translate(0, -42px);
+              }
+
+              .bar8 {
+                  opacity: 1;
+                  -webkit-transform: rotate(315deg) translate(0, -42px);
+                  -moz-transform: rotate(315deg) translate(0, -42px);
+              }
+          </style>
+          <div class="order_load">
+            <div class="loading16">
+              <div class="bar1"></div>
+              <div class="bar2"></div>
+              <div class="bar3"></div>
+              <div class="bar4"></div>
+              <div class="bar5"></div>
+              <div class="bar6"></div>
+              <div class="bar7"></div>
+              <div class="bar8"></div>
+            </div>
+          </div>
+
+        </div>
+        <input type="submit" value="" class="register_submit">
+      </form>
+      <!--  <div class="wechat_zone clear_fix">
+         <div class="division border_1px weixin"></div>
+         <p>新用户、已绑定用户，请走快捷登录</p>
+         <div class="wechat_btn btn">
+           <span><em class="wechat_ico sprites"></em>微信快捷登录</span>
+           <style type="text/css">
+     /*body{
+       -webkit-transform: translate(0,0,0);
+       -webkit-backface-visibility:hidden;
+     }*/
+     .loading16{
+       top:-31px;
+       width: 100px;
+       height: 100px;
+       position: relative;
+       left: 50%;
+       margin:0;
+       margin-left: -50px;
+       border-radius: 100px;
+       -webkit-border-radius: 100px;
+       -webkit-animation-duration:1.5s;
+       -webkit-animation-iteration-count:infinite;
+       -webkit-animation-timing-function:linear;
+       -webkit-animation-name: rotateThis16;
+       -moz-border-radius: 100px;
+       -moz-animation-duration:1.5s;
+       -moz-animation-iteration-count:infinite;
+       -moz-animation-timing-function:linear;
+       -moz-animation-name: rotateThis16;
+     }
+     @-webkit-keyframes rotateThis16{
+       from {-webkit-transform: scale(0.18) rotate(0deg);}
+       to {-webkit-transform: scale(0.18) rotate(360deg);}
+     }
+     @-moz-keyframes rotateThis16{
+       from {-moz-transform: scale(0.18) rotate(0deg);}
+       to {-moz-transform: scale(0.18) rotate(360deg);}
+     }
+     .loading16 > div{
+       width: 18px;
+       height: 18px;
+       background-color: #fff;
+       -webkit-border-radius: 30px;
+       -moz-border-radius: 30px;
+       -o-border-radius: 30px;
+       border-radius: 30px;
+       position: absolute;
+       left: 41px;
+       top: 41px;
+     }
+
+     .bar1{
+       opacity: 0.3;
+       -webkit-transform: rotate(0deg) translate(0, -42px);
+       -moz-transform: rotate(0deg) translate(0, -42px);
+     }
+     .bar2{
+       opacity: 0.4;
+       -webkit-transform: rotate(45deg) translate(0, -42px);
+       -moz-transform: rotate(45deg) translate(0, -42px);
+     }
+     .bar3{
+       opacity: 0.5;
+       -webkit-transform: rotate(90deg) translate(0, -42px);
+       -moz-transform: rotate(90deg) translate(0, -42px);
+     }
+     .bar4{
+       opacity: 0.6;
+       -webkit-transform: rotate(135deg) translate(0, -42px);
+       -moz-transform: rotate(135deg) translate(0, -42px);
+     }
+     .bar5{
+       opacity: 0.7;
+       -webkit-transform: rotate(180deg) translate(0, -42px);
+       -moz-transform: rotate(180deg) translate(0, -42px);
+     }
+     .bar6{
+       opacity: 0.8;
+       -webkit-transform: rotate(225deg) translate(0, -42px);
+       -moz-transform: rotate(225deg) translate(0, -42px);
+     }
+     .bar7{
+       opacity: 0.9;
+       -webkit-transform: rotate(270deg) translate(0, -42px);
+       -moz-transform: rotate(270deg) translate(0, -42px);
+     }
+     .bar8{
+       opacity: 1;
+       -webkit-transform: rotate(315deg) translate(0, -42px);
+       -moz-transform: rotate(315deg) translate(0, -42px);
+     }
+     </style>
+     <div class="order_load">
+       <div class="loading16">
+         <div class="bar1"></div>
+         <div class="bar2"></div>
+         <div class="bar3"></div>
+         <div class="bar4"></div>
+         <div class="bar5"></div>
+         <div class="bar6"></div>
+         <div class="bar7"></div>
+         <div class="bar8"></div>
+       </div>
+     </div>
+
+           <div class="down_shadow"></div>
+         </div>
+       </div> -->
+
+      <!--[if !IE]>-->
+      <div class="register_zone clear_fix">
+        <div class="division border_1px"></div>
+        <p class="join_us">还没有珀丽莱帐号？快来注册吧！</p>
+
+        <div class="reg_btn btn">注册
+          <div class="down_shadow"></div>
+        </div>
+      </div>
+      <!--<![endif]-->
+    </div>
+  </div>
+  <div id="register_layer" class="hide">
+    <div class="border_1px layer_head">
+      <div class="ico_wrapper turnoff_ico left">
+    <span class="sprites">
+      <em class="down_shadow"></em>
+    </span>
+      </div>
+      <div class="title">注册</div>
+    </div>
+    <div class="register_box">
+      <form id="register" method="post">
+        <div class="suffix_tip hide">
+          <div class="tip_angle"></div>
+          <span class="left">sina.com</span>
+          <span class="left">qq.com</span>
+          <span class="left">163.com</span>
+          <span class="left">yahoo.com</span>
+          <span class="left">126.com</span>
+          <span class="left">sohu.com</span>
+
+          <div class="clear"></div>
+        </div>
+        <input type="hidden" id="account_client" name="account[client]" value="phone_web">
+
+        <p class="email read_in">
+          <span class="left">邮箱</span>
+          <input class="left" type="email" name="account[email]" placeholder="E-mail地址">
+          <em class="right hide right_ico sprites"></em>
+          <span class="clear_txt hide"><em class="sprites"></em></span>
+        </p>
+
+        <p class="read_in name">
+          <span class="left">姓名</span>
+          <input class="left" type="text" name="user[name]" placeholder="最多为20位字符">
+          <em class="right hide right_ico sprites"></em>
+          <span class="clear_txt hide"><em class="sprites"></em></span>
+        </p>
+
+        <p class="read_in psd">
+          <span class="left">密码</span>
+          <input class="left" type="password" name="account[password]" placeholder="6-20位字母、数字或符号">
+          <em class="right222 hide right_ico sprites"></em>
+          <span class="clear_txt hide"><em class="sprites"></em></span>
+        </p>
+
+        <p class="read_in rpsd">
+          <span class="left">确认密码</span>
+          <input class="left" type="password" name="account[password_confirmation]" placeholder="请重复输入您的密码">
+          <em class="right hide right_ico sprites"></em>
+          <span class="clear_txt hide"><em class="sprites"></em></span>
+        </p>
+
+        <!--<p class="coupon read_in">-->
+        <!--<span class="left">推广码</span>-->
+        <!--<input class="left" type="text" name="coupon[code]" placeholder="选填">-->
+        <!--<em class="right hide right_ico sprites"></em>-->
+        <!--<span class="clear_txt hide"><em class="sprites"></em></span>-->
+        <!--</p>-->
+
+        <p class="captcha_need hide read_in">
+          <span class="left">验证码</span>
+      <span class="captcha_content left loaded">
+        <input class="left captcha_input" type="tel" name="captcha" placeholder="请输入4位数字">
+        <img class="left">
+        <span class="clear_txt hide"><em class="sprites"></em></span>
+      </span>
+          <em class="right hide right_ico sprites"></em>
+        </p>
+
+        <div class="register_btn btn" id="register_submit">
+          <span>注册并登录</span>
+          <style type="text/css">
+              /*body{
+                -webkit-transform: translate(0,0,0);
+                -webkit-backface-visibility:hidden;
+              }*/
+              .loading16 {
+                  top: -31px;
+                  width: 100px;
+                  height: 100px;
+                  position: relative;
+                  left: 50%;
+                  margin: 0;
+                  margin-left: -50px;
+                  border-radius: 100px;
+                  -webkit-border-radius: 100px;
+                  -webkit-animation-duration: 1.5s;
+                  -webkit-animation-iteration-count: infinite;
+                  -webkit-animation-timing-function: linear;
+                  -webkit-animation-name: rotateThis16;
+                  -moz-border-radius: 100px;
+                  -moz-animation-duration: 1.5s;
+                  -moz-animation-iteration-count: infinite;
+                  -moz-animation-timing-function: linear;
+                  -moz-animation-name: rotateThis16;
+              }
+
+              @-webkit-keyframes rotateThis16 {
+                  from {
+                      -webkit-transform: scale(0.18) rotate(0deg);
+                  }
+                  to {
+                      -webkit-transform: scale(0.18) rotate(360deg);
+                  }
+              }
+
+              @-moz-keyframes rotateThis16 {
+                  from {
+                      -moz-transform: scale(0.18) rotate(0deg);
+                  }
+                  to {
+                      -moz-transform: scale(0.18) rotate(360deg);
+                  }
+              }
+
+              .loading16 > div {
+                  width: 18px;
+                  height: 18px;
+                  background-color: #fff;
+                  -webkit-border-radius: 30px;
+                  -moz-border-radius: 30px;
+                  -o-border-radius: 30px;
+                  border-radius: 30px;
+                  position: absolute;
+                  left: 41px;
+                  top: 41px;
+              }
+
+              .bar1 {
+                  opacity: 0.3;
+                  -webkit-transform: rotate(0deg) translate(0, -42px);
+                  -moz-transform: rotate(0deg) translate(0, -42px);
+              }
+
+              .bar2 {
+                  opacity: 0.4;
+                  -webkit-transform: rotate(45deg) translate(0, -42px);
+                  -moz-transform: rotate(45deg) translate(0, -42px);
+              }
+
+              .bar3 {
+                  opacity: 0.5;
+                  -webkit-transform: rotate(90deg) translate(0, -42px);
+                  -moz-transform: rotate(90deg) translate(0, -42px);
+              }
+
+              .bar4 {
+                  opacity: 0.6;
+                  -webkit-transform: rotate(135deg) translate(0, -42px);
+                  -moz-transform: rotate(135deg) translate(0, -42px);
+              }
+
+              .bar5 {
+                  opacity: 0.7;
+                  -webkit-transform: rotate(180deg) translate(0, -42px);
+                  -moz-transform: rotate(180deg) translate(0, -42px);
+              }
+
+              .bar6 {
+                  opacity: 0.8;
+                  -webkit-transform: rotate(225deg) translate(0, -42px);
+                  -moz-transform: rotate(225deg) translate(0, -42px);
+              }
+
+              .bar7 {
+                  opacity: 0.9;
+                  -webkit-transform: rotate(270deg) translate(0, -42px);
+                  -moz-transform: rotate(270deg) translate(0, -42px);
+              }
+
+              .bar8 {
+                  opacity: 1;
+                  -webkit-transform: rotate(315deg) translate(0, -42px);
+                  -moz-transform: rotate(315deg) translate(0, -42px);
+              }
+          </style>
+          <div class="order_load">
+            <div class="loading16">
+              <div class="bar1"></div>
+              <div class="bar2"></div>
+              <div class="bar3"></div>
+              <div class="bar4"></div>
+              <div class="bar5"></div>
+              <div class="bar6"></div>
+              <div class="bar7"></div>
+              <div class="bar8"></div>
+            </div>
+          </div>
+
+        </div>
+        <input type="submit" value="" class="register_submit">
+      </form>
+      <!--[if !IE]>-->
+      <div class="division border_1px"></div>
+      <p class="join_us">已有珀丽莱帐号？立即登录</p>
+
+      <div class="log_btn btn">登录
+        <div class="down_shadow"></div>
+      </div>
+      <!--<![endif]-->
+    </div>
+
+  </div>
+</div>

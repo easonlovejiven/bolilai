@@ -1,0 +1,83 @@
+<div class="cardbox">
+  <a class="foldtitle" href="#" id="trade_new_summary_card_open"><em class="icon"></em>使用礼品卡</a>
+  <div id="trade_new_summary_card_area" style="display: none;">
+    <div class="cardover">
+      <strong>礼品卡可用余额：<span id="trade_new_summary_card_balance">￥<%= @current_user.balance+@current_user.cards_balance %></span></strong>
+      <a class="addlink" href="#" id="trade_new_summary_card_activate_area_switch">添加礼品卡</a>
+      <div id="trade_new_summary_card_activate_area" class="numberbox" style="display: none;">
+        <div class="box_top"></div>
+        <div class="box_cont">
+          <div class="ligroup">
+            <label for="trade_new_summary_card_number" style="cursor: pointer;">序列号：</label>
+            <input id="trade_new_summary_card_number" type="text" placeholder="请输入内容" maxlength="8">
+          </div>
+          <div class="ligroup">
+            <label for="trade_new_summary_card_password" style="cursor: pointer;">激活码：</label>
+            <input id="trade_new_summary_card_password" type="text" placeholder="请输入内容" maxlength="4">
+          </div>
+          <a id="trade_new_summary_card_activate" class="sure" href="#">确定</a>
+        </div>
+        <div class="box_bottom"></div>
+      </div>
+      <div id="trade_new_summary_card_activate_error" class="errorbox" style="display: none;">
+        <div class="box_cont">
+          礼品卡验证错误！
+        </div>
+        <div class="box_bottom"></div>
+      </div>
+    </div>
+    <% has_card = (@current_user.balance+@current_user.cards_balance) > 0 %>
+    <div class="cardpassword newpd" id="trade_new_summary_card_newpw_area" style="<%="display: #{!@current_user.has_password && has_card ? 'block' : 'none'};" %>" data-url="<%= user_path(@current_user) %>">
+      <label class="tips"><em class="icon"></em><p>为了您的账号安全，需设置支付密码后才能使用礼品卡。</p>
+        <a href="#" id="trade_new_summary_card_newpwbox_switch">设置密码</a></label>
+      <p class="cardinfo">(礼品卡不能与代金券、现金券、基因值、vip折扣等特别优惠同时使用。)</p>
+      <div id="trade_new_summary_card_newpwbox" class="newpwbox" style="display: none;">
+        <div class="box_top"></div>
+        <div class="box_cont">
+          <div class="ligroup">
+            <label for="trade_new_summary_card_newpw_input" style="cursor: pointer;">新密码：</label>
+            <input type="password" placeholder="请输入内容" id="trade_new_summary_card_newpw_input" maxlength="20">
+          </div>
+          <div class="ligroup">
+            <label for="trade_new_summary_card_newpw_confirm" style="cursor: pointer;">重新输入密码：</label>
+            <input type="password" placeholder="请输入内容" id="trade_new_summary_card_newpw_confirm" maxlength="20">
+          </div>
+          <a id="trade_new_summary_card_newpw" class="sure" href="#" data-url="<%= auction_user_path(@current_user) %>">确定</a>
+          <span id="trade_new_summary_card_newpw_inconsistent" class="wperror" style="display: none;">两次密码输入错误！</span>
+        </div>
+        <div class="box_bottom"></div>
+      </div>
+      <div id="trade_new_summary_card_newpw_error" style="display: none;" class="errorbox">
+        <div class="box_cont">
+          密码设置失败！
+        </div>
+        <div class="box_bottom"></div>
+      </div>
+    </div>
+    <div id="trade_new_summary_card_box" class="cardpassword" style="<%="display: none;" if !@current_user.has_password && has_card %>">
+      <div id="trade_new_summary_card_inspect" style="<%="display: #{@current_user.has_password && has_card ? 'block' : 'none'};" %>">
+        <label for="trade_new_summary_card_inspect_password" style="cursor: pointer;" class="tips"><em class="icon"></em><p>使用余额支付需先输入支付密码：</p></label>
+        <input id="trade_new_summary_card_inspect_password" placeholder="请输入内容" type="password" maxlength="20">
+        <a href="#" data-url="<%= validate_password_auction_user_path(@current_user) %>" id="trade_new_summary_card_inspect_btn" class="cardbtn">确定</a>
+        <p class="cardinfo">(礼品卡不能与代金券、现金券、基因值、vip折扣等特别优惠同时使用。)</p>
+        <div id="trade_new_summary_card_inspect_error" class="errorbox" style="display: none;">
+          <div class="box_cont">
+            密码验证失败！
+          </div>
+          <div class="box_bottom"></div>
+        </div>
+      </div>
+      <div id="trade_new_summary_card_inspect_success" style="display: none;">
+        <input id="trade_new_summary_card_confirm_checkbox" type="checkbox" checked="checked"/>
+        <div class="cardsuccess">
+          使用余额支付
+          <span>密码验证成功</span>
+          (礼品卡不能与代金券、现金券、基因值、vip折扣等特别优惠同时使用。)
+        </div>
+      </div>
+      <div id="trade_new_summary_card_no_card" class="tips" style="<%="display: none;" if has_card %>">
+        <em class="icon"></em><p>您没有可使用的礼品卡！</p>
+      </div>
+    </div>
+  </div>
+</div>

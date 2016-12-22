@@ -1,0 +1,41 @@
+<% (@product.operation_images.order('COALESCE(sequence, 1000000) ASC, id ASC').select(&:id)+(params[:action] != 'show' ? (1..10).map{ Shop::ProductOperationImage.new(:active => false) } : [])).each_with_index do |operation_image, i| %>
+    <%= f.fields_for :operation_images, operation_image do |pf| %>
+        <% if params[:action] != 'show' %>
+            <%= pf.check_box :active, :onclick => "$(this).next().slideToggle('fast');" %>
+        <% end %>
+        <div style="<%="#{'display:none;' unless operation_image.active?}"%>">
+          <table class='.form-table'>
+            <% unless operation_image.new_record? %>
+                <tr>
+                  <th><%= pf.label :id, "ID" %></th>
+                  <td><%= operation_image.id %></td>
+                </tr>
+            <% end %>
+            <tr>
+              <th><%= pf.label :pic, "图片" %></th>
+              <td><%= render :partial => 'manage/shared/attachment', :locals => { :show => params[:action] == 'show', :form => pf, :field => :pic, :image => { :'max-width' => 300, :'max-height' => 300 } }%></td>
+            </tr>
+            <tr>
+              <th><%= pf.label :sequence, "顺序" %></th>
+              <td>
+                <% if params[:action] == 'show' %>
+                    <%= operation_image.sequence %>
+                <% else %>
+                    <%= pf.text_field :sequence %>
+                <% end %>
+              </td>
+            </tr>
+            <% unless operation_image.new_record? %>
+                <tr>
+                  <th><%= pf.label :created_at, "创建时间" %></th>
+                  <td><%= operation_image.created_at.try(:to_s, :db) %></td>
+                </tr>
+                <tr>
+                  <th><%= pf.label :updated_at, "更新时间" %></th>
+                  <td><%= operation_image.updated_at.try(:to_s, :db) %></td>
+                </tr>
+            <% end %>
+          </table>
+        </div>
+    <% end %>
+<% end %>

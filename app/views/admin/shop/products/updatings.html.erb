@@ -1,0 +1,20 @@
+<%
+def format_json(data)
+	seperator = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
+	case data.class.to_s
+	when 'Hash'
+		data.empty? ? "{}" : "{\n#{data.map{|k,v| "<span style='color:#333;'>#{h k}:</span> #{format_json(v)}," }.join("\n").split("\n").map{|l| "#{seperator}#{l}" }.join("\n")}\n}"
+	when 'Array'
+		data.empty? ? "[]" : "[\n#{data.map{|a| "#{format_json(a)}," }.join("\n").split("\n").map{|l| "#{seperator}#{l}" }.join("\n")}\n]"
+	when 'String'
+		"<span style='color:darkgreen;'>\"#{h data}\"</span>"
+	when 'Fixnum'
+		"<span style='color:blue;'>#{h data}</span>"
+	when 'NilClass'
+		"<span style='color:red;'>null</span>"
+	else
+		h data.inspect
+	end
+end
+%>
+<%= simple_format format_json(ActiveSupport::JSON.decode(@updating.data)) %>

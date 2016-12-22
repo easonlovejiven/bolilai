@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+  <trades>
+  	<%= raw cache_items(@trades, "views/shop/trades/%i/%i", 'trade', 'xml').values.join %>
+  </trades>
+</response>

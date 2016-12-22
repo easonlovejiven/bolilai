@@ -1,0 +1,192 @@
+<%
+@page_title = "付款"
+
+# @breadcrumb = [
+# 	["悦购", auction_products_path],
+# 	["订单管理", auction_trades_path],
+# 	[@trade.identifier, auction_trade_path(@trade)],
+# ]
+
+banks = %w[ alipay_icbcb2c  alipay_comm alipay_abc alipay_cebbank alipay_cib  alipay_spdb alipay_gdb alipay_bjbank alipay_nbbank alipay_psbc-debit alipay_shbank   alipay_bjrcb alipay_hzcbb2c alipay_citic]
+
+platforms = %w[alipay alipay_qr]
+creditcards = %w[cmb abc icbc ccb ceb spabank].map{|s| "alipay_creditcard_#{s}" }
+installments = %w[cmbchina_creditcard_12  comm_creditcard]
+common_use = @current_user.trades.where("payment_service IS NOT NULL AND payment_service NOT IN ('express', 'giveaway', 'shop')").order("ID DESC").limit(20).pluck(:payment_service).map{|service| case service; when /alipay_cmb|bill99_cmb/ then 'cmbchina'; when /^alipay_|^bill99_/ then Shop::Trade::INDEPENDENT_BANKS.map{|bank| bank[:name]}.include?(s=service.gsub(/^alipay_|^bill99_/, '')) ? s : Shop::Trade::ALIPAY_BANKS.find{|bank| bank[:name] == s}.present? ? "alipay_#{s}" : service;else service;end }.uniq[0..4]
+%>
+
+<div id="popup_window_original" class="no_popup" style=" padding: 20px;">
+	<!-- div_popup_window_begin -->
+
+	<div class="cartbox">
+		<!--[if lte IE 8]><div class="pop_left"></div><div class="pop_center"></div><div class="pop_right"></div><![endif]-->
+		<!--[if IE 6]><iframe></iframe><![endif]-->
+		<a class="closelog js_facebox_close" href="#"></a>
+		<h4 class="box_title">购物车</h4>
+		<div class="cartnav">
+			<a href="#" class="step01">购物车</a>
+			<span class="icons icon01"></span>
+			<a href="#" class="step02">确认订单</a>
+			<span class="icons icon02"></span>
+			<a href="#" class="step03 current">付款</a>
+		</div>
+		<form class="weimall_form" id="trade_payment_form" data-id="<%= @trade.id %>" onsubmit="if (event) event.returnValue = false; return false;">
+			<div class="Paycont" id="trade_show_payment" style="display:<%= 'none' if @trade.status != 'pay' %>">
+				<div class="Receivcont" style="height: 370px;">
+					<div class="Receivscroll">
+						<div class="OrderInfo">
+							<strong>您的订单号为：</strong><span><%= h @trade.identifier %></span>
+							<strong class="im">应付款：</strong><span><%= h @trade.payment_price %></span><em>RMB</em>
+						</div>
+						<span class="OrderTips">若选择在线付款,请您在2小时之内完成支付(超时订单将被自动取消)。</span>
+						<div class="SelectTitle">请选择您的支付方式</div>
+						<% if request.url =~ /cmbc\.weimall\.com/ && cookies['promotion_id'].to_i == 115 %>
+						<div class="PayMode_two">
+							<span style="display:none;"><input type="radio" name="pay_online" /></span>
+							<input type="radio" name="pay_online" id="trade_payment_service_is_online" />
+							<label for="trade_payment_service_is_online" class="Modetitle">在线支付</label>
+						</div>
+						<div class="PayList">
+							<ul class="paybank02" style="height: 135px;">
+								<% %w[cmbc].each do |service| %>
+									<li><input type="radio" name="trade[payment_service]" value="<%= h service %>" id="trade_payment_service_<%= h service %>" class="js_trade_payment_service_online"> <label class="pic pic_<%= h service %>" for="trade_payment_service_<%= h service %>"></label></li>
+								<% end %>
+							</ul>
+						</div>
+						<div class="PayMode_one">
+							<input type="radio" name="trade[payment_service]" value="express" id="trade_payment_service_express" checked="checked" />
+							<label for="trade_payment_service_express" class="Modetitle">货到付款<em>因部分地区不支持货到付款，珀丽莱客服将通过400电话与您确认订单信息。</em></label>
+							<span class="Modetel">请留下您的联系电话<input type="text" size="18.7" name="trade[delivery_phone]" value="<%= h @trade.delivery_phone %>" id="trade_payment_delivery_phone" /></span>
+						</div>
+						<% elsif request.url =~ /comm\.weimall\.com/ %>
+						<div class="PayMode_two">
+							<span style="display:none;"><input type="radio" name="pay_online" /></span>
+							<input type="radio" name="pay_online" id="trade_payment_service_is_online" checked="checked"/>
+							<label for="trade_payment_service_is_online" class="Modetitle">在线支付</label>
+						</div>
+						<div class="PayList">
+							<ul class="paybank02" style="height: 135px;">
+								<% %w[comm_creditcard].each do |service| %>
+									<li><input type="radio" name="trade[payment_service]" value="<%= h service %>" id="trade_payment_service_<%= h service %>" class="js_trade_payment_service_online" checked="checked"> <label class="pic pic_<%= h service %>" for="trade_payment_service_<%= h service %>"></label></li>
+								<% end %>
+							</ul>
+						</div>
+						<script type="text/javascript" charset="utf-8">
+							$(function(){
+								$(".js_trade_payment_service_online").trigger("mousedown");
+							});
+						</script>
+						<% else %>
+						<div class="PayMode_one">
+							<input type="radio" name="trade[payment_service]" value="express" id="trade_payment_service_express" checked="checked" />
+							<label for="trade_payment_service_express" class="Modetitle">货到付款<em>因部分地区不支持货到付款，珀丽莱客服将通过400电话与您确认订单信息。</em></label>
+							<span class="Modetel">请留下您的联系电话<input type="text" size="18.7" name="trade[delivery_phone]" value="<%= h @trade.delivery_phone %>" id="trade_payment_delivery_phone" /></span>
+						</div>
+						<div class="PayMode_two">
+							<span style="display:none;"><input type="radio" name="pay_online" /></span>
+							<input type="radio" name="pay_online" id="trade_payment_service_is_online" />
+							<label for="trade_payment_service_is_online" class="Modetitle">在线支付</label>
+						</div>
+						<div class="PayList">
+							<% if common_use.present? %>
+								<em>常用支付</em>
+								<ul class="paybank01">
+									<% common_use.each do |service| %>
+										<li><input type="radio" name="trade[payment_service]" value="<%= h service %>" id="trade_payment_service_<%= h service %>_common_use" class="js_trade_payment_service_online"> <label class="pic pic_<%= h service %>" for="trade_payment_service_<%= h service %>_common_use"></label></li>
+									<% end %>
+								</ul>
+							<% end %>
+							<em>选择支付平台支付</em>
+							<ul class="paybank01">
+								<% platforms.each do |service| %>
+									<li><input type="radio" name="trade[payment_service]" value="<%= h service %>" id="trade_payment_service_<%= h service %>" class="js_trade_payment_service_online"> <label class="pic pic_<%= h service %>" for="trade_payment_service_<%= h service %>"></label></li>
+								<% end %>
+							</ul>
+							<em>选择银行支付</em>
+							<ul class="paybank01">
+								<% banks.each do |service| %>
+									<li><input type="radio" name="trade[payment_service]" value="<%= h service %>" id="trade_payment_service_<%= h service %>" class="js_trade_payment_service_online"> <label class="pic pic_<%= h service %>" for="trade_payment_service_<%= h service %>"></label></li>
+								<% end %>
+							</ul>
+							<!--<em>选择分期支付(最低金额600RMB，最多可分12期支付)</em>-->
+							<!--<ul class="paybank01">-->
+								<%# installments.each do |service| %>
+									<!--<li><input type="radio" name="trade[payment_service]" value="<%#= h service %>" id="trade_payment_service_<%#= h service %>" class="js_trade_payment_service_online"> <label class="pic pic_<%#= h service %>" for="trade_payment_service_<%#= h service %>"></label></li>-->
+								<%# end %>
+							<!--</ul>-->
+						</div>
+						<% end %>
+					</div>
+					<div class="poniter_event_none"></div>
+				</div>
+				<div class="sendlink">
+					<a href="#" class="sPbtn" id="trade_payment_confirm"><span><span>确认支付方式</span><em>处理中...</em></span></a>
+					<a href="#" style="display:none;" id="trade_payment_link" /></a>
+				</div>
+				<div style="display:none;" id="trade_payment_process">
+					<div class="warnbox_shelter"></div>
+					<!--[if lte IE 8]><div class="ie_warnbox"></div><![endif]-->
+					<div class="warnbox">
+						<div class="Mask_two"></div>
+						<div class="box_cont">
+							<div class="no_pay">
+								<h3>付款完成前请不要关闭此窗口！</h3>
+								<p>完成付款后请根据你的情况点击下面的按钮 ：</p>
+								<p class="shop_tips warn_tips">请在新开网页上，使用网银完成付款后，再选择。</p>
+							</div>
+						</div>
+						<div class="warnsend">
+							<a href="#" class="wPbtn" id="trade_payment_process_success" data-id="<%= @trade.id %>"><span><span>已完成付款</span><em>处理中...</em></span></a>
+							<a href="#" class="sPbtn" id="trade_payment_process_failure" data-id="<%= @trade.id %>"><span><span>付款遇问题</span><em>处理中...</em></span></a>
+						</div>
+					</div>
+				</div>
+				<div style="display:none;" id="trade_payment_problem">
+					<div class="warnbox_shelter"></div>
+					<!--[if lte IE 8]><div class="ie_warnbox"></div><![endif]-->
+					<div class="warnbox">
+						<div class="box_cont">
+							<div class="question_pay">
+								<h3>付款过程遇到问题，您可以尝试</h3>
+								<ul>
+									<% if request.url =~ /comm\.weimall\.com/ %>
+									<li><a href="#" id="trade_payment_problem_online">选择在线支付方式</a></li>
+									<% else %>
+									<li><a href="#" id="trade_payment_problem_express">选择货到付款</a></li>
+									<li><a href="#" id="trade_payment_problem_online">选择其它在线支付方式</a></li>
+									<% end %>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="trade_show_express" style="display:<%= 'none' unless @trade.payment_service && @trade.payment_service == 'express' %>;">
+				<div class="OrderRequest">
+					<span class="pic"></span>
+					<h3>货到付款请求已提交。</h3>
+					<p>我们将尽快与您联系确认订单信息。</p>
+				</div>
+				<div class="sendlink">
+					<a href="#" class="sPbtn close" style=" position: absolute; margin-top: 11px; top:0px; right:-4px;"><span><span>确认</span></span></a>
+					<a href="/shop/trades" class="wPbtn" style=" position: absolute; margin-top: 11px; top:0px; right:103px;"><span><span>订单管理</span></span></a>
+				</div>
+			</div>
+
+			<div id="trade_show_online" style="display:<%= 'none' unless @trade.payment_service && @trade.payment_service != 'express' %>;">
+				<div class="OrderRequest">
+					<span class="pic"></span>
+					<h3>付款成功。</h3>
+					<p>将在一个工作日内发货。</p>
+				</div>
+				<div class="sendlink">
+					<a href="#" class="sPbtn close" style=" position: absolute; margin-top: 11px; top:0px; right:-4px;"><span><span>确认</span></span></a>
+					<a href="/shop/trades" class="wPbtn" style=" position: absolute; margin-top: 11px; top:0px; right:103px;"><span><span>订单管理</span></span></a>
+				</div>
+			</div>
+
+		</form>
+	</div>
+	<!-- div_popup_window_end -->
+</div>

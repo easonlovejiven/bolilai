@@ -1,0 +1,47 @@
+/* help 帮助 */
+.HelpBox { position: relative; width: 920px; height: 560px; background-color: #FFF; border-radius: 7px; box-shadow: 0 0 20px rgba(0,0,0,0.3); }
+body.msn .HelpBox { border-radius: 0; box-shadow: none; }
+.HelpBox .closelog { position: absolute; display: block; top: 31px; right: 32px; width: 22px; height: 22px; text-indent: -9999px; background: url(/themes/purple/images/product/popclose.gif) no-repeat left top; }
+.HelpBox .closelog:hover { background-position: left bottom; }
+.HelpBox .helpleft { position: absolute; left: 0; top: 0; background-color: #F7F0E5; height: 560px; width: 150px; border-radius: 7px 0 0 7px; -moz-border-radius: 7px 0 0 7px; -webkit-border-radius: 7px 0 0 7px; }
+.HelpBox .helpcontScroll { position: absolute; left: 175px; top: 70px; width: 712px; height: 459px; /*font-size: 0;*/ overflow-x:hidden; overflow-y: auto; }
+.HelpBox .title { position: absolute; left: 21px; top: 30px; width: 105px; height: 22px; line-height: 22px; padding-left: 30px; font-size: 18px; color: #9A8448; background: url(/themes/purple/images/product/help/icon.png) no-repeat 0 0; overflow: hidden; }
+.HelpBox .help_experience { position: absolute; left: 29px; bottom: 22px; width: 90px; height: 16px; overflow: hidden; text-indent: -9999px; background: url(/themes/purple/images/product/help/experience.png) no-repeat 0 0; }
+.HelpBox .help_experience:hover { opacity: 0.8; filter: alpha(opacity=80); }
+.HelpBox .help_list { position: absolute; left: 23px; top: 76px; width: 120px; height: 440px; overflow: hidden; }
+.HelpBox .help_list a.help_title { position: relative; display: inline-block; *display: inline; *zoom: 1; white-space: nowrap; font-size: 12px; height: 28px; line-height: 28px; margin-bottom: 8px; margin-bottom: 8px; padding: 0 14px 0 7px; color: #635217; }
+@media \0screen { .HelpBox .help_list a.help_title { line-height: 30px; } }
+.HelpBox .help_list a.help_title:hover,
+.HelpBox .help_list a.help_title.current { background: #9A8448; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; color: #FFF; }
+body.msn .HelpBox .help_list a.help_title:hover,
+body.msn .HelpBox .help_list a.help_title.current { -moz-border-radius: 0; -webkit-border-radius: 0; border-radius: 0; }
+.HelpBox .help_list a.help_title.current { cursor: default; }
+.HelpBox .help_list a.help_title:hover .help_link_left,
+.HelpBox .help_list a.help_title:hover .help_link_right,
+.HelpBox .help_list a.help_title.current .help_link_left,
+.HelpBox .help_list a.help_title.current .help_link_right { position: absolute; width: 5px; height: 28px; background: url(/themes/purple/images/product/help/linkradius.png) no-repeat 0 0; }
+.HelpBox .help_list a.help_title:hover .help_link_left,
+.HelpBox .help_list a.help_title.current .help_link_left { top: 0; left: 0; background-position: -0 0; }
+.HelpBox .help_list a.help_title:hover .help_link_right,
+.HelpBox .help_list a.help_title.current .help_link_right { top: 0; right: 0; *right: -1px; background-position: -5px 0; }
+body.msn .HelpBox .help_list a.help_title .help_link_left,
+body.msn .HelpBox .help_list a.help_title .help_link_right { display: none; }
+
+/*IE*/
+.HelpBox { *background: none; }
+body.msn .HelpBox { *background-color: #FFF; }
+@media \0screen { .HelpBox { background: none; } }
+@media \0screen { body.msn .HelpBox { background-color: #FFF; } }
+.HelpBox .helpleft { *left: 10px; *width: 140px; }
+body.msn .HelpBox .helpleft { *left: 0; *width: 150px; }
+@media \0screen { .HelpBox .helpleft { left: 10px; width: 140px; } }
+@media \0screen { body.msn .HelpBox .helpleft { left: 0; width: 150px; } }
+.HelpBox .pop_left { position: absolute; left: 0; top: 0; width: 10px; height: 560px; background: url(/themes/purple/images/product/help/pop_left.png) no-repeat 0 0; _background: url(/themes/purple/images/product/help/pop_left.gif) no-repeat 0 0; }
+.HelpBox .pop_right { position: absolute; right: 0; top: 0; width: 10px; height: 560px; background: url(/themes/purple/images/product/help/pop_right.png) no-repeat 0 0; _background: url(/themes/purple/images/product/help/pop_right.gif) no-repeat 0 0; }
+.HelpBox .pop_center { position: absolute; left: 150px; top: 0; width: 760px; height: 560px; background-color: white; }
+body.msn .pop_left,
+body.msn .pop_right,
+body.msn .pop_center { display: none; }
+body.msn .HelpBox .helpleft { border-radius:0px; -moz-border-radius:0px; -webkit-border-radius:0px;}
+.msn .HelpBox .closelog { background: url(/themes/purple/images/product/msn_popclose.jpg) no-repeat left top;}
+.msn .HelpBox .closelog:hover { background: url(/themes/purple/images/product/msn_popclose.jpg) no-repeat left bottom;}

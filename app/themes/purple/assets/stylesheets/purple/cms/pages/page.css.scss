@@ -1,0 +1,47 @@
+.about_us {
+  .title-banner .title {
+    background-position: -65px -330px;
+  }
+
+  .panel {
+    margin-top: 20px;
+    margin-bottom: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    .title-line {
+      padding: 15px 0;
+      margin: 0;
+      font-size: 24px;
+      color: #888;
+      border-bottom: 1px solid #ddd;
+      .en {
+        font-size: 22px;
+      }
+    }
+    .panel-body {
+      padding-left: 0;
+      padding-right: 0;
+      font-size: 18px;
+      font-weight: 400;
+    }
+  }
+  .env_panel {
+    img {
+      display: block;
+      width: 100%;
+    }
+    .img2 > img {
+      width: 262px;
+      height: 170px;
+    }
+  }
+  .adds_panel {
+    margin-bottom: 20px;
+    h4 {
+      margin-bottom: 20px;
+    }
+    img {
+      width: 100%;
+    }
+  }
+}

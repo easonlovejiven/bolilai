@@ -1,0 +1,115 @@
+@import "shared/function"
+
+.series_a3
+	display: block
+	width:  1000px
+	margin: 0 auto
+	position: relative
+	height: 565px
+	margin-bottom: 12px
+	background: #fff
+	overflow: hidden
+	.product_list
+		display: block
+		margin: 18px 0 0 32px
+		overflow: hidden
+		.link
+			display: block
+			width: 296px
+			height: 522px
+			float: left
+			margin-right: 24px
+			position: relative
+			background: asset-url('auction/pages/template/shared/imgbg_296x347.png') no-repeat center top
+			// position: absolute
+			// top: 219px
+			// left: 0px
+			.title
+				position: absolute
+				top: 365px
+				left: 0px
+				width: 100%
+				line-height: 28px
+				font-size: 18px
+				display: block
+				text-align: center
+				height: 30px
+				overflow: hidden
+			.pic
+				display: block
+				width: 267px
+				height: 318px
+				background: #f1f1f1
+				position: absolute
+				left: 14px
+				top: 13px
+				overflow: hidden
+				img
+					display: block
+					width: 267px
+					height: 318px
+			.linktext
+				display: block
+				position: absolute
+				left: 39px
+				top: 407px
+				width: 208px
+				.summary
+					display: block
+					span
+						display: block
+						line-height: 20px
+						font-size: 16px
+						height: 20px
+						overflow: hidden
+					em
+						display: block
+						line-height: 20px
+						font-size: 12px
+						height: 40px
+						overflow: hidden
+				.value
+					.MarketPrice
+						display: block
+						line-height: 26px
+						font-size: 12px
+						text-decoration: line-through
+						overflow: hidden
+						height: 22px
+						margin-bottom: 4px
+						em
+							height: 22px
+							@include inline-block
+						span
+							min-width: 50px
+							height: 22px
+							text-decoration: line-through
+							@include inline-block
+					.IhaveuPrice
+						display: block
+						line-height: 26px
+						font-size: 22px
+						margin-top: 5px
+						overflow: hidden
+						height: 30px
+						em
+							@include inline-block
+							font-size: 12px
+							height: 30px
+							_float: left
+							_line-height: 28px
+							text-decoration: none
+							margin-bottom: 0
+						span
+							min-width: 50px
+							height: 30px
+							@include inline-block
+	
+
+
+.ihaveu
+	.series_a3
+		left: -20px
+.layout_flash
+	.series_a3
+		left: auto

@@ -1,0 +1,8 @@
+<h1>查看收藏</h1>
+<%= image_tag(@favorite.product.pic || '') if @favorite.product %>
+<br />
+<%= @favorite.product.name if @favorite.product %>
+<br />
+<%= @favorite.product.price if @favorite.product %>
+<br />
+<%= @favorite.product.description if @favorite.product %>

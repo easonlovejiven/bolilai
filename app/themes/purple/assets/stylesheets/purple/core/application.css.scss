@@ -1,0 +1,267 @@
+.btn {
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  padding: 3px 12px;
+  font-size: 13px;
+  line-height: 1.42857143;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.btn:hover, .btn:focus, .btn.active,
+.btn:active, .btn:disabled, .btn[disabled] {
+  outline: none !important;
+  background-image: none !important;
+  filter: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  text-shadow: none;
+}
+
+.btn-xs {
+  padding: 1px 5px;
+  font-size: 12px;
+}
+
+.btn:hover, .btn:focus {
+  color: #b8935c;
+  text-decoration: none;
+}
+
+.brown.btn, .brown.btn-link {
+  color: white;
+  background-color: #cfa972;
+}
+
+.btn.brown.disabled, .btn.brown.disabled:hover, .btn.brown.disabled:focus,
+.btn.brown.disabled:active, .btn.brown.disabled.active, .btn.brown[disabled],
+.btn.brown[disabled]:hover, .btn.brown[disabled]:focus, .btn.brown[disabled]:active,
+.btn.brown[disabled].active, fieldset[disabled] .btn.brown, fieldset[disabled]
+ .btn.brown:hover, fieldset[disabled] .btn.brown:focus, fieldset[disabled]
+ .btn.brown:active, fieldset[disabled] .btn.brown.active {
+  color: white;
+  background-color: #cfa972;
+}
+
+.green.btn {
+  color: white;
+  background-color: #71b247;
+}
+
+.green.btn:hover, .green.btn:focus,
+.green.btn:active, .green.btn.active {
+  color: white;
+  background-color: #588d3a;
+}
+
+.btn.green.disabled, .btn.green.disabled:hover, .btn.green.disabled:focus,
+.btn.green.disabled:active, .btn.green.disabled.active, .btn.green[disabled],
+.btn.green[disabled]:hover, .btn.green[disabled]:focus, .btn.green[disabled]:active,
+.btn.green[disabled].active, fieldset[disabled] .btn.green, fieldset[disabled]
+ .btn.green:hover, fieldset[disabled] .btn.green:focus, fieldset[disabled]
+ .btn.green:active, fieldset[disabled] .btn.green.active {
+  color: white;
+  background-color: #71b247;
+}
+
+.btn-link {
+  text-decoration: underline;
+}
+
+.btn-link:hover, .btn-link:focus {
+  color: #b8935c;
+  text-decoration: underline;
+}
+
+.breadcrumb {
+  padding: 11px 0;
+  list-style: none;
+  border-radius: 2px;
+  overflow: hidden;
+  &, a {
+    color: #666;
+  }
+  > li {
+    float: left;
+    a:hover {
+      text-decoration: none;
+      color: #b8935c;
+    }
+  }
+  > li + li:before {
+    content: ">";
+    padding: 0 5px;
+  }
+}
+
+.pagination {
+  text-align: right;
+  padding-top: 12px;
+  padding-bottom: 30px;
+  overflow: hidden;
+  list-style-type: none;
+
+  li {
+    float: left;
+    display: block;
+    a {
+//      float: left;
+      display: block;
+      overflow: hidden;
+      margin-left: 4px;
+      color: #444;
+      padding: 4px 8px;
+      font-size: 12px;
+      text-align: center;
+      border: 1px solid #ccc;
+      text-decoration: none;
+    }
+    &.disabled {
+      a, a:hover, a:active {
+        color: #ccc;
+        cursor: default;
+      }
+    }
+    &.active {
+      a, a:hover, a:active {
+        color: #b8935c;
+      }
+    }
+  }
+}
+
+/** 功能 **/
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.ml10 {
+  margin-left: 10px;
+}
+
+.mr10 {
+  margin-right: 10px;
+}
+
+.clear, .clr {
+  display: block;
+  overflow: hidden;
+  clear: both;
+  height: 0;
+  line-height: 0;
+  font-size: 0;
+}
+
+.product_tag_soldout,
+.product_tag_discount,
+.product_tag_label {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  display: inline-block;
+  padding: 0 5px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  height: 22px;
+  line-height: 20px;
+  font-size: 12px;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/** color **/
+.font-red {
+  color: #C81623 !important;
+}
+
+.font-green {
+  color: #71b247 !important;
+}
+
+.font-blue {
+  color: #005ea7 !important;
+}
+
+.font-brown {
+  color: #cfa972 !important;
+}
+
+/*** form **/
+.form {
+  .area, .itxt, .sele, .selt {
+    line-height: 18px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    float: none;
+  }
+
+  input[type=radio] {
+    margin-right: 4px;
+  }
+
+  .item {
+    display: block;
+    margin-bottom: 20px;
+    line-height: 30px;
+    overflow: hidden;
+
+    span.label {
+      float: left;
+      height: 18px;
+      line-height: 18px;
+      padding: 6px 5px;
+      width: 100px;
+      text-align: right;
+    }
+    .label em {
+      padding-right: 3px;
+      padding-top: 5px;
+      vertical-align: middle;
+      font-size: 16px;
+    }
+  }
+  .item:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+  em {
+    color: #e4393c;
+  }
+  .error {
+    height: 18px;
+    line-height: 13px;
+    display: none;
+    margin-top: 8px;
+    margin-right: 10px;
+    padding: 0;
+    color: #000;
+    float: left;
+    em.error_icon {
+      background: asset-url("purple/common/icons/ierror.gif") no-repeat 0 0;
+      display: block;
+      float: left;
+      height: 13px;
+      width: 13px;
+      margin-right: 5px;
+    }
+  }
+}

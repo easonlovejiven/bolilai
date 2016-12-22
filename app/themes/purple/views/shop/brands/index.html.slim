@@ -1,0 +1,50 @@
+ruby:
+	@page_title = "时尚奢侈品品牌大全"
+	@page_keywords = %W[奢侈品网站 奢侈品品牌大全]
+	@page_description = "珀丽莱，购买全球顶级时尚奢侈品，包括Gucci古驰，Prada普拉达，Burberry博柏利，D&G，Hermes爱马仕，LV路易威登，Channel香奈儿等顶尖奢侈品。"
+	@brands = Shop::Brand.active.published.select("shop_brands.*, SUM(shop_products.discount) AS s").joins("JOIN shop_products ON shop_products.brand_id = shop_brands.id AND shop_products.active = TRUE").group("shop_brands.id").order('s DESC').limit(500)
+
+.brand_2013.prefetch
+	.navigation
+		ul.list
+			li
+				a.link.js_product_brands_link.current href="#" data-type="genre" data-name="top" 热门大牌
+			li
+				a.link.js_product_brands_link href="#" data-type="rank" data-name="sold_count" 销售排行
+			li
+				- (('A'..'Z').map-['Q']).each do |initial|
+					a.link.js_product_brands_link href="#" data-type="initial" data-name="#{h initial}"
+						=h initial
+	.hotbox#product_brands_top
+		.hotbrands
+			.list
+				- %w[63 32 34 51 106 79 118 50 55 19 42 58 26 154 47 48].each do |id|
+					a.link href="/shop/brands/#{id}" target="_blank"
+	.ranking#product_brands_sold_count
+		h2.title 销售排行
+		.listhead
+			span.text.text1 排行
+			span.text.text2 品牌
+			span.text.text3 推荐商品
+		ul.list
+			- Shop::Product.active.published.select('brand_id, SUM(sold_count*discount) AS s').group('brand_id').order('s DESC').limit(10).map(&:brand).each_with_index do |brand, index|
+			 - next if brand.present?
+              li class="top#{h index+1}"
+					h4.num= h index+1
+					= link_to brand, :class => "brandname", :target => "_blank" do
+						.colorblock
+						h2.e_name= h brand.name
+						h3.c_name= h brand.chinese
+					.shadow
+					.imglist
+						- brand.products.active.published.where('unsold_count > 0').order('sold_count*discount DESC').limit(4).each do |product|
+							= link_to image_tag("purple/#{product.major_pic}.thumb145.jpg", :alt => [product.brand.try(:name), product.name.to_s.gsub(product.brand.try(:name).to_s.strip, '').gsub(product.brand.try(:chinese).to_s.strip, '')].compact.join(' '), :class => 'pic'), product, :class => 'link', :target => "_blank"
+	.ABCmain#product_brands_ABC
+		- @brands.group_by(&:initial).sort.each do |initial, brands|
+			.ABCcont class="#{cycle("odd", "even")} cont#{h initial}" id="product_brands_#{h initial}"
+				h3.ABCtitle= h initial
+				ul.list
+					- brands.sort_by { |brand| brand.name.downcase }.each do |brand|
+						li
+							= link_to brand, :class => "link #{'highlight' if !brand.recommend.blank?}", :target => "_blank" do
+								= h brand.name

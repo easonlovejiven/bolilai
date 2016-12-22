@@ -1,0 +1,1867 @@
+/*
+ * user login+signup
+---------------------------------       */
+
+.logsigbox {
+  position: relative;
+  display: block;
+  margin: 0 auto;
+  margin-top: 50px;
+  width: 880px;
+  height: 340px;
+  _overflow: hidden; /*margin:0 auto;*/
+  background: #262626;
+}
+
+.logsigbox .box_cont {
+  position: absolute;
+  top: 31px;
+  left: 16px;
+  width: 845px;
+  height: 290px;
+  display: block;
+  overflow: hidden;
+  background: asset-url("purple/user/login_and_signup/loginbg.png") repeat-x left top #fff;
+}
+
+.logsigbox .closelog {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  width: 12px;
+  height: 12px;
+  display: block;
+  overflow: hidden;
+  background: url("/themes/purple/images/user/login_and_signup/login_close.gif") no-repeat 0 0;
+}
+
+.logsigbox .closelog:hover {
+  background-position: 0 -12px;
+}
+
+.logsigbox h4.box_title {
+  position: absolute;
+  display: block;
+  height: 26px;
+  color: #35261F;
+  font-size: 18px;
+  line-height: 100%;
+  padding: 0;
+  text-align: left;
+}
+
+.logsigbox .loginline {
+  position: absolute;
+  top: 50px;
+  left: 434px;
+  width: 2px;
+  height: 179px;
+  display: block;
+  overflow: hidden;
+  background: url(/themes/purple/images/user/login_and_signup/loginline.png) no-repeat 0 0;
+  _background: none;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/themes/purple/images/user/login_and_signup/loginline.png");
+}
+
+.logsigbox .logsend {
+  position: absolute;
+  left: 30px;
+  top: 170px;
+  width: 500px;
+  height: 45px;
+  display: block;
+}
+
+.logsigbox .pop_left {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 5px;
+  height: 350px;
+  background: url(/themes/purple/images/user/login_and_signup/pop_left.gif) no-repeat 0 0; /*_background: none; _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/themes/purple/images/user/login_and_signup/pop_left.png");*/
+}
+
+.logsigbox .pop_right {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 5px;
+  height: 350px;
+  background: url(/themes/purple/images/user/login_and_signup/pop_right.gif) no-repeat 0 0; /*_background: none; _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/themes/purple/images/user/login_and_signup/pop_right.png");*/
+}
+
+.logsigbox .pop_center {
+  position: absolute;
+  left: 5px;
+  top: 0;
+  width: 880px;
+  height: 350px;
+  background: #272727 url(/themes/purple/images/user/login_and_signup/pop_center.gif) repeat-x 0 0;
+}
+
+.logsigbox .error {
+  display: none;
+  margin: 0;
+  padding: 0;
+}
+
+.logsigbox .tip {
+  height: 43px;
+  left: 290px;
+  line-height: 43px; /*min-width: 180px;*/
+  width: 175px;
+  position: absolute;
+  top: 5px;
+  z-index: 100;
+}
+
+.logsigbox .tip .tip_left {
+  background: url(/themes/purple/images/common/sprites/mod_rbg.gif) no-repeat -130px 0px;
+  display: inline-block;
+  *display: inline;
+  zoom: 1;
+  float: left;
+  height: 43px;
+  width: 10px;
+}
+
+.logsigbox .tip .tip_right {
+  background: url(/themes/purple/images/common/sprites/mod_rbg.gif) no-repeat -140px 0px;
+  float: left;
+  height: 43px;
+  width: 6px;
+}
+
+.logsigbox .tip .tip_text {
+  background: url(/themes/purple/images/common/sprites/tip_center.gif) repeat-x scroll left top transparent;
+  color: #262702;
+  display: inline-block;
+  *display: inline;
+  zoom: 1;
+  float: left;
+  height: 40px;
+  line-height: 18px;
+  padding-top: 3px;
+  width: 149px;
+  font-size: 12px;
+}
+
+.logsigbox .error {
+  color: #000;
+  line-height: 26px;
+  margin-left: 5px;
+  margin-top: 2px; /*position: absolute; top:5px; left: 290px;*/
+  float: left;
+}
+
+.logsigbox .error em.error_icon {
+  background: url(/themes/purple/images/common/icons/ierror.gif) no-repeat scroll 0 0 transparent;
+  display: inline-block;
+  *display: inline;
+  zoom: 1;
+  float: left;
+  height: 13px;
+  margin-right: 5px;
+  margin-top: 5px;
+  vertical-align: middle;
+  width: 13px;
+}
+
+.msn .logsigbox .error em.error_icon {
+  background-image: url(/themes/purple/images/common/icons/msn_ierror.gif);
+}
+
+.logsigbox .error {
+  display: none;
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+}
+
+.msn .logsigbox .error em.error_icon {
+  background-image: url(/themes/purple/images/common/icons/msn_ierror.gif);
+}
+
+@media \0screen {
+  .logsigbox .jqTransformInputInner div input {
+    line-height: 100%;
+    display: block;
+    padding: 6px 0 0 2px;
+    height: auto;
+    float: left;
+  }
+}
+
+.logsigbox form.jqtransformdone label,
+.logsigbox form.jqtransformdone label:hover {
+  cursor: pointer; /*margin-right: 0;*/
+}
+
+/*其他登录方式*/
+.logsigbox .logother {
+  position: absolute;
+  display: block;
+  width: 375px;
+  height: 76px;
+  overflow: hidden;
+}
+
+.logsigbox .logother h5 {
+  display: block;
+  width: 105px;
+  color: #686868;
+  font-size: 12px;
+  line-height: 20px;
+}
+
+/*
+.logsigbox .logother a { position: absolute; top:0px; display:block; padding-left: 21px; text-decoration:none; color: #777; font-size: 12px; line-height: 20px; background:no-repeat left center;}
+.logsigbox .logother a span { text-decoration: underline; color: #777; font-size: 12px;}
+.logsigbox .logother a.lalipay { position: absolute;  left: 117px;  top: 1px; height: 21px;  width: 73px; background-image:url(/themes/purple/images/user/login_and_signup/login_alipay.jpg);}
+.logsigbox .logother a.lalipay span { display:none;}
+.logsigbox .logother a.lmsn { background-image:url(/themes/purple/images/user/login_and_signup/login_msn.gif); width: 40px; left: 222px;}
+.logsigbox .logother a.lsina { background-image:url(/themes/purple/images/user/login_and_signup/login_sina.gif); width: 60px; left: 281px; top: 1px;}
+*/
+
+.logsigbox .logother .linkurl {
+  display: block;
+  position: absolute;
+  left: 1px;
+  top: 26px;
+  width: 322px;
+}
+
+.logsigbox .logother .linkurl a {
+  display: block;
+  width: 92px;
+  height: 20px;
+  background: url(/assets/core/user/login_logother.jpg) no-repeat;
+  float: left;
+  margin: 0 13px 6px 0;
+}
+
+.logsigbox .logother .linkurl a span {
+  display: none;
+}
+
+.logsigbox .logother .linkurl .logo_alipay {
+  background-position: 0 0;
+}
+
+.logsigbox .logother .linkurl .logo_live {
+  background-position: 0 -20px;
+}
+
+.logsigbox .logother .linkurl .logo_qq {
+  background-position: 0 -40px;
+}
+
+.logsigbox .logother .linkurl .logo_sina {
+  background-position: 0 -60px;
+}
+
+.logsigbox .logother .linkurl .logo_tianji {
+  background-position: 0 -80px;
+}
+
+.logsigbox .logother .linkurl .logo_comm {
+  background-image: url(/themes/purple/images/user/login_and_signup/logo_comm.png);
+}
+
+/*激活提示*/
+.logsigbox .logtips {
+  position: absolute;
+  left: 30px;
+  top: 230px;
+  display: block;
+  width: 375px;
+  height: 34px;
+  overflow: hidden;
+}
+
+.logsigbox .logtips p {
+  background: url(/themes/purple/images/common/icons/itips_green.gif) no-repeat scroll left center transparent;
+  color: #777;
+  padding-left: 20px;
+}
+
+.logsigbox .logtips p span {
+  color: #853C0B;
+}
+
+.logsigbox .logtips a.setext {
+  margin: 3px 0 0 20px;
+  line-height: 100%;
+}
+
+/*登录/注册 切换*/
+.logsigbox .cutover {
+  position: absolute;
+  top: 120px;
+  left: 516px;
+  width: 240px;
+  height: 32px;
+  display: block;
+  overflow: hidden;
+}
+
+.logsigbox .cutover strong {
+  position: absolute;
+  top: 8px;
+  left: 1px;
+  width: 115px;
+  height: 18px;
+  color: #000;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: normal;
+}
+
+.logsigbox .cutover .uplink {
+  position: absolute;
+  top: 1px;
+  left: 141px;
+  display: block;
+  height: 26px;
+  width: 82px;
+  background: url(/themes/purple/images/user/login_and_signup/lslinkbtn.gif?0810) no-repeat left bottom;
+}
+
+.logsigbox .cutover .uplink span {
+  display: none;
+}
+
+/* 登录
+---------------------------------       */
+.logsigbox .loginbox .cutover .uplink {
+  background-position: 0 0;
+}
+
+.logsigbox .loginbox .cutover .uplink:hover {
+  background-position: -82px 0;
+}
+
+.logsigbox .loginbox h4.box_title {
+  left: 33px;
+  top: 16px;
+  *top: 18px;
+}
+
+.logsigbox .loginbox ol.formbox {
+  position: absolute;
+  top: 67px;
+  left: 32px;
+}
+
+.logsigbox .loginbox ol.formbox li.fli {
+  display: block;
+  clear: both;
+  position: relative;
+  width: 500px;
+  height: 34px;
+  *height: 30px;
+  _height: 30px;
+  padding: 0;
+}
+
+.logsigbox .loginbox ol.formbox li.fli .tip {
+  left: 280px;
+  top: 2px;
+}
+
+.logsigbox .loginbox ol.formbox li.fli .error {
+  margin: 0;
+  position: absolute;
+  height: 18px;
+  left: 280px;
+  top: 9px;
+  width: 200px;
+  line-height: 14px;
+}
+
+.logsigbox .loginbox ol.formbox li.fli .error em.error_icon {
+  margin: 0 5px 0 0;
+}
+
+.logsigbox .loginbox ol.formbox li.fli strong {
+  position: absolute;
+  left: 0px;
+  top: 5px;
+  _top: 8px;
+  width: 70px;
+  height: 14px;
+  vertical-align: top;
+  line-height: 16px;
+}
+
+.logsigbox .loginbox ol.formbox li.fli .jqTransformInputWrapper {
+  position: absolute;
+  left: 70px;
+  top: 4px;
+}
+
+.logsigbox .loginbox ol.formbox li.fli .jqTransformInputWrapper .jqTransformInputInner {
+  height: 24px;
+  overflow: hidden;
+}
+
+.logsigbox .loginbox ol.formbox li.fli input {
+  width: 188px;
+  height: 24px;
+  *height: 21px;
+  padding-bottom: 5px \9;
+  line-height: 13px \9;
+  *line-height: 12px;
+}
+
+.logsigbox .loginbox ol.formbox a.setext {
+  position: absolute;
+  top: 8px;
+  left: 211px;
+  width: 65px;
+  _height: 16px;
+  line-height: 13px;
+  text-decoration: underline;
+  color: #827777;
+}
+
+.logsigbox .loginbox .logother {
+  left: 28px;
+  top: 207px;
+}
+
+.logsigbox .loginbox .logsend span.jqTransformCheckboxWrapper {
+  position: absolute;
+  left: 114px;
+  top: 8px;
+  margin: 0;
+}
+
+/*
+.logsigbox .loginbox .logsend .jqTransformButton { position: absolute; left: 199px; top:5px;}
+.logsigbox .loginbox .logsend .jqTransformButton span span { padding:6px 21px 7px 27px;}
+*/
+.logsigbox .loginbox .logsend .remember_me {
+  position: absolute;
+  left: 137px;
+  top: 9px;
+  width: 45px;
+  height: 14px;
+  font-size: 12px;
+  line-height: 13px;
+}
+
+.logsigbox .loginbox .logsend label.remember_me {
+  top: 3px;
+}
+
+.logsigbox .loginbox .logsend .error {
+  position: absolute;
+  left: 285px;
+  top: 3px;
+  width: 150px;
+  height: 25px;
+  line-height: 29px;
+}
+
+.logsigbox .loginbox .logsend .error em.error_icon {
+  margin-top: 7px;
+}
+
+/* 按钮 */
+.logsigbox .loginbox .loginButton {
+  position: absolute;
+  left: 200px;
+  top: 6px;
+  cursor: pointer;
+  display: block;
+  width: 76px;
+  height: 22px;
+  background-image: url(/themes/purple/images/user/login_and_signup/login_btn.jpg?0812); /*-webkit-transition-duration: 0.5s;*/
+}
+
+.logsigbox .loginbox .loginButton span,
+.logsigbox .loginbox .loginButton em {
+  display: none;
+}
+
+.logsigbox .loginbox .loginButton:hover {
+  background-position: 0 -22px;
+}
+
+.logsigbox .loginbox .loginButton.disabled,
+.logsigbox .loginbox .loginButton.disabled:hover {
+  cursor: default;
+  background-position: 0 -44px;
+}
+
+.logsigbox .loginbox .loginButton.loading,
+.logsigbox .loginbox .loginButton.loading:hover {
+  cursor: default;
+  background-position: 0 -66px;
+}
+
+body.msn .logsigbox .loginbox .loginButton.loading,
+body.msn .logsigbox .loginbox .loginButton.loading:hover {
+  cursor: default;
+  background: #514012;
+}
+
+body.msn .logsigbox .loginbox .loading span,
+body.msn .logsigbox .loginbox .loading span,
+body.msn .logsigbox .signupbox .loading span {
+  display: none;
+}
+
+body.msn .logsigbox .loginbox .loading em {
+  color: #FFF;
+  display: block;
+  font-size: 12px;
+  height: 20px;
+  line-height: 11px;
+  padding-top: 4px;
+  text-align: center;
+  width: 100%;
+}
+
+/* 注册
+---------------------------------       */
+.logsigbox .signupbox ol.formbox li.fli input {
+  height: 24px;
+  *height: 21px;
+  padding-bottom: 5px \9;
+  line-height: 13px \9;
+  *line-height: 12px;
+}
+
+/* 为切换不移动。。。
+.logsigbox .signupbox { left: 17px; top: 34px; height: 294px;}
+
+.logsigbox .signupbox .loginline { left: 432px;}
+*/
+.logsigbox .signupbox .logother {
+  left: 478px;
+  top: 200px;
+  width: 320px; /*z-index: 56;*/
+}
+
+.logsigbox .signupbox .cutover {
+  /*left: 513px; top: 118px;*//* z-index: 56;*/
+}
+
+.logsigbox .signupbox .cutover .uplink {
+  background-position: 0 -28px; /*left: 143px; top: 2px;*/
+}
+
+.logsigbox .signupbox .cutover .uplink:hover {
+  background-position: -82px -28px;
+}
+
+.logsigbox .signupbox h4.box_title {
+  left: 30px;
+  top: 12px;
+}
+
+.logsigbox .signupbox .sigMode {
+  position: absolute;
+  left: 30px;
+  top: 41px;
+}
+
+.logsigbox .signupbox .sigMode .jqTransformRadioWrapper {
+  margin: 5px 7px 0 0;
+}
+
+.logsigbox .signupbox .sigMode label {
+  margin-right: 20px;
+  margin-top: 6px;
+  line-height: 100%;
+  *line-height: 15px;
+}
+
+.logsigbox .signupbox ol.formbox {
+  position: absolute;
+  top: 74px;
+  left: 29px;
+  z-index: 55;
+  width: 406px;
+}
+
+.logsigbox .signupbox ol.formbox li.fli {
+  display: block;
+  clear: both;
+  position: relative;
+  height: 28px;
+  padding: 0;
+  vertical-align: top;
+  font-size: 0;
+}
+
+.logsigbox .signupbox ol.formbox li.fli .code_img {
+  position: absolute;
+  //  left: 145px;
+  left: 190px;
+  top: 5px;
+}
+
+.logsigbox .signupbox ol.formbox li.fli .code_img a {
+  position: absolute;
+  top: 5px;
+  left: 57px;
+  display: block;
+  height: 15px;
+  width: 15px;
+  background: url(/themes/purple/images/user/login_and_signup/reload_icon.png) no-repeat 0 0;
+}
+
+.logsigbox .signupbox ol.formbox li.fli .validation .error {
+  left: 230px;
+  top: 7px;
+}
+
+.logsigbox .signupbox ol.formbox li.fli .validation .tip {
+  left: 195px;
+  top: 2px;
+}
+
+.logsigbox .signupbox .tip {
+  display: none;
+}
+
+.logsigbox .signupbox ol.formbox li.fli .tip {
+  left: 267px;
+  top: -4px;
+}
+
+.logsigbox .signupbox ol.formbox li.fli .error {
+  margin: 0;
+  position: absolute;
+  left: 274px;
+  top: 5px;
+  width: 200px;
+  height: 16px;
+  *padding-bottom: 1px;
+  line-height: 12px;
+  vertical-align: top;
+}
+
+.logsigbox .signupbox ol.formbox li.fli .error em.error_icon {
+  margin: 0 5px 0 0;
+}
+
+.logsigbox .signupbox ol.formbox li.fli .validation .error {
+  z-index: 55;
+  color: #FFF;
+  overflow: hidden;
+  padding: 5px 10px 3px 30px;
+  *padding: 3px 10px 5px 30px;
+  white-space: pre;
+  width: 114px;
+  background: url("/themes/purple/images/common/icons/error_important.png") no-repeat 0 0;
+  _background: url("/themes/purple/images/common/icons/error_important_ie6.gif") no-repeat 0 0;
+}
+
+.logsigbox .signupbox ol.formbox li.fli .validation .error em.error_icon {
+  display: none;
+}
+
+.msn .logsigbox .signupbox ol.formbox li.fli .validation .error {
+  background: url("/themes/purple/images/common/icons/error_important_msn.gif") no-repeat 0 0;
+  _background: url("/themes/purple/images/common/icons/error_important_msn.gif") no-repeat 0 0;
+}
+
+.logsigbox .signupbox ol.formbox li.fli strong,
+.logsigbox .signupbox ol.formbox li.fli label {
+  position: absolute;
+  left: 0px;
+  top: 5px;
+  width: 70px;
+  height: 14px;
+  margin: 0;
+  padding: 0;
+  vertical-align: top;
+  line-height: 100%;
+  *line-height: 16px;
+  font-size: 12px;
+}
+
+.logsigbox .signupbox ol.formbox li.fli .jqTransformInputWrapper {
+  position: absolute;
+  left: 64px;
+  top: 0px;
+  _height: 20px;
+}
+
+.logsigbox .signupbox ol.formbox li.fli input {
+  width: 188px;
+}
+
+.logsigbox .signupbox ol.formbox li.fli .validation input {
+  width: 60px;
+}
+
+.logsigbox .signupbox ol.formbox li.PromotionCode {
+  input {
+    width: 97px;
+  }
+
+  strong,
+  label {
+    top: 10px;
+  }
+
+  .validation strong,
+  .validation label {
+    //left: 5px;
+  }
+
+  .jqTransformInputWrapper {
+    top: 5px;
+  }
+
+  .tip {
+    left: 180px;
+    top: -3px;
+  }
+
+  .validation {
+    position: absolute;
+    top: 0;
+    //left: 180px;
+    width: 65px;
+  }
+
+  .validation strong,
+  .validation label {
+    width: 53px;
+    white-space: pre;
+  }
+
+  //.validation .jqTransformInputWrapper {
+  //  left: 55px;
+  //}
+
+  //.validation .code_img {
+  //  left: 135px;
+  //}
+
+  .validation .code_img img {
+    margin-top: 5px;
+  }
+
+  .validation .code_img a {
+    top: 11px;
+  }
+
+  .validation .error {
+    left: 270px;
+    top: 6px;
+    z-index: 99;
+  }
+
+  .validation .tip {
+    left: 270px;
+    top: 5px;
+    _width: 220px;
+    z-index: 9;
+  }
+}
+
+.logsigbox .signupbox ol.formbox li.fli .gender {
+  padding-left: 66px;
+}
+
+.logsigbox .signupbox ol.formbox li.fli .gender span.jqTransformRadioWrapper {
+  margin-top: 6px;
+  margin-left: 0px;
+}
+
+.logsigbox .signupbox ol.formbox li.fli .gender label {
+  width: 42px;
+  line-height: 16px;
+  position: relative;
+  font-size: 12px;
+}
+
+.logsigbox .signupbox ol.formbox a.setext {
+  position: absolute;
+  top: 6px;
+  left: 209px;
+  width: 65px;
+  line-height: 100%;
+}
+
+.logsigbox .loginbox .logsend label.remember_me {
+  line-height: 19px;
+}
+
+.logsigbox .signupbox .logsend {
+  top: 250px;
+  left: 29px;
+  width: 450px;
+}
+
+.logsigbox .signupbox .logsend span.jqTransformCheckboxWrapper {
+  position: absolute;
+  top: 9px;
+  left: 94px;
+  margin: 0;
+}
+
+.logsigbox .signupbox .logsend .remember_me {
+  position: absolute;
+  top: 10px;
+  left: 117px;
+  margin: 0;
+  width: 50px;
+  padding: 0; /*line-height:*/
+  font-size: 12px;
+  line-height: 14px;
+}
+
+.logsigbox .signupbox .logsend .button.jqTransformButton {
+}
+
+.logsigbox .signupbox .look_server {
+  position: absolute;
+  left: 0;
+  top: 7px;
+  text-decoration: underline;
+  color: #8d8481;
+}
+
+.logsigbox .signupbox .jqTransformButton {
+  position: absolute;
+  left: 181px;
+  top: 3px;
+}
+
+.logsigbox .signupbox .jqTransformButton span span {
+  padding: 6px 6px 7px 12px;
+}
+
+/* 按钮 */
+.logsigbox .signupbox .signupButton {
+  position: absolute;
+  left: 184px;
+  top: 4px;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  display: block;
+  width: 82px;
+  height: 24px;
+  border: none;
+  background: url(/themes/purple/images/user/login_and_signup/signup_btn.jpg?0000) no-repeat 0 0;
+}
+
+.logsigbox .signupbox .signupButton span {
+  display: none;
+}
+
+.logsigbox .signupbox .signupButton:hover {
+  background-position: 0 -24px;
+}
+
+.logsigbox .signupbox .signupButton.disabled,
+.logsigbox .signupbox .signupButton.disabled:hover {
+  cursor: default;
+  background-position: 0 -48px;
+}
+
+/* 注册条款 */
+.logsigbox .signupbox .Terms_info {
+  z-index: 58;
+  position: absolute;
+  top: 15px;
+  left: 440px;
+  width: 400px;
+  height: 260px;
+  padding-right: 5px;
+  background: #fff url(/themes/purple/images/user/login_and_signup/loginbg.png) left -9px repeat-x;
+}
+
+.logsigbox .signupbox .Terms_info div {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 260px;
+  position: absolute;
+  top: 0;
+  padding: 0 18px 0 13px;
+}
+
+.logsigbox .signupbox .Terms_info h5 {
+  color: #000;
+  font-size: 14px;
+  font-weight: normal;
+  margin-top: 14px;
+}
+
+.logsigbox .signupbox .Terms_info h6 {
+  color: #333;
+  font-size: 12px;
+  font-weight: normal;
+  padding: 15px 0;
+}
+
+.logsigbox .signupbox .Terms_info p {
+  color: #333;
+  font-size: 12px;
+  line-height: 160%;
+  text-align: justify;
+  text-justify: distribute;
+}
+
+/* 注册成功 */
+.logsigbox .signupbox .success,
+.logsigbox .pwResetbox .success {
+  position: absolute;
+  top: 120px;
+  left: 290px;
+}
+
+.logsigbox .pwResetbox .success {
+  left: 265px;
+}
+
+.logsigbox .signupbox .success em,
+.logsigbox .pwResetbox .success em {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  display: block;
+  height: 45px;
+  width: 45px;
+  background: url(/themes/purple/images/common/icons/suicon03.png) no-repeat 0 0;
+  _background: none;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/themes/purple/images/common/icons/suicon03.png");
+}
+
+.logsigbox .signupbox .success h2,
+.logsigbox .pwResetbox .success h2 {
+  position: absolute;
+  top: 0;
+  left: 60px;
+  display: block;
+  width: 300px;;
+  color: #666;
+  font-size: 42px;
+  line-height: 100%;
+}
+
+.msn .logsigbox .signupbox .success em,
+.msn .logsigbox .pwResetbox .success em {
+  background: url(/themes/purple/images/common/icons/msn_suicon02.png) no-repeat 0 0;
+  _background: none;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/themes/purple/images/common/icons/msn_suicon02.png");
+}
+
+.logsigbox .pwResetbox .error {
+  line-height: 21px;
+  _line-height: 24px;
+  margin-top: -1px;
+}
+
+.logsigbox .pwResetbox .validation {
+  position: absolute;
+  height: 30px;
+  left: 81px; /*_left:0;*/
+  top: 0;
+  width: 400px;
+}
+
+.logsigbox .pwResetbox .validation .error {
+  left: 170px;
+  position: absolute;
+  top: 0;
+}
+
+.logsigbox .pwResetbox .validation .jqTransformInputWrapper input {
+  width: 60px;
+}
+
+.logsigbox .pwResetbox .validation img {
+  position: absolute;
+  left: 85px;
+  top: 0px;
+}
+
+.logsigbox .pwResetbox .validation a {
+  position: absolute;
+  top: 5px;
+  left: 136px;
+  display: block;
+  height: 15px;
+  width: 15px;
+  background: url(/themes/purple/images/user/login_and_signup/reload_icon.png) no-repeat 0 0;
+}
+
+/* 密码重置 */
+.logsigbox .pwResetbox {
+  position: relative;
+}
+
+.logsigbox .pwResetbox .resetsuccess {
+  position: absolute;
+  top: 100px;
+  left: 184px;
+  display: block;
+  width: 600px;
+  height: 20px;
+  color: #333;
+  font-size: 18px;
+  line-height: 100%;
+}
+
+.logsigbox .pwResetbox .resetsuccess span {
+  padding: 0 24px;
+  color: #6A4B2E;
+  font-size: 14px;
+}
+
+.logsigbox .pwResetbox .resettips {
+  position: absolute;
+  top: 152px;
+  left: 307px;
+  display: block;
+  width: 400px;
+  height: 20px;
+  padding-left: 26px;
+  color: #333;
+  font-size: 12px;
+}
+
+.logsigbox .pwResetbox .resettips em {
+  position: absolute;
+  top: 2px;
+  left: 0px;
+  display: block;
+  width: 15px;
+  height: 15px;
+  background: url(/themes/purple/images/common/icons/itips_green.gif) no-repeat 0 0;
+}
+
+.msn .logsigbox .pwResetbox .resettips em {
+  background-image: url(/themes/purple/images/common/icons/msn_itips_green.gif);
+}
+
+.logsigbox .pwResetbox h4.box_title {
+  position: absolute;
+  display: block;
+  width: 300px;
+  color: #333;
+  font-size: 26px;
+  line-height: 100%;
+}
+
+.logsigbox .pwResetbox ol.formbox,
+.logsigbox .pwResetbox .logsends {
+  position: absolute;
+  display: block;
+}
+
+.logsigbox .pwResetbox .resetsend,
+.logsigbox .pwResetbox .resetform {
+  position: absolute;
+  display: block;
+  width: 600px;
+  height: 20px;
+}
+
+.logsigbox .pwResetbox .resetsend {
+  top: 38px;
+  left: 234px;
+}
+
+.logsigbox .pwResetbox .resetsend h4.box_title {
+  left: 115px;
+  top: 0px;
+}
+
+.logsigbox .pwResetbox .resetsend ol.formbox {
+  top: 58px;
+  left: 10px;
+}
+
+.logsigbox .pwResetbox .resetsend ol.formbox li.fli input,
+.logsigbox .pwResetbox .resetform ol.formbox input {
+  height: 24px;
+  *height: 21px;
+  padding-bottom: 5px \9;
+  line-height: 13px \9;
+  *line-height: 12px;
+}
+
+.logsigbox .pwResetbox .resetsend .logsends {
+  width: 180px;
+  left: 213px;
+  top: 139px;
+}
+
+.logsigbox .pwResetbox .resetform {
+  left: 234px;
+  top: 38px;
+}
+
+.logsigbox .pwResetbox .resetform h4.box_title {
+  left: 124px;
+  top: 10px;
+}
+
+.logsigbox .pwResetbox .resetform ol.formbox {
+  left: 30px;
+  top: 59px;
+  width: 580px;
+}
+
+.logsigbox .pwResetbox .resetform ol.formbox strong {
+  width: 98px;
+  float: left;
+  margin-top: 4px;
+}
+
+.logsigbox .pwResetbox .resetform ol.formbox li {
+  height: 28px;
+}
+
+.logsigbox .pwResetbox .resetform ol.formbox input {
+  width: 187px;
+}
+
+.logsigbox .pwResetbox .resetform .logsends {
+  width: 300px;
+  left: 233px;
+  top: 134px;
+}
+
+.logsigbox .pwResetbox .resetform .logsends .error {
+  left: 105px;
+  position: absolute;
+  top: -1px;
+  width: 210px;
+}
+
+.logsigbox .pwResetbox .logsends .resetButton {
+  display: block;
+  border: 0;
+  height: 22px;
+  width: 76px;
+  overflow: hidden;
+  background: url(/themes/purple/images/user/login_and_signup/resetsend_btn.png) no-repeat 0 0;
+  cursor: pointer;
+}
+
+.msn .logsigbox .pwResetbox .logsends .resetButton {
+  background: #614c16;
+}
+
+.msn .logsigbox .pwResetbox .logsends .resetButton:hover {
+  background: #796739;
+}
+
+.logsigbox .pwResetbox .logsends .resetButton:hover {
+  background-position: 0 -22px;
+}
+
+.logsigbox .pwResetbox .logsends .resetButton span {
+  display: none;
+}
+
+.msn .logsigbox .pwResetbox .logsends .resetButton span {
+  display: block;
+  color: #FFF;
+  text-align: center;
+  line-height: 18px;
+  font-size: 12px;
+  margin-top: -1px;
+  float: left;
+  width: 100%;
+}
+
+.msn .logsigbox .pwResetbox .logsends a.resetButton span {
+  line-height: 24px;
+}
+
+.logsigbox .pwResetbox .logsends .disabled,
+.logsigbox .pwResetbox .logsends .disabled:hover {
+  background-color: #737373;
+  background-position: left bottom;
+  cursor: default;
+}
+
+.msn .logsigbox .pwResetbox .logsends .disabled,
+.msn .logsigbox .pwResetbox .logsends .disabled:hover {
+  background: #737373;
+}
+
+.logsigbox .pwResetbox .resetsend li.fli {
+  position: relative;
+  height: 30px;
+  padding: 0;
+}
+
+.logsigbox .pwResetbox .resetsend li.fli strong,
+.logsigbox .pwResetbox .resetsend li.fli label {
+  width: 81px;
+  float: left;
+  margin: 3px 0 0 0;
+  _margin: 5px 0 0 0;
+}
+
+.logsigbox .pwResetbox .jqTransformButton span span {
+  width: 30px;
+}
+
+.logsigbox .pwResetbox .jqTransformButton.disabled span {
+  background-position: right -25px;
+}
+
+.logsigbox .pwResetbox .jqTransformButton.disabled span span {
+  background-position: left -25px;
+}
+
+/* 发送激活码 */
+.logsigbox .ActivationBox {
+}
+
+.logsigbox .ActivationBox .sent h4.box_title {
+}
+
+.logsigbox .ActivationBox .sent .logother {
+}
+
+.logsigbox .ActivationBox .sent .logother span {
+}
+
+.logsigbox .ActivationBox .sent .logother a {
+}
+
+.logsigbox .ActivationBox .sent .formbox {
+}
+
+.logsigbox .ActivationBox .sent .logsends {
+}
+
+.logsigbox .ActivationBox .again {
+}
+
+/***手机注册***/
+.PhoneBox {
+}
+
+.PhoneBox button {
+  font-size: 12px;
+}
+
+.PhoneBox .jqTransformInputInner div input {
+  height: 15px;
+  padding: 5px 0 2px;
+}
+
+/*激活*/
+.PhoneBox .Activating {
+  position: absolute;
+  left: 146px;
+  top: 97px;
+}
+
+.PhoneBox .Activating .aticon {
+  position: absolute;
+  top: 6px;
+  left: 1px;
+  display: block;
+  height: 55px;
+  width: 55px;
+  background: url(/themes/purple/images/common/icons/suicon03.png) no-repeat 0 0;
+  _background: none;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/themes/purple/images/common/icons/suicon03.png");
+}
+
+.msn .PhoneBox .Activating .aticon {
+  background: url(/themes/purple/images/common/icons/msn_suicon01.png) no-repeat 0 0;
+  _background: none;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/themes/purple/images/common/icons/msn_suicon01.png");
+}
+
+.PhoneBox .Activating h2.title {
+  position: absolute;
+  top: 0px;
+  left: 69px;
+  width: 635px;
+  color: #35261F;
+  font-size: 18px; /*font-weight: bold;*/
+}
+
+.PhoneBox .Activating .formcont {
+  position: absolute;
+  left: 72px;
+  top: 37px;
+  width: 635px;
+}
+
+.PhoneBox .Activating .formcont label {
+  width: 64px;
+  color: #2b241a;
+  margin-top: 5px;
+  margin-right: 0;
+  font-size: 14px;
+}
+
+.PhoneBox .Activating .formcont .jqTransformInputWrapper {
+  margin-top: 2px;
+  margin-right: 24px;
+}
+
+.PhoneBox .Activating .formcont .jqTransformButton {
+  float: left;
+  color: #FFF;
+  height: 22px;
+  overflow: hidden;
+  width: 76px;
+  margin-top: 2px;
+  margin-right: 24px;
+  background: url(/themes/purple/images/user/login_and_signup/Activating_btn.png) no-repeat 0 0;
+}
+
+.PhoneBox .Activating .formcont .jqTransformButton:hover {
+  background-position: 0 -22px;
+}
+
+.PhoneBox .Activating .formcont button.disabled,
+.PhoneBox .Activating .formcont button.disabled:hover {
+  background-position: 0 -44px;
+  cursor: default;
+}
+
+.msn .PhoneBox .Activating .formcont .jqTransformButton {
+  height: 23px; /*border:1px solid #6c5e48;*/
+  background: #65511e;
+}
+
+.msn .PhoneBox .Activating .formcont .jqTransformButton:hover {
+  /*border:1px solid #796e5e;*/
+  background: #76622f;
+}
+
+.msn .PhoneBox .Activating .formcont button.disabled,
+.msn .PhoneBox .Activating .formcont button.disabled:hover {
+  /*border:1px solid #5f5f5f;*/
+  background: #737373;
+}
+
+.PhoneBox .Activating .formcont .ReSend {
+  margin: 5px 0 0 8px;
+  float: left;
+  text-decoration: underline;
+}
+
+.PhoneBox .Activating .formcont .error {
+  width: 85px;
+  line-height: 24px;
+}
+
+.PhoneBox .Activating .formcont form.disabled {
+  width: 635px;
+  height: 50px;
+  background: none;
+}
+
+.PhoneBox .Activating .formcont .jqTransformInputWrapper.disabled {
+  padding: 0;
+  overflow: hidden;
+}
+
+/*.PhoneBox .Activating .formcont .jqTransformInputWrapper { overflow: hidden;}*/
+/*.PhoneBox .jqTransformInputInner div input { overflow: hidden;}*/
+/*.PhoneBox .Activating .formcont form.disabled .jqTransformInputWrapper { background: url("/themes/purple/images/common/jqtransform/no_checked_inputleft.gif?0312") no-repeat scroll left top transparent;}*/
+.PhoneBox .Activating .formcont form.disabled .jqTransformInputInner {
+  _background: url("/themes/purple/images/common/jqtransform/no_checked_inputleft.gif?0312") no-repeat scroll left top transparent;
+}
+
+.PhoneBox .Activating .formcont form.disabled .jqTransformInputWrapper {
+  _background-position: right -24px;
+}
+
+/*重新发送激活码 !*/
+.PhoneBox .ReSendCode {
+  position: absolute;
+  left: 200px;
+  top: 40px;
+}
+
+.PhoneBox .ReSendCode .title {
+  display: block;
+  font-size: 24px; /*font-weight: bold;*/
+  text-align: center;
+  width: 470px;
+}
+
+.PhoneBox .ReSendCode .phoneinfo {
+  position: absolute;
+  top: 56px;
+  left: 33px;
+  width: 600px;
+}
+
+.PhoneBox .ReSendCode .phoneinfo .icontitle {
+  display: block;
+  float: left;
+  padding-left: 25px;
+  text-align: left;
+  width: 105px;
+  background: url("/themes/purple/images/common/icons/itips_green.gif") no-repeat 6px 2px;
+}
+
+.msn .PhoneBox .ReSendCode .phoneinfo .icontitle {
+  background-image: url("/themes/purple/images/common/icons/msn_itips_green.gif");
+}
+
+.PhoneBox .ReSendCode .phoneinfo .mobile {
+  display: block;
+  float: left;
+  margin-left: 12px;
+  text-align: left;
+  color: #7b5030;
+}
+
+.PhoneBox .ReSendCode .phoneinfo .nomyphone {
+  position: absolute;
+  text-decoration: underline;
+  top: 1px;
+  left: 283px;
+  color: #413e39;
+}
+
+.PhoneBox .ReSendCode .formcont {
+  position: absolute;
+  top: 91px;
+  left: 0;
+}
+
+.PhoneBox .ReSendCode .formcont label {
+  display: block;
+  float: left;
+  margin-right: 12px;
+  margin-top: 2px;
+  text-align: right;
+  width: 180px;
+}
+
+.PhoneBox .ReSendCode .formcont .jqTransformInputWrapper {
+  margin-left: 0px;
+}
+
+.PhoneBox .ReSendCode .formcont .code_img {
+  position: relative;
+  display: block;
+  float: left;
+  height: 24px;
+  width: 88px;
+}
+
+.PhoneBox .ReSendCode .formcont .code_img a {
+  background: url("/themes/purple/images/user/login_and_signup/reload_icon.png") no-repeat 0 0;
+  display: block;
+  height: 15px;
+  left: 58px;
+  position: absolute;
+  top: 4px;
+  width: 15px;
+}
+
+.PhoneBox .ReSendCode .formcont .error {
+  line-height: 21px;
+  width: 105px;
+}
+
+.PhoneBox .ReSendCode .formcont .jqTransformButton {
+  position: absolute;
+  top: 43px;
+  left: 177px;
+  width: 106px;
+  height: 22px;
+  color: #FFF;
+  overflow: hidden;
+  background: url(/themes/purple/images/user/login_and_signup/ReSendCode_btn.png) no-repeat 0 0;
+  padding-bottom: 3px;
+}
+
+.PhoneBox .ReSendCode .formcont .jqTransformButton:hover {
+  background-position: 0 -22px;
+}
+
+.PhoneBox .ReSendCode .formcont .disabled,
+.PhoneBox .ReSendCode .formcont .disabled:hover {
+  background-position: 0 -44px;
+  cursor: default;
+}
+
+.msn .PhoneBox .ReSendCode .formcont .jqTransformButton {
+  height: 22px;
+  border: 1px solid #6c5e48;
+  background: #65511e;
+}
+
+.msn .PhoneBox .ReSendCode .formcont .jqTransformButton:hover {
+  border: 1px solid #796e5e;
+  background: #76622f;
+}
+
+.msn .PhoneBox .ReSendCode .formcont .disabled,
+.msn .PhoneBox .ReSendCode .formcont .disabled:hover {
+  border: 1px solid #5f5f5f;
+  background: #737373;
+}
+
+.PhoneBox .newmobile {
+}
+
+.PhoneBox .newmobile .phoneinfo .jqTransformInputWrapper {
+  margin-left: 10px;
+  margin-right: 19px;
+}
+
+.PhoneBox .newmobile .phoneinfo .error {
+  position: absolute;
+  top: -2px;
+  left: 290px;
+  line-height: 20px;
+}
+
+/*激活码重新发送成功 !*/
+.PhoneBox .ReSendSuccess {
+  position: absolute;
+  top: 28px;
+  left: 200px;
+}
+
+.PhoneBox .ReSendSuccess .title {
+  display: block;
+  font-size: 26px;
+  text-align: center;
+  width: 445px;
+}
+
+.PhoneBox .ReSendSuccess .tipsicon {
+  position: absolute;
+  top: 47px;
+  left: 61px;
+  padding-left: 23px;
+  background: url("/themes/purple/images/common/icons/itips_green.gif") no-repeat 0 center;
+}
+
+.msn .PhoneBox .ReSendSuccess .tipsicon {
+  background-image: url("/themes/purple/images/common/icons/msn_itips_green.gif");
+}
+
+.PhoneBox .ReSendSuccess .formbox {
+  position: absolute;
+  top: 78px;
+  left: 95px;
+  width: 550px;
+  height: 115px;
+}
+
+.PhoneBox .ReSendSuccess .formbox li.fli {
+  display: block;
+  height: 30px;
+  *height: 24px;
+  width: 550px;
+  padding: 0;
+}
+
+.PhoneBox .ReSendSuccess .formbox li.fli input {
+  width: 187px;
+}
+
+.PhoneBox .ReSendSuccess .formbox li.fli .error {
+  line-height: 22px;
+  margin-right: 1px;
+  margin-top: -1px;
+}
+
+.PhoneBox .ReSendSuccess .formbox li.fli .ReSend {
+  float: left;
+  text-decoration: underline;
+  margin-top: 1px;
+}
+
+.PhoneBox .ReSendSuccess .formbox li.logsends {
+  position: relative;
+}
+
+.PhoneBox .ReSendSuccess .formbox li.logsends .setext {
+  position: absolute;
+  left: 205px;
+  top: 0px; /**top: -5px;*/
+  text-decoration: underline;
+  line-height: 15px;
+  font-size: 12px;
+}
+
+.PhoneBox .ReSendSuccess .formbox label,
+.PhoneBox .ReSendSuccess .formbox strong {
+  float: left;
+  margin-left: 0px;
+  width: 59px;
+}
+
+.PhoneBox .ReSendSuccess .logsend {
+  position: absolute;
+  top: 191px;
+  left: 284px;
+  width: 370px;
+}
+
+.PhoneBox .ReSendSuccess .logsend .error {
+  line-height: 23px;
+}
+
+.PhoneBox .ReSendSuccess .jqTransformButton {
+  float: left;
+  color: #FFF;
+  height: 22px;
+  overflow: hidden;
+  width: 76px;
+  margin-top: 2px;
+  margin-right: 24px;
+  background: url(/themes/purple/images/user/login_and_signup/Activating_btn.png) no-repeat 0 0;
+}
+
+.PhoneBox .ReSendSuccess .jqTransformButton:hover {
+  background-position: 0 -22px;
+}
+
+.PhoneBox .ReSendSuccess .disabled,
+.PhoneBox .ReSendSuccess .disabled:hover {
+  background-position: 0 -44px;
+  cursor: default;
+}
+
+.msn .PhoneBox .ReSendSuccess .jqTransformButton {
+  /*height: 24px; border:1px solid #6c5e48;*/
+  background: #65511e;
+}
+
+.msn .PhoneBox .ReSendSuccess .jqTransformButton:hover {
+  /*border:1px solid #796e5e;*/
+  background: #76622f;
+}
+
+.msn .PhoneBox .ReSendSuccess .disabled,
+.msn .PhoneBox .ReSendSuccess .disabled:hover {
+  /*border:1px solid #5f5f5f;*/
+  background: #737373;
+}
+
+/*手机密码重置*/
+.PhoneBox .pwResetbox {
+  left: 185px;
+  top: 35px;
+}
+
+.PhoneBox .pwResetbox .title {
+  width: 483px;
+}
+
+.PhoneBox .pwResetbox .tipsicon {
+  top: 41px;
+  padding-left: 18px;
+}
+
+.PhoneBox .pwResetbox .formbox {
+  top: 65px;
+  left: 88px;
+  height: 100px;
+}
+
+.PhoneBox .pwResetbox .formbox li.fli {
+  height: 32px;
+  _float: left;
+}
+
+.PhoneBox .pwResetbox .formbox label,
+.PhoneBox .pwResetbox .formbox strong {
+  width: 90px;
+}
+
+.PhoneBox .pwResetbox .logsend {
+  left: 291px;
+  top: 165px;
+}
+
+/******/
+.msn .logsigbox .pop_left,
+.msn .logsigbox .pop_right {
+  display: none;
+}
+
+.msn .logsigbox .pop_center {
+  display: block;
+  border: 1px solid #1D1D1D;
+  background: none;
+  height: 349px;
+  width: 889px;
+  left: 0;
+  top: 0;
+}
+
+.msn .logsigbox {
+  /*height: 350px;  width: 890px; border: 1px solid #1D1D1D;*/
+  background: #262626;
+  border-radius: 0px;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
+.msn .logsigbox .box_cont {
+  background: #f4f0e7;
+}
+
+.msn .logsigbox .cutover .uplink {
+  /*height: 24px;  width: 81px; border: 1px solid #605e5a;*/
+  background: #ad881c;
+  color: #fff;
+}
+
+.msn .logsigbox .cutover .uplink:hover {
+  background: #cba63a;
+}
+
+.msn .logsigbox .cutover .uplink span {
+  display: block;
+  text-align: center;
+  color: #fff;
+  font-size: 12px;
+  line-height: 26px;
+}
+
+/*
+.msn .logsend .jqTransformButton { height: 21px;  width: 76px; border: 1px solid #60605d; background:#5f4d15;}
+.msn .logsend .jqTransformButton:hover { background:#967c2a;}
+.msn .logsend .jqTransformButton span { width: 100%; background:none; margin:0px; padding:0px; display:block; text-align:center; color:#fff; }
+.msn .logsend .jqTransformButton span span{ line-height: 18px;}
+
+
+.msn .logsigbox .loginbox .logsend .jqTransformButton span span { margin:0px; padding:0px;}
+*/
+
+.msn .logsigbox .loginbox .loginButton {
+  height: 20px;
+  _padding-top: 1px; /*_height: 15px; width: 74px; border: 1px solid #6a614f;*/
+  background: #514012;
+}
+
+.msn .logsigbox .signupbox .signupButton {
+  /*width: 82px; border: 1px solid #6a614f;*/
+  background: #514012;
+}
+
+.msn .logsigbox .signupbox a.signupButton {
+  /*height: 22px;*/
+}
+
+.msn .logsigbox .signupbox a.signupButton span {
+  margin: 0;
+  padding: 6px 0 0;
+}
+
+.msn .logsigbox .loginbox .loginButton:hover,
+.msn .logsigbox .signupbox .signupButton:hover {
+  /*border: 1px solid #6a614f;*/
+  background: #89722b;
+  overflow: hidden;
+}
+
+.msn .logsigbox .loginbox .loginButton span,
+.msn .logsigbox .signupbox .signupButton span {
+  display: block;
+  width: 100%;
+  height: 20px;
+  _height: 15px;
+  font-size: 12px;
+  color: #fff;
+  text-align: center;
+  line-height: 11px;
+  padding-top: 4px;
+}
+
+/*.msn .logsigbox .loginbox .loginButton span { font-size:13px;}*/
+.msn .logsigbox .signupbox .signupButton span {
+  *line-height: 18px; /*margin: 0; padding: 0;line-height: 16px; line-height: 20px\9; *line-height: 22px; _line-height: 15px;*/
+}
+
+.msn .logsigbox .loginbox .loginButton.disabled,
+.msn .logsigbox .loginbox .loginButton.disabled:hover,
+.msn .logsigbox .signupbox .signupButton.disabled,
+.msn .logsigbox .signupbox .signupButton.disabled:hover {
+  /*border: 1px solid #60605e;*/
+  background: #737373;
+}
+
+.msn .logsigbox .signupbox .Terms_info {
+  background: #F4F0E7;
+}
+
+.msn .logsigbox .tip .tip_text {
+  background: url(/themes/purple/images/common/sprites/msn_tip_center.gif) repeat-x left top;
+}
+
+.msn .logsigbox .tip .tip_left {
+  background: url(/themes/purple/images/common/sprites/msn_tip_icon.gif) no-repeat 0 0;
+}
+
+.msn .logsigbox .tip .tip_right {
+  background: url(/themes/purple/images/common/sprites/msn_tip_icon.gif) no-repeat -10px 0;
+}
+
+.jqTransformInputWrapper {
+  /*overflow: hidden;*/
+}
+
+.jqTransformInputInner {
+}
+
+.msn .logsigbox .pwResetbox .jqTransformButton span {
+  padding: 0px;
+}
+
+.msn .logsigbox .pwResetbox .jqTransformButton span span {
+  padding: 5px 17px 6px;
+  background: #514012;
+  border: 1px solid #6A614F;
+}
+
+.msn .logsigbox .pwResetbox .jqTransformButton:hover span span {
+  background: #89722B;
+  border: 1px solid #6A614F;
+}
+
+.msn .logsigbox .pwResetbox .jqTransformButton.disabled span {
+}
+
+.msn .logsigbox .pwResetbox .jqTransformButton.disabled span span,
+.msn .logsigbox .pwResetbox .jqTransformButton.disabled:hover span span {
+  background: #737373;
+  border: 1px solid #60605E;
+}
+
+.msn .logsigbox .pwResetbox .resetsend .logsends {
+  left: 215px;
+  left: 208px \9;
+  _left: 210px;
+}
+
+.msn .logsigbox .loginline {
+  width: 1px;
+  background: #E7E7E7;
+}
+
+
+
+
+
+

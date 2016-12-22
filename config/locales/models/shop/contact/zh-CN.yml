@@ -1,0 +1,15 @@
+zh-CN:
+  activerecord:
+    models:
+      shop/contact: 地址
+    attributes:
+      shop/contact:
+        name: 姓名
+        mobile: 手机
+        phone: 固话
+        country: 国家
+        province: 省份
+        city: 城市
+        town: 区县
+        address: 街道
+        postcode: 邮编

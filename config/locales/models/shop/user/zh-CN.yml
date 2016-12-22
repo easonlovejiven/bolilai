@@ -1,0 +1,13 @@
+zh-CN:
+  activerecord:
+    models:
+      shop/user: 用户
+    attributes:
+      shop/user:
+        editor_id:  编辑ID
+        name:  名称
+    enums:
+        shop/user:
+          sex:
+            female: "女"
+            male: "男"

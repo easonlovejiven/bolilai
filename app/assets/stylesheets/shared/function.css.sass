@@ -1,0 +1,17 @@
+// 文字段落对齐
+@mixin text-justify
+	text-align: justify
+	text-justify: distribute
+// 文字溢出省略“...”
+@mixin overflow-ellipsis
+	white-space: nowrap
+	text-overflow: ellipsis
+	-o-text-overflow: ellipsis
+	overflow: hidden
+@mixin inline-block
+	display: inline-block
+	*display: inline
+	zoom: 1
+@mixin moz-brightness($luminance)
+	filter: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='brightness'><feComponentTransfer><feFuncR type='linear' slope='"+$luminance+"'/><feFuncG type='linear' slope='"+$luminance+"'/><feFuncB type='linear' slope='"+$luminance+"'/></feComponentTransfer></filter></svg>#brightness")
+	filter: brightness($luminance)

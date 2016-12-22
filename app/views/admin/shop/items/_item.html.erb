@@ -1,0 +1,5 @@
+<% if item && item.product %>
+    <%= link_to item.product.major_pic.blank? ? raw(%[<span style="width:50px;height:50px;margin:0;vertical-align:middle;background-color:#fafafa;display:inline-block;"></span>]) : image_tag("#{item.product.major_image.url(:thumb)}", :style => "width:50px;height:50px;margin:0;vertical-align:middle;", :alt => ""), preview_admin_shop_product_path(item.product), :title => item.product.name, :target => '_blank' %>
+    <br/>
+    <%= link_to "id:#{item.id}", admin_shop_item_path(item), "data-target" => 'rightPanel' if can?(:show, item) %>
+<% end %>

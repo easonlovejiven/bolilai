@@ -1,0 +1,12 @@
+<h1>收藏列表</h1>
+<%= link_to "创建", new_auction_favorite_path %>
+<br/>
+<br/>
+<br/>
+<% @favorites.each do |favorite| %>
+	产品:<%= link_to favorite.product.name, auction_favorite_path(favorite.product), :rel => 'facebox' if favorite.product %>
+	<%= link_to '查看', auction_favorite_path(favorite) %>
+	<%= link_to '编辑', edit_auction_favorite_path(favorite) %>
+	<%= link_to '删除', auction_favorite_path(favorite), :confirm => "确定删除吗？", :method => :delete %>
+	<br />
+<% end %>

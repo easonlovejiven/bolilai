@@ -1,0 +1,9 @@
+<object width="<%= width ||= 500 %>" height="<%= height ||= 400 %>" type="application/x-shockwave-flash" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">
+	<param name="movie" value="<%= image_path "http://releases.flowplayer.org/swf/flowplayer-3.2.7.swf" %>">
+	<param value="true" name="allowfullscreen">
+	<param value="always" name="allowscriptaccess">
+	<param value="high" name="quality">
+	<param value="#ffffff" name="bgcolor">
+	<param value='config={"clip":{"url":"<%= image_path multimedia || '' %>","scaling":"fit","autoPlay":true,"autoBuffering":true},"canvas":{"backgroundGradient":"none","backgroundColor":"#ffffff"}}' name="flashvars">
+	<embed type="application/x-shockwave-flash" src="<%= image_path "http://releases.flowplayer.org/swf/flowplayer-3.2.7.swf" %>" allowfullscreen="true" allowscriptaccess="always" width="<%= width ||= 400 %>" height="<%= height ||= 300 %>" quality="high" bgcolor="#ffffff" flashvars='config={"clip":{"url":"<%= image_path multimedia || '' %>","scaling":"fit","autoPlay":true,"autoBuffering":true},"canvas":{"backgroundGradient":"none","backgroundColor":"#ffffff"}}'>
+</object>

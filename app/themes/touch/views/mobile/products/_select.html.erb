@@ -1,0 +1,25 @@
+<% unless @product.relate_product_ids.blank? %>
+    <!-- loading -->
+    <div id="loading" class="hide pro_height pro_width"></div>
+    <div class="optional">
+      <p class="opt_wrapper opt_color"><span>选择<em></em></span></p>
+    </div>
+    <!-- color -->
+    <div class="optional_box color clear_fix ">
+      <div class="wrapper loaded left active">
+        <% color_name= !@product.color_name.blank? ? @product.color_name : @product.name %>
+        <%= link_to shop_product_path(@product), "data-id" => "#{@product.id}", :class => "js_product_relate", :title => "#{h @product.color_name}", "data-prevent" => "1", "class" => "current" do %>
+            <%= image_tag(!@product.color_pic.blank? ? @product.color_image.url(:tiny) : @product.major_image.url(:tiny), :alt => "#{@product.name}") %><%= color_name %>
+        <% end %>
+      </div>
+      <% @product.relate_products.each do |p| %>
+          <div class="wrapper loaded left">
+            <% color_name= !p.color_name.blank? ? p.color_name : p.name %>
+            <%= link_to shop_product_path(p), "data-id" => "#{p.id}", :class => "js_product_relate", :title => "#{h p.color_name}", "width" => "40", "height" => "40" do %>
+                <%= image_tag(!p.color_pic.blank? ? p.color_image.url(:tiny) : p.major_image.url(:tiny).to_s, :alt => "#{p.name}") %><%= color_name %>
+            <% end %>
+            <div class="border" data-href="/products/<%= @product.id %>"></div>
+          </div>
+      <% end %>
+    </div>
+<% end %>

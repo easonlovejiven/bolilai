@@ -1,0 +1,251 @@
+<!-- CSS -->
+<%= stylesheet_link_tag "touch/frame" %>
+<%= stylesheet_link_tag "touch/frame_respond" %>
+<%= javascript_include_tag "touch/controller" %>
+<!-- header -->
+<% content_for :header do %>
+    <header class="border_1px">
+      <!-- <div class="left_option left"> -->
+      <div class="ico_wrapper back_ico left hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <!-- </div> -->
+      <div class="title ">
+        购物车
+      </div>
+      <div class="ico_wrapper add_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper edit_ico right hide">
+        <span class="">编辑
+          <em class="down_shadow"></em>
+        </span>
+        <span class="">完成
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper info_ico right hide text">
+        详情<em class="down_shadow"></em>
+      </div>
+      <div class="ico_wrapper filter_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper mode_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+    </header>
+<% end %>
+<!-- end header -->
+<!-- 调用页面主体 -->
+<script type="text/javascript">
+    views.product_style(0.28);
+    views.recommend_style(0.344);
+    views.cart_style();
+    $(function () {
+        app.lasy_load($('img'));
+        var $open = $('.edit_ico'),
+                $cancel = $('.bag_cancel'),
+                $bag_pro = $('.bag, .product, .cart_enter_multibuy'),
+                $estop = $('.estop'),
+                $bottom = $('.bottom_fix'),
+                $delete_pro = $bottom.find('.delete_pro'),
+                $delete_btn = $bottom.find('.bag_delete'),
+                $pay_btn = $bottom.find('.bag_payment');
+        app.push_event($bag_pro, 200);
+        app.on_off_event($open, $cancel, $estop, $bottom);
+        cart_index_controller.initialize($cancel, $delete_pro, $delete_btn, $estop, $pay_btn);
+    });
+</script>
+<div class="main" id="main">
+  <div>
+    <input id="authenticity_token" type="hidden" value="KT7gvfo1yBe+vYg5UEi30g591KH3IJ/Sszr8ttAp1Ew=">
+    <!-- 页面主体 -->
+    <% if @cart.blank? %>
+        <div class="cart_sorry_txt">
+          <p><span class="sprites left"></span>抱歉，您的购物车中暂无商品</p>
+        </div>
+    <% else %>
+        <div class="shopping_bag">
+          <% @cart.reverse.each_with_index do |unit, i| %>
+              <% product = Shop::Product.acquire(unit['product_id']) %>
+              <% sold_out = (ActiveSupport::JSON.decode(product.measures_unsold_count) rescue {})[unit['measure']||''].to_i == 0 %>
+              <div class="bag pro_height border_1px " id="<%= i %>" data-id="<%= product.id %>" data-measure="" data-href="/products/<%= product.id %>" data-discount="<%= product.discount %>">
+                <div class="pro_img img_wrap left pro_width pro_height">
+                  <img class="pro_width pro_height" width="90" height="90" data-src="<%= product.major_image.url(:thumb) %>">
+                </div>
+                <div class="bag_info right pro_height">
+                  <p class="bag_name"><%= product.name %></p>
+
+                  <div class="bag_goodnum"><span>商品编号&nbsp;:&nbsp;</span><span><%= product.identifier %></span></div>
+                  <div class="bag_detail">
+                    <span class="bag_color right"><%= product.color %></span>
+                    <span class="left bag_price">￥<%= product.discount %></span>
+                    <span class="left rebate_price"><%= product.price if !product.price.blank? %></span>
+
+                    <div class="clear"></div>
+                  </div>
+                </div>
+                <div class="estop hide">
+                  <p class="bag_cancel" data-id="<%= product.id %>">
+                    <span class="sprites"></span>
+                  </p>
+                </div>
+                <div class="down_shadow"></div>
+              </div>
+          <% end %>
+        </div>
+
+    <% end %>
+  </div>
+</div>
+
+<!-- 底部结算按钮 -->
+<% unless @cart.blank? %>
+    <div class="bottom_fix clear_fix border_1px">
+      <div class="left">
+        <p class="delete_pro">已选定件商品</p>
+
+        <p class="bag_sum clear_fix">
+          <span class="left">金额总计:</span>
+          <span class="ellipsis sum left">￥<%= @total_price %></span>
+        </p>
+
+        <p class="bag_num ellipsis">共计<%= @cart.size %>件商品</p>
+      </div>
+      <div class="bag_payment btn purple_bg right" data-contact="" data-hwg="false">结算
+        <div class="down_shadow"></div>
+      </div>
+      <div class="bag_delete btn grey_bg right">删除
+        <div class="down_shadow"></div>
+      </div>
+    </div>
+<% end %>
+<!-- loading -->
+<div id="loading16" class="hide">
+  <style type="text/css">
+      /*body{
+        -webkit-transform: translate(0,0,0);
+        -webkit-backface-visibility:hidden;
+      }*/
+      .loading16 {
+          top: -31px;
+          width: 100px;
+          height: 100px;
+          position: relative;
+          left: 50%;
+          margin: 0;
+          margin-left: -50px;
+          border-radius: 100px;
+          -webkit-border-radius: 100px;
+          -webkit-animation-duration: 1.5s;
+          -webkit-animation-iteration-count: infinite;
+          -webkit-animation-timing-function: linear;
+          -webkit-animation-name: rotateThis16;
+          -moz-border-radius: 100px;
+          -moz-animation-duration: 1.5s;
+          -moz-animation-iteration-count: infinite;
+          -moz-animation-timing-function: linear;
+          -moz-animation-name: rotateThis16;
+      }
+
+      @-webkit-keyframes rotateThis16 {
+          from {
+              -webkit-transform: scale(0.18) rotate(0deg);
+          }
+          to {
+              -webkit-transform: scale(0.18) rotate(360deg);
+          }
+      }
+
+      @-moz-keyframes rotateThis16 {
+          from {
+              -moz-transform: scale(0.18) rotate(0deg);
+          }
+          to {
+              -moz-transform: scale(0.18) rotate(360deg);
+          }
+      }
+
+      .loading16 > div {
+          width: 18px;
+          height: 18px;
+          background-color: #fff;
+          -webkit-border-radius: 30px;
+          -moz-border-radius: 30px;
+          -o-border-radius: 30px;
+          border-radius: 30px;
+          position: absolute;
+          left: 41px;
+          top: 41px;
+      }
+
+      .bar1 {
+          opacity: 0.3;
+          -webkit-transform: rotate(0deg) translate(0, -42px);
+          -moz-transform: rotate(0deg) translate(0, -42px);
+      }
+
+      .bar2 {
+          opacity: 0.4;
+          -webkit-transform: rotate(45deg) translate(0, -42px);
+          -moz-transform: rotate(45deg) translate(0, -42px);
+      }
+
+      .bar3 {
+          opacity: 0.5;
+          -webkit-transform: rotate(90deg) translate(0, -42px);
+          -moz-transform: rotate(90deg) translate(0, -42px);
+      }
+
+      .bar4 {
+          opacity: 0.6;
+          -webkit-transform: rotate(135deg) translate(0, -42px);
+          -moz-transform: rotate(135deg) translate(0, -42px);
+      }
+
+      .bar5 {
+          opacity: 0.7;
+          -webkit-transform: rotate(180deg) translate(0, -42px);
+          -moz-transform: rotate(180deg) translate(0, -42px);
+      }
+
+      .bar6 {
+          opacity: 0.8;
+          -webkit-transform: rotate(225deg) translate(0, -42px);
+          -moz-transform: rotate(225deg) translate(0, -42px);
+      }
+
+      .bar7 {
+          opacity: 0.9;
+          -webkit-transform: rotate(270deg) translate(0, -42px);
+          -moz-transform: rotate(270deg) translate(0, -42px);
+      }
+
+      .bar8 {
+          opacity: 1;
+          -webkit-transform: rotate(315deg) translate(0, -42px);
+          -moz-transform: rotate(315deg) translate(0, -42px);
+      }
+  </style>
+  <div class="order_load">
+    <div class="loading16">
+      <div class="bar1"></div>
+      <div class="bar2"></div>
+      <div class="bar3"></div>
+      <div class="bar4"></div>
+      <div class="bar5"></div>
+      <div class="bar6"></div>
+      <div class="bar7"></div>
+      <div class="bar8"></div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,149 @@
+<h2>查看支付宝付款</h2>
+<%= form_for @trade, :as => "trade", :url => '/' do |f| %>
+    <%= f.error_messages %>
+
+    <table class="form-table">
+      <tbody>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :id, "ID" %></th>
+        <td><%= @trade.id %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :subject, "subject" %></th>
+        <td><%= @xml.xpath('alipay/response/trade/subject').text if @xml.xpath('alipay/response/trade/subject') %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :body, "body" %></th>
+        <td><%= @xml.xpath('alipay/response/trade/body').text if @xml.xpath('alipay/response/trade/body') %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :buyer_email, "buyer_email" %></th>
+        <td><%= @xml.xpath('alipay/response/trade/buyer_email').text if @xml.xpath('alipay/response/trade/buyer_email') %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :buyer_id, "buyer_id" %></th>
+        <td><%= @xml.xpath('alipay/response/trade/buyer_id').text if @xml.xpath('alipay/response/trade/buyer_id') %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :coupon_used_fee, "coupon_used_fee" %></th>
+        <td><%= @xml.xpath('alipay/response/trade/coupon_used_fee').text if @xml.xpath('alipay/response/trade/coupon_used_fee') %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :discount, "discount" %></th>
+        <td><%= @xml.xpath('alipay/response/trade/discount').text if @xml.xpath('alipay/response/trade/discount') %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :flag_trade_locked, "flag_trade_locked" %></th>
+        <td><%= @xml.xpath('alipay/response/trade/flag_trade_locked').text if @xml.xpath('alipay/response/trade/flag_trade_locked') %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :gmt_create, "gmt_create" %></th>
+        <td><%= @xml.xpath('alipay/response/trade/gmt_create').text if @xml.xpath('alipay/response/trade/gmt_create') %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :gmt_last_modified_time, "gmt_last_modified_time" %></th>
+        <td><%= @xml.xpath('alipay/response/trade/gmt_last_modified_time').text if @xml.xpath('alipay/response/trade/gmt_last_modified_time') %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :gmt_logistics_modify, "gmt_logistics_modify" %></th>
+        <td><%= @xml.xpath('alipay/response/trade/gmt_logistics_modify').text if @xml.xpath('alipay/response/trade/gmt_logistics_modify') %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :gmt_payment, "gmt_payment" %></th>
+        <td><%= @xml.xpath('alipay/response/trade/gmt_payment').text if @xml.xpath('alipay/response/trade/gmt_payment') %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :is_total_fee_adjust, "is_total_fee_adjust" %></th>
+        <td><%= @xml.xpath('alipay/response/trade/is_total_fee_adjust').text if @xml.xpath('alipay/response/trade/is_total_fee_adjust') %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :logistics_fee, "logistics_fee" %></th>
+        <td><%= @xml.xpath('alipay/response/trade/logistics_fee').text if @xml.xpath('alipay/response/trade/logistics_fee') %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :out_trade_no, "out_trade_no" %></th>
+        <td><%= @xml.xpath('alipay/response/trade/out_trade_no').text if @xml.xpath('alipay/response/trade/out_trade_no') %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :payment_type, "payment_type" %></th>
+        <td><%= @xml.xpath('alipay/response/trade/payment_type').text if @xml.xpath('alipay/response/trade/payment_type') %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :price, "price" %></th>
+        <td><%= @xml.xpath('alipay/response/trade/price').text if @xml.xpath('alipay/response/trade/price') %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :quantity, "quantity" %></th>
+        <td><%= @xml.xpath('alipay/response/trade/quantity').text if @xml.xpath('alipay/response/trade/quantity') %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :seller_email, "seller_email" %></th>
+        <td><%= @xml.xpath('alipay/response/trade/seller_email').text if @xml.xpath('alipay/response/trade/seller_email') %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :seller_id, "seller_id" %></th>
+        <td><%= @xml.xpath('alipay/response/trade/seller_id').text if @xml.xpath('alipay/response/trade/seller_id') %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :trade_no, "trade_no" %></th>
+        <td><%= @xml.xpath('alipay/response/trade/trade_no').text if @xml.xpath('alipay/response/trade/trade_no') %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :to_buyer_fee, "to_buyer_fee" %></th>
+        <td><%= @xml.xpath('alipay/response/trade/to_buyer_fee').text if @xml.xpath('alipay/response/trade/to_buyer_fee') %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :to_buyer_fee, "to_seller_fee" %></th>
+        <td><%= @xml.xpath('response/trade/to_seller_fee').text if @xml.xpath('response/trade/to_seller_fee') %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :total_fee, "total_fee" %></th>
+        <td><%= @xml.xpath('alipay/response/trade/total_fee').text if @xml.xpath('alipay/response/trade/total_fee') %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :trade_status, "trade_status" %></th>
+        <td><%= @xml.xpath('alipay/response/trade/trade_status').text if @xml.xpath('alipay/response/trade/trade_status') %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :use_coupon, "use_coupon" %></th>
+        <td><%= @xml.xpath('alipay/response/trade/use_coupon').text if @xml.xpath('alipay/response/trade/use_coupon') %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :created_at, "创建时间" %></th>
+        <td><%= @trade.created_at && @trade.created_at.to_s(:db) %></td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><%= f.label :created_at, "修改时间" %></th>
+        <td><%= @trade.updated_at && @trade.updated_at.to_s(:db) %></td>
+      </tr>
+      <tbody>
+    </table>
+<% end %>

@@ -1,0 +1,23 @@
+- if @brand && @brand.introduced?
+	a.product_brand_introduction.product_brand_close onclick="$(this).toggleClass('product_brand_close')"
+		span.close 收起
+		span.open 更多
+		.logo
+			- if !@brand.pic.blank?
+				= image_tag @brand.pic_image.url("thumb") || '', :alt => @brand.name, :class => "pic"
+				span.pngfix style="_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=http://i2.weimall.net#{@brand.pic}, sizingMethod=scale);"
+		.chinese= h @brand.chinese
+		/ .name= h @brand.name
+		.title
+			span.dot
+			= h @brand.title
+		.description= simple_format h @brand.description
+		dl.attributes
+			dt.pronunciation 发音：
+			dd.pronunciation= h @brand.pronunciation
+			dt.year 创建期：
+			dd.year= h @brand.year
+			dt.country 发源地：
+			dd.country= h @brand.country && @brand.country.name
+			dt.keywords 关键词：
+			dd.keywords= h @brand.keywords.to_s.split(',').join(' ')

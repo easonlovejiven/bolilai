@@ -1,0 +1,15 @@
+zh-CN:
+  activerecord:
+    models:
+      "shop/voucher": 代金券
+    attributes:
+      "shop/voucher":
+          event_id：活动ID
+          editor_id：编辑ID
+          user_id：用户ID
+          trade_id：交易ID
+          identifier：编号
+          obtained_at：获得时间
+          used_at：使用时间
+          remark：备注
+          active?：有效？

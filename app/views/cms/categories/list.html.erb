@@ -1,0 +1,65 @@
+<% if !@page.blank? %>
+    <% @page_title=@page.name %>
+<% else %>
+    <% @page_title=@category.name %>
+<% end %>
+<div class="info_content">
+  <ol class="breadcrumb">
+    <li><%= link_to '首页', '/' %></li>
+    <% @category.ancestors.each do |cate| %>
+        <li><%= link_to cate.name, cms_cate_link(cate) %></li>
+    <% end %>
+    <li><%= @category.name %></li>
+  </ol>
+
+  <div class="top_line"></div>
+  <div class="main_post">
+    <div class="post_list">
+      <div class="content_warp">
+        <div class="post_tps">
+          <h3 class="title">“<%= @category.name %>”</h3>
+          <%= @category.description %>
+        </div>
+        <div>
+          <div class="recomm_title">
+            <span><%= @category.name %>&nbsp;&nbsp;精彩推荐</span>
+
+            <div class="line"></div>
+          </div>
+
+          <% @pages.each do |page| %>
+              <div class="item">
+                <%= link_to cms_page_path(page) do %>
+                    <h3><%= page.name %></h3>
+                <% end %>
+                <p>
+                  <%= page.summary %>
+                </p>
+
+                <div class="info">
+                  <span><%= page.created_at.strftime('%Y-%m-%d %H:%M:%S') %></span>
+                </div>
+              </div>
+          <% end %>
+        </div>
+      </div>
+      <div class="fr">
+        <%= paginate @pages, views_prefix: "shared", :theme => 'shop' %>
+      </div>
+    </div>
+    <div class="post_side">
+      <div class="content">
+        <div class="rec_list">
+          <h3 class="title">推荐文章</h3>
+          <ul>
+            <% @rmd_pages.published.each do |page| %>
+                <li>
+                  ▪&nbsp;<%= link_to page.name, "/cms/pages/#{page.id}", title: page.name, target: '_blank' %>
+                </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

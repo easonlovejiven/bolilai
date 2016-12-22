@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>单件</title>
+  <style>
+      @media print {
+          .toolbar {
+              display: none;
+          }
+      }
+
+      .toolbar {
+          margin: 1mm;
+      }
+
+      body {
+          font-size: 3.2mm;
+          font-family: Arial;
+          line-height: 120%;
+          padding: 0;
+          font-family: "微软雅黑";
+      }
+
+      html, body {
+          margin: 0;
+          padding: 0;
+      }
+
+      img {
+          border: 0;
+      }
+
+      .goods {
+          margin-top: 0px;
+          font-size: 10px;
+          line-height: 12px;
+          width: 210px;
+          height: 361px;
+          display: block;
+          overflow: hidden;
+          margin-bottom: 5px;
+      }
+
+      .goods_code {
+          padding: 5px 10px 10px 10px;
+          display: block;
+          height: 226px;
+          line-height: 160%;
+          overflow: hidden;
+          /*		word-wrap: break-word;
+                  word-break: break-all;*/
+          /*		border-bottom: 1px solid #ccc;*/
+      }
+
+      .goods_code .wash {
+          text-align: justify;
+          text-justify: distribute;
+      }
+
+      .goods .pic {
+          display: block;
+          text-align: center;
+          height: 82px;
+          overflow: hidden;
+      }
+
+      .goods .pic img {
+          max-width: 190px;
+          margin-top: 14px;
+      }
+
+      .goods .price {
+          display: block;
+          text-align: center;
+          vertical-align: top;
+      }
+
+      .goods .price span {
+          padding-right: 10px;
+      }
+
+      .goods .pic.no_discount {
+          /*		padding-top: 7px;*/
+          height: 89px;
+      }
+
+      .goods_code span {
+          display: block;
+          overflow: hidden;
+      }
+  </style>
+
+  <script language="javascript">
+      //定义注册表位置
+      var HKEY_Path = "HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\PageSetup\\";
+      var pids = "";
+      if (pids != '') {
+          alert('货品 ' + pids + ' 尚未发布!');
+      }
+
+      function pageSetup(name, value) {
+          try {
+              var Wsh = new ActiveXObject("WScript.Shell");
+              Wsh.RegWrite(HKEY_Path + name, value);
+              //修改注册表值
+          } catch (e) {
+              //alert('需要运行运行Activex才能进行打印设置，请使用IE。');
+          }
+      }
+      //检查浏览器类型
+      function checkBrowser() {
+          var browser = navigator.userAgent;
+          browser = browser.toLowerCase();
+          var patten = /msie[\s\d.]+/;
+          if (browser.match(patten)) {
+              return true;
+          } else {
+              return false;
+          }
+      }
+      //打印
+      function pagePrint() {
+          var isie = checkBrowser();
+          if (isie == false) {
+              alert("该功能只支持IE浏览器!");
+          } else {
+              wb.ExecWB(6, 1);
+          }
+      }
+      //预览
+      function pagePreview() {
+          var isie = checkBrowser();
+          if (isie == false) {
+              alert("该功能只支持IE浏览器!");
+          } else {
+              wb.ExecWB(7, 1);
+          }
+      }
+      //页面设置
+      function pageSet() {
+          var isie = checkBrowser();
+          if (isie == false) {
+              alert("该功能只支持IE浏览器!");
+          } else {
+              wb.ExecWB(8, 1);
+          }
+      }
+      //name的值可为header（页眉），footer（页脚），margin_bottom（下边距），margin_left（左边距），margin_right（右边距），margin_top（上边距）
+      pageSetup('header', '');
+      pageSetup('footer', '');
+      pageSetup('margin_bottom', '0');
+      //pageSetup('margin_left','1.05');//1=25.4mm
+      pageSetup('margin_left', '0.08');//1=25.4mm
+      pageSetup('margin_right', '0');
+      //pageSetup('margin_top','2.4');
+      pageSetup('margin_top', '0.118');
+  </script>
+</head>
+<body>
+<!--[if IE]>
+<div class='toolbar'>
+    <OBJECT classid="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2" id="wb" name="wb" height=0 width=0></OBJECT>
+    <input type='button' value='打印' onclick='pagePrint();'/>
+    <input type='button' value='打印预览' onclick='pagePreview();'/>
+    <input type='button' value='页面设置' onclick='pageSet();'/>
+</div>
+<![endif]-->
+<div class="goods">
+  <div class="goods_code">
+    <span>名称：<%= @item.product.name %></span>
+    <span>品牌：<%= @item.product.brand.try(:chinese) %></span>
+    <span>产地：<%= @item.origin %></span>
+    <span>商品编号：<%= @item.identifer %></span>
+    <span>型号：<%= @item.measure %></span>
+    <span>成分：<%= @item.product.values.where(attribute_id: 3).map(&:content).join('，') %></span>
+    <% wash = @item.product.values.where(attribute_id: 7).map(&:content).join('，') %>
+    <% if wash.present? %><span class="wash">洗涤方法：<%= wash %></span>
+    <% end %>
+  </div>
+  <div class="pic<%= ' no_discount' unless @item.product.try(:shop_price) == @item.product.discount %>">
+    <%#= image_tag "http://erp.weimall.com/outprint/getcode/code/#{ErpRecord.connection.select_all(%[select * FROM erp_crstorage WHERE sn = '#{@item.identifer}']).first.try(:[], "pid")}", alt: "" %>
+  </div>
+  <div class="price">
+    <span>参考价：￥<%= @item.product.price %></span>
+    <span>销售价：￥<%= @item.product.try(:shop_price) %></span>
+    <% if @item.product.try(:shop_price) == @item.product.discount %>
+        <br>
+        *特例商品不享受会员折扣
+    <% end %>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,69 @@
+// 块阴影
+@mixin box-shadow($value)
+  -moz-box-shadow: $value
+  -webkit-box-shadow: $value
+  -o-box-shadow: $value
+  -ms-box-shadow: $value
+  box-shadow: $value
+
+@mixin inset-box-shadow($value1, $value2)
+  -moz-box-shadow: $value1, $value2
+  -webkit-box-shadow: $value1, $value2
+  -o-box-shadow: $value1, $value2
+  -ms-box-shadow: $value1, $value2
+  box-shadow: $value1, $value2
+// 圆角
+@mixin border-radius($value)
+  -moz-border-radius: $value
+  -webkit-border-radius: $value
+  -o-border-radius: $value
+  -ms-border-radius: $value
+  border-radius: $value
+// 过渡动画
+@mixin transition-duration($value)
+  -moz-transition-duration: $value
+  -webkit-transition-duration: $value
+  -o-transition-duration: $value
+  transition-duration: $value
+// 普通渐变渲染
+@mixin gradient($gradient, $color1, $color2)
+  background: -moz-linear-gradient($gradient, $color1, $color2)
+  background: -webkit-linear-gradient($gradient, $color1, $color2)
+  background: -o-linear-gradient($gradient, $color1, $color2)
+// 文字段落对齐
+@mixin text-justify
+  text-align: justify
+  text-justify: distribute
+// 文字溢出省略“...”
+@mixin overflow-ellipsis
+  white-space: nowrap
+  text-overflow: ellipsis
+  -o-text-overflow: ellipsis
+  overflow: hidden
+
+@mixin inline-block
+  display: inline-block
+  *display: inline
+  zoom: 1
+
+// 文字段落对齐
+@mixin text-justify
+  text-align: justify
+  text-justify: distribute
+// 文字溢出省略“...”
+@mixin overflow-ellipsis
+  white-space: nowrap
+  text-overflow: ellipsis
+  -o-text-overflow: ellipsis
+  overflow: hidden
+
+@mixin inline-block
+  display: inline-block
+  *display: inline
+  zoom: 1
+
+@mixin moz-brightness($luminance)
+  filter: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='brightness'><feComponentTransfer><feFuncR type='linear' slope='" +$luminance+ "'/><feFuncG type='linear' slope='" +$luminance+ "'/><feFuncB type='linear' slope='" +$luminance+ "'/></feComponentTransfer></filter></svg>#brightness")
+  filter: brightness($luminance)
+
+

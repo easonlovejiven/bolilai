@@ -1,0 +1,31 @@
+<h2>查看招商银行付款</h2>
+
+<table class="form-table">
+	<tbody>
+
+		<tr class="form-field form-required">
+			<th scope="row">ID</th>
+			<td><%= @trade.id %></td>
+		</tr>
+	
+		<tr class="form-field form-required">
+			<th scope="row">状态编号</th>
+			<td><%= @result[:status] %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">状态描述</th>
+			<td><%= @result[:desc] %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">付款金额</th>
+			<td><%= @result[:payment] %></td>
+		</tr>
+	
+		<tr class="form-field form-required">
+			<th scope="row">描述</th>
+			<td><%= CMBCHINA::QuerySingleOrderStatus[@result[:status]] %></td>
+		</tr>
+	</tbody>
+</table>

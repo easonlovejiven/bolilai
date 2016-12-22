@@ -1,0 +1,67 @@
+%h2 查看招商银行信用卡支付付款
+
+%table.form-table
+	%tbody
+		%tr(class="form-field form-required")
+			%th(scope="row") 错误码
+			%td= @result && @result.css("Code").text
+	
+		%tr(class="form-field form-required")
+			%th(scope="row") 错误码
+			%td= @result && @result.css('ErrMsg').text.encode('utf-8', 'gbk')
+			
+		%tr(class="form-field form-required")
+			%th(scope="row") 信用卡中心内部商户号
+			%td= @result && @result.css('CrdMchNbr').text
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 信用卡中心内部定单号
+			%td= @result && @result.css('CrdBllNbr').text
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 信用卡中心内部参考号
+			%td= @result && @result.css('CrdBllRef').text
+			
+		%tr(class="form-field form-required")
+			%th(scope="row") 信用卡中心内部授权号
+			%td= @result && @result.css('CrdAutCod').text
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 商户定单号
+			%td= @result && @result.css('MchBllNbr').text
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 商户定单日期
+			%td= @result && @result.css('MchBllDat').text
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 定单状态
+			%td= @result && @result.css('BllBllSts').text
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 定单受理日期
+			%td= @result && @result.css('BllAcpDat').text
+			
+		%tr(class="form-field form-required")
+			%th(scope="row") 商户确认日期
+			%td= @result && @result.css('BllStlDat').text
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 交易币种
+			%td= @result && @result.css('BllTrxCcy').text
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 定单原始金额
+			%td= @result && @result.css('BllBllAmt').text
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 总分期数
+			%td= @result && @result.css('BllPedCnt').text
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 定单确认金额
+			%td= @result && @result.css('BllStlAmt').text
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 卡号
+			%td= @result && @result.css('CadCadNbr').text

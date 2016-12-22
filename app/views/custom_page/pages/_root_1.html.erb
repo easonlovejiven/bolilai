@@ -1,0 +1,307 @@
+<%= stylesheet_inline_tag 'custom_page/pages/root_1.css' %>
+<%= javascript_inline_tag 'admin/custom_page/root_1.js' %>
+<!--轮播图-->
+<div class="covers slides widget" data-widget-id="covers_<%=page.id%>" data-options='{ "effect": "slide, fade", "play": 3000, "pause": 2500 }'>
+  <div class="js_home_recommend_position" data-interval="5" data-key="key"></div>
+  <div class="list slides_container">
+    <% (data['covers'] || []).each do |cover| %>
+        <div class="link">
+          <%= link_to cover['url'], :target => '_blank' do %>
+              <%= image_tag cover['pic'].to_s, width: 1920, height: 480, alt: "" %>
+          <% end %>
+        </div>
+    <% end %>
+  </div>
+  <ul class="slides_pagination">
+    <% (data['covers'] || []).length.times do |index| %>
+        <li class="<%= 'current' if index == 0 %>"><%= link_to '', "##{index}" %></li>
+    <% end %>
+  </ul>
+  <a class="prev slides_prev" href="##"></a>
+  <a class="next slides_next" href="##"></a>
+</div>
+
+<div class="home2012v2 prefetch">
+  <div class="homecontent">
+    <!--图片展示-->
+    <div class="cate_section pic_list widget" data-widget-id="pic_list_<%=page.id%>">
+      <% (data['pic_list'] || []).each_with_index do |item, index| %>
+          <div class="link <%= "s#{index+1}" %>">
+            <%= link_to item['url'], :target => '_blank' do %>
+                <%= image_tag item['pic'].to_s, :alt => "", :style => "width:100%; height:100%;" %>
+            <% end %>
+          </div>
+      <% end %>
+    </div>
+    <!--新品推荐-->
+    <div class="cate_section xinpin widget" data-widget-id="xinpin_<%=page.id%>">
+      <h2 class="title"><%= link_to '更多》', data['xinpin_section']['url'], class: 'more' %>
+        <span><%= data['xinpin_section']['name'] %></span></h2>
+
+      <div class="product_mod">
+        <div class="slides_control">
+          <div class="product_list">
+            <% data['xinpin_section']['products'][0..3].each_with_index do |p, index| %>
+                <div class="<%= "link link#{index}" %>">
+                  <%= link_to p['url'].to_s, :target => "_blank" do %>
+                      <%= image_tag(p['pic'].to_s, :alt => '', :class => "pic") %>
+                  <% end %>
+                </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 广告 -->
+    <div class="cate_section advs widget advs1" data-widget-id="advs1_<%=page.id%>">
+      <div class="link">
+        <%= link_to image_tag("#{data['advs1']['pic']}"), "#{data["advs1"]['url']}", class: 'adv pic advs1' %>
+      </div>
+    </div>
+    <!--琥珀版块-->
+    <div class="cate_section hupo widget" data-widget-id="hupo_<%=page.id%>">
+      <h2 class="title"><%= link_to '更多》', "#{data['hupo_section']['url']}", class: 'more' %>
+        <span><%= data['hupo_section']['name'] %></span></h2>
+
+      <div class="navlist">
+        <ul>
+          <% data['hupo_section']['categories'].each_with_index do |item, index| %>
+              <li class="<%= "link s#{index+1} #{'pic_link' if item['pic'].present?}" %>">
+                <%= link_to item['url'], :target => '_blank' do %>
+                    <% if item['pic'].present? %>
+                        <%= image_tag item['pic'].to_s, :alt => "", :style => "width:100%; height:100%;" %>
+                    <% else %>
+                        <%= item['name'] %>
+                    <% end %>
+                <% end %>
+              </li>
+          <% end %>
+        </ul>
+      </div>
+      <div class="product_mod">
+        <div class="slides_control">
+          <div class="product_list">
+            <div class="link hupo-search">
+              <h2>搜索琥珀</h2>
+              <%= link_to '/shop/products?where[category1_id]=5', :target => "_blank" do %>
+                  <div><span class="count"><%= 2880 %></span> 颗 》</div>
+              <% end %>
+            </div>
+            <% (data['hupo_section']['shapes'][1..8]||[]).each_with_index do |p, index| %>
+                <div class="<%= "link link#{index}" %>">
+                  <%= link_to image_tag("#{p['pic']}", :alt => '', :class => "pic"), p['url'], :target => "_blank" %>
+                  <div class="title">
+                    <%= link_to p["title"]||"", p['url'], :target => "_blank" %>
+                  </div>
+                </div>
+            <% end %>
+          </div>
+          <div class="banner_item">
+            <div class="product_list">
+              <%= render partial: 'custom_page/pages/root1/product_list',
+                         locals: {products_data: data['hupo_section']['products'][0..4]} %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--串饰版块-->
+    <div class="cate_section chuanshi widget" data-widget-id="chuanshi_<%=page.id%>">
+      <h2 class="title"><%= link_to '更多》', "#{data['chuanshi_section']['url']}", class: 'more' %><%= data['chuanshi_section']['name'] %></h2>
+
+      <div class="navlist">
+        <ul>
+          <% data['chuanshi_section']['categories'][0..8].each_with_index do |item, index| %>
+              <li class="<%= "link s#{index+1} #{'pic_link' if item['pic'].present?}" %>">
+                <%= link_to item['url'], :target => '_blank' do %>
+                    <% if item['pic'].present? %>
+                        <%= image_tag item['pic'].to_s, :alt => "", :style => "width:100%; height:100%;" %>
+                    <% else %>
+                        <span><%= item['name'] %></span>
+                    <% end %>
+                <% end %>
+              </li>
+          <% end %>
+        </ul>
+      </div>
+      <div class="product_mod slides_container">
+        <div class="slides_control">
+          <div class="first_item">
+            <div class="pic_item">
+              <% pic = data['chuanshi_section']['products'][0] %>
+              <%= image_tag pic["pic"] %>
+            </div>
+          </div>
+          <div class="product_list">
+            <%= render partial: 'custom_page/pages/root1/product_list',
+                       locals: {products_data: data['chuanshi_section']['products'][1..6]} %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 广告 -->
+    <div class="cate_section advs widget advs2" data-widget-id="advs2_<%=page.id%>">
+      <div class="link">
+        <%= link_to image_tag("#{data['advs2']['pic']}"), "#{data["advs2"]['url']}", class: 'adv pic' %>
+      </div>
+    </div>
+    <!--项链与坠饰-->
+    <div class="cate_section xianglian widget" data-widget-id="xianglian_<%=page.id%>">
+      <h2 class="title"><%= link_to '更多》', data['xianglian_section']['url'], class: 'more' %><%= data['xianglian_section']['name'] %></h2>
+
+      <div class="navlist">
+        <ul>
+          <% data['xianglian_section']['categories'][0..8].each_with_index do |item, index| %>
+              <li class="<%= "link s#{index+1} #{'pic_link' if item['pic'].present?}" %>">
+                <%= link_to item['url'], :target => '_blank' do %>
+                    <% if item['pic'].present? %>
+                        <%= image_tag item['pic'].to_s, :alt => "" %>
+                    <% else %>
+                        <%= item['name'] %>
+                    <% end %>
+                <% end %>
+              </li>
+          <% end %>
+        </ul>
+      </div>
+      <div class="product_mod">
+        <div class="slides_control">
+          <div class="product_list">
+            <%= render partial: 'custom_page/pages/root1/product_list',
+                       locals: {products_data: data['xianglian_section']['products'][0..5]} %>
+          </div>
+          <div class="banner_item">
+            <% xl_pics = (data['xianglian_section']['pic_list'] || []) %>
+            <div class="slides" data-options='{ "effect": "slide, fade", "play": 2800, "pause": 1500 }'>
+              <div class="slides_container">
+                <% xl_pics.each do |cover| %>
+                    <div class="link">
+                      <%= link_to cover['url'], :target => '_blank' do %>
+                          <%= image_tag cover['pic'].to_s, width: 986, height: 300, alt: "" %>
+                      <% end %>
+                    </div>
+                <% end %>
+              </div>
+              <ul class="slides_pagination">
+                <% xl_pics.length.times do |index| %>
+                    <li class="<%= 'current' if index == 0 %>"><%= link_to '', "##{index}" %></li>
+                <% end %>
+              </ul>
+              <a class="prev" href="##"></a>
+              <a class="next" href="##"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--最新资讯-->
+    <%
+       news = data["news"]||{category_id: nil}
+       new_cate = Cms::Category.where(id: news["category_id"]).first_or_initialize
+       new_pages = new_cate.pages.active.published.order("created_at desc")
+       if !data["news"]["tag"].blank?
+         new_pages=new_pages.tagged_with(data["news"]["tag"])
+       end
+       new_pages=new_pages.limit(4)
+       first_new = new_pages.first || Cms::Page.new(name: '更新中...')
+    %>
+    <div class="indexw_content_5">
+      <div class="indexw_content_5_bor news widget" data-widget-id="articles1_<%=page.id%>">
+        <div class="borright">
+          <a class="borrightti" href="/cms/<%= "#{new_cate.url}_#{new_cate.id}" %>" target="_blank">
+            <h2>
+              <em><%= new_cate.name||"栏目名称" %></em>
+              <span>更多》</span>
+            </h2>
+          </a>
+          <%= link_to (first_new.new_record? ? '#' : "/cms/pages/#{first_new.id}"), class: "indexw_content_5_borimgbor", target: '_blank' do %>
+              <%= image_tag "#{first_new.editor_pic_url(:cover280)}", width: 280, height: 140, alt: '' %>
+              <div class="indexw_content_5_borimgbort"><%= first_new.name %></div>
+          <% end %>
+          <ul>
+            <% (new_pages[1..3] || []).each_with_index do |page, index| %>
+                <li>
+                  <%= link_to page.name.to_s.truncate(22), "/cms/pages/#{page.id}", target: '_blank' %>
+                  <%= image_tag 'purple/news/index_content_hot.png', class: "indexw_content_5_img", alt: '' if index<2 %>
+                </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+      <% lessons = data["lesson"]||{category_id: nil}
+         lesson_cate = Cms::Category.where(id: lessons["category_id"]).first_or_initialize
+         lesson_pages = lesson_cate.pages.active.published.order("created_at desc").limit(4)
+         if !data["news"]["tag"].blank?
+           lesson_pages=lesson_pages.tagged_with(data["news"]["tag"])
+         end
+         lesson_pages=lesson_pages.limit(4)
+         first_lesson = lesson_pages.first || Cms::Page.new(name: '更新中...') %>
+      <div class="indexw_content_5_bor lesson widget" data-widget-id="articles2_<%=page.id%>">
+        <div class="borright">
+          <a class="borrightti" href="/cms/<%= "#{lesson_cate.url}_#{lesson_cate.id}" %>" target="_blank">
+            <h2>
+              <em><%= lesson_cate.name||"栏目名称" %></em>
+              <span>更多》</span>
+            </h2>
+          </a>
+          <%= link_to (first_lesson.new_record? ? '#' : "/cms/pages/#{first_lesson.id}"), class: "indexw_content_5_borimgbor", target: '_blank' do %>
+              <%= image_tag "#{first_lesson.editor_pic_url(:cover280)}", width: 280, height: 140, alt: '' %>
+              <div class="indexw_content_5_borimgbort"><%= first_lesson.name %></div>
+          <% end %>
+          <ul>
+            <% (lesson_pages[1..3] || []).each_with_index do |page, index| %>
+                <li>
+                  <%= link_to page.name.to_s.truncate(22), "/cms/pages/#{page.id}", target: '_blank' %>
+                  <%= image_tag 'purple/news/index_content_hot.png', class: "indexw_content_5_img", alt: '' if index<2 %>
+                </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+      <div class="people widget" data-widget-id="people_<%=page.id%>">
+        <div class="store_title">
+          <h2>客户评价</h2>
+        </div>
+        <div class="slides comments" data-options='{ "effect": "slide, fade", "play": 3000, "pause": 1500 }'>
+          <ul class="list slides_container">
+            <% (data['people'][0..8]||[]).each do |item| %>
+                <% if item["id"].present?
+                     ct = Comment.where(id: item["id"]).first_or_initialize
+                     user = ct.new_record? ? Core::user.new : ct.user
+                     item['pic'] = item['pic'] || user.pic_key.url
+                     item['name'] = item['name'] || user.name
+                     item['desc'] = item['desc'] || user.name
+                     item['talk'] = item['talk'] || ct.body
+                   end
+                %>
+                <li>
+                  <div class="avatar">
+                    <%= image_tag "#{item['pic']}", :alt => "" %>
+                    <div class="name-desc">
+                      <span class="desc"><%= item["desc"] %></span>
+                      <span class="name"><%= item["name"] %></span>
+                    </div>
+                  </div>
+                  <div class="talk">
+                    <span class="quote left"></span>
+                    <%= h item["talk"] %>
+                    <span class="quote right"></span>
+                  </div>
+                </li>
+            <% end %>
+          </ul>
+          <ul class="slides_pagination">
+            <% (data['people'][0..8] || []).length.times do |index| %>
+                <li class="<%= 'current' if index == 0 %>"><%= link_to '', "##{index}" %></li>
+            <% end %>
+          </ul>
+          <a class="prev slides_prev slides_link" href="##"></a>
+          <a class="next slides_next slides_link" href="##"></a>
+        </div>
+      </div>
+    </div>
+    <%= render "custom_page/pages/root1/shoptab", data: data,page: page %>
+  </div>
+</div>
+<%=render :partial => 'admin/custom_page/pages/series_preview', :locals => { :data => data,:page=>page }%>
+

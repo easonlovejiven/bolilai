@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no"/>
+  <meta name="renderer" content="webkit|ie-comp|ie-stand">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content=""/>
+  <link rel="shortcut icon" href="<%= asset_path('favicon.png') %>">
+  <title><%= content_for?(:title) ? yield(:title) : "" %></title>
+
+  <%= stylesheet_link_tag 'admin/application', media: "all" %>
+  <%= javascript_include_tag 'core/modernizr' %>
+  <!--[if lt IE 9]>
+      <%#= javascript_include_tag 'core/respond.min' %>
+  <![endif]-->
+  <%= csrf_meta_tag %>
+</head>
+
+<body class="<%= yield(:body_class) if content_for?(:body_class) %>">
+<%= yield(:navigation) if content_for?(:navigation) %>
+<%= yield :home_carousel if content_for?(:home_carousel) %>
+<%= yield :home_banner if content_for?(:home_banner) %>
+<%= content_for?(:content) ? yield(:content) : yield %>
+<%= javascript_include_tag 'admin/application.js' %>
+<%= yield(:js_part) %>
+<input type="hidden" id="domain" value="http://<%= Rails.application.secrets[:qiniu_damemtu] %>.qiniudn.com/">
+<input type="hidden" id="uptoken_url" value="/uploads/uptoken">
+
+<!--[if lt IE 9]>
+<script type="text/javascript">
+    $(function () {
+        var str = '<div class="browser-tip">你的浏览器版本过低低低，建议升级您的浏览器以获得更好的体验!' +
+                '<a href="http://browsehappy.com" target="_blank">&nbsp;立即升级！</a></div>';
+        $('body').append(str);
+    })
+</script>
+<![endif]-->
+</body>
+</html>

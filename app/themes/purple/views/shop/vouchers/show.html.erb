@@ -1,0 +1,17 @@
+<h1>查看代金券</h1>
+
+<% if  event = @voucher.event %>
+	活动ID：<%= event.id %><br/>
+	活动名称：<%= event.name %><br/>
+	活动描述：<%= event.description %><br/>
+	金额：<%= event.amount %><br/>
+	限制：<%= event.limitation %><br/>
+	开始时间：<%= event.started_at && event.started_at.to_s(:db) %><br/>
+	结束时间：<%= event.ended_at && event.ended_at.to_s(:db) %><br/>
+<% end %>
+ID： <%= @voucher.id %><br/>
+编号： <%= @voucher.identifier %><br/>
+用户： <%= @voucher.user_id %><br/>
+交易：<%= @voucher.trade_id %><br/>
+获得时间：<%= @voucher.obtained_at && @voucher.obtained_at.to_s(:db) %><br/>
+使用时间：<%= @voucher.used_at && @voucher.used_at.to_s(:db) %><br/>

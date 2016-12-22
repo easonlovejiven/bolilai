@@ -1,0 +1,190 @@
+<% @record = @item %>
+<% @show = !%w[new edit].include?(params[:action]) && @record.valid? %>
+<div class="modal-header">
+  <%= render "admin/modal/header" %>
+</div>
+<%= render 'admin/shared/prompt' %>
+<div class="modal-body">
+  <%= form_for @item, as: :item, :url => @item.new_record? ? admin_shop_items_path : admin_shop_item_path(@item),
+               :html => {:method => @item.new_record? ? :post : :put, :multipart => true, class: "form-horizontal"} do |f| %>
+      <% if !params[:product_id].blank? %>
+          <%= f.hidden_field :product_id %>
+      <% else %>
+          <%= render 'admin/modal/text_field', {f: f, field: :product_id, required: true} %>
+      <% end %>
+      <% if !@item.new_record? %>
+          <div class="form-group">
+            <%= f.label :id, 'ID', {class: 'col-md-3 control-label'} %>
+            <div class="form-control-static">
+              <strong><%= @record.id %></strong>
+            </div>
+          </div>
+      <% end %>
+      <% if !@show %>
+          <div class="form-group">
+            <%= f.label :count, '<sup>*</sup>单件数目'.html_safe, class: 'col-md-3 control-label' %>
+            <div class="col-md-6">
+              <%= text_field_tag :count, 1, {class: 'form-control', required: true} %>
+              <span class="info">最多100个</span>
+            </div>
+          </div>
+      <% end %>
+
+      <%= render 'admin/modal/text_field', {f: f, field: :identifer} %>
+
+      <div class="form-group">
+        <%= f.label :barcode, class: 'col-md-3 control-label' %>
+        <div class="col-md-8 form-control-static">
+          <%= @record.barcode %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :remark, '备注', class: 'col-md-3 control-label' %>
+        <div class="col-md-8">
+          <% if @show %>
+              <div class="form-control-static">
+                <%= @record.remark %>
+              </div>
+          <% else %>
+              <%= f.text_area :remark, {class: 'form-control'} %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :product_id, '产品', class: 'col-md-3 control-label' %>
+        <div class="col-md-8">
+          <div class="form-control-static">
+            <%= render :partial => "admin/shop/products/product", :object => @item.product %>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :purchase_type, '采购类型', class: 'col-md-3 control-label' %>
+        <div class="col-md-8 form-control-static">
+          <%= Shop::Item::PURCHASE_TYPES[@item.purchase_type] %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :storage_at, '入库时间', class: 'col-md-3 control-label' %>
+        <div class="col-md-8 form-control-static">
+          <%= @item.storage_at && @item.storage_at.to_s(:db) %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :expired_at, '过期时间', class: 'col-md-3 control-label' %>
+        <div class="col-md-8 form-control-static">
+          <%= @item.expired_at && @item.expired_at.to_s(:db) %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :origin, '产地', class: 'col-md-3 control-label' %>
+        <div class="col-md-8 form-control-static">
+          <%= @item.origin %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :storage_name, '仓库', class: 'col-md-3 control-label' %>
+        <div class="col-md-8 form-control-static">
+          <%= @item.storage_name %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :store_num, '库位', class: 'col-md-3 control-label' %>
+        <div class="col-md-8 form-control-static">
+          <%= @item.store_num %>
+        </div>
+      </div>
+
+      <% if params[:action] == 'new' %>
+          <div class="form-group">
+            <%= f.label :published, '是否发布', class: 'col-md-3 control-label' %>
+            <div class="col-md-8">
+              <label class='checkbox-inline'>
+                <%= f.check_box :published, checked: true, value: true, class: 'checkbox' %>
+                <span>发布</span></label>
+            </div>
+          </div>
+      <% end %>
+
+      <% unless @item.new_record? %>
+          <div class="form-group">
+            <%= f.label :trade_id, '交易', class: 'col-md-3 control-label' %>
+            <div class="col-md-8 form-control-static">
+              <%#= link_to_if @current_user.can_show_trade?, @item.trade.id, admin_shop_trade_path(@item.trade), "data-target" => "rightPanel" if @item.trade %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :trade_id, '退货次数', class: 'col-md-3 control-label' %>
+            <div class="col-md-8 form-control-static">
+              <%= link_to_if can?(:index, :unit), Shop::Unit.where(["status IS NOT NULL AND item_id = ?", @item.id]).count, admin_shop_units_path('where[item_id]' => @item.id) %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :created_at, '创建时间', class: 'col-md-3 control-label' %>
+            <div class="col-md-8 form-control-static">
+              <%= @item.created_at && @item.created_at.to_s(:db) %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :updated_at, '修改时间', class: 'col-md-3 control-label' %>
+            <div class="col-md-8 form-control-static">
+              <%= @item.updated_at && @item.updated_at.to_s(:db) %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :updatings, '修改记录', class: 'col-md-3 control-label' %>
+            <div class="col-md-8 form-control-static">
+              <table>
+                <thead>
+                <tr>
+                  <th>发布</th>
+                  <th>编辑</th>
+                  <th>时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% @item.updatings.order("created_at ASC").each do |updating| %>
+                    <tr>
+                      <td><%= updating.published? ? '✔' : '✘' if updating.published != nil %></td>
+                      <td><%= link_to_if @current_user.can_show_editor?, updating.editor.name, admin_manage_editor_path(updating.editor),
+                                         "data-target" => "rightPanel" if updating.editor %></td>
+                      <td><%= updating.created_at.to_s(:db) %></td>
+                    </tr>
+                <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :editor, '编辑', class: 'col-md-3 control-label' %>
+            <div class="col-md-8 form-control-static">
+              <%= link_to_if can?(:show, @item.editor), @item.editor.name, admin_manage_editor_path(@item.editor), "data-target" => "rightPanel" if @item.editor %>
+            </div>
+          </div>
+      <% end %>
+
+      <div class="form-actions">
+        <% if @show %>
+            <%= link_to '查看', admin_shop_item_path(@item), "data-target" => "rightPanel", class: 'btn btn-success' if can?(:show, @item) %>
+            <%= link_to '编辑', edit_admin_shop_item_path(@item), "data-target" => "rightPanel", class: 'btn btn-success' if can?(:update, @item) %>
+        <% else %>
+            <p class="submit">
+              <%= f.submit "提交", class: "btn btn-primary" %>
+            </p>
+        <% end %>
+      </div>
+  <% end %>
+</div>

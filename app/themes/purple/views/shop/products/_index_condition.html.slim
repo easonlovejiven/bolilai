@@ -1,0 +1,33 @@
+.fbox_top.prefetch
+	h2
+		| 筛选
+		span= @products_count
+		| 件商品
+	.search_tag
+		- if @target
+			a.tag_text href="#{conditions_path('where' => { 'target' => nil })}"
+				span= (@targets.find{|o| o[:value] == @target }||{})[:name]
+		- if @category1
+			a.tag_text href="#{conditions_path('where' => { 'category1_id' => nil, 'category2_id' => nil })}"
+				span= h @category1.name
+		- if @category2
+			a.tag_text href="#{conditions_path('where' => { 'category1_id' => nil, 'category2_id' => nil })}"
+				span= h @category2.parent.try(:name)
+			a.tag_text href="#{conditions_path('where' => { 'category1_id' => @category2.parent_id, 'category2_id' => nil })}"
+				span= h @category2.name
+		- if @brand
+			a.tag_text href="#{conditions_path('where' => { 'brand_id' => nil })}"
+				span= h @brand.name
+		- if params[:where] && params[:where][:price] && (@gt = params[:where][:price][:gt] || params[:where][:price][:gteq]) && (@gt = @gt.to_i) && (@lt = params[:where][:price][:lt] || params[:where][:price][:lteq]) && (@lt = @lt.to_i)
+			a.tag_text href="#{conditions_path('where' => { 'price' => { 'gt' => nil, 'gteq' => nil, 'lt' => nil, 'lteq' => nil } })}"
+				span= "￥#{h @gt}~#{h @lt}"
+		- if @measure
+			a.tag_text href="#{conditions_path('where' => { 'measure' => nil })}"
+				span= h @measure
+		- if @color
+			= link_to conditions_path('where' => { 'color' => nil }), :class => "tag_text" do
+				span= "#{Shop::Product::COLORS.map{|k,v|{v=>k}}.inject(&:merge)[@color]}色"
+		- (params[:values]||[]).each do |k, v|
+			- (v.is_a?(Hash) ? v.values : v.to_sz).map do |value|
+				a.tag_text href="#{conditions_path('values' => { k => (v.is_a?(Hash) ? v.values : v.to_sz)-[value] })}"
+					span= h value

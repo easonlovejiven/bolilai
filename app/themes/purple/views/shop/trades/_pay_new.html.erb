@@ -1,0 +1,64 @@
+<div class="popup_main popup_tips">
+	<div class="Shopping_info">
+		<div class="Shopping_Pay">
+			<h5>订单已提交，请选择付款方式。</h5>
+			<p>您的订单号：<span><%= @trade.identifier %></span></p>
+			<p class="PayOrderTotal"><strong>应付款</strong>：<span><%= @trade.price %></span>RMB</p>
+			<p class="Paytips"><span class="icons17x17 icon_03"></span>请于12月6日20点1分之前付款，否则您将无法完成此次购买，并扣除500点基因值</p>
+		</div>
+	</div>
+
+	<form id='pay_way' method="get" accept-charset="utf-8">
+	<h6 class="Shopping_title">请选择以下支付平台支付：</h6>
+	<ul class="Shopping_Payment">
+		<li>
+			<input type="radio" name='pay_way' value='alipay'/>
+			<%= image_tag("purple/images/store/zhifubao.png") %>
+		</li>
+	</ul>
+	<h6 class="Shopping_title">请选择以下银行支付：</h6>
+	<ul class="Shopping_Payment">
+		<li>
+			<input type="radio" name='pay_way' value='cmbchina'/>
+			<%= image_tag("purple/images/store/cmbc.png") %>
+			<a href="#">查看银行额度帮助</a>
+		</li>
+	</ul>
+	<ul class="Shopping_Payment">
+		<li>
+			<input type="radio" name='pay_way' value='express'/>
+			<%= image_tag("purple/images/store/cmbc.png") %>
+			<a href="#">货到付款</a>
+		</li>
+	</ul>
+
+	<div class="Shopping_btn">
+		<button class="Confirmation_btn"><span class="icons24x24 home_07"></span><span class="text">确认订单</span></button>
+	</div>
+	</form>
+	<script type="text/javascript" charset="utf-8">
+		$("input[name='pay_way'][value='alipay']").attr('checked',true)
+
+		$(document).ready(function(){
+			$('form#pay_way').submit(function(){
+				way = $("input[name='pay_way']:checked").val();
+				if (way == 'alipay'){
+					window.open('<%= @trade.alipay_checkout_url %>','targetwindow')
+				}
+				if (way == 'cmbchina'){
+					window.open('<%= @trade.cmbchina_checkout_url %>','targetwindow')
+				}
+
+				if (way == 'express'){
+					$.ajax({
+						url: '<%= express_pay_auction_trade_path(@trade) %>',
+						type: 'PUT',
+						success: function( response ) {
+							window.location.href = '<%= auction_trade_path(@trade) %>';
+					   }
+					})
+				}
+				});
+			});
+	</script>
+</div>

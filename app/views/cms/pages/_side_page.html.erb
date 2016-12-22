@@ -1,0 +1,34 @@
+<div class="top_line"></div>
+<div class="main_post">
+  <div class="post_content side_page">
+    <div class="content_warp">
+      <h2 class="title"><%= @page.name %></h2>
+
+      <div class="post_sbt">
+        <span>来源：珀丽莱</span>
+        <span>时间：<%= time_format(@page.created_at) %></span>
+        <%= render 'cms/pages/shared_btn' %>
+      </div>
+      <div class="post_tps">
+        <%= @page.summary %>
+      </div>
+      <div class="content">
+        <%= raw @page.body %>
+      </div>
+    </div>
+  </div>
+  <div class="post_side">
+    <div class="content">
+      <div class="rec_list">
+        <h3 class="title">相关文章</h3>
+        <ul>
+          <% @rmd_pages.published.each do |page| %>
+              <li>
+                ▪&nbsp;<%= link_to page.name, "/cms/pages/#{page.id}", title: page.name, target: '_blank' %>
+              </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+span
+	- if include_blank ||= nil
+		= form.radio_button field, nil
+		| &nbsp;
+		= form.label "#{field}", "(#{t('.blank')})"
+		| &nbsp;
+	- form.object.class.const_get(field.upcase).each do |key, value|
+		= form.radio_button field, key
+		| &nbsp;
+		= form.label "#{field}_#{key}", t("activerecord.enums.#{form.object.class.name.downcase.gsub('::', '/')}.#{field}.#{key}")
+		| &nbsp;

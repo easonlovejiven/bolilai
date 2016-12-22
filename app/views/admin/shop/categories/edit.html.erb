@@ -1,0 +1,114 @@
+<% @record=@category %>
+<% @show = !%w[new edit].include?(params[:action]) && @record.valid? %>
+<div class="modal-header">
+  <%= render "admin/modal/header" %>
+</div>
+<%= render 'admin/shared/prompt' %>
+<%= form_for @category, as: :category, :url => @category.new_record? ? admin_shop_categories_path : admin_shop_category_path(@category), :html => {:method => @category.new_record? ? :post : :put, :multipart => true, class: "form-horizontal"} do |f| %>
+    <%= f.error_messages %>
+    <div class="modal-body">
+      <fieldset>
+        <%= render 'admin/modal/id', {f: f} if @show %>
+        <%= render 'admin/modal/text_field', {f: f, field: :name, required: true} %>
+        <%= render :partial => "admin/modal/image_field", locals: {f: f, field: :pic, max_files: 1, form_as: :category, required: true} %>
+        <div class="form-group">
+          <%= f.label :parent_id, class: 'col-md-3 control-label' do -%>父类
+          <% end -%>
+          <div class="col-md-6">
+            <% if @show %>
+                <%#= raw @category.parents.map { |parent| link_to_if @current_user.can_show_category?, parent.name, admin_shop_category_path(parent), :rel => "facebox" }.join(' &gt; ') %>
+                <%= raw @category.parents.map { |parent| link_to parent.name, admin_shop_category_path(parent), "data-target" => "rightPanel" }.join(' &gt; ') %>
+            <% else %>
+                <%= f.select :parent_id, Shop::Category.active.map { |c| [c.name, c.id] }, {:include_blank => ""}, class: "form-control" %>
+            <% end %>
+          </div>
+        </div>
+        <%= render 'admin/modal/text_area', {f: f, field: :description} %>
+        <div class="form-group">
+          <%= f.label :priority, class: 'col-md-3 control-label' do -%>
+              优先
+          <% end -%>
+          <div class="col-md-6">
+            <% if @show %>
+                <%= Shop::Category::PRIORITIES.map { |p| {p[:name] => p[:title]} }.inject({}, &:merge)[@category.priority] %>
+            <% else %>
+                <%= f.select :priority, [[]]+Shop::Category::PRIORITIES.map { |p| [p[:title], p[:name]] }, {}, class: "form-control" %>
+            <% end %>
+          </div>
+        </div>
+
+        <%= render 'admin/modal/text_field', {f: f, field: :measures, note: "（用英文逗号分隔）"} %>
+
+        <%= render 'admin/modal/text_field', {f: f, field: :measure_properties, note: "（用英文逗号分隔）"} %>
+
+        <%= render 'admin/modal/text_field', {f: f, field: :ranges, note: "（用英文逗号分隔）"} %>
+
+        <div class="form-group">
+          <%= f.label :attribute_ids, class: 'col-md-3 control-label' do -%>
+              属性列表
+          <% end -%>
+          <div class="col-md-6">
+            <% @category.parents.reverse.each do |category| %>
+                <div class="form-control-static">
+                  <%= link_to category.name, admin_shop_category_path(category), "data-target" => "rightPanel" %>
+                  属性：
+                  <% category.current_attributes.each do |attribute| %>
+                      <%= link_to attribute.name, admin_shop_attribute_path(attribute), "data-target" => "rightPanel" %>
+                      ,
+                  <% end %>
+                </div>
+            <% end %>
+
+            <% if params[:action] == 'show' %>
+                <div class="form-control-static">
+                  当前属性：
+                  <% @category.current_attributes.each do |attribute| %>
+                      <%= link_to attribute.name, admin_shop_attribute_path(attribute), "data-target" => "rightPanel" %>
+                      ,
+                  <% end %>
+                </div>
+            <% else %>
+                <%= select_tag "category[attribute_ids]", options_for_select([[]]+Shop::Attribute.active.map { |a| [a.name, a.id] }, @category.current_attributes.map(&:id)), :multiple => true, :size => "10", :style => "height:auto;", class: "form-control select2" %>
+            <% end %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label :attribute_ids, class: 'col-md-3 control-label' do -%>
+              基本属性
+          <% end -%>
+          <div class="col-md-6">
+            <% if @show %>
+                <div class="form-control-static">
+                  <% @category.basic_attributes.each do |attribute| %>
+                      <%= attribute.name %>,
+                  <% end %>
+                </div>
+            <% else %>
+                <%= select_tag "category[basic_attribute_ids]", options_for_select([[]]+@category.current_attributes.map { |a| [a.name, a.id] }, @category.basic_attributes.map(&:id)), :multiple => true, :size => "10", :style => "height:auto;", class: "form-control select2" %>
+                <div class="note">是当前属性列表中筛选出来的属性</div>
+            <% end %>
+          </div>
+        </div>
+        <%= render 'admin/modal/text_field', {f: f, field: :order, required: true} %>
+
+        <%= render :partial => "admin/modal/image_field", locals: {f: f, field: :banner_pic, max_files: 1, form_as: :category, note: "1178x*"} %>
+        <%= render :partial => "admin/modal/text_field", locals: {f: f, field: :banner_pic_link, max_files: 1, form_as: :category} %>
+
+        <% if @show %>
+            <div class="form-actions">
+              <%= link_to '查看', admin_shop_category_path(@category), "data-target" => "rightPanel", class: "btn btn-primary" if can?(:show, @category) %>
+              <%= link_to '编辑', edit_admin_shop_category_path(@category), class: "btn btn-primary" if can?(:update, @category) %>
+              <%= link_to '删除', admin_shop_category_path(@category), method: "destroy", "data-target" => "rightPanel", class: "btn btn-primary" if can?(:destroy, @category) %>
+            </div>
+        <% else %>
+            <%= render 'admin/modal/footer', {f: f} %>
+        <% end %>
+      </fieldset>
+    </div>
+<% end %>
+
+<script type="text/javascript">
+    $(function () {
+        App.initMultiSelect2(".select2")
+    })
+</script>

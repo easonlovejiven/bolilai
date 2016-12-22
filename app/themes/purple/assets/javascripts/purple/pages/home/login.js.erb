@@ -1,0 +1,769 @@
+$(function () {
+    $(document).on({
+        click: function () {
+            var site = $(this).data('site');
+            window.open('/core/connections/new?redirect=%2Fhome%2Fconnections%2Fpopup%2F0%3Fredirect%3D' + encodeURIComponent(encodeURIComponent($('#user_login_redirect').val() || $('#user_signup_redirect').val() || '/shop')) + '&site=' + site.name, '', 'width=' + site.width + ',height=' + site.height + '');
+            return false;
+        }
+    }, '.js_user_connection');
+    $(document).on({
+        click: function () {
+            $('#captcha_image').attr('src', $('#captcha_image').attr('src').replace(/\?.*/, '') + '?' + (new Date()).getTime());
+            $('#user_reset_account_captcha, #user_signup_captcha').val('').focus().select()
+        }
+    }, '#captcha_refresh');
+    $(document).on({
+        input: function () {
+            var val = $(this).val().replace(/\s+/g, '')
+            if (val != $(this).val()) $(this).val(val)
+            $(this).data('checking', false).closest('form').submit();
+        },
+        blur: function () {
+            $(this).data('checking', true).closest('form').submit();
+        },
+        keyup: function (event) {
+            if (event.keyCode == 13) $('#user_login_account_password').focus().select()
+        }
+    }, '#user_login_account_login');
+    $(document).on({
+        input: function () {
+            var val = $(this).val().replace(/\s+/g, '').substring(0, 20)
+            if (val != $(this).val()) $(this).val(val)
+            $(this).data('checking', false).closest('form').submit();
+        },
+        blur: function () {
+            $(this).data('checking', true).closest('form').submit();
+        },
+        keyup: function (event) {
+            if (event.keyCode == 13) $('#user_login_confirm').mousedown();
+        }
+    }, '#user_login_account_password');
+    $(document).on({
+        mousedown: function () {
+            $(this).closest('form').data('submitting', true).submit();
+        }
+    }, '#user_login_confirm');
+    $(document).on({
+        submit: function (event) {
+            // event.preventDefault();
+            if ($(this).hasClass('disabled')) return;
+
+            var login_valid = $('#user_login_account_login').val().length > 0
+            var password_valid = $('#user_login_account_password').val().length >= 6
+            if (login_valid && password_valid) {
+                $('#user_login_confirm_tip').hide();
+                $('#user_login_confirm').removeClass('disabled');
+            }
+            else $('#user_login_confirm').addClass('disabled');
+
+            if (!$(this).data('submitting') || $(this).hasClass('disabled') || $('#notification_confirm').hasClass('disabled')) {
+                $(this).data('submitting', false);
+                return;
+            }
+
+            $.ajax({
+                url: $(this).attr('action') + '.json',
+                type: 'post',
+                data: $(this).serialize(),
+                context: this,
+                beforeSend: function () {
+                    $(this).addClass('disabled');
+                    $('#user_login_confirm').addClass('disabled loading');
+                },
+                complete: function () {
+                    $(this).removeClass('disabled');
+                    $('#user_login_confirm').removeClass('loading');
+                },
+                success: function (data) {
+                    if (data['error']) {
+                        $('#user_login_confirm_tip').show();
+                        $(this).data('submitting', false);
+                        return;
+                    }
+                    $.cookie('remember_me', '1', {expires: $('#remember_me').prop('checked') ? 90 : null, path: '/',domain: "<%=Rails.application.secrets.domain%>"});
+                    $.cookie('user_id', data.account.id, {expires: 90, path: '/',domain: "<%=Rails.application.secrets.domain%>"})
+                    $(document).trigger('userinit');
+                    window.go(null, '', $('#user_login_redirect').val());
+                    if (document.location.href.match(/qqcb\.weimall\.com/)) document.location.reload();
+                },
+                error: function () {
+                    $('#user_login_confirm_tip').show();
+                    $(this).data('submitting', false);
+                }
+            });
+        }
+    }, '#user_login_form');
+
+    $(document).on({
+        click: function () {
+            $('#user_login_area').hide();
+            $('#user_reset_area').show();
+            $('#user_reset_account_login').val($('#user_login_account_login').val()).focus().select()
+        }
+    }, '#user_login_reset_link');
+    $(document).on({
+        input: function () {
+            var val = $(this).val().replace(/\s+/g, '')
+            if (val != $(this).val()) $(this).val(val)
+            $(this).data('checking', false).closest('form').submit()
+        },
+        blur: function () {
+            $(this).data('checking', true).closest('form').submit()
+        },
+        focus: function () {
+            $('#user_reset_account_login_error').hide();
+        },
+        keyup: function (event) {
+            if (event.keyCode == 13) $('#user_reset_account_captcha').focus().select()
+        }
+    }, '#user_reset_account_login');
+    $(document).on({
+        input: function () {
+            var val = $(this).val().replace(/[^\d]+/g, '').substring(0, 4)
+            if (val != $(this).val()) $(this).val(val)
+            $(this).data('checking', false).closest('form').submit()
+        },
+        blur: function () {
+            $(this).data('checking', true).closest('form').submit()
+        },
+        focus: function () {
+            $('#user_reset_account_captcha_error').hide();
+        },
+        keyup: function (event) {
+            if (event.keyCode == 13) $('#user_reset_confirm').click();
+        }
+    }, '#user_reset_account_captcha');
+    $(document).on({
+        click: function () {
+            $(this).closest('form').data('submitting', true).submit();
+        }
+    }, '#user_reset_confirm');
+    $(document).on({
+        submit: function (event) {
+            if ($(this).hasClass('disabled')) return;
+
+            var login_valid = $('#user_reset_account_login').val().match(/^[a-z0-9\.\_]+@([a-z0-9]+\.)+[a-z]+$|^1\d{10}$/i);
+            var captcha_valid = $('#user_reset_account_captcha').val().match(/\d{4}/);
+            if (login_valid && captcha_valid) $('#user_reset_confirm').removeClass('disabled');
+            else $('#user_reset_confirm').addClass('disabled');
+
+            if (!$(this).data('submitting') || $(this).hasClass('disabled') || $('#user_reset_confirm').hasClass('disabled')) {
+                $(this).data('submitting', false);
+                return;
+            }
+
+            $('#user_reset_confirm').addClass('disabled');
+
+            if (!$(this).data('login_status')) {
+                $.ajax({
+                    url: "/core/accounts/0.json",
+                    type: "get",
+                    data: {"account[login]": $('#user_reset_account_login').val()},
+                    context: this,
+                    beforeSend: function () {
+                        $(this).data('login_status', 'loading');
+                    },
+                    complete: function () {
+                        $(this).submit();
+                    },
+                    success: function (data) {
+                        $(this).data('login_status', data.account ? 'success' : 'failure');
+                    },
+                    error: function () {
+                        $(this).data('login_status', 'error');
+                    }
+                });
+                return;
+            } else if ($(this).data('login_status') == 'loading') {
+                return;
+            } else if ($(this).data('login_status') != 'success') {
+                $(this).data('login_status', null);
+                $(this).data('captcha_status', null);
+                $('#user_reset_account_login_error').show();
+                $(this).data('submitting', false);
+                return;
+            } else if (!$(this).data('captcha_status')) {
+                $.ajax({
+                    url: "/core/accounts/validate_captcha.json",
+                    type: "post",
+                    data: {captcha: $('#user_reset_account_captcha').val()},
+                    context: this,
+                    beforeSend: function () {
+                        $(this).data('captcha_status', 'loading');
+                    },
+                    complete: function () {
+                        $(this).submit();
+                    },
+                    success: function (data) {
+                        $(this).data('captcha_status', data.is_valid ? 'success' : 'failure');
+                    },
+                    error: function () {
+                        $(this).data('captcha_status', 'error');
+                    }
+                });
+                return;
+            } else if ($(this).data('captcha_status') == 'loading') {
+                return;
+            } else if ($(this).data('captcha_status') != 'success') {
+                $(this).data('login_status', null);
+                $(this).data('captcha_status', null);
+                $('#user_reset_account_captcha_error').show();
+                $('#user_reset_account_captcha').val('')
+                $(this).data('submitting', false);
+                return;
+            }
+            $(this).data('login_status', null);
+            $(this).data('captcha_status', null);
+
+            $.ajax({
+                url: $(this).attr('action') + '.js',
+                type: 'post',
+                data: $(this).serialize(),
+                context: this,
+                beforeSend: function () {
+                    $(this).addClass('disabled');
+                    $('#user_reset_confirm').addClass('disabled');
+                },
+                complete: function () {
+                    $(this).removeClass('disabled');
+                    $('#user_reset_confirm').removeClass('disabled');
+                },
+                success: function (data) {
+                    if ($('#user_reset_account_login').val().match(/^1\d{10}$/)) {
+                        $('#user_reset_phone_login').val($('#user_reset_account_login').val());
+                        $('#user_reset_area').hide();
+                        $('#user_reset_phone_area').show();
+                    } else {
+                        $('#user_reset_success_email').text($('#user_reset_account_login').val());
+                        $('#user_reset_area').hide();
+                        $('#user_reset_success_area').show();
+                    }
+                },
+                error: function () {
+                    $('#captcha_refresh').click();
+                }
+            });
+            return false
+        }
+    }, '#user_reset_form');
+
+    $(document).on({
+        input: function () {
+            var val = $(this).val().replace(/[^\d]+/g, '').substring(0, 6)
+            if (val != $(this).val()) $(this).val(val)
+            $(this).data('checking', false).closest('form').submit();
+        },
+        blur: function () {
+            $(this).data('checking', true).closest('form').submit();
+        },
+        keyup: function (event) {
+            if (event.keyCode == 13) $('#user_reset_phone_password').focus().select()
+        }
+    }, '#user_reset_phone_reset_code');
+    $(document).on({
+        input: function () {
+            var val = $(this).val().replace(/\s+/g, '').substring(0, 20)
+            if (val != $(this).val()) $(this).val(val)
+            $(this).data('checking', false).closest('form').submit();
+        },
+        blur: function () {
+            $(this).data('checking', true).closest('form').submit();
+        },
+        keyup: function (event) {
+            if (event.keyCode == 13) $('#user_reset_phone_password_confirmation').focus().select()
+        }
+    }, '#user_reset_phone_password');
+    $(document).on({
+        input: function () {
+            var val = $(this).val().replace(/\s+/g, '').substring(0, 20)
+            if (val != $(this).val()) $(this).val(val)
+            $(this).data('checking', false).closest('form').submit();
+        },
+        blur: function () {
+            $(this).data('checking', true).closest('form').submit();
+        },
+        keyup: function (event) {
+            if (event.keyCode == 13) $('#user_reset_phone_confirm').mousedown();
+        }
+    }, '#user_reset_phone_password_confirmation');
+    $(document).on({
+        mousedown: function () {
+            $(this).closest('form').data('submitting', true).submit();
+        }
+    }, '#user_reset_phone_confirm');
+    $(document).on({
+        submit: function () {
+            var reset_code_valid = $('#user_reset_phone_reset_code').val().match(/^\d{6}$/);
+            if (reset_code_valid) $('#user_reset_phone_reset_code_error').hide();
+            if (!reset_code_valid && $('#user_reset_phone_reset_code').data('checking')) $('#user_reset_phone_reset_code_error').show();
+
+            var password_valid = $('#user_reset_phone_password').val().length >= 6;
+            if (password_valid) $('#user_reset_phone_password_error').hide();
+            if (!password_valid && $('#user_reset_phone_password').data('checking')) $('#user_reset_phone_password_error').show();
+
+            var password_confirmation_valid = $('#user_reset_phone_password').val() == $('#user_reset_phone_password_confirmation').val();
+            if (password_confirmation_valid) $('#user_reset_phone_password_confirmation_error').hide();
+            if (!password_confirmation_valid && $('#user_reset_phone_password_confirmation').data('checking')) $('#user_reset_phone_password_confirmation_error').show();
+
+            if (reset_code_valid && password_valid && password_confirmation_valid) $('#user_reset_phone_confirm').removeClass('disabled');
+            else $('#user_reset_phone_confirm').addClass('disabled');
+
+            if (!$(this).data('submitting') || $(this).hasClass('disabled') || $('#user_reset_phone_confirm').hasClass('disabled')) {
+                $(this).data('submitting', false);
+                return;
+            }
+            $(this).data('submitting', false);
+
+            if ($(this).hasClass('disabled')) return;
+            $.ajax({
+                url: $(this).attr('action') + '.json',
+                type: 'post',
+                data: $(this).serialize(),
+                context: this,
+                beforeSend: function () {
+                    $(this).addClass('disabled');
+                    $('#user_reset_phone_confirm').addClass('disabled');
+                },
+                complete: function () {
+                    $(this).removeClass('disabled');
+                    $('#user_reset_phone_confirm').removeClass('disabled');
+                },
+                success: function (data) {
+                    if (data['error']) {
+                        $('#user_reset_phone_reset_code_error').show();
+                        return;
+                    }
+                    $('#user_reset_phone_area').hide();
+                    $('#user_reset_phone_success_area').show();
+                },
+                error: function () {
+                    $('#user_reset_phone_reset_code_error').show();
+                }
+            });
+            return false;
+        }
+    }, '#user_reset_phone_form');
+
+    $(document).on({
+        mousedown: function () {
+            $('#signup_term_content').toggle().trigger('update');
+        }
+    }, '#signup_term_button');
+    $(document).on({
+        update: function () {
+            if ($(this).html().strip() != '' || $(this).data('loading')) return;
+            $.ajax({
+                url: '/statics/home/account/term.html',
+                context: this,
+                beforeSend: function () {
+                    $(this).data('loading', true);
+                },
+                complete: function () {
+                    $(this).data('loading', false);
+                },
+                success: function (data) {
+                    $(this).html(data);
+                }
+            });
+        }
+    }, '#signup_term_content');
+    $(document).on({
+        click: function () {
+            $('#user_signup_account_email_area').show();
+            $('#user_signup_account_phone_area').hide();
+            $('#user_signup_account_email').prop('disabled', false).focus().select()
+            $('#user_signup_account_phone').prop('disabled', true)
+            $('#user_signup_account_email, #user_signup_account_phone').closest('.jqTransformInputWrapper').trigger('disabledchange')
+        }
+    }, '#user_signup_login_is_email');
+    $(document).on({
+        click: function () {
+            $('#user_signup_account_phone_area').show();
+            $('#user_signup_account_email_area').hide();
+            $('#user_signup_account_phone').prop('disabled', false).focus().select()
+            $('#user_signup_account_email').prop('disabled', true)
+            $('#user_signup_account_email, #user_signup_account_phone').closest('.jqTransformInputWrapper').trigger('disabledchange')
+        }
+    }, '#user_signup_login_is_phone');
+    $(document).on({
+        input: function () {
+            $(this).data('checking', false).closest('form').submit();
+        },
+        blur: function () {
+            $(this).data('checking', true).closest('form').submit();
+        }
+    }, '#user_signup_account_email, #user_signup_account_phone, #user_signup_account_password, #user_signup_account_password_confirmation, #user_signup_user_name, #user_signup_coupon_code, #user_signup_captcha');
+    $(document).on({
+        input: function () {
+            var val = $(this).val().replace(/\s+/g, '')
+            if (val != $(this).val()) $(this).val(val)
+        }
+    }, '#user_signup_account_email, #user_signup_account_phone, #user_signup_account_password, #user_signup_account_password_confirmation, #user_signup_coupon_code');
+    $(document).on({
+        focus: function () {
+            if ($('#user_signup_account_email_error').css('display') == 'none') $('#user_signup_account_email_tip').show()
+        },
+        blur: function () {
+            $('#user_signup_account_email_tip').hide();
+            $('#user_signup_account_email_error_duplicate').hide();
+        },
+        keyup: function (event) {
+            if (event.keyCode == 13) $('#user_signup_account_password').focus().select()
+        }
+    }, '#user_signup_account_email');
+    $(document).on({
+        input: function () {
+            var val = $(this).val().replace(/[^\d]+/g, '').substring(0, 11)
+            if (val != $(this).val()) $(this).val(val)
+        },
+        focus: function () {
+            if ($('#user_signup_account_phone_error').css('display') == 'none') $('#user_signup_account_phone_tip').show()
+        },
+        blur: function () {
+            $('#user_signup_account_phone_tip').hide();
+            $('#user_signup_account_phone_error_duplicate').hide();
+        },
+        keyup: function (event) {
+            if (event.keyCode == 13) $('#user_signup_account_password').focus().select()
+        }
+    }, '#user_signup_account_phone');
+    $(document).on({
+        input: function () {
+            var val = $(this).val().substring(0, 20)
+            if (val != $(this).val()) $(this).val(val)
+        },
+        focus: function () {
+            if ($('#user_signup_account_password_error').css('display') == 'none') $('#user_signup_account_password_tip').show()
+        },
+        blur: function () {
+            $('#user_signup_account_password_tip').hide();
+        },
+        keyup: function (event) {
+            if (event.keyCode == 13) $('#user_signup_account_password_confirmation').focus().select()
+        }
+    }, '#user_signup_account_password');
+    $(document).on({
+        input: function () {
+            var val = $(this).val().substring(0, 20)
+            if (val != $(this).val()) $(this).val(val)
+        },
+        focus: function () {
+            if ($('#user_signup_account_password_confirmation_error').css('display') == 'none') $('#user_signup_account_password_confirmation_tip').show()
+        },
+        blur: function () {
+            $('#user_signup_account_password_confirmation_tip').hide();
+        },
+        keyup: function (event) {
+            if (event.keyCode == 13) $('#user_signup_user_name').focus().select()
+        }
+    }, '#user_signup_account_password_confirmation');
+    $(document).on({
+        input: function () {
+            var val = $(this).val().replace(/\s+/, '')
+            if (val != $(this).val()) $(this).val(val)
+        },
+        focus: function () {
+            if ($('#user_signup_user_name_error').css('display') == 'none') $('#user_signup_user_name_tip').show()
+        },
+        blur: function () {
+            $('#user_signup_user_name_tip').hide();
+        },
+        keyup: function (event) {
+            if (event.keyCode == 13) $('#user_signup_coupon_code').focus().select()
+        }
+    }, '#user_signup_user_name');
+    $(document).on({
+        focus: function () {
+            if ($('#user_signup_coupon_code_error').css('display') == 'none') $('#user_signup_coupon_code_tip').show()
+        },
+        blur: function () {
+            $('#user_signup_coupon_code_tip').hide();
+        },
+        keyup: function (event) {
+            if (event.keyCode == 13) {
+                if ($('#user_signup_captcha_area').css('display') != 'none') $('#user_signup_captcha').focus().select()
+                else $(this).blur() && $('#user_signup_confirm').mousedown()
+            }
+        }
+    }, '#user_signup_coupon_code');
+    $(document).on({
+        focus: function () {
+            if ($('#user_signup_captcha_error').css('display') == 'none') $('#user_signup_captcha_tip').show()
+        },
+        blur: function () {
+            $('#user_signup_captcha_tip').hide();
+        },
+        input: function () {
+            var val = $(this).val().replace(/[^\d]+/g, '').substring(0, 4)
+            if (val != $(this).val()) $(this).val(val)
+        },
+        keyup: function (event) {
+            if (event.keyCode == 13) $(this).blur() && $('#user_signup_confirm').mousedown();
+        }
+    }, '#user_signup_captcha');
+    $(document).on({
+        mousedown: function () {
+            $('#user_signup_form').data('submitting', true).submit();
+        }
+    }, '#user_signup_confirm');
+    $(document).on({
+        submit: function () {
+            if ($(this).hasClass('disabled')) return;
+
+            var email_valid = $('#user_signup_account_email_area').css('display') == 'none' || $('#user_signup_account_email').val().match(/^[a-z0-9\.\_]+@([a-z0-9]+\.)+[a-z]+$/i);
+            if (email_valid) $('#user_signup_account_email_error').hide();
+            else if ($('#user_signup_account_email').data('checking')) $('#user_signup_account_email_error').show();
+
+            var phone_valid = !$('#user_signup_account_phone_area').css('display') == 'none' || $('#user_signup_account_phone').val().match(/^1\d{10}$/i);
+            if (phone_valid) $('#user_signup_account_phone_error').hide();
+            else if ($('#user_signup_account_phone').data('checking')) $('#user_signup_account_phone_error').show();
+
+            var password_valid = $('#user_signup_account_password').val().length >= 6 && $('#user_signup_account_password').val().length <= 20;
+            if (password_valid) $('#user_signup_account_password_error').hide();
+            else if ($('#user_signup_account_password').data('checking')) $('#user_signup_account_password_error').show();
+
+            var password_confirmation_valid = $('#user_signup_account_password').val() == $('#user_signup_account_password_confirmation').val();
+            if (password_confirmation_valid) $('#user_signup_account_password_confirmation_error').hide();
+            else if ($('#user_signup_account_password_confirmation').data('checking')) $('#user_signup_account_password_confirmation_error').show();
+
+            var name_valid = $('#user_signup_user_name').val() != '';
+            if (name_valid) $('#user_signup_user_name_error').hide();
+            else if ($('#user_signup_user_name').data('checking')) $('#user_signup_user_name_error').show();
+
+            var captcha_valid = $('#user_signup_captcha_area').css('display') == 'none' || $('#user_signup_captcha').val().match(/\d{4}/);
+            if (captcha_valid) $('#user_signup_captcha_error').hide()
+
+            if (email_valid && password_valid && password_confirmation_valid && name_valid && captcha_valid) $('#user_signup_confirm').removeClass('disabled');
+            else $('#user_signup_confirm').addClass('disabled');
+
+            if (!$(this).data('submitting') || $(this).hasClass('disabled') || $('#user_signup_confirm').hasClass('disabled')) {
+                $(this).data('submitting', false);
+                return;
+            }
+            $(this).data('submitting', false);
+
+            $('#user_signup_confirm').addClass('disabled');
+
+            if ($('#user_signup_account_email_area').css('display') != 'none') {
+                if (!$(this).data('email_status')) {
+                    $.ajax({
+                        url: "/core/accounts/0.json",
+                        type: "get",
+                        data: {"account[email]": $('#user_signup_account_email').val()},
+                        context: this,
+                        beforeSend: function () {
+                            $(this).data('email_status', 'loading');
+                        },
+                        complete: function () {
+                            $(this).data('submitting', true).submit();
+                        },
+                        success: function (data) {
+                            $(this).data('email_status', !data.account ? 'success' : 'failure');
+                            if (data.need_captcha) {
+                                $('#user_signup_captcha_area').show();
+                                $('#user_signup_captcha').focus().select()
+                            }
+                        },
+                        error: function () {
+                            $(this).data('email_status', 'error');
+                        }
+                    });
+                    return;
+                } else if ($(this).data('email_status') == 'loading') {
+                    return;
+                } else if ($(this).data('email_status') != 'success') {
+                    $(this).data('email_status', null);
+                    $(this).data('phone_status', null);
+                    $(this).data('captcha_status', null);
+                    $('#user_signup_account_email_error_duplicate').show();
+                    $(this).data('submitting', false);
+                    return;
+                }
+            }
+            if ($('#user_signup_account_phone_area').css('display') != 'none') {
+                if (!$(this).data('phone_status')) {
+                    $.ajax({
+                        url: "/core/accounts/0.json",
+                        type: "get",
+                        data: {"account[phone]": $('#user_signup_account_phone').val()},
+                        context: this,
+                        beforeSend: function () {
+                            $(this).data('phone_status', 'loading');
+                        },
+                        complete: function () {
+                            $(this).data('submitting', true).submit();
+                        },
+                        success: function (data) {
+                            $(this).data('phone_status', !data.account ? 'success' : 'failure');
+                            if (data.need_captcha) $('#user_signup_captcha_area').show();
+                        },
+                        error: function () {
+                            $(this).data('phone_status', 'error');
+                        }
+                    });
+                    return;
+                } else if ($(this).data('phone_status') == 'loading') {
+                    return;
+                } else if ($(this).data('phone_status') != 'success') {
+                    $(this).data('email_status', null);
+                    $(this).data('phone_status', null);
+                    $(this).data('captcha_status', null);
+                    $('#user_signup_account_phone_error_duplicate').show();
+                    $(this).data('submitting', false);
+                    return;
+                }
+            }
+            if ($('#user_signup_captcha_area').css('display') != 'none') {
+                if (!$(this).data('captcha_status')) {
+                    $.ajax({
+                        url: "/core/accounts/validate_captcha.json",
+                        type: "post",
+                        data: {captcha: $('#user_signup_captcha').val()},
+                        context: this,
+                        beforeSend: function () {
+                            $(this).data('captcha_status', 'loading');
+                        },
+                        complete: function () {
+                            $(this).data('submitting', true).submit();
+                        },
+                        success: function (data) {
+                            $(this).data('captcha_status', data.is_valid ? 'success' : 'failure');
+                        },
+                        error: function () {
+                            $(this).data('captcha_status', 'error');
+                        }
+                    });
+                    return;
+                } else if ($(this).data('captcha_status') == 'loading') {
+                    return;
+                } else if ($(this).data('captcha_status') != 'success') {
+                    $(this).data('email_status', null);
+                    $(this).data('phone_status', null);
+                    $(this).data('captcha_status', null);
+                    $('#user_signup_captcha_error').show();
+                    $('#user_signup_captcha').val('').focus().select()
+                    $('#captcha_refresh').click()
+                    $(this).data('submitting', false);
+                    return;
+                }
+            }
+            $(this).data('email_status', null);
+            $(this).data('phone_status', null);
+            $(this).data('captcha_status', null);
+
+            $.ajax({
+                url: $(this).attr('action') + '.json',
+                type: 'post',
+                data: $(this).serialize(),
+                context: this,
+                beforeSend: function () {
+                    $(this).addClass('disabled');
+                    $('#user_signup_confirm').addClass('disabled');
+                },
+                complete: function () {
+                    $(this).removeClass('disabled');
+                },
+                success: function (data) {
+                    if (data.error) return $('#captcha_refresh').click()
+                    if ($('#user_signup_account_email_area').css('display') != 'none') {
+                        $('#user_signup_form_area').hide();
+                        $('#user_signup_success_area').show();
+
+                        setTimeout(function () {
+                            $.cookie('remember_me', '1', {expires: $('#remember_me').prop('checked') ? 90 : null,path: '/' });
+                            $.cookie('user_id', data.account.id, {expires: 90, path: '/' })
+                            $(document).trigger('userinit');
+                            var url = $('#user_signup_redirect').val()
+                            if (!url || url == '') url = '/shop';
+                            window.go(null, {}, url);
+                        }, 500);
+                    } else {
+                        $('#user_signup_form_area').hide();
+                        $('#user_activate_phone_area').show();
+                        $('#user_activate_phone_login').val($('#user_signup_account_phone').val());
+                    }
+                },
+                error: function () {
+                    $('#captcha_refresh').click();
+                }
+            });
+            return false;
+        }
+    }, '#user_signup_form');
+
+    $(document).on({
+        input: function () {
+            var val = $(this).val().replace(/[^\d]+/g, '').substring(0, 6)
+            if (val != $(this).val()) $(this).val(val)
+            $(this).data('checking', false).closest('form').submit();
+        },
+        blur: function () {
+            $(this).data('checking', true).closest('form').submit();
+        },
+        keyup: function (event) {
+            if (event.keyCode == 13) $('#user_activate_phone_confirm').mousedown();
+        }
+    }, '#user_activate_phone_activation_code');
+    $(document).on({
+        mousedown: function () {
+            $(this).closest('form').data('submitting', true).submit();
+        }
+    }, '#user_activate_phone_confirm');
+    $(document).on({
+        submit: function () {
+            var code_valid = $('#user_activate_phone_activation_code').val().match(/^\d{6}$/);
+            if (code_valid) $('#user_activate_phone_activation_code_error').hide();
+            if (!code_valid && $('#user_activate_phone_activation_code').data('checking')) $('#user_activate_phone_activation_code_error').show();
+
+            if (code_valid) $('#user_activate_phone_confirm').removeClass('disabled');
+            else $('#user_activate_phone_confirm').addClass('disabled');
+
+            if (!$(this).data('submitting') || $(this).hasClass('disabled') || $('#user_activate_phone_confirm').hasClass('disabled')) {
+                $(this).data('submitting', false);
+                return;
+            }
+            $(this).data('submitting', false);
+
+            if ($(this).hasClass('disabled')) return;
+            $.ajax({
+                url: $(this).attr('action') + '.json',
+                type: 'post',
+                data: $(this).serialize(),
+                context: this,
+                beforeSend: function () {
+                    $(this).addClass('disabled');
+                    $('#user_activate_phone_confirm').addClass('disabled');
+                },
+                complete: function () {
+                    $(this).removeClass('disabled');
+                    $('#user_activate_phone_confirm').removeClass('disabled');
+                },
+                success: function (data) {
+                    if (data['error']) {
+                        $('#user_activate_phone_activation_code_error').show();
+                        return;
+                    }
+                    $('#user_activate_phone_area').hide();
+                    $('#user_signup_success_area').show();
+
+                    setTimeout(function () {
+                        $.cookie('remember_me', '1', {
+                            expires: $('#remember_me').prop('checked') ? 90 : null,
+                            path: '/',
+                            domain: "<%=Rails.application.secrets.domain%>"
+                        })
+                        $(document).trigger('userinit');
+                        url = $('#user_signup_redirect').val();
+                        if (!url || url == '') url = '/shop';
+                            window.go(null, {}, url);
+                    }, 500);
+                },
+                error: function () {
+                    $('#user_activate_phone_activation_code_error').show();
+                }
+            });
+            return false;
+        }
+    }, '#user_activate_phone_form');
+
+});

@@ -1,0 +1,13 @@
+<div id="current-theme">
+	<h2>查看分享</h2>
+
+	<p>
+		<b>分享图片:</b>
+		<%= image_tag @trade.photo.pic || '' %>
+	</p>
+
+	<p>
+		<%#= link_to '接受', accept_admin_shop_trade_path(@trade), "data-confirm" => "确定接受吗？", :method => :put %>
+		<%#= link_to '拒绝', reject_admin_shop_trade_path(@trade), "data-confirm" => "确定拒绝吗？", :method => :put %>
+	</p>
+</div>

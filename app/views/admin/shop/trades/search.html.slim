@@ -1,0 +1,41 @@
+#search
+	h2 搜索
+	form method="get" action=admin_shop_trades_path
+		table class="form-table"
+			tbody
+				tr
+					th 交易创建时间大于等于
+					td
+						= text_field_tag "auction_trades[created_at][gteq]", "", class: "datetime"
+						br （默认为当前时间，相差不超过1个月）
+				tr
+					th 交易创建时间小于等于
+					td
+						= text_field_tag "auction_trades[created_at][lteq]", "", class: "datetime"
+						br （默认为当前时间，相差不超过1个月）
+				tr
+					th 交易用户ID
+					td= text_field_tag "auction_trades[user_id]"
+				tr
+					th 交易快递手机
+					td = text_field_tag "auction_trades[delivery_phone]"
+				tr
+					th 地址姓名
+					td = text_field_tag "auction_contacts[name]"
+				tr
+					th 地址手机
+					td = text_field_tag "auction_contacts[mobile]"
+				tr
+					th 产品名称
+					td = text_field_tag "auction_products[name]"
+				tr
+					th 产品品牌ID
+					td = text_field_tag "auction_products[brand_id]"
+				tr
+					th 产品一级分类ID
+					td = select_tag "auction_products[category1_id]", options_for_select([nil] + Shop::Category.find(1).children.active.map{|c| [c.name, c.id]}, params[:where] && params[:where][:category1_id].to_i)
+				tr
+					th 产品二级分类ID
+					td = select_tag "auction_products[category2_id]", content_tag(:option) + raw(option_groups_from_collection_for_select(Shop::Category.find(1).children.active, :children, :name, :id, :name, params[:where] && params[:where][:category2_id].to_i))
+		p.submit
+			input type="submit" value="搜索"

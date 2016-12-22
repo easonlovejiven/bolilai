@@ -1,0 +1,14 @@
+ruby:
+  @page_title = "商品分类"
+  @page_keywords = %W[琥珀蜜蜡 时尚珠宝]
+
+.categories.prefetch
+  h3.toptitle 全部分类
+  - Shop::Unit.where("shop_units.returned = FALSE AND shop_units.created_at > NOW() - INTERVAL 12 MONTH").joins("JOIN shop_items ON shop_items.id = shop_units.item_id JOIN shop_products ON shop_products.id = shop_items.product_id").group("shop_products.category2_id").select("SUM(shop_units.price) AS weight, shop_units.item_id").map { |unit| [unit.try(:item).try(:product).try(:category2), unit.weight] }.compact.group_by { |category2, weight| category2.try(:parent) }.sort_by { |category1, group| group.map(&:second).sum }.reverse.each do |category1, group|
+    .partblock
+      h3.title= link_to category1.try(:name), category1, :target => "_blank"
+      ul.list
+        - group.sort_by(&:second).reverse.each do |category2, weight|
+          li
+            = link_to image_tag("purple/#{category2.try(:pic)}.64.jpg", :class => "pic", :alt => category2.try(:name)), shop_products_path('where' => {'category2_id' => category2.try(:id)}), :class => "link", :target => "_blank", :title => category2.try(:name)
+            = link_to category2.try(:name), shop_products_path('where' => {'category2_id' => category2.try(:id)}), :class => "text", :target => "_blank", :title => category2.try(:name)

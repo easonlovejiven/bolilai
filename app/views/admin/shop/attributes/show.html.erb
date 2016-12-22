@@ -1,0 +1,72 @@
+<% @record = @attribute %>
+<% @show = !%w[new edit].include?(params[:action]) && @record.valid? %>
+<div class="modal-header">
+  <%= render "admin/modal/header" %>
+</div>
+<%= render 'admin/shared/prompt' %>
+<div class="modal-body">
+  <%= form_for @attribute, as: :attribute, :url => @attribute.new_record? ? admin_shop_attributes_path : admin_shop_attribute_path(@attribute),
+               :html => {:method => @attribute.new_record? ? :post : :put, class: "form-horizontal"} do |f| %>
+      <div class="form-group">
+        <%= f.label :id, 'ID', {class: 'col-md-3 control-label'} %>
+        <div class="form-control-static">
+          <%= f.hidden_field :id %>
+          <strong><%= @attribute.send(:id) %></strong>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :name, '<sup>*</sup>名称'.html_safe, class: 'col-md-3 control-label' %>
+        <div class="form-control-static">
+          <%= h @attribute.name %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :option_list, '<sup>*</sup>选项列表'.html_safe, class: 'col-md-3 control-label' %>
+        <div class="col-md-8 form-control-static">
+          <%= h @attribute.option_list.split.join(',') %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :searchable, '<sup>*</sup>可搜索'.html_safe, class: 'col-md-3 control-label' %>
+        <div class="form-control-static">
+          <%= @attribute.searchable? ? '✔' : '✘' %>
+        </div>
+      </div>
+
+      <% if !@attribute.new_record? %>
+          <div class="form-group">
+            <%= f.label :created_at, '创建时间', class: 'col-md-3 control-label' %>
+            <div class="form-control-static">
+              <strong><%= @attribute.created_at && @attribute.created_at.to_s(:db) %></strong>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :updated_at, '修改时间', class: 'col-md-3 control-label' %>
+            <div class="form-control-static">
+              <strong><%= @attribute.updated_at && @attribute.updated_at.to_s(:db) %></strong>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :editor, '编辑', class: 'col-md-3 control-label' %>
+            <div class="form-control-static">
+              <%= link_to_if can?(:show, @attribute.editor), @attribute.editor.name, admin_manage_editor_path(@attribute.editor), "data-target" => "rightPanel" if @attribute.editor %>
+            </div>
+          </div>
+      <% end %>
+
+      <div class="form-actions">
+        <% if @show %>
+            <%= link_to '查看', admin_shop_attribute_path(@attribute), class: "btn btn-primary", "data-target" => "rightPanel" if can?(:show, @attribute) %>
+            <%= link_to '编辑', edit_admin_shop_attribute_path(@attribute), class: "btn btn-primary", "data-target" => "rightPanel" if can?(:update, @attribute) %>
+            <%= link_to '删除', delete_admin_shop_attribute_path(@attribute), class: "btn btn-primary", "data-target" => "rightPanel" if can?(:destroy, @attribute) %>
+        <% else %>
+            <%= f.submit "提交", class: "btn btn-primary" %>
+        <% end %>
+      </div>
+  <% end %>
+</div>

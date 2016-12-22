@@ -1,0 +1,115 @@
+<% @barlar = "http://#{HOSTS['dynamic']}/" %>
+<% @image = "http://#{HOSTS['asset']}/statics/mail/notification/" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title><%= "订单#{@trade.identifier}已成功付款" %></title>
+</head>
+<body style="margin:0; padding:0;">
+
+<table width="100%" cellspacing="0" cellpadding="40" border="0">
+  <tbody>
+  <tr>
+    <td width="100%" bgcolor="#2c1e15" align="center" style="font-family:'微软雅黑','Microsoft YaHei',verdana;">
+
+      <table width="600" cellspacing="0" cellpadding="0" border="0">
+        <tbody>
+        <tr>
+          <td style="background: #000; color: #fff; vertical-align: middle; overflow:hidden; height:25px; text-align: left;">
+
+            <!--header 开始-->
+            <table width="601" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#000" style="background:#000; width:601px; height:34px;">
+              <tr>
+                <td style="background:#000;">
+                  <a href="http://www.barlar.cn" target="_blank" title="barlar 珀丽莱 轻奢珠宝时尚品牌" style=" outline:none; text-decoration:none;" hidefocus="true"><span height="34" border="0" style="margin: 0 auto;display: block;color:#fff; font-size:12px;width: 570px">珀丽莱商城(www.barlar.cn)</span></a>
+                </td>
+              </tr>
+            </table>
+            <!--header 结束-->
+
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top" style="background-color: #fff; border-bottom: 1px solid #ebebeb; font-family:'微软雅黑','Microsoft YaHei',verdana; padding: 15px;" colspan="2">
+      <table width="100%">
+        <tbody>
+        <tr>
+          <td valign="top" align="left" style="font-size: 12px; padding:10px;">
+            <table>
+              <tr>
+                <td style="width:72px;" valign="top" align="left">
+                  <label style="color:#222; display: block; padding: 3px 0;">商户订单号:</label></td>
+                <td>
+                  <div style="font-family:'微软雅黑','Microsoft YaHei',verdana; color:#333; padding: 3px 0;">
+                    <span style="color:#92741a;"><%= @trade.id %></span>，订单<span style="color:#92741a;"><%= @trade.identifier %></span>已成功付款<span style="color:#92741a;"><%= @trade.price %></span>元，共<span style="color:#92741a;"><%= @trade.units.size %></span>件货品。
+                    付款服务
+                    <span style="color:#92741a;"><%= Auction::Trade::PAYMENT_SERVICES[@trade.payment_service] %></span>，付款编号
+                    <span style="color:#92741a;"><%= @trade.payment_identifier %></span></div>
+                </td>
+              </tr>
+              <% @trade.units.each do |unit| %>
+                  <tr>
+                    <td style="width:72px;" valign="top" align="left">
+                      <label style="color:#222; display: block; padding: 3px 0;">单件编号:</label></td>
+                    <td>
+                      <div style="font-family:'微软雅黑','Microsoft YaHei',verdana; color:#333; padding: 3px 0;">
+                        <span style="color:#92741a;"><%= unit.item.identifer %></span>，
+                        <span style="color:#92741a;"><%= unit.item.product.name %></span>
+                        <% if !unit.item.measure.blank? %>，
+                            尺码：<span style="color:#92741a;"><%= unit.item.measure %></span>
+                        <% end %>实际价格<span style="color:#92741a;"><%= unit.price %></span>元。
+                      </div>
+                    </td>
+                  </tr>
+              <% end %>
+              <% ct = @trade.contact %>
+              <tr>
+                <td valign="top" align="left" colspan="2">
+                  <div style="font-family:'微软雅黑','Microsoft YaHei',verdana; color:#333; padding: 3px 0;">请在一个工作日内将发送到：<span style="color:#92741a;"><%= "#{ct.country}#{ct.province}#{ct.city}#{ct.town}#{ct.address}" %></span>
+                    ，邮编：<span style="color:#92741a;"><%= ct.postcode %></span> ，
+                    收货人：<span style="color:#92741a;"><%= @trade.contact.name %></span>
+                    ，手机：<span style="color:#92741a;"><%= ct.mobile %></span>
+                    ，电话：<span style="color:#92741a;"><%= ct.phone %></span></div>
+                </td>
+              </tr>
+              <tr>
+                <td style="width:72px;" valign="top" align="left">
+                  <label style="color:#222; display: block; padding: 3px 0;">备注:</label></td>
+                <td>
+                  <div style="font-family:'微软雅黑','Microsoft YaHei',verdana; color:#333; padding: 3px 0;"><%= @trade.comment %></div>
+                </td>
+              </tr>
+
+              <td style="width:72px;" valign="top" align="left">
+                <label style="color:#222; display: block; padding: 3px 0;">开具发票：</label></td>
+              <td>
+                <div style="font-family:'微软雅黑','Microsoft YaHei',verdana; color:#333; padding: 3px 0;">
+                  <% if @trade.invoice_type %>
+                      发票抬头:<span style="color:#92741a;"><%= Auction::Trade::INVOICE_TYPES[@trade.invoice_type] %>
+                  ：<%= @trade.invoice_title %></span><br/>发票内容:<span style="color:#92741a;"><%= Auction::Trade::INVOICE_CONTENTS[@trade.invoice_content] %></span><br/>发票地址：
+                      <% if @trade.invoice_contact.nil? || @trade.invoice_contact == @trade.contact %>
+                          <span style="color:#92741a;">与收货地址相同</span>
+                      <% else %>
+                          <% ic = @trade.invoice_contact %>
+                          <span style="color:#92741a;"><%= "#{ic.country}#{ic.province}#{ic.city}#{ic.town}#{ic.address}" %></span>
+                          ，邮编：<span style="color:#92741a;"><%= ic.postcode %></span> ，
+                          收件人：<span style="color:#92741a;"><%= ic.name %></span>
+                          ，手机：<span style="color:#92741a;"><%= ic.mobile %></span>
+                          ，电话：<span style="color:#92741a;"><%= ic.phone %></span>
+                      <% end %>
+                  <% else %><span style="color:#92741a;">不开具发票</span>
+                  <% end %></div>
+              </td>
+            </table>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

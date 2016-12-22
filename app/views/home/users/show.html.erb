@@ -1,0 +1,67 @@
+<% content_for :show_content do %>
+    <div class="user-set userset-lcol">
+      <span class="top_line"></span>
+
+      <div class="base_info_wp">
+        <div class="avatar">
+          <%= image_tag @user.pic_key.try(:url, :thumb), class: 'pic' %>
+        </div>
+
+        <div class="base_info">
+          <dl>
+            <dt>会员账号：</dt>
+            <dd><%= @user.account && @user.account.email || @user.account.phone %> <%= link_to '修改资料', edit_user_path(@user), class: 'btn-link btn-xs' %></dd>
+          </dl>
+          <dl>
+            <dt>会员姓名：</dt>
+            <dd><%= @user.name %></dd>
+          </dl>
+          <dl>
+            <dt>会员积分：</dt>
+            <dd><%= @user.shop_user.trades_point.to_i %></dd>
+          </dl>
+          <dl>
+            <dt>会员等级：</dt>
+            <dd><%= @user.shop_user.level.name %></dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="trade_index">
+        <h3 class="title">最近订单 <%= link_to '全部订单>>', shop_trades_path, class: 'more' %></h3>
+
+        <span class="top_line"></span>
+
+        <div class="trade_thead">
+          <p class="th1">商品</p>
+
+          <p class="th2">优惠信息</p>
+
+          <p class="th3">交易金额</p>
+
+          <p class="jqeraform">交易状态</p>
+
+          <p class="th4">操作</p>
+          <em class="th_line1"></em>
+          <em class="th_line2"></em>
+          <em class="th_line3"></em>
+          <em class="th_line4"></em>
+        </div>
+        <div class="trade_list">
+          <% if @trades.count == 0 %>
+              <div class="list_empty">
+                <h3>您还没有订单！</h3>
+                <a href="/shop/products">
+                  <span>现在就去购物</span>
+                </a>
+              </div>
+          <% else %>
+              <div id="pagination">
+                <%= render :partial => 'shop/trades/trade', :collection => @trades %>
+              </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+<% end %>
+<%= render template: 'home/users/show_layout', locals: {user_info: {key: 'show', value: '个人信息'}} %>

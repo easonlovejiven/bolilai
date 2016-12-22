@@ -1,0 +1,26 @@
+<h2>查看中国银联付款</h2>
+
+<table class="form-table">
+	<tbody>
+
+		<tr class="form-field form-required">
+			<th scope="row">ID</th>
+			<td><%= @trade.id %></td>
+		</tr>
+	
+		<tr class="form-field form-required">
+			<th scope="row">状态</th>
+			<td><%= h case @result[:queryResult];when '0';'成功';when '1';'失败';when '2';'处理中';when '3';'无此交易';end %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">金额</th>
+			<td><%= h @result[:settleAmount].to_i/100 %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">交易流水号</th>
+			<td><%= h @result[:qid] %></td>
+		</tr>
+	</tbody>
+</table>

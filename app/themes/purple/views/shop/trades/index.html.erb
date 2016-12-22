@@ -1,0 +1,53 @@
+<% @page_title = "订单管理" %>
+<% content_for :show_content do %>
+    <div class="trade_index">
+      <span class="top_line"></span>
+
+      <div class="trade_thead">
+        <p class="th1">商品</p>
+
+        <p class="th2">优惠信息</p>
+
+        <p class="th3">交易金额</p>
+
+        <form class="jqeraform">
+
+          <select onchange="if ($(this).val() != '' && $(this).val() != '选择交易状态') window.go({ pushState: true }, '', $(this).val())">
+            <option>选择交易状态</option>
+            <% [[nil, '查看全部'], ['pay', '待付款'], [%w[audit prepare ship], '待发货'], ['receive', '待收货'],
+                ['complete', '交易完成'], [%w[cancel freezed], '已取消'], ['punished', '订单过期']].each do |status, name| %>
+                <option value="<%= url_for('where[status]' => status) %>"
+                        <%= 'selected="selected"' if status && status == (params[:where] && params[:where][:status]) %>><%= name %>
+                </option>
+            <% end %>
+          </select>
+        </form>
+        <p class="th4">操作</p>
+        <em class="th_line1"></em>
+        <em class="th_line2"></em>
+        <em class="th_line3"></em>
+        <em class="th_line4"></em>
+        <!--[if IE]
+          <span class="thleft"></span>
+          <span class="thright"></span>
+        -->
+      </div>
+      <div class="trade_list">
+        <% if @trades.total_count == 0 %>
+            <div class="list_empty">
+              <h3>您还没有订单！</h3>
+              <a href="/shop/products">
+                <span>现在就去购物</span>
+              </a>
+            </div>
+        <% else %>
+            <%= render :partial => 'trade', :collection => @trades %>
+            <div class="fr">
+                <%= paginate @trades, views_prefix: "shared", :theme => 'shop'%>
+            </div>
+        <% end %>
+      </div>
+    </div>
+<% end %>
+
+<%= render template: 'home/users/show_layout', locals: {user_info: {key: 'trades', value: '我的订单'}} %>

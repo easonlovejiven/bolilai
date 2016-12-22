@@ -1,0 +1,63 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="rightPanel">×</button>
+  <h4 class="modal-title">查看<%= '发票' if params[:action] == 'invoice_delivery_query' %>快递</h4>
+</div>
+<%= render 'admin/shared/prompt' %>
+<div class="modal-body">
+  <table class="table table-bordered">
+    <tbody>
+    <tr>
+      <th scope="row">ID</th>
+      <td><%= @trade.id %></td>
+    </tr>
+
+    <tr>
+      <th scope="row">订单号</th>
+      <td><%= params[:action] == 'delivery_query' ? @trade.delivery_identifier : @trade.invoice_delivery_identifier %></td>
+    </tr>
+    <% if params[:action] == 'delivery_query' %>
+        <tr>
+          <th scope="row">快递收货时间</th>
+          <td><%= @trade.delivery_received_at && @trade.delivery_received_at.to_s(:db) %></td>
+        </tr>
+    <% end %>
+    <tr>
+      <th scope="row">创建时间</th>
+      <td><%= @trade.created_at && @trade.created_at.to_s(:db) %></td>
+    </tr>
+
+    <tr>
+      <th scope="row">修改时间</th>
+      <td><%= @trade.updated_at && @trade.updated_at.to_s(:db) %></td>
+    </tr>
+
+    </tbody>
+  </table>
+
+  <table class="table table-bordered">
+    <thead>
+    <tr>
+      <th>序号</th>
+      <th>时间</th>
+      <th>跟踪信息</th>
+      <th>备注</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @details[:steps].each_with_index do |step, i| %>
+        <tr>
+          <td><%= i+1 %></td>
+          <td><%= step[:time].to_time && step[:time].to_time.to_s(:db) %></td>
+          <td><%= step[:context] %></td>
+          <td><%= step[:location] %></td>
+        </tr>
+    <% end unless @details[:steps].blank? %>
+    </tbody>
+  </table>
+  <div class="form-actions">
+    <button type="button" class="btn btn-success" data-dismiss="rightPanel">确定</button>
+  </div>
+</div>
+
+
+

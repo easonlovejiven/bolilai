@@ -1,0 +1,129 @@
+<!-- CSS -->
+<%= stylesheet_link_tag "touch/frame" %>
+<%= stylesheet_link_tag "touch/frame_respond" %>
+<!-- 压缩的model/view/controller -->
+<%= javascript_include_tag "touch/controller" %>
+<% content_for :header do %>
+    <header class="border_1px">
+      <!-- <div class="left_option left"> -->
+      <div class="ico_wrapper back_ico left">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <!-- </div> -->
+      <div class="title ">
+        订单详细
+      </div>
+    </header>
+<% end %>
+<script type="text/javascript">
+    views.product_style(0.1875);
+    $(function () {
+        var trade = true;
+        if (trade) {
+            app.lasy_load($('img'));
+            trades_index_controller.initialize();
+            is_ticket = false;
+            is_ulife = false;
+            if (is_ulife) $('#check_pay .ignore_order, #success_pay .scan_order, #no_pay .scan_order').addClass('ulife');
+            if (is_ticket) $('#no_pay .success_order_body > p').css('color', 'rgba(0,0,0,0)');
+            if (!is_ulife) $('#no_pay h1').html('<span class="sprites success_ico"></span>订单已成功提交');
+        } else {
+            trades_show_controller.initialize(function (res) {
+                if (res) {
+                    trades_index_controller.initialize();
+                }
+            });
+        }
+
+        app.push_event('.success_back', 100);
+        $('.tic_btn').bind(itap_event, function () {
+            var $this = $(this);
+            $this.addClass('push');
+            setTimeout(function () {
+                $this.removeClass('push');
+            }, 300);
+            if (get_cookie('ulife_app') == "true") {
+                if (window.UAPPJSBridge) {
+                    UAPPJSBridge.goto_ticket_page();
+                } else {
+                    $(document).on('UAPPJSBridgeReady', function () {
+                        UAPPJSBridge.goto_ticket_page();
+                    });
+                }
+            } else {
+                window.location.href = $this.data('href');
+            }
+        });
+
+        if (window.UAPPJSBridge) {
+            UAPPJSBridge.refresh_balance();
+        } else {
+            $(document).on('UAPPJSBridgeReady', function () {
+                UAPPJSBridge.refresh_balance();
+            });
+        }
+
+    });
+</script>
+<div class="main" id="main">
+  <div>
+    <!--********订单存在*********-->
+    <section data-id="<%=@trade.id%>" id="trade" class="trades_zone" data-envior="true" data-hwg="false">
+      <div class="hide vizlury" data-orderid="<%=@trade.identifier%>" data-price="<%=@trade.price%>">
+        <%@trade.units.each do |unit|%>
+            <div class="prolist" data-proid="<%=unit.item.product_id%>"></div>
+        <%end%>
+      </div>
+      <div class="success_ex hide">
+        <span class="sprites"></span><span class="success_t">您已完成购买</span>
+        <span class="success_back right" data-href="/ulife">返回U元商城<em class="sprites"></em></span>
+      </div>
+
+      <div class="trade_info border_1px ">
+        <div class="trade_time clear_fix">
+          <span class="left">成交时间</span>
+
+          <p class="right"><%= @trade.created_at.to_s(:db) %></p>
+        </div>
+        <div class="trade_no clear_fix">
+          <span class="left">订单编号</span>
+
+          <p class="right"><%= @trade.identifier %></p>
+        </div>
+        <div class="trade_detail clear_fix">
+          <span class="left">收货信息</span>
+
+          <p class="right clear_fix">
+            <em class="left ellipsis"><%= @trade.contact.name %></em>
+            <em class="left"><%= @trade.contact.mobile %></em>
+            <em class="left addr"><%= h @trade.contact.locations %></em>
+          </p>
+        </div>
+      </div>
+      <!-- 订单列表 -->
+      <div class="border_1px pro_zone ">
+        <% @trade.units.each do |unit| %>
+            <div class="trade_detail_box border_1px clear_fix" data-href="/products/<%=unit.item.product_id%>">
+              <div class="left pic_link left pro_height img_wrap pro_width pro_img">
+                <img class="pro_height pro_width" width="60" height="60" data-src="<%=unit.item.product.major_image.url(:thumb)%>">
+              </div>
+              <div class="down_shadow"></div>
+              <div class="bag_info pro_height right">
+                <p class="bag_name"><%=unit.item.product.name%></p>
+
+                <div class="bag_detail">
+                  <!--<span class="bag_size">XXXL/110</span>-->
+                  <span class="bag_color"><%=unit.item.product.color_name%></span>
+                  <span class="right bag_price ">￥<%=unit.item.product.discount%><em class="ele_logo"></em></span>
+                </div>
+                <div class="down_shadow"></div>
+              </div>
+            </div>
+        <% end %>
+      </div>
+
+    </section>
+  </div>
+</div>

@@ -1,0 +1,56 @@
+class CreateShopUnits < ActiveRecord::Migration
+	def change
+		create_table :shop_units do |t|
+			t.integer  "trade_id"
+			t.integer  "item_id"
+			t.integer  "discount"
+			t.integer  "price"
+			t.integer  "percent"
+		    t.integer  "point"
+		    t.boolean  "returned",                 :default => false, :null => false
+		    t.boolean  "active",                   :default => true,  :null => false
+		    t.integer  "lock_version"
+		    t.datetime "created_at"
+		    t.datetime "updated_at"
+		    t.string   "status"
+		    t.integer  "return_editor_id"
+		    t.datetime "returned_at"
+		    t.text     "remark"
+		    t.string   "return_phone"
+		    t.string   "return_name"
+		    t.string   "return_bank"
+		    t.string   "return_account"
+		    t.datetime "request_at"
+		    t.datetime "audit_at"
+		    t.datetime "receive_at"
+		    t.integer  "audit_editor_id"
+		    t.integer  "receive_editor_id"
+		    t.datetime "freeze_at"
+		    t.integer  "freeze_editor_id"
+		    t.string   "return_branch"
+		    t.string   "return_province"
+		    t.string   "return_city"
+		    t.integer  "editor_id"
+		    t.integer  "request_editor_id"
+		    t.integer  "transfer_editor_id"
+		    t.datetime "transfer_at"
+		    t.boolean  "prepared",                 :default => false, :null => false
+		    t.text     "prepare_remark"
+		    t.integer  "voucher_id"
+		    t.integer  "amount_received"
+		    t.integer  "amount_returned"
+		    t.integer  "amount_receive_editor_id"
+		    t.datetime "amount_received_at"
+		    t.string   "return_reason"
+		    t.datetime "amount_returned_at"
+		    t.integer  "amount_return_editor_id"
+		    t.integer  "amount_balance_returned"
+		    t.integer  "guide_percent"
+		    t.integer  "level_percent"
+		    t.integer  "point_percent"
+		    t.string   "receipt_number"
+		    t.integer  "user_id"
+			t.timestamps null: false
+		end
+ 	end
+end

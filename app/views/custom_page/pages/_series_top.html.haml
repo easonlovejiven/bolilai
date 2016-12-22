@@ -1,0 +1,13 @@
+= stylesheet_inline_tag "custom_page/pages/series_top/#{data['theme']}.css" unless data['theme'].blank?
+-# stylesheet_inline_tag "custom_page/pages/series_top/#{data['arrange']}.css" unless data['arrange'].blank?
+- flash = request.fullpath.match(/\?flash$/)
+.seriesbox.series_top(style="margin-bottom: #{v = (data['style']||{})['margin-bottom']; v.blank? ? 12 : v}px;")
+	%a.leftlink(href="#{legacy_url(data['url'], flash)}" target="_blank")
+		= image_tag data['pic'], :class => 'pic', :alt => data['title']
+		%span.at_once 立即购买
+	.textbox
+		.label= h data['label']
+		.title= h data['title']
+		.subtitle= h data['subtitle']
+		.description= h data['description']
+	= render :partial => 'admin/custom_page/pages/series_preview', :locals => { :data => data,page: page }

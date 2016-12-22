@@ -1,0 +1,17 @@
+<script type="text/javascript" charset="utf-8">
+    $('a#simple_captcha').click(function () {
+        $.getJSON('/accounts/captcha_image.json', function (data) {
+            $('.simple_captcha img')[0].src = data.url
+
+        });
+    });
+</script>
+<div class="popup_nav">
+  <ul>
+    <li><a class="<%= 'current' if params[:controller] == "home/sessions" %>" href="<%= new_session_path %>">登录</a></li>
+    <li>
+      <a class="<%= 'current' if params[:controller] == "home/accounts" && params[:action] == 'new' %>" href="<%= new_account_path %>">注册</a>
+    </li>
+    <li><a class="<%= 'current' if params[:action] == 'find' %>" href="<%= find_accounts_path %>">找回密码</a></li>
+  </ul>
+</div>

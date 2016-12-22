@@ -1,0 +1,5 @@
+<% form_tag :action=>:create do %>
+  电子邮件：<%= text_field_tag "email",'',:width=>"300px"%><br/>
+  <%= show_simple_captcha(:label=>"<a href='/reset'>看不清,换一张</a>") %>
+  <%= submit_tag "重置密码"%>
+<% end %>

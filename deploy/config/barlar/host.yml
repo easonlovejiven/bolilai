@@ -1,0 +1,36 @@
+# development:
+#   asset: localhost
+#   photo: localhost
+#   image: [i0.weimall, i1.weimall, i2.weimall]
+#   audio: music.weimall.com
+#   video: video.weimall.com
+#   dynamic: local.weimall.com
+
+# development:
+#   asset:
+#   photo: barlar.cn:3000
+#   image: i0.weimall.com:3000
+#   audio: i0.weimall.com:3000
+#   video: i0.weimall.com:3000
+#   static: barlar.cn:3000
+#   dynamic: dww.weimall.com:3000
+
+# development:
+#   image: [i0.weimall, i1.weimall, i2.weimall, i3.weimall]
+#   dynamic: barlar.cn
+
+development:
+  asset:
+  photo: barlar.cn
+  image: [i0.weimall, i1.weimall, i2.weimall]
+  audio: barlar.cn
+  video: barlar.cn
+  static: barlar.cn
+  dynamic: barlar.cn
+
+  # http://hyy.msn.weimall.com:3000
+
+production:
+  asset:
+  image: [i0.weimall, i1.weimall, i2.weimall, i3.weimall]
+  dynamic: barlar.cn

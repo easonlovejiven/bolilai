@@ -1,0 +1,185 @@
+.notifybox { position: relative; height: 560px; width: 920px; border-radius: 7px; -moz-border-radius: 7px; -webkit-border-radius: 7px; background: #fff; box-shadow: 0 0 20px rgba(0,0,0,0.3); }
+body.msn .notifybox { box-shadow: none; }
+.notifybox .closelog { z-index: 5; position: absolute; top: 22px; right: 22px; width: 22px; height:22px; display: block; text-indent: -9999px; background: url(/themes/purple/images/product/popclose.gif) no-repeat left top; }
+.notifybox .closelog:hover { background-position: left bottom; }
+.notifybox .box_title { position: absolute; left: 28px; top: 25px; width: 104px; height: 22px; text-indent: -999px; background: url(/themes/purple/images/product/notification/title.png) no-repeat 0 0; }
+.notifybox .notify_bg { position: absolute; right: 53px; top: 127px; width: 347px; height: 343px; background: url(/themes/purple/images/product/notification/notify_bg.png) no-repeat 0 0; }
+.notifybox .notify_promot { position: absolute; top: 117px; left: 226px; width: 420px; line-height: 16px; font-size: 12px; color: #000; cursor: default; }
+
+
+
+.notifybox .notify_cont { position: absolute; top:163px; left: 226px; width: 655px; font-size: 0; cursor: default; }
+.notifybox .notify_cont .notify_select { /*width: 41px; _width: 38px; height: 24px;*/ width:60px; margin-left: 4px; }
+.notifybox .notify_cont .notify_text { width: 378px; height: 15px; padding:5px 0 3px; padding: 4px 0 3px\9; *padding:7px 0 3px;}
+@media \0screen { 
+	.notifybox .notify_cont .notify_text { padding:5px 0 3px; }
+ }
+/*
+.notifybox .notify_cont .notify_textarea { width: 372px; width: 368px\9; height: 90px; padding: 2px 9px; padding-left: 5px\9;}
+*/
+/*
+.notifybox .notify_cont .notify_product ,
+.notifybox .notify_cont .notify_measure ,
+.notifybox .notify_cont .notify_separator ,
+.notifybox .notify_cont .notify_email ,
+.notifybox .notify_cont .notify_phone ,
+.notifybox .notify_cont .notify_comment { position: relative; }
+*/
+.notifybox .notify_cont .notify_product { height: 27px; }
+.notifybox .notify_cont .notify_measure { height: 32px; }
+.notifybox .notify_cont .notify_separator { height: 17px; }
+.notifybox .notify_cont .notify_email { height: 35px; }
+.notifybox .notify_cont .notify_phone { height: 40px; }
+.notifybox .notify_cont .notify_comment { height: 160px; }
+.notifybox .notify_cont label { /*position: absolute; top: 3px; left: 0px;*/ float:left; width: 38px; margin: 3px 0 0; font-size: 12px; cursor: pointer;}
+.notifybox .notify_cont h6,
+.notifybox .notify_cont .notify_comment_notice { display:block; width: 400px; height: 20px; overflow: hidden; line-height: 23px; color: #9C864B; font-size: 12px;}
+.notifybox .notify_cont .notify_comment_notice { color:#ccc;}
+
+.notifybox .notify_cont h6,
+.notifybox .notify_cont h6:hover ,
+.notifybox .notify_success_area .notify_success_title ,
+.notifybox .notify_success_area .notify_success_content,
+.notifybox .notify_cont .notify_comment_notice{ cursor: default;}
+
+.notifybox .notify_cont .error { display:none; /*position: absolute; top: -1px; left: 442px;*/ float: left; width: 150px; font-size: 12px; margin: 0 0 0 6px; line-height: 22px;}
+.notifybox .notify_cont .error em.error_icon { background: url("/themes/purple/images/common/icons/ierror.gif") no-repeat 0 0; display: block; float: left; height: 13px; margin-right: 5px; margin-top: 4px; width: 13px; }
+.msn .notifybox .notify_cont .error em.error_icon { background-image: url("/themes/purple/images/common/icons/msn_ierror.gif"); }
+
+/*
+.notifybox .notify_cont h6,
+.notifybox .notify_cont .jqTransformSelectWrapper,
+.notifybox .notify_cont .jqTransformTextarea,
+.notifybox .notify_cont .notify_comment_notice { position: absolute; top: 0px; left: 42px; margin:0px;}
+.notifybox .notify_cont .jqTransformTextarea { top: 28px;}
+.notifybox .notify_cont .jqTransformSelectWrapper { left: 39px;}
+.notifybox .notify_cont .notify_comment_notice { left: 44px;}
+.notifybox .notify_cont h6 { left: 40px;}
+*/
+.notifybox .notify_cont h6,
+.notifybox .notify_cont .notify_comment_notice,
+.notifybox .notify_cont .jqTransformSelectWrapper,
+.notifybox .notify_cont .jqTransformInputWrapper { float:left;}
+.notifybox .notify_cont h6 { margin-left: 2px;}
+.notifybox .notify_cont .notify_comment_notice { margin-left: 6px;}
+.notifybox .notify_cont .jqTransformInputWrapper { margin: 0 0 0 4px;}
+.notifybox .notify_cont .notify_comment { position: relative; }
+.notifybox .notify_cont .notify_comment .jqTransformTextarea { position: absolute; top: 28px; left: 42px;  margin:0px;}
+.msn .notifybox .notify_cont .notify_comment .jqTransformTextarea { *left: 38px; *top: 29px;}
+.notifybox .notify_cont .selectspan { display:none; position: absolute; top: 0px; left: 42px; margin:0px; height: 22px; width: 200px; }
+
+/*
+.notifybox table.jqTransformTextarea td#jqTransformTextarea-mm div {  width: 392px; width:381px\9; }
+*/
+.notifybox .notify_submit { position: absolute; /*right: 27px;*/left: 774px; bottom: 29px; width: 119px; height: 33px; text-indent: -9999px; background: url(/themes/purple/images/product/notification/submit.gif) no-repeat 0 0; }
+.notifybox .notify_submit:hover { background-position: 0 -33px; }
+.notifybox .notify_submit.disabled,
+.notifybox .notify_submit.disabled:hover { /*opacity: 0.5;*/  cursor: default; background-position: 0 -66px;}
+
+@media \0screen { .notifybox .notify_cont .notify_text { float: left; margin-top: 2px;}}
+
+
+.notifybox .notify_success_area { position: absolute; left: 266px; top: 235px; }
+.notifybox .notify_success_area .notify_success_icon { position: absolute; left: 0px; top: 4px; width: 44px; height: 45px; background: url(/themes/purple/images/common/icons/suicon02.png) no-repeat 0 0; }
+.msn .notifybox .notify_success_area .notify_success_icon { background-image: url("/themes/purple/images/common/icons/msn_suicon02.jpg");}
+.notifybox .notify_success_area .notify_success_title { position: absolute; left: 60px; top: 0px; width: 200px; height: 20px; line-height: 22px; font-size: 20px; }
+@media \0screen { .notifybox .notify_success_area .notify_success_title { height: 22px; line-height: 22px; } }
+.notifybox .notify_success_area .notify_success_content { position: absolute; left: 60px; top: 31px; width: 200px; height: 20px; line-height: 16px; font-size: 14px; }
+@media \0screen { .notifybox .notify_success_area .notify_success_content { height: 16px; line-height: 16px; } }
+.notifybox .notify_close { position: absolute; right: 37px; bottom: 27px; width: 108px; height: 33px; text-indent: -9999px; background: url(/themes/purple/images/product/notification/close.png) no-repeat 0 0; }
+.notifybox .notify_close:hover { background-position: 0 -33px; }
+
+
+/* IE 圆角 */
+.notifybox { *background: none; }
+@media \0screen { .notifybox { background: none; } }
+.notifybox .pop_left { position: absolute; left: 0; top: 0; width: 10px; height: 560px; background: url(/themes/purple/images/product/cart/pop_left.png?000) no-repeat 0 0; _background: url(/themes/purple/images/product/cart/pop_left.gif?000) no-repeat 0 0; /*background: url(/themes/purple/images/product/notification/pop_left.png?00) no-repeat 0 0; _background: url(/themes/purple/images/product/notification/pop_left.gif?00) no-repeat 0 0;*/ /*_background: none; _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/themes/purple/images/product/notification/pop_left.png");*/ }
+.notifybox .pop_right { position: absolute; right: 0; top: 0; width: 10px; height: 560px; background: url(/themes/purple/images/product/cart/pop_right.png) no-repeat 0 0; _background: url(/themes/purple/images/product/cart/pop_right.gif?000) no-repeat 0 0; /*background: url(/themes/purple/images/product/notification/pop_right.png?00) no-repeat 0 0; _background: url(/themes/purple/images/product/notification/pop_right.gif?00) no-repeat 0 0;*/ /*_background: none; _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/themes/purple/images/product/notification/pop_right.png");*/ }
+.notifybox .pop_center { position: absolute; left: 10px; top: 0; width: 900px; height: 560px; background-color: white; }
+
+
+/* 2012-09-21
+.notifybox table.jqTransformTextarea td#jqTransformTextarea-ml ,
+.notifybox table.jqTransformTextarea td#jqTransformTextarea-mr { width:5px; height:96px;}
+.notifybox table.jqTransformTextarea td#jqTransformTextarea-ml { background: url(/themes/purple/images/product/notification/notification_textleft.png) no-repeat 0 0;}
+.notifybox table.jqTransformTextarea td#jqTransformTextarea-mr { background: url(/themes/purple/images/product/notification/notification_textright.png) no-repeat 0 0;}
+.notifybox table.jqTransformTextarea td#jqTransformTextarea-mm { background: url(/themes/purple/images/product/notification/notification_textcenter.png) repeat-x 0 0;}
+.notifybox table.jqTransformTextarea-focus td#jqTransformTextarea-ml { background: url(/themes/purple/images/product/notification/notification_textleft.png) no-repeat 0 -96px;}
+.notifybox table.jqTransformTextarea-focus td#jqTransformTextarea-mr { background: url(/themes/purple/images/product/notification/notification_textright.png) no-repeat 0 -96px;}
+.notifybox table.jqTransformTextarea-focus td#jqTransformTextarea-mm { background: url(/themes/purple/images/product/notification/notification_textcenter.png) repeat-x 0 -96px;}
+.notifybox table.jqTransformTextarea textarea { height: 90px;  width: 378px; 
+ border-radius:5px; 
+-moz-border-radius:5px; 
+-webkit-border-radius:5px;}
+.msn .notifybox table.jqTransformTextarea textarea {
+ border-radius:0px; 
+-moz-border-radius:0px; 
+-webkit-border-radius:0px;}
+
+.msn .notifybox table.jqTransformTextarea textarea { height: 90px; width: 376px;}
+.msn .notifybox table.jqTransformTextarea td#jqTransformTextarea-ml,
+.msn .notifybox table.jqTransformTextarea td#jqTransformTextarea-mr { width:0px; display:none; background:none; }
+.msn .notifybox table.jqTransformTextarea td#jqTransformTextarea-mm div { padding:0; }
+.msn .notifybox table.jqTransformTextarea td#jqTransformTextarea-mm ,
+.msn .notifybox table.jqTransformTextarea-focus td#jqTransformTextarea-mm { background:none;}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) { 
+.notifybox table.jqTransformTextarea textarea { height: 90px; width: 376px; padding: 2px 7px;}
+.notifybox table.jqTransformTextarea td#jqTransformTextarea-ml,
+.notifybox table.jqTransformTextarea td#jqTransformTextarea-mr { display:none; background:none; }
+.notifybox table.jqTransformTextarea td#jqTransformTextarea-mm div { padding:0; }
+.notifybox table.jqTransformTextarea td#jqTransformTextarea-mm ,
+.notifybox table.jqTransformTextarea-focus td#jqTransformTextarea-mm{ background:none;}
+}
+@-moz-document url-prefix() {
+.notifybox table.jqTransformTextarea textarea { height: 92px; width: 376px; padding: 2px 7px;}
+.notifybox table.jqTransformTextarea td#jqTransformTextarea-ml,
+.notifybox table.jqTransformTextarea td#jqTransformTextarea-mr { display:none; background:none; }
+.notifybox table.jqTransformTextarea td#jqTransformTextarea-mm div { padding:0; }
+.notifybox table.jqTransformTextarea td#jqTransformTextarea-mm ,
+.notifybox table.jqTransformTextarea-focus td#jqTransformTextarea-mm{ background:none;}
+}*/
+
+
+.msn .notifybox { background: #fff; border-radius:0px; -moz-border-radius:0px; -webkit-border-radius:0px; }
+.msn .notifybox .closelog { background: url(/themes/purple/images/product/msn_popclose.jpg) no-repeat left top;}
+.msn .notifybox .closelog:hover { background: url(/themes/purple/images/product/msn_popclose.jpg) no-repeat left bottom;}
+.msn .notifybox .pop_left ,
+.msn .notifybox .pop_right ,
+.msn .notifybox .pop_center { display:none; background: none;}
+.msn .notifybox .notify_close,
+.msn .notifybox .notify_submit  { text-align: center; color: #FFF; line-height: 34px; overflow: hidden; text-indent:0px; background:#705D1F;}
+.msn .notifybox .notify_close:hover,
+.msn .notifybox .notify_submit:hover { background:#847339;}
+.msn .notifybox .notify_submit.disabled, 
+.msn .notifybox .notify_submit.disabled:hover { background:#6D6D6D;}
+.notifybox .notify_cont .jqTransformSelectWrapper { left: 5px;}
+
+
+.notifybox table.jqTransformTextarea { height: 96px; width: 400px; *width: 391px;}
+.msn .notifybox table.jqTransformTextarea { *width: 400px; }
+.notifybox table.jqTransformTextarea td#jqTransformTextarea-ml,
+.notifybox table.jqTransformTextarea td#jqTransformTextarea-mm,
+.notifybox table.jqTransformTextarea td#jqTransformTextarea-mr{ display: block; float: left; height: 96px; }
+.notifybox table.jqTransformTextarea td#jqTransformTextarea-ml,
+.notifybox table.jqTransformTextarea td#jqTransformTextarea-mr{ width: 5px; }
+.notifybox table.jqTransformTextarea td#jqTransformTextarea-mm{ width: 380px; *width: 370px; }
+.notifybox table.jqTransformTextarea td#jqTransformTextarea-mm textarea { overflow-y: auto;}
+.notifybox table.jqTransformTextarea textarea { background: none; border: 0px; width: 378px; height: 88px; padding: 4px 0 2px 2px;}
+.notifybox table.jqTransformTextarea td#jqTransformTextarea-ml { background: #f3eddf url("/themes/purple/images/product/notification/notification_textleft.png") no-repeat 0 0;}
+.notifybox table.jqTransformTextarea td#jqTransformTextarea-mr { background: #f3eddf url("/themes/purple/images/product/notification/notification_textright.png") no-repeat 0 0;}
+.notifybox table.jqTransformTextarea td#jqTransformTextarea-mm { background: #f3eddf url("/themes/purple/images/product/notification/notification_textcenter.png") repeat-x 0 0; }
+.notifybox table.jqTransformTextarea-focus td#jqTransformTextarea-ml ,
+.notifybox table.jqTransformTextarea-focus td#jqTransformTextarea-mr ,
+.notifybox table.jqTransformTextarea-focus td#jqTransformTextarea-mm { background-position: 0 -96px;}
+.notifybox table.jqTransformTextarea textarea:focus { border: 0px; background: none; outline: none;}
+
+.msn .notifybox table.jqTransformTextarea td#jqTransformTextarea-ml,
+.msn .notifybox table.jqTransformTextarea td#jqTransformTextarea-mr{ display: none;}
+.msn .notifybox table.jqTransformTextarea td#jqTransformTextarea-mm { width: 378px; height: 94px; padding: 0 5px; background: #E9E3D3; border: 1px solid #C0BFBB;}
+.msn .notifybox table.jqTransformTextarea textarea { padding: 3px 0 2px 1px;}
+.msn .notifybox table.jqTransformTextarea ,
+.msn .notifybox table.jqTransformTextarea td#jqTransformTextarea-ml, 
+.msn .notifybox table.jqTransformTextarea td#jqTransformTextarea-mm, 
+.msn .notifybox table.jqTransformTextarea td#jqTransformTextarea-mr { *height: 94px;}
+.msn .notifybox table.jqTransformTextarea-focus td#jqTransformTextarea-mm { background: #EFEBDF; border: 1px solid #D2D1CF;}

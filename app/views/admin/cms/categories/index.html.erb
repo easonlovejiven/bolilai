@@ -1,0 +1,95 @@
+<section>
+  <div class="row">
+    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="jarviswidget">
+        <header>
+          <span class="widget-icon"><i class="fa fa-table"></i></span>
+
+          <h2>栏目管理</h2>
+
+          <div class="widget-toolbar">
+            <%= link_to raw('<i class="fa fa-plus-circle"></i> 创建'), new_admin_cms_category_path, class: 'btn btn-xs btn-default', data: {target: 'rightPanel'} if can?(:create, ::Cms::Category.new) %>
+            <%= link_to raw('删除'), batch_delete_admin_cms_categories_path,"data-href"=>"#{batch_delete_admin_cms_categories_path}","data-target" => "rightPanel",class: 'btn btn-xs btn-default batch_delete' if can?(:destroy, ::Cms::Category.new) %>
+          </div>
+        </header>
+        <div>
+          <div class="widget-body no-padding">
+            <div class="table-responsive">
+              <table class="table table-striped table-hover">
+                <thead>
+                <tr class="heading">
+                  <th id="checkall"><input type="checkbox"/></th>
+                  <th class="index">ID</th>
+                  <th width="150">
+                    栏目名称
+                  </th>
+                  <th width="150">
+                    栏目URL
+                  </th>
+                  <th width="150">
+                    模板类型
+                  </th>
+                  <th width="180">
+                    是否单页面
+                  </th>
+                  <th width="180">
+                    等级
+                  </th>
+                  <th width="180">
+                    位置
+                  </th>
+                  <th width="180">
+                    操作
+                  </th>
+                  <th width="">
+                    发布
+                  </th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <% @categories.each_with_index do |category, index| %>
+                    <tr>
+                      <td class="check"><input id="<%= category.id %>" type="checkbox"/></td>
+                      <td class="check"><%= category.id %></td>
+                      <td><span><%= "#{"-"*category.level} #{category.name}" %></span></td>
+                      <td><%= category.url %></td>
+                      <td><%= Cms::Category::TEMPLATE_TYPE[category.template_type] %></td>
+                      <td><%= format_yes_no(category.is_page) %></td>
+                      <td><%= category.level %></td>
+                      <td><%= category.position %></td>
+                      <td>
+                        <div class="op">
+                          <%= link_to t("show"), admin_cms_category_path(category), "data-target" => "rightPanel", class: 'btn btn-xs btn-success' if can?(:show, category) %>
+                          <%= link_to t("edit"), edit_admin_cms_category_path(category), "data-target" => "rightPanel", class: 'btn btn-xs btn-success' if can?(:update, category) %>
+                          <%= link_to t("delete"), delete_admin_cms_category_path(category), "data-target" => "rightPanel", class: 'btn btn-xs btn-success' if can?(:destroy, category) %>
+                          <%= link_to t("visit"), visit_cms_cate_link(category), target: "_blank", class: 'btn btn-xs btn-success' if can?(:show, category) %>
+                        </div>
+                      </td>
+                      <td><%= render :partial => "admin/shared/publish", :object => category %></td>
+                    </tr>
+                <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!--分页工具条-->
+          <div class="dt-toolbar-footer">
+            <%= render "admin/shared/pagination", :object => @categories %>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+<!--隐藏div区-->
+<div id="dialog_confirm" style="display:none">
+  <p><span class="ui-icon ui-icon-alert" style="float:left;margin:0 7px 20px 0;"></span><%= t("tip.delete") %>
+  </p>
+</div>
+
+<div id="nocheck" style="display:none">
+  <p>
+    <span class="ui-icon ui-icon-alert" style="float:left;margin:0 7px 20px 0;"></span><%= t("tip.nocheck") %>
+  </p>
+</div>

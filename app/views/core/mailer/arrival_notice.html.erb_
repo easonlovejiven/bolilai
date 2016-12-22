@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <title>订单已申请货到付款</title>
+</head>
+<body style="background-color:#f8f8f8;font-family:'微软雅黑',Microsoft YaHei,verdana;margin:0; padding:0;">
+<table width="100%" align="center" cellspacing="0" cellpadding="0" border="0" bgcolor="#e2e2e2" style="background-color:#d7d7d7; margin:0 auto; width:100%; ">
+  <tbody>
+  <tr>
+    <td style="border:none; background-color:#f8f8f8; width:100%; font-family:'微软雅黑',Microsoft YaHei,verdana; " width="100%" bgcolor="#f8f8f8">
+
+      <!--header 开始-->
+      <table width="601" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#000" style="background:#000; width:601px; height:34px;">
+        <tr>
+          <td style="background:#000;">
+            <a href="http://www.barlar.cn" target="_blank" title="barlar 珀丽莱 轻奢珠宝时尚品牌" style=" outline:none; text-decoration:none;" hidefocus="true"><span  height="34"  border="0" style="margin: 0 auto;display: block;color:#fff; font-size:12px;width: 570px">珀丽莱商城(www.barlar.cn)</span></a>
+          </td>
+        </tr>
+      </table>
+      <!--header 结束-->
+
+      <!--content 开始-->
+      <table width="601" border="0" cellspacing="0" cellpadding="0" bgcolor="#fff" style="background:#fff;" align="center">
+        <tr>
+          <td>
+            <table width="526" border="0" cellspacing="0" cellpadding="0" align="center">
+              <tr>
+                <td height="76" colspan="2" valign="bottom" style="font-size:16px; font-weight:bold; border-bottom:3px solid #e5e5e5;">
+                  <p style="padding:0; margin:5px 0;">您需要的商品已经到货</p></td>
+              </tr>
+              <tr>
+                <td width="381" valign="middle" style="font-size:12px; color:#333333; line-height:24px;" height="155">尊敬的 <%= h @notification.user.name %>
+                  ， 您好：<br/>
+                  <span style="padding:0; margin:0; font-size:14px;">您需要的的商品 <a href="http://www.barlar.cn/l/429771?redirect=%2F%23popup%3DsingleProduct%26productId%3D<%= h @notification.product.id %>"><%= h @notification.product.name %></a> 已经到货，请点击链接前往购买。</span><br/>
+                </td>
+                <td width="145" align="right" valign="top" style=" padding-top:26px; padding-right:2px;">
+                  <a href="/shop/products/<%= h @notification.product.id %>" target="_blank" style=" outline:none; " hidefocus="ture" title="立即查看"><img src="<%=asset_path("purple/mailer/look_btn.jpg")%>" alt="立即查看" width="106" height="33" border="0" style=" font-size:15px; color:#000; "/></a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td height="40">&nbsp;</td>
+        </tr>
+      </table>
+      <!--content 结束-->
+      <!--footer 开始-->
+      <table width="601" border="0" cellspacing="0" cellpadding="0" align="center">
+        <tr>
+          <td height="31" colspan="3" align="center" valign="bottom" style=" font-size:12px;">珀丽莱郑重承诺，所售商品均为100%正品保证，支持专柜验货。</td>
+        </tr>
+      </table>
+      <!--footer 结束-->
+    </td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<h2>查看中国银行付款</h2>
+
+<table class="form-table">
+	<tbody>
+
+		<tr class="form-field form-required">
+			<th scope="row">ID</th>
+			<td><%= @trade.id %></td>
+		</tr>
+	
+		<tr class="form-field form-required">
+			<th scope="row">商户号</th>
+			<td><%= @result.css("header/merchantNo").text if @result %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">错误码</th>
+			<td><%= @result.css("header/exception").text if @result %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">商户订单号</th>
+			<td><%= @result.css("body/orderTrans/orderNo").text if @result %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">状态</th>
+			<td>
+				<% case @result.css("body/orderTrans/orderStatus").text
+				when '0' %>
+				未处理
+				<% when '1' %>
+				支付
+				<% when '2' %>
+				撤销
+				<% when '3' %>
+				退货
+				<% when '4' %>
+				未明
+				<% when '5' %>
+				失败
+				<% end if @result %>
+			</td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">银行卡类别</th>
+			<td>
+				<% case @result.css("body/orderTrans/cardTyp").text
+				when '01' %>
+				中行借记卡
+				<% when '02' %>
+				中行信用卡，信用卡（分行卡）
+				<% when '04' %>
+				中行信用卡，信用卡（总行卡）
+				<% when '11' %>
+				银联借记卡
+				<% when '21' %>
+				VISA借记卡
+				<% when '22' %>
+				VISA信用卡
+				<% when '31' %>
+				MC 借记卡
+				<% when '32' %>
+				MC 信用卡
+				<% when '42' %>
+				运通卡
+				<% when '52' %>
+				大来卡
+				<% when '62' %>
+				JCB卡
+				<% end if @result %>
+			</td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">支付时间</th>
+			<td><%= @result.css("body/orderTrans/payTime").text if @result %></td>
+		</tr>
+		
+		<tr class="form-field form-required">
+			<th scope="row">支付金额</th>
+			<td><%= @result.css("body/orderTrans/payAmount").text if @result %></td>
+		</tr>
+		
+	</tbody>
+</table>

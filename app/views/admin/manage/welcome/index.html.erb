@@ -1,0 +1,10 @@
+<div class="row">
+	<div class="col-xs-12 col-md-12 col-lg-6">
+		<%= render :partial => 'office/human/todos/front_notifications', :locals => { :records => @current_user.notifications.active.order("created_at desc").limit(10) } %>
+		<%= render :partial => 'office/human/todos/front_todos', :locals => { :records => Office::Human::Todo.where(creator_id: @current_user.id) } %>
+		<%= render :partial => 'office/work/applies/front_applies', :locals => { :records => Office::Work::Apply.where(creator_id: @current_user.id, active: true)} %>
+	</div>
+	<div class="col-xs-12 col-md-12 col-lg-6">
+		<%= render :partial => 'office/human/events/front_calendar' %>
+	</div>
+</div>

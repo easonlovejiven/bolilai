@@ -1,0 +1,16 @@
+/- if @current_user.can_show_user? && user
+a href=admin_shop_user_path(user.id) data-target="rightPanel" title=user.name = user.name.to_s[0..3]
+- if (c = Shop::Trade.where(["status IN('ship','receive','complete') AND user_id = ?", user.id]).count) && c > 0
+  |（
+  a data-remote="true" href="#{admin_shop_trades_path('where[user_id]' => user.id)}"= c
+  |）
+= link_to image_tag(user.level.icon, alt: ""), admin_shop_level_path(user.level), title: user.level.name, "data-target" => "rightPanel" if user && user.level && user.level.icon
+/= link_to_if @current_user.can_show_level?, image_tag(user.level.icon, alt: ""), admin_shop_level_path(user.level), title: user.level.name, "data-target"=>"rightPanel" if user && user.level && user.level.icon
+- if user && !user.label.blank?
+  span title=user.label #
+- if user && user.birthday && user.birthday.month == Time.now.month && user.birthday.day == Time.now.day
+  span title="生日" style="font-size:16px;" ☺
+- phone = user && Core::Account.find(user.id).phone
+/- if @current_user.can_create_call? && phone.present?
+  = link_to_remote '☎', url: admin_shop_calls_path(call: { calling_no: phone }), method: 'post', confirm: '确定拨打电话吗？', failure: "alert('呼叫失败');", html: { style: "font-size:20px; line-height:14px; display:inline-block;" } if @current_user.can_create_call?
+  = link_to '✎', new_admin_shop_sms_path('sms[phone]' => phone), "data-target"=>"rightPanel", style: "font-size:18px; line-height:14px; display:inline-block;" if @current_user.can_create_sms? && @current_user.can_show_contact?

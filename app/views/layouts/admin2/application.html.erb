@@ -1,0 +1,29 @@
+<% content_for :manager_title do %>
+    管理员后台
+<% end %>
+<% content_for :content do %>
+    <%= render 'layouts/admin/header' %>
+    <div class="page-container  small-sidebar">
+      <div class="clearfix"></div>
+      <div class="page-sidebar-wrapper">
+        <div class="page-sidebar navbar-collapse collapse">
+          <ul class="page-sidebar-menu">
+            <li class="sidebar-toggler-wrapper">
+            </li>
+            <%= render :partial => "layouts/admin/menu" %>
+          </ul>
+        </div>
+      </div>
+      <div class="page-content-wrapper">
+        <div class="page-content">
+          <%= render :partial => "shared/flash" %>
+          <div class="row">
+            <%= yield %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%= render 'layouts/admin/footer' %>
+<% end %>
+
+<%= render template: "layouts/admin/pure" %>

@@ -1,0 +1,28 @@
+= stylesheet_inline_tag "custom_page/pages/series_a2/#{data['theme']}.css" unless data['theme'].blank?
+-# stylesheet_inline_tag "custom_page/pages/series_a2/#{data['arrange']}.css" unless data['arrange'].blank?
+- flash = request.fullpath.match(/\?flash$/)
+.seriesbox.series_a2(style="margin-bottom: #{v = (data['style']||{})['margin-bottom']; v.blank? ? 12 : v}px;")
+  %a.pic_detail(href="#{legacy_url(data['link']['url'], flash)}" title="#{data['link']['name']}" class="widget" data-widget-id="large_widget_#{page.id}")
+    = image_tag data['link']['pic'], :class => 'pic', :alt => data['link']['name']
+
+  - product = Shop::Product.where(id: data['product']['id']).first_or_initialize
+  = link_to flash ? "/index.html#subapp=productGrid&category2_id=#{product.category2_id}&keyword=&extid=#{product.id}" : product, :class => "rightlink widget","data-widget-id"=>"small_widget_#{page.id}", :target => "_blank" do
+    = image_tag "#{product.major_image.url(:cover400)}", :alt => "", :class => "pic_title"
+    .product_info
+      .textbox
+        .title= h data['product']['title']
+        .description= h data['product']['summary']
+      .link
+        .linktext
+          .summary
+            %span= h product.brand ? product.brand.name : ''
+            %em= h product.name.to_s.gsub(product.brand ? product.brand.name.to_s.strip : '', '').gsub(product.brand ? product.brand.chinese.to_s.strip : '', '')
+          .value
+            .MarketPrice
+              %em ￥
+              %span= product.price
+            .WeimallPrice
+              %em ￥
+              %span=product.discount
+          .at_once 立即购买
+  = render :partial => 'admin/custom_page/pages/series_preview', :locals => { :data => data,:page=>page }

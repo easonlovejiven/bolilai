@@ -1,0 +1,59 @@
+<script>
+    var category_tree =<%= raw Shop::Category.find(1).to_json(only: [:id, :name], include: { children: { only: [:id, :name], include: { children: { only: [:id, :name], include: { children: { only: [:id, :name] } } } } } })%>.children,
+            category1_children = _.pluck(category_tree, 'children'),
+            category2_list = _.object(_.pluck(category_tree, 'id'), category1_children),
+            category3_list = _.object(_.chain(category1_children).flatten().pluck('id').value(), _.chain(category1_children).flatten().pluck('children').value()),
+
+            category_id = [<%= @product.category1 ? @product.category1.id : false %>, <%= @product.category2 ? @product.category2.id : false %>, <%= @product.category3 ? @product.category3.id : false %>];
+
+    (function (options) {
+        constructor = {
+            selects: '._category_selects',
+            source: [category_tree, category2_list, category3_list],
+            callback: function () {
+            }
+        }
+        options = $.extend(constructor, options);
+
+        var get_options = function (data) {
+            return _.reduce(data, function (p, c) {
+                return p + '<option value="' + c.id + '">' + c.name + '</option>';
+            }, '<option value=""></option>');
+        }
+
+        $(options.selects).eq(0).html(get_options(options.source[0]));
+
+        $(document).on({
+            change: function () {
+                var _this = $(this),
+                        _selects = $(options.selects),
+                        this_index = _this.index(options.selects),
+                        _next = _selects.eq(this_index + 1);
+
+                if (!_next.length) {
+                    return true;
+                }
+
+                var this_data = options.source[this_index + 1][_this.val()] || [],
+                        _next_all = _selects.slice(this_index + 2);
+
+                _next.prop('disabled', false);
+                _next.html(get_options(this_data));
+
+                if (!_next_all.length) {
+                    return true;
+                }
+
+                _.each(_next_all, function (v) {
+                    $(v).val('');
+                    $(v).prop('disabled', true);
+                });
+            }
+        }, '._category_selects');
+    }());
+
+    _.each(_.compact(category_id), function (v, i) {
+        $('._category_selects').eq(i).val(v);
+        $('._category_selects').eq(i).change();
+    });
+</script>

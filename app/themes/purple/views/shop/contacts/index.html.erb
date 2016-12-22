@@ -1,0 +1,123 @@
+<% content_for :show_content do %>
+    <div class="mod-main" id="adds_list">
+      <span class="top_line"></span>
+      <div class="receiving_list">
+        <div class="ReceivingHead">
+          <%= link_to '添加新地址', '#', id: 'newAddress', class: 'btn btn-xs fr', onclick: 'javascript:($(".new_form").hasClass("open") ? $(".new_form").removeClass("open") : $(".new_form").addClass("open"))' %>
+          <span>您已创建<b id="contactNum_top" class="font-green"> <%= @contacts.count %> </b>个收货地址。</span>
+        </div>
+        <div class="RScroll">
+          <% @contacts.unshift(Shop::Contact.new).each_with_index do |contact| %>
+              <%= form_tag contact.new_record? ? shop_contacts_path(format: 'json') : shop_contact_path(contact, format: 'json'), method: 'post', remote: true,
+                           class: "ReceivingInfo #{'new_form' if contact.new_record?}", id: "receiving_list_#{contact.id}", 'data-id' => contact.id, 'data-reload' => true do %>
+                  <% unless contact.new_record? %>
+                      <input type="hidden" name="_method" value="put">
+
+                      <div class="no_edit">
+                        <span class="ReceivingDef"><%= link_to('默认', 'javascript:;') if nil %></span>
+
+                        <div class="editinfo">
+                          <span><%= h contact.name %></span>
+                          <span><%= h contact.mobile %> <%= h contact.phone %></span>
+                          <span><%= h contact.locations %></span>
+                          <span><%= h contact.postcode %></span>
+                        </div>
+
+                        <div class="box_zindex">
+                          <a href="#" class="set_delete js_receiving_list_delete" id="receiving_list_<%= contact.id %>_delete" data-id="<%= contact.id %>">删除</a>
+                          <a href="#" class="set_edit js_receiving_list_edit" id="receiving_list_<%= contact.id %>_edit" data-id="<%= contact.id %>">编辑</a>
+
+                          <div class="cancel_box js_receiving_list_delete_box" style="display:none;" id="receiving_list_<%= contact.id %>_delete_box">
+                            <div class="cancel_box_top">&nbsp;</div>
+                            <div class="cancel_box_cont">
+                              <h6>确认删除该地址?</h6>
+                              <a href="#" class="sure js_receiving_list_delete_confirm" data-id="<%= contact.id %>">确定</a>
+                              <a href="#" class="cancle js_receiving_list_delete_cancel" data-id="<%= contact.id %>">取消</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  <% end %>
+                  <div class="edit" id="receiving_list_<%= contact.id %>_edit_area">
+                    <ol class="formbox disabled">
+                      <li class="fli">
+                        <label for="receiving_list_<%= contact.id %>_name">收货人：</label>
+
+                        <div class="inputWrapper">
+                          <input name="contact[name]" type="text" value="<%= h contact.name %>" id="receiving_list_<%= contact.id %>_name" class="js_receiving_list_name" size="14"/>
+                        </div>
+                        <div class="name_tip error js_receiving_list_error" id="receiving_list_<%= contact.id %>_name_error">
+                          <em class="error_icon"></em> 请输入收货人姓名
+                        </div>
+                      </li>
+                      <li class="fli">
+                        <label for="receiving_list_<%= contact.id %>_mobile">手机：</label>
+
+                        <div class="inputWrapper">
+                          <input name="contact[mobile]" type="text" value="<%= h contact.mobile %>" id="receiving_list_<%= contact.id %>_mobile" class="js_receiving_list_mobile" size="14"/>
+                        </div>
+                        <div class="mobil_tip error js_receiving_list_error" id="receiving_list_<%= contact.id %>_mobile_error">
+                          <em class="error_icon"></em>请输入正确联系方式
+                        </div>
+                      </li>
+                      <li class="fli">
+                        <label style="cursor: default;">送货地址：</label>
+                        <span class="select_wrapper">
+                        <%= select_tag 'contact[province]', options_for_select(contact.province.blank? ? [['选择省份', '']] : [[contact.province, contact.province]], contact.province), :id => "receiving_list_#{contact.id}_province", :style => "", :class => "select js_contact_province js_contact_province_#{contact.id || 'add'} js_receiving_list_province", 'data-id' => contact.id || 'add' %>
+                        </span>
+                        <span class="select_wrapper">
+                        <%= select_tag 'contact[city]', options_for_select(contact.city.blank? ? [['选择城市', '']] : [[contact.city, contact.city]], contact.city), :disabled => !contact.province, :id => "receiving_list_#{contact.id}_city", :style => "", :class => "select js_contact_city js_contact_city_#{contact.id || 'add'} js_receiving_list_city", 'data-id' => contact.id || 'add' %>
+                        </span>
+                        <span class="select_wrapper">
+                        <%= select_tag 'contact[town]', options_for_select(contact.town.blank? ? [['选择区', '']] : [[contact.town, contact.town]], contact.town), :disabled => !contact.city, :id => "receiving_list_#{contact.id}_town", :style => "", :class => "select js_contact_town js_contact_town_#{contact.id || 'add'} js_receiving_list_town", 'data-id' => contact.id || 'add' %>
+                        </span>
+
+                        <div class="txt">*省份和城市为必选项</div>
+                      </li>
+                      <li class="fli">
+                        <label for="receiving_list_<%= contact.id %>_contact">详细地址：</label>
+
+                        <div class="inputWrapper">
+                          <input name='contact[address]' type="text" id="receiving_list_<%= contact.id %>_address" class="js_receiving_list_address" value="<%= h contact.address %>" size="60"/>
+                        </div>
+                        <div class="detail_tip error js_receiving_list_error" id="receiving_list_<%= contact.id %>_address_error">
+                          <em class="error_icon"></em>请输入正确地址
+                        </div>
+                      </li>
+                      <li class="fli">
+                        <label for="receiving_list_<%= contact.id %>_postcode">邮政编码：</label>
+
+                        <div class="inputWrapper">
+                          <input name='contact[postcode]' type="text" id="receiving_list_<%= contact.id %>_postcode" class="js_receiving_list_postcode" value="<%= h contact.postcode %>" size="8"/>
+                        </div>
+                        <div class="post_tip error js_receiving_list_error" id="receiving_list_<%= contact.id %>_postcode_error">
+                          <em class="error_icon"></em>请输入六位邮政编码
+                        </div>
+                      </li>
+                      <li class="fli">
+                        <label>&nbsp;</label>
+                        <button type="submit" id="submitBtn" class="btn brown">提交</button>
+                      </li>
+                    </ol>
+                  </div>
+              <% end %>
+          <% end %>
+          <div class="clear"></div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+        $(function () {
+            $('.js_contact_province').trigger('initialize_options');
+            $('form', '#adds_list').each(function (k, v) {
+                $(v).on('submit', function () {
+                    return update_contact_confirm($(v))
+                });
+                App.handleRjsCb($(v), false)
+            });
+        })
+    </script>
+<% end %>
+
+<%= render template: 'home/users/show_layout', locals: {user_info: {key: 'contactes', value: '收货地址'}} %>

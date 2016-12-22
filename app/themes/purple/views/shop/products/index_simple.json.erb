@@ -1,0 +1,10 @@
+<%
+result = {"products" => @products.map(&:serializable_hash),
+          "products_count" => @products_count,
+          "products_facet" => @products_facet,
+          "filters"  => @filters,
+          "sticky_xml" => @sticky_xml,
+          "sticky"  => (@sticky||{})
+          }
+%>
+<%= raw  result.to_json %>

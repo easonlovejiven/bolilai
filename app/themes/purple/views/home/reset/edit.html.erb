@@ -1,0 +1,58 @@
+<%= flash[:notice] %>
+<div class="no_popup">
+<div id=""><!-- style="display:none;"-->
+<!-- div_popup_window_begin -->
+
+<div class="logsigbox">
+	<div class="pop_left"></div>
+	<div class="pop_center"></div>
+	<div class="pop_right"></div>
+	<a href="#" class="closelog close" onclick="event.returnValue = false; return false;"></a>
+
+	<div class="box_cont pwResetbox" id="">
+		<div class="resetform">
+			<h4 class="box_title">密码重置 !</h4>
+			<% if @account.reset_code == params[:code] %>
+				<% form_for :account, :url => account_url(@account) , :class => "weimall_form", :html => { :method => :put } do |f| %>
+				<ol class="formbox">
+					<li class="fli">
+						<strong>新密码：</strong>
+						<input type="password" name="account[password]" id="account_password" require="true" datatype="limit|strong" min="6" max="20" msg="密码不得少于6个字符超过20个字符或密码过于简单！">
+					</li>
+					<li class="fli">
+						<strong>确定新密码：</strong>
+						<input type="password" name="account[password_confirmation]" id="account_password_confirmation" require="true" datatype="repeat" to="account[password]" msg="两次输入的密码不一致" />
+						<div class="error"style="display:none;"><em class="error_icon"></em>两次密码不一致！</div>
+					</li>
+				</ol>
+				<div class="logsends">
+					<%= hidden_field_tag 'account[reset_code]', params[:code] %>
+					<button class="resetButton" type="submit"><span><span>确定</span></span></button>
+					<div class="error"style="display:none;"><em class="error_icon"></em>重置邮件过期，请关闭重试！</div>
+				</div>
+				<% end %>
+			<% else %>
+				<% form_tag edit_reset_path(@account) , :class => "weimall_form", :method=> :get do %>
+				<ol class="formbox">
+					<li class="fli">
+						<label>&nbsp;</label>
+						<%= text_field_tag "code", '' %>
+					</li>
+				</ol>
+				<div class="logsends">
+					<button class="resetButton" type="submit" name="" id=""><span><span>确定</span></span></button>
+					<div class="error"style="display:none;"><em class="error_icon"></em>xxx请关闭重试！</div>
+				</div>
+				<% end %>
+			<% end %>
+		</div>
+	</div>
+
+
+</div>
+
+<!-- div_popup_window_end -->
+</div>
+</div>
+
+

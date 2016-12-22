@@ -1,0 +1,259 @@
+<!-- CSS -->
+<%= stylesheet_link_tag "touch/frame" %>
+<%= stylesheet_link_tag "touch/frame_respond" %>
+<!-- 压缩的model/view/controller -->
+<%= javascript_include_tag "touch/controller" %>
+<% content_for :header do %>
+    <header class="border_1px">
+      <!-- <div class="left_option left"> -->
+      <div class="ico_wrapper back_ico left hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <!-- </div> -->
+      <div class="title ">
+        订单管理
+      </div>
+      <div class="ico_wrapper add_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper edit_ico right hide">
+        <span class="">编辑
+          <em class="down_shadow"></em>
+        </span>
+        <span class="">完成
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper info_ico right hide text">
+        详情<em class="down_shadow"></em>
+      </div>
+      <div class="ico_wrapper filter_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <div class="ico_wrapper mode_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+    </header>
+<% end %>
+<script type="text/javascript">
+  views.product_style(0.1875);
+  views.empty_style();
+  $(function () {
+    app.lasy_load($('img'));
+    trades_index_controller.initialize();
+  });
+</script>
+<div class="main" id="main">
+  <div>
+    <div class="order_nav nav_list">
+      <div class="left box_sizing <%= 'active' if params[:status]=="pay" %>" data-href="/trades?status=pay">
+        待付款
+      </div>
+      <div class="left box_sizing <%= 'active' if  params[:status]=="audit,prepare,ship" %> " data-href="/trades?status=audit,prepare,ship">
+        待发货
+      </div>
+      <div class="left box_sizing <%= 'active' if params[:status]=="receive" %>" data-href="/trades?status=receive">
+        待收货
+      </div>
+      <div class="left box_sizing <%= 'active' if params[:status]=="complete" %>" data-href="/trades?status=complete">
+        已完成
+      </div>
+    </div>
+    <% if @trades.blank? %>
+        <div class="trade_empty">
+          <p>抱歉，您没有此类订单</p>
+        </div>
+    <% else %>
+        <!-- 订单列表 -->
+        <div class="boxes">
+          <% @trades.each do |trade| %>
+              <div class="trade_box border_1px" id="<%= trade.id %>" data-price="<%= trade.price %>" data-hwg="false">
+                <div class="hide vizlury" data-orderid="<%= trade.identifier %>" data-price="<%= trade.price %>">
+                  <% trade.units.each do |unit| %>
+                      <div class="prolist" data-proid="<%= unit.item.product_id %>"></div>
+                  <% end %>
+                </div>
+                <div>
+                  <p class="deal_time">
+                    成交时间&nbsp;:
+                <span class="order_time">
+                  <%= trade.created_at.to_s(:db) %>
+                </span>
+                  </p>
+                </div>
+                <% trade.units.each do |unit| %>
+                    <div class="order_list one pro_height ">
+                      <div class="left pic_link left pro_height img_wrap pro_width pro_img" data-href="/products/<%= unit.item.product.id %>">
+                        <img class="pro_height pro_width" width="60" height="60" data-src="<%= unit.item.product.major_image.url(:thumb) %>">
+
+                        <div class="down_shadow"></div>
+                      </div>
+
+                      <div class="bag_info pro_height left" data-href="/trades/<%= trade.id %>">
+                        <p class="bag_name"><%= unit.item.product.name %></p>
+
+                        <div class="bag_detail">
+                          <!--<span class="bag_size">XXXL/110</span>-->
+                          <span class="bag_color"><%= h unit.item.product.color_name %></span>
+
+                          <span class="right bag_price ">￥<%= unit.price %><em class="ele_logo"></em></span>
+                        </div>
+                        <span class="order_enter enter_ico sprites"><em class="down_shadow"></em></span>
+
+                        <div class="down_shadow"></div>
+                      </div>
+                    </div>
+                <% end %>
+                <div class="order_option clear_fix ">
+                  <span class="left">总计&nbsp;:</span>
+
+                  <div class="left ">
+                    <div class="order_sum ">￥<%= trade.price %></div>
+                    <div class="u_order_sum hide">
+                      <span class="u_plus hide">＋</span>
+                      <span>&nbsp;</span>0<em class="ele_logo"></em>
+                    </div>
+                  </div>
+                  <% if trade.status=="pay" %>
+                      <div class="trade_pay_btn list purple_bg btn right " data-id="<%= trade.id %>" data-price="<%= trade.price %>">付款
+                        <div class="down_shadow"></div>
+                      </div>
+                      <div class="trade_cancel_btn list btn right" data-id="<%= trade.id %>">
+                        <span>取消</span>
+                        <style type="text/css">
+                          /*body{
+                            -webkit-transform: translate(0,0,0);
+                            -webkit-backface-visibility:hidden;
+                          }*/
+                          .loading16 {
+                            top: -31px;
+                            width: 100px;
+                            height: 100px;
+                            position: relative;
+                            left: 50%;
+                            margin: 0;
+                            margin-left: -50px;
+                            border-radius: 100px;
+                            -webkit-border-radius: 100px;
+                            -webkit-animation-duration: 1.5s;
+                            -webkit-animation-iteration-count: infinite;
+                            -webkit-animation-timing-function: linear;
+                            -webkit-animation-name: rotateThis16;
+                            -moz-border-radius: 100px;
+                            -moz-animation-duration: 1.5s;
+                            -moz-animation-iteration-count: infinite;
+                            -moz-animation-timing-function: linear;
+                            -moz-animation-name: rotateThis16;
+                          }
+
+                          @-webkit-keyframes rotateThis16 {
+                            from {
+                              -webkit-transform: scale(0.18) rotate(0deg);
+                            }
+                            to {
+                              -webkit-transform: scale(0.18) rotate(360deg);
+                            }
+                          }
+
+                          @-moz-keyframes rotateThis16 {
+                            from {
+                              -moz-transform: scale(0.18) rotate(0deg);
+                            }
+                            to {
+                              -moz-transform: scale(0.18) rotate(360deg);
+                            }
+                          }
+
+                          .loading16 > div {
+                            width: 18px;
+                            height: 18px;
+                            background-color: #fff;
+                            -webkit-border-radius: 30px;
+                            -moz-border-radius: 30px;
+                            -o-border-radius: 30px;
+                            border-radius: 30px;
+                            position: absolute;
+                            left: 41px;
+                            top: 41px;
+                          }
+
+                          .bar1 {
+                            opacity: 0.3;
+                            -webkit-transform: rotate(0deg) translate(0, -42px);
+                            -moz-transform: rotate(0deg) translate(0, -42px);
+                          }
+
+                          .bar2 {
+                            opacity: 0.4;
+                            -webkit-transform: rotate(45deg) translate(0, -42px);
+                            -moz-transform: rotate(45deg) translate(0, -42px);
+                          }
+
+                          .bar3 {
+                            opacity: 0.5;
+                            -webkit-transform: rotate(90deg) translate(0, -42px);
+                            -moz-transform: rotate(90deg) translate(0, -42px);
+                          }
+
+                          .bar4 {
+                            opacity: 0.6;
+                            -webkit-transform: rotate(135deg) translate(0, -42px);
+                            -moz-transform: rotate(135deg) translate(0, -42px);
+                          }
+
+                          .bar5 {
+                            opacity: 0.7;
+                            -webkit-transform: rotate(180deg) translate(0, -42px);
+                            -moz-transform: rotate(180deg) translate(0, -42px);
+                          }
+
+                          .bar6 {
+                            opacity: 0.8;
+                            -webkit-transform: rotate(225deg) translate(0, -42px);
+                            -moz-transform: rotate(225deg) translate(0, -42px);
+                          }
+
+                          .bar7 {
+                            opacity: 0.9;
+                            -webkit-transform: rotate(270deg) translate(0, -42px);
+                            -moz-transform: rotate(270deg) translate(0, -42px);
+                          }
+
+                          .bar8 {
+                            opacity: 1;
+                            -webkit-transform: rotate(315deg) translate(0, -42px);
+                            -moz-transform: rotate(315deg) translate(0, -42px);
+                          }
+                        </style>
+                        <div class="order_load">
+                          <div class="loading16">
+                            <div class="bar1"></div>
+                            <div class="bar2"></div>
+                            <div class="bar3"></div>
+                            <div class="bar4"></div>
+                            <div class="bar5"></div>
+                            <div class="bar6"></div>
+                            <div class="bar7"></div>
+                            <div class="bar8"></div>
+                          </div>
+                        </div>
+
+                      </div>
+                  <% end %>
+                </div>
+              </div>
+          <% end %>
+        </div>
+    <% end %>
+    <!-- 分页 -->
+    <%= paginate @trades, views_prefix: "mobile", :theme => 'shop' %>
+  </div>
+</div>

@@ -1,0 +1,337 @@
+.info_content {
+  img{
+    vertical-align: bottom;
+  }
+  .top_line {
+    background: #8e8482;
+    border-bottom: 1px solid #f1f0f1;
+    display: block;
+    height: 2px;
+  }
+
+  .content_warp {
+    padding: 0 50px;
+    background: #f2f2f2;
+    padding-bottom: 30px;
+    h2 {
+      font-size: 18px;
+      color: #000;
+      text-align: left;
+      padding-top: 30px;
+      padding-bottom: 24px;
+    }
+    p {
+      line-height: 26px;
+      margin-bottom: 14px;
+      color: #555;
+    }
+    .content.bg-white {
+      background: #fff;
+      padding: 20px 0;
+    }
+    img {
+      max-width: 680px;
+      max-width: 100%;
+    }
+  }
+}
+
+.main_post {
+  width: 1178px;
+  position: relative;
+  margin: 0 auto;
+  padding-top: 35px;
+  margin-bottom: 25px;
+  background: #f2f2f2;
+  overflow: hidden;
+
+  a:hover, a:active {
+    color: #b8935c;
+    text-decoration: none;
+  }
+
+  .post_content.side_page, .post_list {
+    width: 780px;
+    border-right: 1px solid #bbb;
+  }
+  .post_content, .post_list {
+    float: left;
+    display: block;
+    padding: 0 22px 20px;
+    min-height: 1024px;
+
+    .title {
+      padding-top: 20px;
+      padding-bottom: 15px;
+      font-size: 24px;
+      text-align: center;
+    }
+    .post_sbt {
+      text-align: center;
+      color: #666;
+      font-size: 12px;
+      line-height: 18px;
+      padding: 20px 0 20px 9px;
+    }
+    .post_tps {
+      padding: 22px 25px;
+      line-height: 24px;
+      font-size: 12px;
+      text-align: left;
+      text-indent: 2em;
+      background: #EEE6D1;
+      color: #333;
+      margin-bottom: 15px;
+    }
+  }
+  .post_list {
+    .recomm_title {
+      height: 28px;
+      line-height: 28px;
+      margin-top: 25px;
+      margin-bottom: 20px;
+      position: relative;
+
+      > span {
+        position: absolute;
+        padding-right: 15px;
+        font-size: 14px;
+        background: #f2f2f2;
+        z-index: 3;
+      }
+      > .line {
+        position: absolute;
+        display: block;
+        width: 100%;
+        height: 0;
+        top: 14px;
+        border-top: 1px solid #aaa;
+        z-index: 0;
+      }
+    }
+    .item {
+      padding-bottom: 24px;
+      margin-bottom: 28px;
+      border-bottom: 1px solid #ccc;
+
+      h3 {
+        padding-left: 15px;
+        font-size: 16px;
+        border-left: 3px solid #cfa972;
+        margin-bottom: 16px;
+      }
+      > .info {
+        color: #777;
+        text-align: right;
+      }
+    }
+  }
+
+  .post_side {
+    float: left;
+    width: 350px;
+    display: block;
+    text-align: center;
+    background: #f2f2f2;
+    overflow: hidden;
+
+    a {
+      > img {
+        margin-bottom: 15px;
+        max-width: 308px;
+      }
+    }
+    .rec_list {
+      width: 308px;
+      text-align: left;
+      display: inline-block;
+      .title {
+        font-size: 18px;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #bbb;
+      }
+      li {
+        height: 25px;
+        line-height: 25px;
+        overflow: hidden;
+        font-size: 14px;
+        font-weight: 400;
+        padding-right: 10px;
+      }
+    }
+  }
+  .pagination{
+    margin-right: 50px;
+  }
+}
+
+.main_info {
+  display: block;
+  overflow: hidden;
+  zoom: 1;
+  min-height: 500px;
+  margin-bottom: 30px;
+
+  .left_side {
+    width: 200px;
+    float: left;
+    margin-right: 15px;
+    background: #fff;
+    border-bottom: 1px solid #deddde;
+
+    .left_menu {
+      text-align: left;
+      background: #f2f2f2;
+      padding: 18px 10px 18px 30px;
+      dd {
+        line-height: 29px;
+        color: #666;
+      }
+      dt, dd strong, dd:first-child {
+        color: #333;
+        font-weight: bold;
+        line-height: 32px;
+        font-size: 12px;
+      }
+      a {
+        color: #444;
+      }
+      a:hover, a:hover strong, a.on, dt.on {
+        color: #b8935c;
+      }
+    }
+  }
+  .right_side {
+    width: 960px;
+    float: left;
+    position: relative;
+  }
+}
+
+#service_online_div:hover {
+  background-position: right center;
+}
+
+#service_online_div {
+  z-index: 1002;
+  position: fixed;
+  right: 0px;
+  top: 280px;
+  OVERFLOW: hidden;
+  background: asset-url('purple/home/service_online.png') left center no-repeat;
+  width: 94px;
+  height: 210px;
+  cursor: pointer;
+}
+
+/* Category Page ========================================================================= */
+.category-title {
+  border: 0;
+  margin: 0 0 7px;
+  display: block;
+}
+
+.category-image {
+  width: 100%;
+  overflow: hidden;
+  margin: 30px 0 30px;
+  text-align: center;
+  min-height: 300px;
+}
+
+.category-image img {
+}
+
+.category-description {
+  margin: 0 0 10px;
+}
+
+.category-products {
+}
+
+.fieldset {
+  border: 1px solid #ddd;
+  padding: 22px 25px 12px 33px;
+}
+
+.weimall-customization {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.weimall-customization p {
+  text-indent: 0px !important;
+}
+
+.weimall-information .fieldset {
+  color: #333;
+  letter-spacing: 2px;
+  font-size: 14px;
+  font-weight: lighter;
+  line-height: 175%;
+  padding-top: 50px;
+  padding-bottom: 60px;
+}
+
+.weimall-information .fieldset p {
+  text-indent: 34px;
+}
+
+.weimall-information .fieldset blockquote p {
+  text-indent: 0;
+}
+
+.weimall-information .fieldset blockquote p.t {
+  font-size: 16px;
+}
+
+.weimall-information .fieldset blockquote {
+  font-size: 14px;
+}
+
+.weimall-information .fieldset blockquote:hover {
+  background: #FAFAFA;
+}
+
+.weimall-information .fieldset ul, .weimall-information .fieldset ol {
+  margin-left: 34px;
+}
+
+.weimall-information .fieldset ul li {
+  list-style: circle;
+}
+
+.weimall-information .fieldset ol li {
+  list-style: decimal;
+}
+
+.weimall-information .fieldset ol.abc li {
+  list-style: lower-latin
+}
+
+.weimall-information .fieldset .int {
+  margin-left: 34px;
+}
+
+.weimall-information .fieldset h5 {
+  font-size: 16px;
+  font-weight: lighter;
+}
+
+.weimall-information .fieldset h5 i {
+  font-size: 12px;
+  padding-left: 15px;
+}
+
+.weimall-information .fieldset h4 {
+  font-size: 16px;
+  border-bottom: 1px solid #EEE;
+  padding: 5px 0;
+  margin: 20px 0 15px;
+}
+
+.weimall-information .fieldset address {
+  font-size: 12px;
+  line-height: 150%;
+}

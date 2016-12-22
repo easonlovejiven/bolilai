@@ -1,0 +1,86 @@
+coffee:
+	set_valid_input = (form, validate_id, price) ->
+		$('#prompt_'+validate_id, form).html(price||0)
+		$('#'+validate_id, form).attr('max_price', price||0)
+
+	valid_refund_amount = (ths)->
+		form = ths.parents('form')[0]
+		ths_val = parseInt(ths.val())
+		validate_id = ths.attr('valid')
+		unit_price = parseInt($('#unit_price', form).html())
+		ths_price = parseInt($('#'+validate_id, form).attr('price'))
+
+		val = ths.val().replace(/\D/g, '')
+		ths.val(val) unless val == ths.val()
+
+		$('span.refund_amount_errors', ths.parents('td:first')).remove()
+
+		$(form).on submit: ->
+			!Boolean($('span.refund_amount_errors',form).length)
+
+		if ths.val() is "" or ths_val is 0 or isNaN(ths_val)
+			set_valid_input form, validate_id, ths_price
+			return false
+
+		if ths_val > parseInt(ths.attr('max_price')) or ths_val < 1
+			ths.after('<span class="refund_amount_errors" style="color:red;">数值应在0~'+ths.attr('max_price')+'之间</span>')
+		else
+			set_valid_input form, validate_id, if unit_price-ths_val <= ths_price then unit_price-ths_val else ths_price
+		false
+	if $.browser.msie && $.browser.version < 9
+		$(document).delegate '.amount_returned_input',
+			keyup: -> valid_refund_amount($(this))
+			change: -> valid_refund_amount($(this))
+	else
+		$(document).delegate '.amount_returned_input',
+			input: -> valid_refund_amount($(this))
+h2 退款
+
+= form_for @unit, url: refund_amount_update_admin_shop_trade_path(@unit), html: { method: :put} do |f|
+	= f.error_messages
+	table.form-table
+		tbody
+			- balance = (@unit.trade.price.to_i - @unit.trade.payment_price.to_i)
+			- amount = @unit.price.to_i - (@unit.amount_returned.to_i + @unit.amount_balance_returned.to_i)
+			tr.form-field
+				th scope="row"
+					= label_tag '商品售价'
+				td
+					span#unit_price = @unit.price.to_i
+			- if (@unit.trade.price.to_i != @unit.trade.payment_price.to_i) && @unit.amount_balance_returned.to_i == 0
+				tr.form-field
+					th scope="row"
+						= label_tag '剩余可退余额'
+					td
+						- amount_balance_total = @unit.trade.units.sum(:amount_balance_returned).to_i
+						- balance = amount_balance_total > balance ? 0 : balance - amount_balance_total
+						span#prompt_auction_unit_amount_balance_returned
+							= balance > amount ? amount : balance
+				tr.form-field
+					th scope="row"
+						= f.label 'auction_unit[amount_balance_returned]', "余额退款"
+					td
+						= f.text_field :amount_balance_returned, max_price: balance > amount ? amount : balance , price: balance > amount ? amount : balance, class: 'amount_returned_input', valid: 'auction_unit_amount_returned'
+			tr.form-field
+				th scope="row"
+					= label_tag "剩余可退现金"
+				td
+					- refund_balance_price = @unit.price.to_i - @unit.amount_balance_returned.to_i
+					- amount_refund_total = @unit.trade.payment_price.to_i - @unit.trade.units.where("id != ?", @unit.id).sum(:amount_returned).to_i
+					span#prompt_auction_unit_amount_returned
+					 = refund_amount_price = refund_balance_price.to_i > amount_refund_total ? amount_refund_total : refund_balance_price
+			tr.form-field
+				th scope="row"
+					= f.label :amount_returned, "现金退款"
+				td
+					= f.text_field :amount_returned, max_price: refund_amount_price, price: refund_amount_price, class: 'amount_returned_input', valid: 'auction_unit_amount_balance_returned'
+			tr
+				th scope="row"
+					= label_tag 'sms[success]', "短信通知"
+				td
+					label
+						= check_box_tag 'sms[success]', '1', false, disabled: !(@unit.return_phone? && @current_user.can_create_sms?)
+						= label_tag 'sms[success]', @unit.return_phone? ? "#{h @unit.return_phone}<br />尊敬的用户您好：您的退款已由珀丽莱账户汇出，到账时间根据银行系统接转周期约1-7个工作日，可致电银行查询到账时间。如遇疑问请您致电客服电话查询反馈。感谢您的支持，祝您生活愉快！[珀丽莱]" : ""
+
+	p.submit
+		= f.submit "提交", class: 'submit'

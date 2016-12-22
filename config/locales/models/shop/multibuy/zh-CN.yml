@@ -1,0 +1,17 @@
+zh-CN:
+  activerecord:
+    models:
+      "shop/multibuy": 连拍
+    attributes:
+      "shop/multibuy":
+        name: 名称
+        description: 描述
+        pic: 图片
+        rule: 规则图片
+        pic_for_pad: 平板图片
+        pic_for_phone: 手机图片
+        percent_for_2: 2件折扣
+        percent_for_3: 3件折扣
+        percent_for_4: 4件以上折扣
+        detail: 详情图片
+        editor: 更新人

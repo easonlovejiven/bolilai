@@ -1,0 +1,9 @@
+<%= paginator.render do -%>
+    <div class="page clear_fix border_1px">
+      <%= prev_page_tag %>
+      <div class="index_page left" style="left: 38%;position: relative;">
+        <span><%= current_page %></span>/<%= total_pages %>
+      </div>
+      <%= next_page_tag %>
+    </div>
+<% end -%>

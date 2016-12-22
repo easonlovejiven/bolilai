@@ -1,0 +1,21 @@
+<%
+   page ||= @page || CustomPage::Page.search(position ||= params[:id]) || CustomPage::Page.new
+   @page_title ||= page.title if page.title.present?
+   @page_keywords ||= page.keywords.to_sz if page.keywords.present?
+   @page_description ||= page.description if page.description.present?
+   content = page.content.to_s
+   content = Haml::Engine.new(content, (Haml::Template.options || {}).merge(:suppress_eval => true)).render if page.engine == 'haml'
+   content = Slim::Template.new(:pretty => true) { content }.render if page.engine == 'slim'
+   if page.engine == 'template' && (@data = (JSON.parse(content) rescue nil))
+     content = render(:partial => "custom_page/pages/#{@data["version"].to_s.gsub(/\W+/, '')}", :locals => {:data => @data, :page => page})
+   else
+     content = '请稍等...'
+   end
+%>
+<%= javascript_inline_tag "admin/custom_page/preview/#{@data["version"].to_s.gsub(/\W+/, '')}" if  params[:action]=="preview"%>
+<div class="auction_pages" id="auction_pages_<%= page.id %>">
+  <%= raw(content) %>
+  <% page.pages_pages.order('id ASC').includes(:child).map(&:child).each do |page| %>
+      <%= render :file => 'custom_page/pages/show', :locals => {:page => page} %>
+  <% end %>
+</div>

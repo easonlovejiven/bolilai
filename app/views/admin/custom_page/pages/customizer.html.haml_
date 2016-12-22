@@ -1,0 +1,87 @@
+- show = false
+%h2 定制页面
+= form_for @page, :url => customize_admin_pages_path,:method => :post, :html => { :multipart => true ,id: "togglingForm", "data-redirect-url"=> admin_pages_path} do |f|
+  %table.form-table
+    %tbody
+      %tr
+        %th= f.label :name, '名称'
+        %td
+          - if show
+            = @page.name
+          - else
+            = f.text_field :name
+            = f.error_message_on :name
+      %tr
+        %th= f.label :series, '系列'
+        %td
+          - if show
+            = @page.title
+          - else
+            = f.text_field :series
+            = f.error_message_on :series
+      %tr
+        %th= f.label :title, '标题'
+        %td
+          - if show
+            = @page.title
+          - else
+            = f.text_field :title
+            = f.error_message_on :title
+      %tr(style="display:none;")
+        %th= f.label :engine, '引擎'
+        %td
+          - if show
+            = @page.engine
+          - else
+            = f.select :engine, CustomPage::Page::ENGINES, :include_blank => '', :readonly => true
+            = f.error_message_on :engine
+      %tr(style="display:none;")
+        %th= f.label :content, '内容'
+        %td
+          - if show
+            %pre= h @page.content
+          - else
+            = f.text_area :content, :readonly => true
+            = f.error_message_on :content
+      %tr
+        %th 定制
+        %td
+          %div(style="display: inline-block; float: left; width: 320px; padding: 10px; min-height: 1000px; background-color: white; margin-right: 40px;")
+            #new_pages.pages
+              .tablenav 新页面
+            #new_pages_fields
+          %div(style="display: inline-block; float: left; width: 320px; padding: 10px; min-height: 1000px; background-color: white;")
+            .tablenav#search_form
+              模版页面：&nbsp;&nbsp;
+              = hidden_field_tag 'where[snapshot][noteq]', 'null'
+              = hidden_field_tag 'where[engine]', 'template'
+              = label_tag "where[id][]", "ID"
+              = render :partial => 'admin/shared/search', :locals => { :name => 'id', :title => 'ID', :multiple => true }
+              = label_tag "where[name][like]", "名称"
+              = text_field_tag "where[name][like]", params[:where] && params[:where][:name] && params[:where][:name][:like].to_s.gsub('%', '')
+              = label_tag "where[series]", "系列"
+              = text_field_tag "where[series]", params[:where] && params[:where][:series] || 'coffee1'
+              = label_tag "where[title][like]", "标题"
+              = text_field_tag "where[title][like]", params[:where] && params[:where][:title] && params[:where][:title][:like].to_s.gsub('%', '')
+              = label_tag "where[created_at]", "创建时间"
+              = text_field_tag "where[created_at][gteq]", params[:where] && params[:where][:created_at] && params[:where][:created_at][:gteq], :class => "datepicker"
+              \ ~
+              = text_field_tag "where[created_at][lteq]", params[:where] && params[:where][:created_at] && params[:where][:created_at][:lteq], :class => "datepicker"
+              = label_tag "where[published]", "发布"
+              = select_tag "where[published]", options_for_select([nil, ['✔', 'true'], ['✘', 'false']], params[:where] ? params[:where][:published] : nil)
+              = label_tag "where[editor_id]", "编辑ID"
+              = text_field_tag "where[editor_id]", params[:where] && params[:where][:editor_id]
+              = label_tag "order", "排序"
+              = select_tag "order", options_for_select([nil] + [%w[id ID], %w[created_at 创建时间], %w[updated_at 更新时间]].map { |name, title| [["#{title} ↑", "#{name} asc"], ["#{title} ↓", "#{name} desc"]] }.inject([], &:+), params[:order] || 'id asc')
+              = label_tag "per_page", "每页"
+              = select_tag "per_page", options_for_select([nil, 10, 20, 30, 50, 100, 200, 300, 500, 1000, 2000, 3000, 5000], params[:per_page].to_i)
+              = label_tag "page", "页数"
+              = text_field_tag "page", params[:page]
+              = submit_tag '搜索', :name => nil, :class => "button-secondary", :id => "search_submit"
+            #old_pages.pages
+          %br.clear
+  - unless show
+    .submit= f.submit "提交"
+
+= stylesheet_link_tag 'admin/custom_page/customizer'
+= javascript_include_tag 'admin/custom_page/customizer'

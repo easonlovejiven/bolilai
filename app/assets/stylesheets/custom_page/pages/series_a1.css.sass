@@ -1,0 +1,198 @@
+@import "shared/function"
+.series_a1
+	display: block
+	width:  1000px
+	margin: 0 auto
+	position: relative
+	height: 930px
+	margin-bottom: 12px
+	background: #fff
+	overflow: hidden
+	.dividing_line_960
+		position: absolute
+		top: 560px
+		left: 0
+		display: block
+		overflow: hidden
+		height: 14px
+		background: asset-url('auction/pages/template/shared/dividing_line_960.png') no-repeat center top
+		width: 100%
+	.large_list
+		display: block
+		overflow: hidden
+		padding: 44px 0 0 0
+		width: 1080px
+		.link
+			position: relative
+			width: 350px
+			height: 496px
+			float: left
+			margin-left: 54px
+			margin-right: 132px
+			.title
+				line-height: 28px
+				font-size: 24px
+				display: block
+				text-align: center
+				height: 30px
+				overflow: hidden
+				color: #333
+				margin-bottom: 15px
+			.pic
+				width: 350px
+				height: 350px
+				display: block
+			.linktext
+				display: block
+				padding-left: 31px
+				// padding-top: 10px
+				// position: relative
+				position: absolute
+				top: 400px
+				.summary
+					span
+						display: block
+						line-height: 20px
+						font-size: 16px
+						height: 20px
+						overflow: hidden
+					em
+						display: block
+						line-height: 20px
+						font-size: 12px
+						height: 20px
+						width: 288px
+						white-space: nowrap
+						text-overflow: ellipsis
+						-o-text-overflow: ellipsis
+						overflow: hidden
+				.value
+					.MarketPrice
+						display: block
+						line-height: 26px
+						font-size: 12px
+						text-decoration: line-through
+						overflow: hidden
+						height: 22px
+						margin-bottom: 4px
+						em
+							height: 22px
+							@include inline-block
+						span
+							min-width: 50px
+							height: 22px
+							text-decoration: line-through
+							@include inline-block
+					.IhaveuPrice
+						display: block
+						line-height: 26px
+						font-size: 22px
+						margin-top: 5px
+						overflow: hidden
+						height: 30px
+						em
+							@include inline-block
+							font-size: 12px
+							height: 30px
+							_float: left
+							_line-height: 28px
+							text-decoration: none
+							margin-bottom: 0
+						span
+							min-width: 50px
+							height: 30px
+							@include inline-block
+				.at_once
+					background: #cc6b27 repeat-x 0 0
+					height: 28px
+					width: 103px
+					line-height: 27px
+					position: absolute
+					left: 216px
+					top: 68px
+					text-align: center
+					color: #FFF
+					font-size: 16px
+	.small_list
+		display: block
+		overflow: hidden
+		padding: 44px 0 0 54px
+		width: 965px
+		.link
+			position: relative
+			width: 200px
+			float: left
+			margin-right: 40px
+			height: 325px
+			.pic
+				width: 200px
+				height: 200px
+				display: block
+			.linktext
+				display: block
+				padding-left: 18px
+				position: absolute
+				top: 207px
+				.summary
+					display: block
+					width: 148px
+					span
+						display: block
+						line-height: 20px
+						font-size: 16px
+						height: 20px
+						overflow: hidden
+					em
+						display: block
+						line-height: 20px
+						font-size: 12px
+						height: 40px
+						overflow: hidden
+				.value
+					.MarketPrice
+						display: block
+						line-height: 26px
+						font-size: 12px
+						text-decoration: line-through
+						overflow: hidden
+						height: 22px
+						margin-bottom: 4px
+						em
+							height: 22px
+							@include inline-block
+						span
+							min-width: 50px
+							height: 22px
+							text-decoration: line-through
+							@include inline-block
+					.IhaveuPrice
+						display: block
+						line-height: 26px
+						font-size: 22px
+						margin-top: 5px
+						overflow: hidden
+						height: 30px
+						em
+							@include inline-block
+							font-size: 12px
+							height: 30px
+							_float: left
+							_line-height: 28px
+							text-decoration: none
+							margin-bottom: 0
+						span
+							min-width: 50px
+							height: 30px
+							@include inline-block
+
+@media \0screen
+	.series_a1 .large_list .link .linktext .at_once
+		line-height: 28px
+
+
+.ihaveu
+	.series_a1
+		left: -20px
+.layout_flash
+	.series_a1
+		left: auto

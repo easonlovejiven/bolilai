@@ -1,0 +1,134 @@
+.trade_block.close.open(id="trade_#{trade.id}")
+  -# %a.list_title.js_trade_bar(href="#" onclick="event.returnValue = false; return false;" id="trade_#{trade.id}_bar" data-id="#{trade.id}")
+  .list_title
+    %em.viewicon
+    %strong
+      订单编号：
+      %span= h trade.identifier
+    %strong
+      成交时间：
+      %span= trade.created_at.to_s(:db)
+    /[if IE]
+      %span.thleft
+      %span.thright
+  - case trade.status
+    - when 'pay'
+      .trade_present(class="js_trade_#{trade.id}_current_status")
+        %span.simple 待付款
+        %a.linkclose(href="#" class="Order_cancel js_trade_cancel_button" data-id="#{trade.id}") 取消订单
+        %a.PayBtn(href="#{url_for(trade)}" data-target="popup") 付款
+        .trade_closebox.js_trade_cancel_box( id="trade_#{trade.id}_cancel_box" style="display:none;")
+          /[if IE 6]
+            %iframe
+          %em.boxicon
+          .boxbg
+          /[if IE]
+            .boxbg_ie
+          .boxcont
+            %h6.boxtitle 确定取消该订单？
+            %a.boxBtnL.js_trade_cancel_box_confirm(href="#" data-id="#{trade.id}") 确定
+            %a.boxBtnR.js_trade_cancel_box_cancel(href="#" data-id="#{trade.id}") 取消
+      .trade_present_simple(style="display:none;" class="js_trade_#{trade.id}_new_status") 已取消
+    - when 'audit'
+      .trade_present_simple 待发货
+    - when 'prepare'
+      .trade_present_simple 待发货
+    - when 'ship'
+      .trade_present_simple 待发货
+    - when 'receive'
+      .trade_present.Shipped(class="js_trade_#{trade.id}_current_status")
+        .Receiving 待收货
+        %a.PayBtn.js_trade_receive_button(href="#" data-id="#{trade.id}") 确认收货
+        .trade_closebox.js_trade_receive_box(style="display:none;" id="trade_#{trade.id}_receive_box")
+          /[if IE 6]
+            %iframe
+          %em.boxicon
+          .boxbg
+          /[if IE]
+            .boxbg_ie
+          .boxcont
+            %h6.boxtitle 确认已收到全部商品?
+            %a.boxBtnL.js_trade_receive_box_confirm(href="#" data-id="#{trade.id}") 确定
+            %a.boxBtnR.js_trade_receive_box_cancel(href="#" data-id="#{trade.id}") 取消
+      .trade_present_simple(style="display:none;" class="js_trade_#{trade.id}_new_status") 已完成
+    - when 'complete'
+      .trade_present_simple 交易完成
+    - when 'cancel'
+      .trade_present_simple 已取消
+    - when 'punished'
+      .trade_present_simple 已过期
+    - when 'freezed'
+      .trade_present_simple 已关闭
+  .trade_info
+    - trade.units.each do |unit|
+      .trade_goods
+        .good_name
+          %a( target="_blank" href="#{url_for(unit.item.product)}")
+            = image_tag "#{unit.item.product.major_image.url(:thumb)}", :alt => ""
+          %a( target="_blank" href="#{url_for(unit.item.product)}")
+            %h6= h unit.item.product.name
+          -#%p.Pinfo
+          -#  %strong
+          -#    颜色：
+          -#    %span= h unit.item.product.color_name
+          -#  - unless unit.item.measure.blank?
+          -#    %strong
+          -#      规格：
+          -#      %span= h unit.item.measure
+        .good_discount
+          %span
+        .good_price
+          %span
+            = unit.price
+            %em RMB
+        .good_now
+          %table.link_block
+            %tr
+              %td
+                - case trade.status
+                  - when 'pay'
+                    %span.simple(class="js_trade_#{trade.id}_current_status") 待付款
+                    %span(class="js_trade_#{trade.id}_new_status" style="display:none") 已取消
+                  - when 'audit'
+                    %span 待发货
+                  - when 'prepare'
+                    %span 待发货
+                  - when 'ship'
+                    %span 待发货
+                  - when 'receive'
+                    %span.simple(class="js_trade_#{trade.id}_current_status") 待收货
+                    %span.simple(class="js_trade_#{trade.id}_current_status" style="display:none") 已完成
+                  - when 'complete'
+                    - case unit.status
+                    - when nil
+                      %span 交易完成
+                    - when 'audit'
+                      %span 退货审核中
+                    - when /receive|transfer/
+                      %span 退货中转
+                    - when 'complete'
+                      %span 已退货
+                  - when 'cancel'
+                    %span 已取消
+                  - when 'punished'
+                    %span 已过期
+                  - when 'freezed'
+                    %span 已取消
+        .good_operating
+          %table.link_block
+            %tr
+              %td
+                = link_to '查看物流', '#', :class => "link_express js_trade_delivery_button", 'data-id' => "#{trade.id}" if %w[receive complete].include?(trade.status) && Shop::Trade.valid_express?(trade.delivery_service) && unit.status != 'complete'
+                = link_to unit.status.blank? ? '申请退货' : '退货信息', unit, :style => "display:#{'none' if trade.status == 'receive'};", :class => "link_return js_trade_#{trade.id}_return_button" if %w[receive complete].include?(trade.status) && !%w[complete].include?(unit.status)
+    - if %w[receive complete].include?(trade.status) && Shop::Trade.valid_express?(trade.delivery_service)
+      .express(style="display:none;" id="trade_#{trade.id}_delivery_detail")
+        .express_scroll
+          .express_title
+            %strong
+              快递名称：
+              %span= Shop::Trade.delivery_coms_arr.map { |service| { service[:name] => service[:title] } }.inject(&:merge)[trade.delivery_service]
+            %strong
+              运单编号：
+              %span= h trade.delivery_identifier
+          %h4 查看物流：
+          %ul.express_info

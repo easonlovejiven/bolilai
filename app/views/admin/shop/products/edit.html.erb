@@ -1,0 +1,405 @@
+<% @record = @product %>
+<% @show = !%w[new edit].include?(params[:action]) && @record.valid? %>
+<div class="modal-header">
+  <%= render "admin/modal/header" %>
+</div>
+<%= render 'admin/shared/prompt' %>
+<div class="modal-body">
+  <%= form_for @product, as: :product, :url => @product.new_record? ? admin_shop_products_path : admin_shop_product_path(@product),
+               :html => {:method => @product.new_record? ? :post : :put, :multipart => true, :class => "form-horizontal auction_product_submit"} do |f| %>
+
+      <div class="form-group">
+        <%= f.label :ops, '操作', class: 'col-md-3 control-label' %>
+        <div class="col-md-6 form-control-static">
+          <%= yield :nav_btns %>
+        </div>
+      </div>
+
+      <% if @show %>
+          <div class="form-group">
+            <%= f.label :id, 'ID', {class: 'col-md-3 control-label'} %>
+            <div class="form-control-static">
+              <strong><%= @record.send(:id) %></strong>
+            </div>
+          </div>
+      <% end %>
+
+      <%= render 'admin/modal/text_field', {f: f, field: :identifier} %>
+
+      <div class="form-group">
+        <%= f.label :name, '<sup>*</sup>名称'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= h @record.name %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <%= f.text_field :name, {class: 'form-control', required: true} %>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :label, '标注'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= h @record.label %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <%= f.text_field :label, {class: 'form-control'} %>
+              <%#= select_tag :product_label_select, options_for_select(['']+%w[热销 经典 珍藏 断货]), :style => "width:28px;display:none\\9;", :onchange => "$(this).prev().val($(this).val());" %>
+            </div>
+        <% end %>
+      </div>
+
+
+      <div class="form-group">
+        <%= f.label :remark, '备注'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= h @record.remark %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <%= f.text_field :remark, {class: 'form-control'} %>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :description, '描述'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= h @record.description %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <%= f.text_area :description, {class: 'form-control'} %>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :category_id, '<sup>*</sup>分类'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= link_to @product.category.name, admin_shop_category_path(@product.category), "data-target" => "rightPanel" if @product.category %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <!--<%#= f.collection_select :category_id, Shop::Category.active, :id, :name, {:include_blank => ''},class: 'form-control' %>-->
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :category1_id, '<sup>*</sup>一级分类'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%#= link_to_if @current_user.can_show_category?, @product.category1.name, admin_shop_category_path(@product.category1), "data-target" => "rightPanel", :id => "product_category1" if @product.category1 %>
+              <%= link_to @product.category1.name, admin_shop_category_path(@product.category1), "data-target" => "rightPanel", :id => "product_category1" if @product.category1 %>
+              <%= f.hidden_field :category1_id %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <select class="form-control _category_selects" name="product[category1_id]" class='form-control' required="true"></select>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :category2_id, '<sup>*</sup>二级分类'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= link_to @product.category2.name, admin_shop_category_path(@product.category2), "data-target" => "rightPanel" if @product.category2 %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <select class="form-control _category_selects" name="product[category2_id]" class='form-control' required="true"></select>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :category3_id, '三级分类'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= link_to @product.category3.name, admin_shop_category_path(@product.category3), "data-target" => "rightPanel" if @product.category3 %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <select class="form-control _category_selects" name="product[category3_id]" class='form-control'></select>
+              <%= render :partial => "category_tree" %>
+            </div>
+        <% end %>
+      </div>
+
+
+      <%= render 'admin/modal/text_field', {f: f, field: :price, required: true} %>
+      <%= render 'admin/modal/text_field', {f: f, field: :discount, required: true} %>
+
+      <div class="form-group">
+        <%= f.label :order, '排序'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= @product.order %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <%= f.text_field :order, {class: 'form-control'} %>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :brand_id, '品牌'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%#= link_to_if @current_user.can_show_brand?, @product.brand.name, admin_shop_brand_path(@product.brand), "data-target" => "rightPanel" if @product.brand %>
+              <%= link_to @product.brand.name, admin_shop_brand_path(@product.brand), "data-target" => "rightPanel" if @product.brand %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <%= f.collection_select :brand_id, Shop::Brand.active.order('initial ASC'), :id, :name, {:include_blank => ''}, class: 'form-control' %>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :scarcity, '稀缺（限量）'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= @product.scarcity %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <%= f.select :scarcity, [0, 20, 40, 60, 80, 100].map { |i| [i, i] }, {:include_blank => true}, class: 'form-control' %>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :relate_product_ids, '相关产品ID列表'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <% @product.relate_products.each do |product| %>
+                  <%#= link_to_if @current_user.can_show_product?, image_tag("#{product.major_pic}.thumb65.jpg", :alt => "", :style => "width:50px; height:50px;"), admin_shop_product_path(product), :title => product.name %>
+                  <%= link_to image_tag("#{product.major_image.url(:thumb)}", :alt => "", :style => "width:50px; height:50px;"), admin_shop_product_path(product), :title => product.name %>
+              <% end %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <%= f.text_area :relate_product_ids, class: 'form-control' %>
+              <span class="note">用换行或英文逗号分隔</span>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :match_product_ids, '搭配产品ID列表'.html_safe, class: 'col-md-3 control-label' %>
+        <% unless @show %>
+            <div class="col-md-6">
+              <%= f.text_area :match_product_ids, {class: 'form-control'} %>
+              <span class="note">用换行或英文逗号分隔</span>
+            </div>
+        <% end %>
+        <div class="products sortable selectable <%= 'operable' unless params[:action] == 'show' %>">
+          <%# (@product.match_products+(params[:action] == 'show' ? [] : @product.weighted_products.limit(30))).uniq.each do |product| %>
+          <%#= link_to image_tag("#{product.pic_image.url(:tiny)}", :alt => "#{product['weight']} #{product.name}"), admin_shop_product_path(product), :title => "#{product['weight']} #{product.name}", 'data-id' => product.id, :class => "#{'invalid' unless product.active? && product.published? && product.unsold_count > 0} #{'selected' if @product.match_product_ids.to_s.scan(/\d+/).map(&:to_i).include?(product.id)}" %>
+          <%# end %>
+        </div>
+      </div>
+
+      <% if @show %>
+          <div class="form-group">
+            <%= f.label :readings_count, '浏览数'.html_safe, class: 'col-md-3 control-label' %>
+            <div class="form-control-static">
+              <%= @product.readings_count %>
+            </div>
+          </div>
+      <% end %>
+      <div class="form-group">
+        <%= f.label :point, '积分'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= @product.point %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <%= f.select :point, [0, 20, 40, 60, 80, 100].map { |i| [i, i] }, {:include_blank => true}, class: 'form-control' %>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :color, '<sup>*</sup>颜色'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= @product.color %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <%= f.select :color, Shop::Product::COLORS.keys, {:include_blank => true}, class: 'form-control' %>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :color_name, '颜色名称'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= h @product.color_name %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <%= f.text_field :color_name, {class: 'form-control'} %>
+            </div>
+        <% end %>
+      </div>
+      <%= render :partial => "admin/modal/image_field", locals: {f: f, field: :color_pic, max_files: 1, form_as: :product} %>
+      <div class="form-group">
+        <%= f.label :attribute_data, '属性列表（前往商品二级分类下添加）'.html_safe, class: 'col-md-3 control-label' %>
+        <div class="col-md-6">
+          <% @product.attributes_with_values.map do |attribute, values| %>
+              <% if params[:action] == 'show' %>
+                  <%= link_to attribute.name, admin_shop_attribute_path(attribute), "data-target" => "rightPanel" %>
+                  <%= values.map(&:content).join(', ') %>
+                  <br/>
+              <% else %>
+                  <div style="float:left;padding-right: 10px;height: 70px">
+                    <%= link_to attribute.name, admin_shop_attribute_path(attribute), "data-target" => "rightPanel" %>
+                    <br/>
+                    <% if attribute.option_list.blank? %>
+                        <%= text_area_tag "attributes[#{attribute.id}]", values.map(&:content).join("\n"), style: "height: 50px;width: 100px", placeHolder: "自定义数值，回车键分割" %>
+                    <% else %>
+                        <%= select_tag "attributes[#{attribute.id}]", options_for_select([[]]+attribute.option_list.split, values.map(&:content)), style: "height: 50px;width: 100px", :multiple => true, class: 'select2' %>
+                    <% end %>
+                  </div>
+              <% end %>
+          <% end %>
+        </div>
+      </div>
+
+
+      <%= render :partial => "admin/modal/image_field", locals: {f: f, field: :major_pic, max_files: 1, form_as: :product, required: true} %>
+
+      <!--<div class="form-group">-->
+      <!--<%= f.label :images, '<sup>*</sup>图片列表'.html_safe, class: 'col-md-3 control-label' %>-->
+      <!--<div class="form-control-static">-->
+      <!--<%#=render :partial=>"images"%>-->
+      <!--</div>-->
+      <!--</div>-->
+      <%= render :partial => "admin/modal/image_field", locals: {f: f, field: :large, max_files: 6, form_as: :product, required: true, nested_filed: :images} %>
+
+
+      <div class="form-group">
+        <%= f.label :arrived_at, '上架时间'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= @product.arrived_at && @product.arrived_at.to_s(:db) %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <div class="input-group">
+                <%= f.text_field :arrived_at, {class: 'form-control hasDatepicker'} %>
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+              </div>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :published_at, '发布时间'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= @product.published_at && @product.published_at.to_s(:db) %>
+            </div>
+        <% else %>
+            <div class="col-md-6">
+              <div class="input-group">
+                <%= f.text_field :published_at, {class: 'form-control hasDatepicker'} %>
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+              </div>
+            </div>
+        <% end %>
+      </div>
+      <% if @show %>
+          <div class="form-group">
+            <%= f.label :edited_at, '<sup>*</sup>编辑时间'.html_safe, class: 'col-md-3 control-label' %>
+            <div class="form-control-static">
+              <%= @product.edited_at && @product.edited_at.to_s(:db) %>
+            </div>
+          </div>
+      <% end %>
+      <% if !@show %>
+          <div class="form-group">
+            <%= f.label :body, '产品详细介绍'.html_safe, class: 'col-md-3 control-label' %>
+            <div class="col-md-8">
+              <%= f.text_area :body, {id: 'ueditorContent'} %>
+            </div>
+          </div>
+      <% end %>
+      <% if !@product.new_record? %>
+
+          <div class="form-group">
+            <%= f.label :created_at, '创建时间', class: 'col-md-3 control-label' %>
+            <div class="form-control-static">
+              <%= @product.created_at && @product.created_at.to_s(:db) %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :updated_at, '修改时间', class: 'col-md-3 control-label' %>
+            <div class="form-control-static">
+              <%= @product.updated_at && @product.updated_at.to_s(:db) %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :editor, '编辑', class: 'col-md-3 control-label' %>
+            <div class="form-control-static">
+              <%= link_to_if can?(:show, @product.editor), @product.editor.name, admin_manage_editor_path(@product.editor), "data-target" => "rightPanel" if @product.editor %>
+            </div>
+          </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= f.label :ops, '操作', class: 'col-md-3 control-label' %>
+        <div class="col-md-6 form-control-static">
+          <%= yield :nav_btns %>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <% if @show %>
+            <%= link_to '查看', admin_shop_product_path(@product), "data-target" => "rightPanel", class: 'btn btn-success' if can?(:show, @product) %>
+            <%= link_to '编辑', edit_admin_shop_product_path(@product), class: 'btn btn-success' if can?(:update, @product) %>
+            <%= link_to '删除', delete_admin_shop_product_path(@product), "data-target" => "rightPanel", method: "delete", class: 'btn btn-success' if can?(:destroy, @product) %>
+            <%= link_to '访问', shop_product_path(@product), class: 'btn btn-success', target: '_blank' if can?(:show, @product) %>
+        <% else %>
+            <%= f.submit "提交", class: "btn btn-primary" %>
+        <% end %>
+      </div>
+  <% end %>
+</div>
+<%= javascript_include_tag "plugins/ueditor/ueditor.all" %>
+<style type="text/css">
+    .select2-container-multi .select2-choices {
+        height: 50px !important;
+        width: 162px !important;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+        App.handleDatePickers()
+        if ($('#ueditorContent').length > 0) {
+            var newEditor = UE.getEditor("ueditorContent", {
+                autoFloatEnabled: true,
+                initialFrameWidth: "100%",
+                initialFrameHeight: 240
+            });
+        }
+        App.initMultiSelect2(".select2")
+    })
+</script>

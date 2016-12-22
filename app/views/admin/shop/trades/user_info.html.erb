@@ -1,0 +1,76 @@
+<h2>查看用户</h2>
+
+<%= form_for :user, @user, :url => '/' do |f| %>
+	<%= f.error_messages %>
+
+	<table class="form-table">
+		<tbody>
+			<tr class="form-field form-required">
+				<th scope="row"><%= f.label :id, "ID" %></th>
+				<td><%= @user.id %></td>
+			</tr>
+
+			<tr class="form-field form-required">
+				<th scope="row"><%= f.label :name, "姓名" %></th>
+				<td><%= h @user.name %></td>
+			</tr>
+
+			<tr class="form-field form-required">
+				<th scope="row"><%= f.label :sex, "性别" %></th>
+				<td><%= @user.sex %></td>
+			</tr>
+
+			<tr class="form-field form-required">
+				<th scope="row"><%= f.label :pic, "头像" %></th>
+				<td><%= link_to image_tag(@user.pic, :style => 'height:100px;'), @user.pic, "data-target" => "rightPanel" if !@user.pic.blank? %></td>
+			</tr>
+
+			<tr class="form-field form-required">
+				<th scope="row"><%= f.label :birthday, "生日" %></th>
+				<td><%= @user.birthday %></td>
+			</tr>
+
+			<tr class="form-field form-required">
+				<th scope="row"><%= f.label :email, "邮箱" %></th>
+				<td><%= @user.account.email %></td>
+			</tr>
+
+			<tr class="form-field form-required">
+				<th scope="row"><%= f.label :phone, "手机" %></th>
+				<td><%= @user.account.phone %></td>
+			</tr>
+
+			<tr class="form-field form-required">
+				<th scope="row"><%= f.label :referrer_id, "referrer_id" %></th>
+				<td><%= @user.account.referrer_id %></td>
+			</tr>
+
+			<tr class="form-field form-required">
+				<th scope="row"><%= f.label :source, "source" %></th>
+				<td><%= @user.account.source %></td>
+			</tr>
+
+			<tr class="form-field form-required">
+				<th scope="row"><%= f.label :information, "information" %></th>
+				<td><%= @user.account.information %></td>
+			</tr>
+
+			<tr class="form-field form-required">
+				<th scope="row"><%= f.label :click, "链接" %></th>
+				<td>
+					<%= link_to_if @current_user.can_show_link?, "#{@user.account.link.ad && @user.account.link.ad.promotion && @user.account.link.ad.promotion.name}", @user.account.click ? admin_shop_click_path(@user.account.click) : admin_shop_link_path(@user.account.link), "data-target" => "rightPanel" if @user.account.link %>
+				</td>
+			</tr>
+
+			<tr class="form-field">
+				<th scope="row"><%= f.label :created_at, '创建时间' %></th>
+				<td><%= @user.created_at && @user.created_at.to_s(:db) %></td>
+			</tr>
+
+			<tr class="form-field">
+				<th scope="row"><%= f.label :updated_at, '修改时间' %></th>
+				<td><%= @user.updated_at && @user.updated_at.to_s(:db) %></td>
+			</tr>
+		</tbody>
+	</table>
+<% end %>

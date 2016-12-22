@@ -1,0 +1,45 @@
+- attribute_names = record.class.columns.map{|p| [p.name, p.type] }.to_h
+- attribute_names = attribute_names.reject{|a| %w{active lock_version login_at}.index(a) }
+- attrs = record.class.page_attributes || {}
+- attrs[:text] || %w[ name title ]
+- attrs[:text_area] ||= %w[ ]
+- attrs[:image] ||= %w[ ]
+- attrs[:text_checkbox] ||= %w[ ]
+- options_class =  (h_class = { class: 'form-control' }) && show ? h_class.merge(disabled: 'true') : h_class
+		
+fieldset
+	- (attrs[:text].to_sz&attribute_names.keys).each do |field|
+		.form-group
+			= f.label field, { class: 'col-md-2 control-label' }
+			.col-md-10
+				= f.text_field field, options_class
+				span.help-block
+					= f.error_message_on field
+					
+	- (attrs[:text_area].to_a&attribute_names.keys).each do |field|
+		.form-group
+			= f.label field, { class: 'col-md-2 control-label' }
+			.col-md-10
+				= f.text_area field, options_class
+				span.help-block
+					= f.error_message_on field
+					
+	= yield(:html_tag)
+
+	- if show
+		.form-group
+			= f.label :created_at, { class: 'col-md-2 control-label' }
+			.col-md-10
+				= f.text_field :created_at, options_class
+		.form-group
+			= f.label :updated_at, { class: 'col-md-2 control-label' }
+			.col-md-10
+				= f.text_field :updated_at, options_class
+
+- unless show
+	.form-actions
+		.row
+			.col-md-12
+				button.btn.btn-primary type="submit"
+					i.fa.fa-save
+					= t(:submit)

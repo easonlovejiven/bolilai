@@ -1,0 +1,140 @@
+<div class="row">
+  <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="jarviswidget">
+      <header>
+        <span class="widget-icon"><i class="fa fa-table"></i></span>
+
+        <h2>单件列表（<%= @items.total_count %>）</h2>
+
+        <div class="widget-toolbar">
+          <%= link_to raw('<i class="fa fa-plus-circle"></i> 创建'), new_admin_shop_item_path(params[:where].blank? ? {} : {product_id: params[:where][:product_id]}),
+                      class: 'btn btn-xs btn-default', data: {target: 'rightPanel'} if can?(:create, Shop::Item) %>
+          <%= link_to "批量导入", '#import', class: 'btn btn-xs btn-default', data: {target: 'rightPanel'} if can?(:create, Shop::Item) %>
+          <%= render :partial => "admin/shared/export", locals: {export_formats: %w{csv}} if can?(:index, Shop::Item) %>
+        </div>
+      </header>
+      <div>
+        <div class="widget-body-toolbar">
+          <div id='import' style='display: none;'>
+            <h3>批量导入</h3>
+            <%= form_tag import_admin_shop_items_path, :multipart => true, class: 'form-horizontal' do %>
+                <div class="form-body">
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">CSV文本</label>
+
+                    <div class="col-sm-8">
+                      <%= text_area_tag "csvs[]", '', class: 'form-control', rows: 5 %>
+                      <span class="info">（每行包含单件ID，新购买尺寸，新出厂尺寸，用英文逗号分隔）</span>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">CSV文本</label>
+
+                    <div class="col-sm-6">
+                      <span id='csv_template'><%= file_field_tag 'csvs[]', class: 'form-control' %></span>
+                      <a href="#" onclick="s=$('#csv_template').html();$(this).before(s);return false;">添加更多csv文件</a>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-3"></label>
+                    <%= submit_tag "提交", class: 'btn btn-success' %>
+                  </div>
+                </div>
+            <% end %>
+          </div>
+
+          <%= form_tag request.path, method: 'get', id: 'search_form', class: 'form-inline' do %>
+              <%#= link_to "批量导入", '#import', :class => 'button-secondary', :rel => 'facebox' if @current_user.can_update_item? %>
+              <%#= link_to '创建', new_admin_shop_item_path if @current_user.can_create_item? %>
+              <%= render 'admin/shared/search/basic', field: 'id', kv: search_field_kv(:id), size: 4 %>
+              <%= render 'admin/shared/search/basic', field: 'product_id', kv: search_field_kv(:product_id), size: 4, field_name: '产品ID' %>
+              <%= render 'admin/shared/search/basic', field: 'remark', kv: search_field_kv(:remark, :like), field_name: '备注' %>
+              <%= render 'admin/shared/search/basic', field: 'identifer', kv: search_field_kv(:identifer, :like), field_name: '编号' %>
+              <%= render 'admin/shared/search/basic', field: 'measure', kv: search_field_kv(:measure), field_name: '尺寸' %>
+              <%= render 'admin/shared/search/range', field: 'created_at', class_names: 'hasDatepicker' %>
+              <%= render 'admin/shared/search/select', field: 'published', kv: search_field_kv(:published), field_name: '发布', options: [['✔', 'true'], ['✘', 'false']] %>
+              <%= render 'admin/shared/search/basic', field: 'editor_id', kv: search_field_kv(:editor_id), size: 4, field_name: '编辑ID' %>
+              <%= render 'admin/shared/search/order', field: 'order', fields: [:storage_at, :expired_at] %>
+              <%= render 'admin/shared/search/page' %>
+              <%= render 'admin/shared/search/select', field: 'format', kv: search_field_kv(:format), field_name: '格式', options: [['HTML', 'html'], ['CSV', 'csv']] %>
+              <%= submit_tag t(:search), class: 'btn search-xs btn-success' %>
+              <%= link_to t(:reset), request.path, class: 'btn search-xs btn-default', data: {remote: true} %>
+          <% end %>
+        </div>
+        <div class="widget-body no-padding">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+              <thead>
+              <tr>
+                <th>ID</th>
+                <th>产品</th>
+                <th>编号</th>
+                <th>条码</th>
+                <th>备注</th>
+                <th>购买尺寸</th>
+                <th>标准尺寸</th>
+                <th>出厂尺寸</th>
+                <th>库存尺寸</th>
+                <th>采购类型</th>
+                <th>入库时间</th>
+                <th>过期时间</th>
+                <th>产地</th>
+                <th>库位</th>
+                <th>交易</th>
+                <th>操作</th>
+                <th>发布
+                  <% if can?(:publish, 'item') %>
+                      <%= link_to '✔', '#', :onclick => "var button = $('.status_button.enable:not(.active):first').mousedown().click();
+                         if (button.length) setTimeout($.proxy(function(){ $(this).click(); }, this), 100); return false;" %>&nbsp;
+                      <%= link_to '✘', '#', :onclick => "var button = $('.status_button.enable.active:first').mousedown().click();
+                        if (button.length) setTimeout($.proxy(function(){ $(this).click(); }, this), 100); return false;" %>
+                  <% end %>
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <% @items.each do |item| %>
+                  <tr>
+                    <td><%= link_to item.id, 'where[id]' => item.id %></td>
+                    <td><%= render :partial => "admin/shop/products/product", :object => item.product %></td>
+                    <td><%= h item.identifer %></td>
+                    <td><%= h item.barcode %></td>
+                    <td>
+                      <span class="<%#= 'editable' if !item.trade_id && @current_user.can_update_item? %>" data-url="<%#= admin_shop_item_path(item) %>" data-field="item[remark]"><%= h item.remark %></span>
+                    </td>
+                    <td><%= h item.measure %></td>
+                    <td><%= h item.standard_measure %></td>
+                    <td><%= h item.factory_measure %></td>
+                    <td><%= h item.original_measure %></td>
+                    <td><%= h Shop::Item::PURCHASE_TYPES[item.purchase_type] %></td>
+                    <td><%= time_format item.storage_at if !item.storage_at.blank? %></td>
+                    <td><%= time_format item.expired_at if !item.storage_at.blank? %></td>
+                    <td><%= h item.origin %></td>
+                    <td><%= h item.storage_name %></td>
+                    <td><%= h item.store_num %></td>
+                    <td class="op">
+                      <%= link_to '查看', admin_shop_item_path(item), "data-target" => "rightPanel", class: 'btn btn-xs btn-success' if can?(:show, item) %>
+                      <%= link_to '编辑', edit_admin_shop_item_path(item), "data-target" => "rightPanel", class: 'btn btn-xs btn-success' if can?(:update, item) %>
+                      <%= link_to '打印', print_admin_shop_item_path(item), "data-target" => "rightPanel", class: 'btn btn-xs btn-success' if can?(:show, item) %>
+                    </td>
+                    <td><%= render :partial => "admin/shop/shared/publish", :object => item %></td>
+                  </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="dt-toolbar-footer">
+            <%= render 'admin/shared/pagination', object: @items %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+</div>
+<script type="text/javascript">
+    $(function () {
+        App.handleDatePickers(false, false);
+    })
+</script>

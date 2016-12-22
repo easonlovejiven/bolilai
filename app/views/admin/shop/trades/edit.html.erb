@@ -1,0 +1,308 @@
+<% @record = @trade %>
+<% @show = !%w[new edit].include?(params[:action]) && @record.valid? %>
+<div class="modal-header">
+  <%= render "admin/modal/header" %>
+</div>
+<%= render 'admin/shared/prompt' %>
+<div class="modal-body">
+  <%= form_for @trade, as: :trade, :url => @trade.new_record? ? admin_shop_trades_path : admin_shop_trade_path(@trade),
+               :html => {:method => @trade.new_record? ? :post : :put, :multipart => true, class: "form-horizontal"} do |f| %>
+      <%= f.error_messages %>
+      <% if !@record.new_record? %>
+          <div class="form-group">
+            <%= f.label :id, 'ID', {class: 'col-md-3 control-label'} %>
+            <div class="form-control-static">
+              <strong><%= @record.id %></strong>
+            </div>
+          </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= f.label :identifier, "编号", {class: 'col-md-3 control-label'} %>
+        <div class="form-control-static">
+          <%= @trade.identifier %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :status, "状态", {class: 'col-md-3 control-label'} %>
+        <div class="form-control-static">
+          <span title="<%= h @trade.status %>"><%= h Shop::Trade::STATUS[@trade.status] %></span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :price, "总价格", {class: 'col-md-3 control-label'} %>
+        <div class="form-control-static">
+          <%= @trade.price %></div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :client, {class: 'col-md-3 control-label'} %>
+        <div class="form-control-static">
+          <%= @trade.client %>
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <%= f.label :payment_price, "支付价格", {class: 'col-md-3 control-label'} %>
+        <div class="form-control-static">
+          <%= @trade.payment_price %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label '_', "使用余额", {class: 'col-md-3 control-label'} %>
+        <div class="col-md-8 form-control-static">
+          <%= @trade.price - @trade.payment_price %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :user_id, "用户", {class: 'col-md-3 control-label'} %>
+        <div class="col-md-8 form-control-static">
+          <%= render :partial => "admin/shop/users/user", locals: {:user => @trade.user} %>
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <%= f.label :contact_id, "地址", {class: 'col-md-3 control-label'} %>
+        <div class="form-control-static">
+          <%= link_to_if can?(:show, @trade.contact), @trade.contact.name, admin_shop_contact_path(@trade.contact), "data-target" => "rightPanel" if @trade.contact %>
+        </div>
+      </div>
+
+      <% if !@trade.invoice_contact.blank? %>
+          <div class="form-group">
+            <%= f.label :invoice_contact, "发票地址", {class: 'col-md-3 control-label'} %>
+            <div class="form-control-static">
+              <%= link_to_if can?(:show, @trade.invoice_contact), @trade.invoice_contact.name, admin_shop_contact_path(@trade.invoice_contact), "data-target" => "rightPanel" %>
+            </div>
+          </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= f.label :comment, "留言", {class: 'col-md-3 control-label'} %>
+        <div class="form-control-static">
+          <%= simple_format h @trade.comment %></div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :payment_service, "付款服务", {class: 'col-md-3 control-label'} %>
+        <div class="col-md-8 form-control-static">
+          <%= render :partial => "payment_show", :locals => {:trade => @trade} %></div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :payment_identifier, "付款编号", {class: 'col-md-3 control-label'} %>
+        <div class="form-control-static">
+          <%= h @trade.payment_identifier %></div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :delivery_service, "快递服务", {class: 'col-md-3 control-label'} %>
+        <div class="col-md-6">
+          <% if @show %>
+              <div class="form-control-static">
+                <%= render :partial => "delivery_show", :locals => {:trade => @trade} %>
+              </div>
+          <% else %>
+              <%= f.select :delivery_service, Shop::Trade.delivery_coms_arr.map { |s| [s[:title], s[:name]] }, {}, class: 'form-control' %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :delivery_identifier, "快递编号", {class: 'col-md-3 control-label'} %>
+        <div class="col-md-8">
+          <% if @show %>
+              <div class="form-control-static">
+                <%= h @trade.delivery_identifier %>
+              </div>
+          <% else %>
+              <%= f.text_field :delivery_identifier, class: 'form-control' %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :delivery_time, "快递时间", {class: 'col-md-3 control-label'} %>
+        <div class="form-control-static">
+          <span title="<%= h @trade.delivery_time %>"><%= h Shop::Trade::DELIVERY_TIMES[@trade.delivery_time] %></span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :delivery_phone, "快递手机", {class: 'col-md-3 control-label'} %>
+        <div class="form-control-static">
+          <%= h @trade.delivery_phone %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :invoice_type, "发票类型", {class: 'col-md-3 control-label'} %>
+        <div class="form-control-static">
+          <span title="<%= h @trade.invoice_type %>"><%= h Shop::Trade::INVOICE_TYPES[@trade.invoice_type] %></span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :invoice_title, "发票抬头", {class: 'col-md-3 control-label'} %>
+        <div class="form-control-static">
+          <%= h @trade.invoice_title %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :invoice_content, "发票内容", {class: 'col-md-3 control-label'} %>
+        <div class="form-control-static">
+          <span title="<%= h @trade.invoice_content %>"><%= h Shop::Trade::INVOICE_CONTENTS[@trade.invoice_content] %></span>
+        </div>
+      </div>
+      <%# end %>
+
+      <div class="form-group">
+        <%= f.label :remark, "备注", {class: 'col-md-3 control-label'} %>
+        <div class="col-md-8">
+          <% if params[:action] == 'show' %>
+              <div class="form-control-static">
+                <%= simple_format h @trade.remark %>
+              </div>
+          <% else %>
+              <%= f.text_area :remark, class: 'form-control' %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :invoice_delivery_service, "发票快递服务", {class: 'col-md-3 control-label'} %>
+        <div class="col-md-8">
+          <% if params[:action] == 'show' %>
+              <div class="form-control-static">
+                <%= render :partial => "invoice_delivery_show", :locals => {:trade => @trade} %>
+              </div>
+          <% else %>
+              <%= f.select :invoice_delivery_service, Shop::Trade.delivery_coms_arr.map { |s| [s[:title], s[:name]] },
+                           {:include_blank => true}, class: 'form-control' %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :invoice_delivery_identifier, "发票快递编号", {class: 'col-md-3 control-label'} %>
+        <div class="col-md-8">
+          <% if params[:action] == 'show' %>
+              <div class="form-control-static">
+                <%= @trade.invoice_delivery_identifier %>
+              </div>
+          <% else %>
+              <%= f.text_field :invoice_delivery_identifier, class: 'form-control' %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :invoice_remark, "发票备注", {class: 'col-md-3 control-label'} %>
+        <div class="col-md-8">
+          <div class="form-control-static">
+            <%= simple_format h @trade.invoice_remark %>
+          </div>
+          <% if params[:action] == 'edit' %>
+              <%= f.text_area :invoice_remark, :value => "", class: 'form-control' %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :delivery_received_at, "快递收货时间", {class: 'col-md-3 control-label'} %>
+        <div class="form-control-static">
+          <%= h @trade.delivery_received_at && @trade.delivery_received_at.to_s(:db) %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :delivery_receipted_amount, "快递收款金额", {class: 'col-md-3 control-label'} %>
+        <div class="form-control-static">
+          <%= h @trade.delivery_receipted_amount %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :delivery_receipted_at, "快递收款时间", {class: 'col-md-3 control-label'} %>
+        <div class="form-control-static">
+          <%= h @trade.delivery_receipted_at && @trade.delivery_receipted_at.to_s(:db) %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :editor_id, {class: 'col-md-3 control-label'} %>
+        <% u = @trade.editor %>
+        <div class="form-control-static">
+          <%= u.try(:name) %><%#= link_to_if can?(:show, u), u.name, [:manage, u], rel: 'facebox' if u %></div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :created_at, {class: 'col-md-3 control-label'} %>
+        <div class="form-control-static">
+          <%= @trade.created_at %></div>
+      </div>
+
+
+      <div class="form-group">
+        <%= f.label :units, "单位", {class: 'col-md-3 control-label'} %>
+        <div class="col-md-8 form-control-static">
+          <% @trade.units.each do |unit| %>
+              <br/>ID：<%= unit.id %>
+              <!--<br/>单件：-->
+              <br/>单件：<%= link_to_if can?(:show, unit.item), unit.item.product.name, admin_shop_item_path(unit.item), "data-target" => "rightPanel" %>
+              <br/>成交价：<%= unit.price %>
+              <br/>原始销售价：<%= unit.discount %>
+              <br/>代金券：<%= link_to_if can?(:show, unit.item), unit.voucher.event.name, admin_shop_voucher_path(unit.voucher), :rel => 'facebox' if unit.voucher && unit.voucher.event %>
+              <br/>折扣：<%= unit.percent %>
+              <br/>积分折扣：<%= unit.point_percent %>
+              <br/>等级折扣：<%= unit.level_percent %>
+              <br/>导购折扣：<%= unit.guide_percent %>
+              <br/>积分：<%= unit.point %>
+              <br/>返还？：<%= unit.returned? ? '✔' : '✘' %>
+              <br/>仓库：<%= unit.item.storage_name %>
+              <br/>操作：<%= link_to_if can?(:update, unit), '申请退货', returning_admin_shop_unit_path(unit), :method => :put, "data-confirm" => "确定退货吗？" if unit.status.blank? && %w[audit prepare ship complete].include?(unit.trade.status) && (unit.trade.payment_service != 'express' || unit.trade.status == 'complete') %>
+              <br/>
+          <% end %>
+        </div>
+      </div>
+
+      <% if !@trade.new_record? %>
+          <div class="form-group">
+            <%= f.label :client, {class: 'col-md-3 control-label'} %>
+            <div class="form-control-static">
+              <%= @trade.class.const_get('CLIENTS').map { |client, _| {t("activerecord.enums.auction/trade.client.#{client}") => client} }.inject(&:merge).key(@trade.client) %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :created_at, '创建时间', {class: 'col-md-3 control-label'} %>
+            <div class="form-control-static">
+              <%= @trade.created_at && @trade.created_at.to_s(:db) %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :updated_at, '修改时间', {class: 'col-md-3 control-label'} %>
+            <div class="form-control-static">
+              <%= @trade.updated_at && @trade.updated_at.to_s(:db) %>
+            </div>
+          </div>
+      <% end %>
+
+      <div class="form-actions">
+        <% if @show %>
+            <%= link_to '查看', admin_shop_trade_path(@trade), class: "btn btn-success", 'data-target' => "rightPanel" if can?(:show, @trade) %>
+            <%= link_to '编辑', edit_admin_shop_trade_path(@trade), class: "btn btn-success", 'data-target' => "rightPanel" if can?(:update, @trade) %>
+        <% else %>
+            <%= f.submit "提交", class: 'btn btn-success' %>
+        <% end %>
+      </div>
+  <% end %>
+</div>

@@ -1,0 +1,69 @@
+<h2>国家列表（<%= @countries.total_count %>）</h2>
+
+<form action="/admin/shop/countries" method="get" id="search_form">
+  <div class="tablenav">
+    <div class="alignleft op">
+      <%= link_to '创建', new_admin_shop_country_path, "data-target" => "rightPanel" if @current_user.can_create_country? %>
+      &nbsp;|&nbsp;
+      <%= label_tag "where[id]", "ID" %><%= text_field_tag "where[id]", params[:where] && params[:where][:id], :size => 4 %>
+      <%= label_tag "where[name][like]", "名称" %><%= text_field_tag "where[name][like]", params[:where] && params[:where][:name] && params[:where][:name][:like].to_s.gsub('%', ''), :size => 10 %>
+      <%= label_tag "where[created_at][gteq]", "创建时间" %><%= text_field_tag "where[created_at][gteq]", params[:where] && params[:where][:created_at] && params[:where][:created_at][:gteq], :size => 10, :class => "datepicker" %>
+      ~<%= text_field_tag "where[created_at][lteq]", params[:where] && params[:where][:created_at] && params[:where][:created_at][:lteq], :size => 10, :class => "datepicker" %>
+      <%= label_tag "order[id]", "ID" %><%= select_tag "order[id]", options_for_select([['', nil], ['↑', 'asc'], ['↓', 'desc']], !params[:order].blank? && params[:order][:id]), :style => "width:40px;" %>
+      <%= label_tag "where[published]", "发布" %><%= select_tag "where[published]", options_for_select([['', nil], ['✔', 'true'], ['✘', 'false']], params[:where] && params[:where][:published] ? params[:where][:published] : nil), :style => "width:40px;" %>
+      <%= label_tag "where[user_id]", "编辑ID" %><%= text_field_tag "where[user_id]", params[:where] && params[:where][:user_id], :size => 4 %>
+      <%= label_tag "order[created_at]", "创建时间" %><%= select_tag "order[created_at]", options_for_select([['', nil], ['↑', 'asc'], ['↓', 'desc']], !params[:order].blank? && params[:order][:created_at]), :style => "width:40px;" %>
+      <%= label_tag "per_page", "每页" %><%= select_tag "per_page", options_for_select([['', nil]]+[10, 20, 30, 50, 100, 200, 300, 500].map { |i| [i, i] }, params[:per_page].to_i), :style => "width:50px;" %>
+      <input type="submit" id="post-query-submit" value="搜索" class='btn search-xs btn-success'/>
+      <%= link_to t(:reset), request.path, class: 'btn search-xs btn-default', data: {remote: true} %>
+    </div>
+    <br class="clear"/>
+  </div>
+</form>
+
+<br class="clear"/>
+
+<table class="widefat">
+  <thead>
+  <tr>
+    <th scope="col" class="check-column"><!-- <input type="checkbox" /> --></th>
+    <th class="table_id">
+      ID <%= order_link_btn('id') %>
+    </th>
+    <th>名称</th>
+    <th>排序</th>
+    <th>
+      创建时间 <%= order_link_btn('created_at') %>
+    </th>
+    <th class="table_time">修改时间</th>
+    <th>编辑</th>
+    <th class="table_set">操作</th>
+    <th class="table_set">发布</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @countries.each do |country| %>
+      <tr>
+        <th scope="row" class="check-column"><!-- <input type="checkbox" name="delete[]" value="1" /> --></th>
+        <td><%= link_to country.id, 'where[id]' => country.id %></td>
+        <td>
+          <span class="<%= 'editable' if @current_user.can_update_country? %>" data-url="<%= admin_shop_country_path(country) %>" data-field="country[name]"><%= h country.name %></span>
+        </td>
+        <td>
+          <span class="<%= 'editable' if @current_user.can_update_country? %>" data-url="<%= admin_shop_country_path(country) %>" data-field="country[order]"><%= h country.order %></span>
+        </td>
+        <td><%= country.created_at && country.created_at.to_s(:db) %></td>
+        <td><%= country.updated_at && country.updated_at.to_s(:db) %></td>
+        <td><%= link_to_if @current_user.can_show_editor?, h(country.editor.name), admin_manage_editor_path(country.editor), "data-target" => "rightPanel" if country.editor %></td>
+        <td class='op'>
+          <%= link_to '查看', admin_shop_country_path(country), "data-target" => "rightPanel" if @current_user.can_show_country? %>
+          <%= link_to '编辑', edit_admin_shop_country_path(country), "data-target" => "rightPanel" if @current_user.can_update_country? %>
+          <%= link_to '删除', admin_shop_country_path(country), :confirm => "确定删除吗？", :method => :delete if @current_user.can_destroy_country? %>
+        </td>
+        <td style="padding:0;"><%= render :partial => "admin/shop/shared/publish", :object => country %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<%= render :partial => "admin/shared/pagination" %>

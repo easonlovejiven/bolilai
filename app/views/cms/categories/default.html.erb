@@ -1,0 +1,49 @@
+<%if !@page.blank?%>
+    <%@page_title=@page.name %>
+    <%@current_category=@page.category%>
+<%else%>
+    <%@page_title=@category.name%>
+<%end%>
+<div class="info_content">
+  <ol class="breadcrumb">
+    <li><%= link_to '首页', '/' %></li>
+    <% @current_category.ancestors.each do |cate| %>
+        <li><%= link_to cate.name, cms_cate_link(cate) %></li>
+    <% end %>
+    <li><%= link_to @current_category.name, cms_cate_link(@current_category) %></li>
+    <li><%= link_to @page.name, cms_page_link(@page) if !@page.blank?%></li>
+  </ol>
+
+  <div class="main_info">
+    <div class="left_side">
+      <span class="top_line"></span>
+      <dl class="left_menu">
+        <% unless @category.children.blank? %>
+            <% @category.children.active.published.each do |category| %>
+                <dt><%= category.name %></dt>
+                <% category.pages.published.each do |page| %>
+                    <dd><%= link_to page.name, "#{cms_cate_link(@category)}?page_id=#{page.id}", class: "#{'on' if page==@page}" %></dd>
+                <% end %>
+            <% end %>
+        <% else %>
+            <% @category.pages.active.published.each do |page| %>
+                <dd><%= link_to page.name, "#{cms_cate_link(@category)}?page_id=#{page.id}", class: "#{'on' if page==@page}" %></dd>
+            <% end %>
+        <% end %>
+
+      </dl>
+    </div>
+    <div class="right_side">
+      <span class="top_line"></span>
+
+      <div class="content_warp">
+        <h2 class=""><%= @page.name %></h2>
+
+        <div class="content">
+          <%= raw @page.body %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,70 @@
+<%
+@page_title = @product.name
+# @back_button = ['专场', auction_market_path(@product.market)]
+%>
+
+<div class="appshowinfo">
+  <table class="appshow_title">
+    <tr>
+      <td class="titimg" rowspan="2"><span class="img"><em style="background-image:url(<%= image_path @product.images[0] && @product.images[0].small %>);"></em></span></td>
+      <td colspan="2">
+        <h3><%=h @product.name.sub(@product.keywords, '') %></h3>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <h6><%=h @product.keywords %></h6>
+        <p>
+          <span class="Price">
+            <em class="op">￥<em><%= @product.price %></em></em>
+            <em class="np">￥<em><%= @product.discount %></em></em>
+          </span>
+        </p>
+      </td>
+      <td class="titdis"><span><%= @product.percent_text %>折</span></td>
+    </tr>
+  </table>
+  <div class="spptext">
+    <%= simple_format h @product.description %>
+  </div>
+</div>
+<script type="text/javascript">
+	var myScroll_img;
+
+	function loaded_img() {
+		myScroll_img = new iScroll('scroller_img', {
+			snap:true,
+			momentum:false,
+			hScrollbar:false,
+			onScrollEnd: function () {
+				document.querySelector('#indicator > li.active').className = '';
+				document.querySelector('#indicator > li:nth-child(' + (this.pageX+1) + ')').className = 'active';
+			}
+		 });
+	}
+
+	document.addEventListener('DOMContentLoaded', loaded_img, false);
+	</script>
+<div class="appimages_list">
+  <div>
+    <div id="scroller_img" style="width: 1600px;">
+      <ul class="appimages_show" id="thelist">
+        <% @product.images.each do |image| %>
+          <li><a href="#"><img src="<%= image_path image.medium %>" /></a></li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+  <div id="nav">
+    <!--<div id="prev" onclick="myScroll_img.scrollToPage('prev', 0)">&larr; prev</div>-->
+    <ul id="indicator">
+      <li class="active">1</li>
+      <li>2</li>
+      <li>3</li>
+      <li>4</li>
+      <li>5</li>
+      <li>6</li>
+    </ul>
+    <!--<div id="next" onclick="myScroll_img.scrollToPage('next', 0)">next &rarr;</div>-->
+  </div>
+</div>

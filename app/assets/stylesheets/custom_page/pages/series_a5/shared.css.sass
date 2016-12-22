@@ -1,0 +1,44 @@
+.series_a5
+	.navlist
+		.current a,
+		.current a:hover
+			color: #fff
+			background: $color_leftNav_text_bg
+		.link
+			color: $color_leftNav_text
+			&:hover
+				color: $color_leftNav_text_hover
+			&.current,
+			&.current:hover
+				color: #fff
+				background: $color_leftNav_text_bg
+	.product_mod
+		.product_list
+			.morelink
+				span
+					color: $color_single_more
+					background-image: asset-url('auction/pages/template/#{$theme}/more.png')
+			.link
+				.title
+					color: $color_single_title
+				.linktext
+					.summary
+						span
+							color: $color_single_brands
+						em
+							color: $color_single_summary
+					.value
+						.MarketPrice
+							color: $color_single_gray
+							em,
+							span
+								color: $color_single_gray
+						.IhaveuPrice
+							color: $color_price_stress
+							em,
+							span
+								color: $color_price_stress
+					.preferential
+						color: $color_price_preferential
+						em
+							color: $color_price_preferential

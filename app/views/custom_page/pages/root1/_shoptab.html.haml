@@ -1,0 +1,28 @@
+.stores_wp
+  .store_title
+    %h2 体验中心
+  .store_tabwp.widget{"data-widget-id"=>"stores_#{page.id}"}
+    - c_stores = ((data['stores']||[]).group_by{|s| s["area_en"]}||[]);
+    .store_tab
+      .tab_a
+        - c_stores.each_with_index do |area, index|
+          - c_city = area.try(:[], 1).try(:first) || {}
+          %a{:href => "javascript:;", class:(index==0 ? "a_area a_on" : "a_area")}=c_city["area"]
+      - c_stores.each_with_index do |area, index|
+        - c_cities = area.try(:[], 1)||[]
+        .tab_alist{:style => "display: #{index==0 ? 'block' : 'none'};"}
+          - c_cities.each_with_index do |city, i|
+            %a{:href => "javascript:0;", :data => city["data"],:name => city["city_en"], class:((index== i && i == 0) ? "a_city a_on" : "a_city")}=city["city"]
+    .tab_city_pic
+      - c_stores.each_with_index do |area, index|
+        - c_adds = area.try(:[], 1)||[]
+        - c_adds.each do |add|
+          %div{id:"a_#{add["city_en"]}", :name => add["city"], :style => "display: #{index==0 ? 'block' : 'none'};"}
+            %a{:href=>add["url"]||"javascript:0;", :target=>"_blank"}
+              %span.world_map
+                %span.world_map_title=add["name"]
+                %span.world_map_content
+                  =add["address"]
+                  %br=add["time"].to_s.html_safe
+  .brand_video.widget{"data-widget-id"=>"video_#{page.id}"}
+    %iframe{type:"application/x-shockwave-flash", height:275, width:578, src:"#{data['brand_video']['url']}",frameborder: 0,allowfullscreen: "allowfullscreen"}

@@ -1,0 +1,6 @@
+development:
+  host: localhost
+  port: 8983
+production:
+  host: 120.24.152.196
+  port: 8983

@@ -1,0 +1,10 @@
+.updated
+	%p 清除完成
+
+%table.form-table
+	%tbody
+		%tr
+			%th= label_tag :urls, '地址'
+			%td
+				- @urls.each do |path, success|
+					%div= link_to path, path, :target => '_blank', :style => "#{'color:silver;' unless success}"

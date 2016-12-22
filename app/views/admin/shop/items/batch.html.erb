@@ -1,0 +1,69 @@
+<%= render :partial => "item_js" %>
+<h2>批量添加单件</h2>
+
+<%= form_tag batch_create_admin_shop_items_path do %>
+    <table class="form-table">
+      <tbody>
+      <tr class="form-field form-required">
+        <th scope="row"><label>单件数目(最多100个)</label></th>
+        <td><%= text_field_tag :count, 1, :size => '30' %></td>
+      </tr>
+
+      <tr class="form-field">
+        <th scope="row"><label>产品</label></th>
+        <td>
+          <select id="item_market_id">
+            <option>选择主题：</option>
+            <% Shop::Market.active.each do |market| %>
+                <option value="<%= market.id %>"><%= market.name %></option>
+            <% end %>
+          </select>
+          <br/>
+          <%= grouped_collection_select :product, :category2_id, Shop::Category.find(1).children, :children, :name, :id, :name, {:include_blank => '选择分类：'}, :onclick => "this.onchange();",
+                                        :onchange => "p=parent_table[$(this).find('option:selected').val()]||{}; $('#product_category1_id').attr('value',p['id']||''); $('#product_category1').attr('href','/admin/shop/categories/'+p['id']||'').html(p['name']||'');" %>
+          <script>
+              var parent_table = <%= Shop::Category.find(1).children.active.map{|c1| c1.children.active.map{|c2| { c2.id => { :id => c1.id, :name => c1.name } } } }.inject([]){|a,b|a+b}.inject({}){|a,b|a.merge(b)}.to_json %>;
+          </script>
+          <br/>
+          <select name='item[product_id]' id="select_item_product_id" width="auto">
+            <option>选择产品：</option>
+          </select>
+          <script>
+              <% h2={};Shop::Category.active.each{|c| h2[c.id]=c.products.map{|d| {:id=>d.id,:name=>d.name,:category_id=>d.category2_id}}} %>
+              var products2 = <%= h2.to_json %>
+                      $('#product_category2_id').val(item).selected;
+              $('#product_category2_id').change(function () {
+                  //$('#item_market_id').hide();
+                  $('#item_market_id').val('');
+                  $('#select_item_product_id').hide();
+                  $('#item_measure').hide();
+                  item_category = $(this).val();
+                  if (item_category != '' && item_category != null) {
+                      select_product(item_category, products2);
+                  }
+              })
+          </script>
+        </td>
+      </tr>
+
+      <tr class="form-field">
+        <th scope="row"><label>尺寸</label></th>
+        <td>
+            <span id="item_measure">
+                <select name="item[measure]">
+                  <option></option>
+                </select>
+            </span>
+        </td>
+      </tr>
+
+      <tr class="form-field form-required">
+        <th scope="row"><label>是否发布</label></th>
+        <td><%= check_box_tag "item[published]", true, true %>发布</td>
+      </tr>
+      </tbody>
+    </table>
+    <p class="submit">
+      <%= submit_tag "添加" %>
+    </p>
+<% end %>

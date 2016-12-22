@@ -1,0 +1,156 @@
+<% @record = @event %>
+<% @show = !%w[new edit].include?(params[:action]) && @record.valid? %>
+<div class="modal-header">
+  <%= render "admin/modal/header" %>
+</div>
+<%= render 'admin/shared/prompt' %>
+<div class="modal-body">
+  <%= form_for @event, as: "event", :url => @event.new_record? ? admin_shop_events_path : admin_shop_event_path(@event),
+               :html => {:method => @event.new_record? ? :post : :put, :multipart => true, class: "form-horizontal"} do |f| %>
+      <% if @show %>
+          <div class="form-group">
+            <%= f.label :id, 'ID', {class: 'col-md-3 control-label'} %>
+            <div class="form-control-static">
+              <strong><%= @record.send(:id) %></strong>
+            </div>
+          </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= f.label :name, "<sup>*</sup>名称".html_safe, {class: 'col-md-3 control-label'} %>
+        <div class="col-md-6">
+          <% if @show %>
+              <div class="form-control-static">
+                <%= h @event.name %>
+              </div>
+          <% else %>
+              <%= f.text_field :name, class: 'form-control', required: "true" %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :description, "描述", {class: 'col-md-3 control-label'} %>
+        <div class="col-md-6">
+          <% if @show %>
+              <div class="form-control-static">
+                <%= simple_format h @event.description %>
+              </div>
+          <% else %>
+              <%= f.text_area :description, class: 'form-control' %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :limitation, "<sup>*</sup>限制(满多少)".html_safe, {class: 'col-md-3 control-label'} %>
+        <div class="col-md-6">
+          <% if @event.new_record? %>
+              <%= f.text_field :limitation, class: 'form-control', required: "true" %>
+              <div class="help-info">不可修改</div>
+          <% else %>
+              <div class="form-control-static">
+                <%= h @event.limitation %>
+              </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :amount, "<sup>*</sup>金额（减多少)".html_safe, {class: 'col-md-3 control-label'} %>
+        <div class="col-md-6">
+          <% if @event.new_record? %>
+              <%= f.text_field :amount, class: 'form-control', required: "true" %>
+              <div class="help-info">不可修改</div>
+          <% else %>
+              <div class="form-control-static">
+                <%= h @event.amount %>
+              </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :price, "<sup>*</sup>价格(一般与金额相同)".html_safe, {class: 'col-md-3 control-label'} %>
+        <div class="col-md-6">
+          <% if @show %>
+              <div class="form-control-static">
+                <%= h @event.price %>
+              </div>
+          <% else %>
+              <%= f.text_field :price, class: 'form-control' %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :started_at, "<sup>*</sup>开始时间".html_safe, {class: 'col-md-3 control-label'} %>
+        <div class="col-md-6">
+          <% if @show || @event.started_at && @event.started_at < Time.now %>
+              <%= @event.started_at && @event.started_at.to_s(:db) %>
+          <% else %>
+              <div class="input-group">
+                <%= f.text_field :started_at, class: "form-control hasDatetimepicker", readonly: true %>
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+              </div>
+              <div class="help-info">开始后不可修改</div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :ended_at, "<sup>*</sup>结束时间".html_safe, {class: 'col-md-3 control-label'} %>
+        <div class="col-md-6">
+          <% if @show || @event.ended_at && @event.ended_at < Time.now %>
+              <div class="form-control-static"><%= @event.ended_at && @event.ended_at.to_s(:db) %></div>
+          <% else %>
+              <div class="input-group">
+                <%= f.text_field :ended_at, class: "form-control hasDatetimepicker", readonly: true, required: "true" %>
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+              </div>
+              <div class="help-info">结束后不可修改</div>
+          <% end %>
+        </div>
+      </div>
+
+      <% unless @event.new_record? %>
+          <div class="form-group">
+            <%= f.label :created_at, '创建时间', {class: 'col-md-3 control-label'} %>
+            <div class="form-control-static">
+              <%= @event.created_at && @event.created_at.to_s(:db) %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :updated_at, '修改时间', {class: 'col-md-3 control-label'} %>
+            <div class="form-control-static">
+              <%= @event.updated_at && @event.updated_at.to_s(:db) %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :editor, "编辑", {class: 'col-md-3 control-label'} %>
+            <div class="form-control-static">
+              <%= link_to_if can?(:show, @event.editor), @event.editor.name, admin_manage_editor_path(@event.editor), "data-target" => "rightPanel" if @event.editor %>
+            </div>
+          </div>
+      <% end %>
+
+      <div class="form-actions">
+        <% if @show %>
+            <div class="form-control-static">
+              <%= link_to '查看', admin_shop_event_path(@event), "data-target" => "rightPanel", class: 'btn btn-success' if can?(:show, @event) %>
+              <%= link_to '编辑', edit_admin_shop_event_path(@event), "data-target" => "rightPanel", class: 'btn btn-success' if can?(:update, @event) %>
+              <%= link_to '删除', admin_shop_event_path(@event), class: 'btn btn-success', :confirm => "确定删除吗？", :method => :delete if !(@event.started_at && Time.now > @event.started_at) && can?(:destroy, @event) %>
+            </div>
+        <% else %>
+            <input type="submit" value="提交" class="btn btn-primary"/>
+        <% end %>
+      </div>
+  <% end %>
+</div>
+<script type="text/javascript">
+    $(function () {
+        App.handleDateTimePickers()
+    })
+</script>

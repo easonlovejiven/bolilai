@@ -1,0 +1,89 @@
+%h2 查看交通银行快捷支付付款
+
+%table.form-table
+	%tbody
+		%tr(class="form-field form-required")
+			%th(scope="row") 商户流水号
+			%td= @result && @result.attr('shopTraceNo')
+	
+		%tr(class="form-field form-required")
+			%th(scope="row") 订单号
+			%td= @result && @result.attr('id')
+		
+		%tr(class="form-field form-required")
+			%th(scope="row") 银行支付号
+			%td= @result && @result.css('pospOrderId').text
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 信用卡号
+			%td= @result && !@result.css('card').blank? ? @result.css('card').attr('no').text : nil
+		
+		%tr(class="form-field form-required")
+			%th(scope="row") 交易类型
+			%td= @result && !@result.css('transData').blank? ? @result.css('transData').attr('type').text : nil
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 订单总金额
+			%td= @result && @result.css('transData/totalAmount').text
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 商户批次号
+			%td= @result && @result.css('transData/shopBatchNo').text
+		
+		%tr(class="form-field form-required")
+			%th(scope="row") 交易备注
+			%td= @result && @result.css('transData/remark').text
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 原交易提交时间
+			%td= @result && @result.css('transData/oldSubmitTime').text
+			
+		%tr(class="form-field form-required")
+			%th(scope="row") 原交易类型
+			%td= @result && @result.css('transData/oldTransType').text
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 附加数据
+			%td= @result && @result.css('transData/addData').text
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 实际支付金额
+			%td= @result && @result.css('transData/transAmount').text
+			
+		%tr(class="form-field form-required")
+			%th(scope="row") 交易积分
+			%td= @result && @result.css('transData/transBonus').text
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 积分抵扣金额
+			%td= @result && @result.css('transData/deduction').text
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 后台返回码
+			%td= @result && @result.css('transData/returnCode').text
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 后台返回说明
+			%td= @result && @result.css('transData/returnMessage').text
+			
+		%tr(class="form-field form-required")
+			%th(scope="row") 后台授权码
+			%td= @result && @result.css('transData/authCode').text
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 系统流水号
+			%td= @result && @result.css('transData/traceNo').text
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 系统批次号
+			%td= @result && @result.css('transData/batchNo').text
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 票据号
+			%td= @result && @result.css('transData/invoiceNo').text
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 后台交易时间
+			%td= @result && @result.css('transData/hostTransTime').text
+	</tbody>
+</table>

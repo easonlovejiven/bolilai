@@ -1,0 +1,21 @@
+<h2>审核</h2>
+
+<%= form_for :unit, @unit, :url => audit_admin_shop_unit_path(@unit), :html => { :method => :put } do |f| %>
+	<%= f.error_messages %>
+
+	<table class="form-table">
+		<tbody>
+			<tr class="form-field">
+				<th scope="row"><%= label_tag 'sms[success]', "短信通知" %></th>
+				<td>
+					<%= check_box_tag 'sms[success]', '1', @unit.return_phone?, :disabled => !(@unit.return_phone?) %>
+					<%= label_tag 'sms[success]', @unit.return_phone? ? "#{h @unit.return_phone}<br />已收到您的退货申请，请把货品寄回。[珀丽莱网] www.barlar.cn" : "" %>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<p class="submit">
+		<%= f.submit "提交" %>
+	</p>
+<% end %>

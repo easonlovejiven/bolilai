@@ -1,0 +1,17 @@
+zh-CN:
+  activerecord:
+    models:
+      comment: 评论
+    attributes:
+      comment:
+        editor_id: 编辑ID
+        user: 用户
+        commentable: 商品
+        comment_pics_pic: 晒图
+        title: 标题
+        body: 内容
+        ip: IP地址
+        score: 评级
+        position: 位置
+        active: 是否有效
+        active?: 有效？

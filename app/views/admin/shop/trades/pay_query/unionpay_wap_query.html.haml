@@ -1,0 +1,49 @@
+%h2 查看银联移动支付付款
+
+%table.form-table
+	%tbody
+		%tr(class="form-field form-required")
+			%th(scope="row") 版本号
+			%td= @result[:version]
+	
+		%tr(class="form-field form-required")
+			%th(scope="row") 交易类型
+			%td= @result[:transType]
+		
+		%tr(class="form-field form-required")
+			%th(scope="row") 商户代号
+			%td= @result[:merId]
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 交易状态
+			%td= @result[:transStatus] == '00' ? '成功' : '失败'
+		
+		%tr(class="form-field form-required")
+			%th(scope="row") 响应码
+			%td= @result[:respCode]
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 响应信息
+			%td= @result[:respMsg]
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 查询码
+			%td= @result[:qn]
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 商户订单号
+			%td= @result[:orderNumber]
+		
+		%tr(class="form-field form-required")
+			%th(scope="row") 交易开始时间
+			%td= @result[:orderTime]
+
+		%tr(class="form-field form-required")
+			%th(scope="row") 清算金额（单位：分）
+			%td= @result[:settleAmount]
+			
+		%tr(class="form-field form-required")
+			%th(scope="row") 请求方保留域
+			%td= @result[:sysReserved]
+	</tbody>
+</table>

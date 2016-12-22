@@ -1,0 +1,99 @@
+<script type="text/javascript" charset="utf-8">
+    $(function () {
+        $('.measure_processing').bind('mousedown', function () {
+            $.ajax({
+                url: $(this).attr('href'),
+                type: "put",
+                data: {
+                    '_method': 'put',
+                    'format': 'js',
+                    'item[measure]': $('#new_measure' + $(this).attr('pid')).val(),
+                    'item[factory_measure]': $('#new_factory_measure' + $(this).attr('pid')).val()
+                },
+                context: this,
+                beforeSend: function () {
+                    $(this).addClass('loading').hide();
+                },
+                complete: function () {
+                    $(this).removeClass('loading');
+                },
+                success: function () {
+                    measure_element = $('#new_measure' + $(this).attr('pid'));
+                    measure_element.parent().text(measure_element.val());
+                    factory_measure_element = $('#new_factory_measure' + $(this).attr('pid'));
+                    factory_measure_element.parent().text(factory_measure_element.val());
+                    $(this).remove();
+                },
+                error: function () {
+                    $(this).show();
+                    alert("有错误");
+                    clearInterval(document.timer);
+                    document.timer = null;
+                }
+            });
+        });
+
+        $('#update_all_measure').on({
+            mousedown: function () {
+                var timer = setInterval(function () {
+                    var a = $('.measure_processing:first');
+                    if (!a.length) {
+                        clearInterval(document.timer);
+                        document.timer = null;
+                        alert('全部修改完成');
+                        return;
+                    }
+                    if (a.hasClass('loading')) return;
+                    a.mousedown();
+                }, 100);
+                document.timer = timer;
+            },
+            click: function () {
+                return false;
+            }
+        });
+    });
+</script>
+
+<h2>批量修改</h2>
+
+<br class="clear"/>
+
+<table class="widefat">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>产品名称</th>
+    <th>旧购买尺寸</th>
+    <th>旧出厂尺寸</th>
+    <th>新购买尺寸</th>
+    <th>新出厂尺寸</th>
+    <th>操作</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td><%= link_to '全部修改', '#', :id => 'update_all_measure' %></td>
+  </tr>
+  <% @items.each do |item| %>
+      <tr>
+        <td><%= item.id %></td>
+        <td>
+          <span style="display:inline-block;max-width:300px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"><%= link_to item.product.name, admin_shop_product_path(item.product), "data-target" => "rightPanel" if item.product %></span>
+        </td>
+        <% om = item.measure; ofm = item.factory_measure; nm = @query_options.find { |h| h['id'].to_i == item.id } || {} %>
+        <td><%= om %></td>
+        <td><%= ofm %></td>
+        <td><%= text_field_tag "new_measure", nm['measure'], :size => 5, :id => "new_measure#{item.id}", :pid => "#{item.id}", :class => 'new_measure', :style => "border:1px solid #C6D9E9;" if om != nm['measure'] %></td>
+        <td><%= text_field_tag "new_factory_measure", nm['factory_measure'], :size => 5, :id => "new_factory_measure#{item.id}", :pid => "#{item.id}", :class => 'new_factory_measure', :style => "border:1px solid #C6D9E9;" if ofm != nm['factory_measure'] %></td>
+        <td><%= link_to "修改", admin_shop_item_path(item), :class => "measure_processing", :pid => item.id, :onclick => "return false;" if @current_user.can_update_item? && (om != nm['measure'] || ofm != nm['factory_measure']) %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>

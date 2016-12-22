@@ -1,0 +1,99 @@
+<section>
+  <div class="row">
+    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="jarviswidget">
+        <header>
+          <span class="widget-icon"><i class="fa fa-table"></i></span>
+
+          <h2>代金券类型</h2>
+
+          <div class="widget-toolbar">
+            <%= link_to '<i class="fa fa-plus-circle"></i> 创建'.html_safe, new_admin_shop_event_path, "data-target" => "rightPanel", class: 'btn btn-default' if can?(:create, Shop::Event) %>
+            <%= render :partial => "admin/shared/export", locals: {export_formats: %w{csv}} if can?(:index, Shop::Event) %>
+          </div>
+        </header>
+        <div>
+          <div class="widget-body-toolbar">
+            <%= form_tag request.path, method: 'get', id: 'search_form', class: 'form-inline' do %>
+                <%= render 'admin/shared/search/basic', field: 'id', kv: search_field_kv(:id), size: 4 %>
+                <%= render 'admin/shared/search/basic', field: 'name', kv: search_field_kv(:name, :like) %>
+                <%= render 'admin/shared/search/basic', field: 'amount', kv: search_field_kv(:amount), field_name: '金额' %>
+                <%= render 'admin/shared/search/basic', field: 'limitation', kv: search_field_kv(:limitation), field_name: '限制' %>
+                <%= render 'admin/shared/search/select', field: 'genre', kv: search_field_kv(:genre), options: Shop::Event::GENRES.map { |genre| [genre[:name], genre[:value]] } %>
+                <%= render 'admin/shared/search/range', field: 'started_at', class_names: 'hasDatepicker' %>
+                <%= render 'admin/shared/search/range', field: 'ended_at', class_names: 'hasDatepicker' %>
+                <%= render 'admin/shared/search/basic', field: 'editor_id', kv: search_field_kv(:editor_id), size: 4 %>
+                <%= render 'admin/shared/search/select', field: 'published', kv: search_field_kv(:published), options: [['✔', 'true'], ['✘', 'false']] %>
+                <%= render 'admin/shared/search/order', fields: %w[started_at ended_at] %>
+                <%= render 'admin/shared/search/page' %>
+                <%= submit_tag t(:search), class: 'btn search-xs btn-success' %>
+                <%= link_to t(:reset), request.path, class: 'btn search-xs btn-default', data: {remote: true} %>
+            <% end %>
+          </div>
+        </div>
+        <div>
+          <div class="widget-body no-padding">
+            <div class="table-responsive">
+              <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                  <th> ID <%= order_link_btn('id') %> </th>
+                  <th>名称</th>
+                  <th>限制</th>
+                  <th>金额</th>
+                  <th>价格</th>
+                  <th>类别</th>
+                  <th>
+                    开始时间 <%= order_link_btn('started_at') %>
+                  </th>
+                  <th>
+                    结束时间 <%= order_link_btn('ended_at') %>
+                  </th>
+                  <th>使用/获得/总和</th>
+                  <th>操作</th>
+                  <th class="table_set">发布</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% @events.each do |event| %>
+                    <tr>
+                      <td><%= link_to event.id, 'where[id]' => event.id %></td>
+                      <td>
+                        <span data-url="<%= admin_shop_event_path(event) %>" data-field="event[name]"><%= event.name %></span>
+                      </td>
+                      <td><%= event.limitation %></td>
+                      <td><%= event.amount %></td>
+                      <td>
+                        <span class="" data-url="<%= admin_shop_event_path(event) %>" data-field="event[price]"><%= event.price %></span>
+                      </td>
+                      <td><%= (genre=Shop::Event::GENRES.find { |g| g[:value] == event.genre }) && genre[:name] %></td>
+                      <td><%= event.started_at && event.started_at.to_s(:db) %></td>
+                      <td><%= event.ended_at && event.ended_at.to_s(:db) %></td>
+                      <td>
+                        <%= link_to event.vouchers.active.used.count, admin_shop_vouchers_path('where[event_id]' => event.id, 'where[trade_id][noteq]' => 'nil') %>
+                        /<%= link_to event.vouchers.active.obtain.count, admin_shop_vouchers_path('where[event_id]' => event.id, 'where[user_id][noteq]' => 'nil') %>
+                        /<%= link_to event.vouchers.active.count, admin_shop_vouchers_path('where[event_id]' => event.id) %>
+                      </td>
+                      <td class='op'>
+                        <%= link_to '查看', admin_shop_event_path(event), "data-target" => "rightPanel", class: 'btn btn-xs btn-success' if can?(:show, event) %>
+                        <%= link_to '编辑', edit_admin_shop_event_path(event), "data-target" => "rightPanel", class: 'btn btn-xs btn-success' if can?(:update, event) %>
+                        <%= link_to '删除', admin_shop_event_path(event), "data-target" => "rightPanel", class: 'btn btn-xs btn-success', :confirm => "确定删除吗？", :method => :delete if !(event.started_at && Time.now > event.started_at) && can?(:destroy, event) %>
+                      </td>
+                      <td><%= render :partial => "admin/shop/shared/publish", :object => event %></td>
+                    </tr>
+                <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+<%= render "admin/shared/pagination", object: @events %>
+<script type="text/javascript">
+    $(function () {
+        App.handleDatePickers(undefined, false);
+    })
+</script>

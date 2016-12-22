@@ -1,0 +1,155 @@
+- model = Shop::Trade
+- @page_title = model.model_name.human
+section#widget-grid
+  .row
+    article.col-xs-12.col-sm-12.col-md-12.col-lg-12
+      .jarviswidget
+        header
+          span.widget-icon
+            i.fa.fa-table
+          h2 订单列表
+          .widget-toolbar
+            - if can?(:create, Shop::Trade)
+              = link_to t('new'), new_admin_shop_trade_path, class: 'btn btn-xs btn-default', "data-target" => "rightPanel"
+            - if can?(:index, Shop::Trade)
+              .btn-group
+                = button_tag :class => 'btn btn-xs btn-default dropdown-toggle', "data-toggle" => "dropdown", "aria-expanded" => "false"
+                  - raw("导出<span class='caret'></span>")
+                ul class="dropdown-menu dropdown-menu-right"
+                  - %w{csv tsv}.map { |format| [format.upcase, format] }.each do |item|
+                    li
+                      a href="#{request.path}?#{request.params.merge({format: item[1]}).to_param}" target="_blank">#{item[0]}
+        .div
+          .widget-body-toolbar
+            form action=request.path method="get" style="display:none"
+              table.form-table
+                tbody
+                  tr.form-field
+                    th = label_tag "query_field", "查询条件"
+                    td = select_tag "query_field", options_for_select([['快递编号', 'delivery_identifier'], ['ID', 'id'], ['编号', 'identifier']])
+                  tr.form-field
+                    th = label_tag "query_content", "查询内容"
+                    td
+                      = text_area_tag "query_content"
+                      br （每行包含一个要查询的条件）
+                input type="submit" value="查询" name="commit"
+            form action=request.path method="get" id="search_form" class="form-inline"
+              .tablenav
+                .alignleft
+                  /a href=search_admin_shop_trades_path data-target="rightPanel" 搜索
+                  /a href="#batch_query" data-target="rightPanel" 批量查询
+                  = render 'admin/shared/search/basic', field: 'id', kv: search_field_kv([:id]), size: 4
+                  = render 'admin/shared/search/basic', field: 'identifier', kv: search_field_kv([:identifier]), size: 8
+                  = render 'admin/shared/search/select', field: 'client', kv: search_field_kv([:client]), options: @trades.klass.const_get('CLIENTS').map { |client, _| {t("activerecord.enums.shop/trade.client.#{client}") => client} }.inject(&:merge)
+                  = render 'admin/shared/search/basic', field: 'user_id', kv: search_field_kv([:user_id]), size: 8
+                  = render 'admin/shared/search/basic', field: 'contact_id', kv: search_field_kv([:contact_id])
+                  = render 'admin/shared/search/basic', field: 'invoice_contact_id', kv: search_field_kv([:invoice_contact_id])
+                  = render 'admin/shared/search/basic', field: 'delivery_phone', kv: search_field_kv([:delivery_phone])
+                  = render 'admin/shared/search/select', field: 'status', kv: search_field_kv([:status]), options: @trades.klass.const_get('STATUS').map { |status, _| {t("activerecord.enums.shop/trade.status.#{status}") => status} }.inject(&:merge)
+                  = render 'admin/shared/search', name: 'delivery_identifier', title: '快递编号', multiple: true
+                  = render 'admin/shared/search/select', field: 'invoice_delivery_service', kv: search_field_kv([:invoice_delivery_service]), options: @trades.klass.delivery_coms_arr.map { |invoice_delivery_service, _| {t("activerecord.enums.shop/trade.delivery_service.#{invoice_delivery_service[:name]}") => invoice_delivery_service[:name]} }.inject(&:merge)
+                  = render 'admin/shared/search', name: 'invoice_delivery_identifier', title: '发票快递编号', multiple: true
+                  = render 'admin/shared/search/range', field: 'price'
+                  = render 'admin/shared/search/range', field: 'created_at', class_names: 'hasDatepicker'
+                  = render 'admin/shared/search/basic', field: 'editor_id', kv: search_field_kv([:editor_id]), size: 6
+                  = render 'admin/shared/search/range', field: 'audit_at', class_names: 'hasDatepicker'
+                  = render 'admin/shared/search/basic', field: 'audit_editor_id', kv: search_field_kv([:audit_editor_id]), size: 6
+                  = render 'admin/shared/search/basic', field: 'comment', kv: search_field_kv([:comment, :like])
+                  = render 'admin/shared/search/basic', field: 'remark', kv: search_field_kv([:remark, :like])
+                  = render 'admin/shared/search/order', fields: %w[price audit_at prepare_at ship_at delivery_received_at freeze_at]
+                  = render 'admin/shared/search/page'
+                  = submit_tag t('search'), name: nil, class: 'btn search-xs btn-success'
+                  = link_to t(:reset), request.path, class: 'btn search-xs btn-default', data: {remote: true}
+          .widget-body.no-padding
+            .table-responsive
+              table#dt_basic.table.table-striped.table-hover width="100%"
+                thead
+                  tr
+                    - %w[id status  client  units price payment_price balance user_id contact_id payment_service delivery_service comment remark  return].each do |field|
+                      th = model.human_attribute_name(field)
+                    th
+                      = model.human_attribute_name('created_at')
+                      = order_link_btn('created_at')
+                    th = t('actions')
+                tbody
+                  - @trades.includes(units: [{item: :product}, {voucher: :event}], contact: {}).each do |trade|
+                    tr
+                      td = trade.id
+                      td class="trade_status #{trade.status}"
+                        span title=trade.status
+                          = Shop::Trade::STATUS[trade.status]
+                      td.center
+                        - if !trade.client.blank?
+                          span class="clients_icon clients-#{trade.client}"
+                            .tips_text
+                              span= @trades.klass.const_get('CLIENTS').map { |client, _| {t("activerecord.enums.shop/trade.client.#{client}") => client} }.inject(&:merge).key(trade.client)
+                              i.icon
+                      td style="padding:0;max-width:300px;"
+                        table style="border-collapse: collapse;"
+                          - trade.units.each do |unit|
+                            tr style="background-color: transparent;"
+                              td style="border:none;padding:0;"
+                                = link_to raw(%[#{image_tag("#{unit.item.product.major_image.url(:thumb)}", alt: "", style: "width:45px; height:45px; margin:0; vertical-align:middle; #{%[opacity:0.2;] if unit.returned?}")} #{%[<span title="#{h unit.item.product.measure_description}" style="display:inline-block; position:absolute; width:10px; height:10px; border-radius:10px; right:-3px; top:-3px; background-color:#2583AD; opacity: 0.5;"></span>] unless unit.item.product.measure_description.blank?}]), admin_shop_item_path(unit.item), style: "display:inline-block; position:relative; overflow: hidden;", title: "#{unit.item.product.name}", "data-target" => "rightPanel" if unit.item && unit.item.product
+                              - if unit.voucher && unit.voucher.event
+                                td
+                                  = unit.discount
+                                td
+                                  = link_to_if can?(:show, unit.voucher), "-#{unit.voucher.event.amount}", admin_shop_voucher_path(unit.voucher), title: unit.voucher.event.name, "data-target" => 'rightPanel'
+                              - elsif unit.point_percent.present? && unit.point_percent != 0
+                                td
+                                  = unit.discount
+                                td
+                                  = "#{unit.point_percent}%"
+                              - elsif unit.level_percent.present? && unit.level_percent != 0
+                                td
+                                  = unit.discount
+                                td
+                                  = "#{unit.level_percent}%"
+                              - elsif unit.guide_percent.present? && unit.guide_percent != 0
+                                td
+                                  = unit.discount
+                                td
+                                  = "#{unit.guide_percent}%"
+                              - elsif unit.percent.present? && unit.percent != 0
+                                td
+                                  = unit.discount
+                                td
+                                  = "#{unit.percent}%"
+                              - else
+                                td
+                                td
+                              td style="border:none;padding:0;"
+                                = unit.price
+                              td style="border:none;padding:0;"
+                                | &nbsp;
+                                = unit.prepared? ? '✔' : ''
+                                | &nbsp;
+                                span style="display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100px;" title="#{unit.prepare_remark} #{unit.item.storage_name}"
+                                  = "#{unit.prepare_remark} #{unit.item.storage_name}"
+                            tr
+                      td = trade.price
+                      td = trade.payment_price
+                      td = trade.price - trade.payment_price
+                      td = render "admin/shop/users/user", user: trade.user if can?(:show, trade.user)
+                      td
+                        = link_to_if can?(:show, trade.contact), trade.contact.name.to_s[0..3], admin_shop_contact_path(trade.contact), "data-target" => "rightPanel" if trade.contact
+                        = raw (c = Shop::Trade.count(conditions: ["status IN('ship','receive','complete') AND contact_id = ?", trade.contact_id])) && c > 0 ? "（#{link_to(c, admin_shop_trades_path('where[contact_id]' => trade.contact_id), remote: true)}）" : nil
+                      /= link_to_remote '☎', url: admin_shop_calls_path(call: {calling_no: trade.contact.mobile}), method: 'post', confirm: '确定拨打电话吗？', failure: "alert('呼叫失败');", html: {style: "font-size:20px; line-height:14px; display:inline-block;"} trade.contact && trade.contact.mobile.present?
+                      /= link_to '✎', new_admin_shop_sms_path('sms[phone]' => trade.contact.mobile, 'sms[trade_id]' => trade.id), "data-target" => "rightPanel", style: "font-size:18px; line-height:14px; display:inline-block;" && trade.contact && !trade.contact.mobile.blank?
+                      td = render "payment_show", trade: trade
+                      td = render "delivery_show", trade: trade
+                      td
+                        div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100px;" title=trade.comment
+                          = trade.comment
+                      td
+                        div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100px;" title=trade.remark
+                          = trade.remark
+                      /td = link_to trade.calls.count, admin_shop_calls_path('where[trade_id]' => trade.id) if trade.calls.count > 0
+                      /td = link_to trade.smss.count, admin_shop_smss_path('where[trade_id]' => trade.id) if trade.smss.count > 0
+                      td = link_to trade.units.where('status IS NOT NULL').count, admin_shop_units_path('where[trade_id]' => trade.id), remote: true if trade.units.where('status IS NOT NULL').count > 0
+                      td = time_format trade.created_at
+                      td.op
+                        = render 'actions', trade: trade
+
+            .dt-toolbar-footer
+              = render 'admin/shared/pagination', object: @trades

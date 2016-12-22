@@ -1,0 +1,59 @@
+<!-- CSS -->
+<%= stylesheet_link_tag "touch/frame" %>
+<%= stylesheet_link_tag "touch/frame_respond" %>
+<%= javascript_include_tag "touch/controller" %>
+<% content_for :header do %>
+    <header class="border_1px">
+      <!-- <div class="left_option left"> -->
+      <div class="ico_wrapper back_ico left hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+      <!-- </div> -->
+      <div class="title ">
+        <%= @category.name %>
+      </div>
+      <div class="ico_wrapper add_ico right hide">
+        <span class="sprites">
+          <em class="down_shadow"></em>
+        </span>
+      </div>
+    </header>
+<% end %>
+<script type="text/javascript">
+    $(function () {
+        if (window.location.search.indexOf('noheader') > -1) {
+            $('header.border_1px').addClass('hide');
+            $('.nav_fix').addClass('hide');
+            $('#app').addClass('hide');
+            $('#main').css('height', '100%');
+            $('.help_item').each(function (i, dom) {
+                var attr = $(dom).attr('data-href');
+                $(dom).attr('data-href', attr + '?noheader=true');
+            });
+        }
+        app.push_event($('.help_item, .phone'), 200);
+        help_detail_controller.initialize();
+    });
+</script>
+<div class="main" id="main">
+  <% if @category.is_page %>
+      <div class="help_detail size_img size_img_wrap">
+        <%= raw @category.body %>
+      </div>
+  <% else %>
+      <div>
+        <div class="details outer_border">
+          <% @category.pages.active.published.each do |page| %>
+              <div data-href="<%= cms_page_path(page) %>" class="outer_border help_item">
+                <%= page.name %>
+                <span class="arrow sprites right"></span>
+
+                <div class="down_shadow"></div>
+              </div>
+          <% end %>
+        </div>
+      </div>
+  <% end %>
+</div>

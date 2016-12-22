@@ -1,0 +1,581 @@
+coffee:
+	$ ->
+		network_unavailable = -> alert('Network Unavailable')
+
+		open_new_account = ->
+			$.facebox ajax: '/manage/core/accounts/new'
+
+		new_account_ready = ->
+			$('#core_account_guide_id').val($('input[auction_trade[guide_id]]:checked').val())
+			$('#new_core_account')
+				.data('query', $('#auction_trade_user_query').val())
+				.trigger('ready')
+
+		convert_query = (query)->
+			query = decodeURI query
+			if (query or '') is '' then {} else query.split('&').reduce (p,c)->
+				m = c.split('=')
+				m[0] = m[0].replace(/\]/g, '').split('[')
+				k = m[0].pop()
+				o = m[0].reduce (q,r)->
+					q[r] = if q[r] then q[r] else {}
+				,p
+				o[k] = m[1]
+				p
+			, {}
+
+		reload_product = ->
+			units = convert_query($('#new_auction_trade').serialize()).auction_trade.units
+			$('tr.units table tbody').children()[2..].remove()
+			init_units _.values units
+
+		select_account = (account) ->
+			return unless account
+			$('#server').data('account', account)
+			$('#auction_trade_user_id').val(account.id)
+			$('#account_id').show().find('strong').text(account.id) if account.id
+			$('#account_phone').show().find('strong').text(account.phone) if account.phone
+			$('#account_email').show().find('strong').text(account.email) if account.email
+			$('#account_user_name').show().find('strong').text(account.user.name) if account.user.name
+			$('#account_user_sex').show().find('strong').text({ male: '先生', female: '女士' }[account.user.sex]) if account.user.sex
+			$('#account_level').show().find('strong').html('' + level.name + (if level.icon then '<img src="http://i0.weimall.net.cn' + level.icon + '" style="vertical-align: middle;" />' else '')) if level = account.auction_user && account.auction_user.level
+			$('#account_query').hide()
+			$('#account_select').prop('checked', true)
+			$('#account_text').fadeIn()
+			update_contacts()
+			update_invoice_contacts()
+			update_vouchers()
+
+		update_vouchers = ->
+			return unless account = $('#server').data('account')
+			return if $('#server').data('vouchers')
+			$.ajax
+				dataType: 'json'
+				url: '/admin/shop/vouchers'
+				data:
+					"where[user_id]": account.id
+					"where[trade_id]": 'null'
+					'avalable': '1'
+			.fail network_unavailable
+			.done (vouchers) -> $('#server').data('vouchers', vouchers)
+
+		query_account = (options = {}) ->
+			if account = $('#server').data('account')
+				select_account(account)
+				return
+			unless $('#auction_trade_user_query').val()
+				open_new_account()
+				return false
+			$.ajax
+				url: '/admin/shop/trades/trades_accounts.json'
+				data:
+					query: $('#auction_trade_user_query').val()
+				beforeSend: -> $('#account_query :input').prop('disabled', true)
+			.always -> $('#account_query :input').prop('disabled', false)
+			.fail network_unavailable
+			.done (resp) ->
+				switch resp.accounts.length
+					when 0 then open_new_account()
+					else select_account(resp.accounts[0])
+				reload_product()
+
+		calculate_total = ->
+			$('.price_total').html(_.reduce($('._deal_price'),(sum,v)->
+				sum + if $(v).siblings().find('.unit_checker').prop('checked') then parseInt($(v).text()) else 0
+			,0))
+
+		get_original_price = (_discount)->
+			price_class = if $('#account_select').prop('checked') then '._sale_price' else '._shop_price'
+			_discount.parent().siblings(price_class).text()
+
+		if_discount_used = (discount)->
+			tag_name = discount.localName or discount.nodeName
+			if tag_name is 'input' then $(discount).prop('checked') else $(discount).val()
+
+		recalculate_discount = ->
+			_.each(_.filter($('._level_percent, ._multibuy, ._guide_percent, ._point_percent, ._voucher'), if_discount_used), calculate_discount)
+			calculate_total()
+
+		get_deal_price = (_discount)->
+			_discount.parent().siblings('._deal_price')
+
+		get_minimum_price = (_discount)->
+			_discount.parent().siblings('._minimum_price').text() or 0
+
+		calculate_discount = (discount)->
+			_this = $(discount)
+
+			discount_used = if_discount_used(discount)
+
+			original_price = get_original_price(_this)
+			_deal_price = get_deal_price(_this)
+			_deal_price.text(original_price)
+
+			if discount_used
+				for input_discount in _this.parent().siblings().children('._level_percent, ._multibuy')
+					continue if not $(input_discount).prop('checked')
+					$(input_discount).prop('checked', false)
+					$(input_discount).trigger('change')
+				for select_discount in _this.parent().siblings().children('._guide_percent, ._point_percent, ._voucher')
+					continue if not $(select_discount).val()
+					$(select_discount).val('')
+				switch
+					when _this.hasClass('_level_percent')
+						final_price = Math.floor(original_price * (100 - _this.val()) / 100)
+						if final_price < get_minimum_price(_this)
+							_this.prop('checked', false)
+							alert '折后价低于最低价，请选择其他折扣'
+							break
+						_deal_price.text(final_price)
+
+					when _this.hasClass('_guide_percent') or _this.hasClass('_point_percent')
+						final_price = Math.floor(original_price * (100 - _this.val()) / 100)
+						if final_price < get_minimum_price(_this) and final_price
+							_this.val('')
+							alert '折后价低于最低价，请选择其他折扣'
+							break
+						_deal_price.text(final_price)
+
+					when _this.hasClass('_voucher')
+						final_price = original_price - _this.children(':selected').data('amount')
+						final_price = 0 if final_price < 0
+						if  final_price < get_minimum_price(_this) and final_price
+							_this.val('')
+							alert '使用此代金券后低于最低价，请重新选择'
+							break
+						else if original_price < _this.children(':selected').data('limitation')
+							_this.val('')
+							alert '当前商品无法使用此代金券，请重新选择'
+							break
+						_deal_price.text(final_price)
+
+			do ->
+				if _this.hasClass('_multibuy')
+					this_multibuy_id = _this.val()
+					multibuy_goods = _.filter($('._multibuy:checked'), (n)->
+						$(n).val() is this_multibuy_id and not $(n).prop('disabled')
+					)
+					return true if not multibuy_goods.length
+					multibuy_discounts = _this.siblings().text().split(',')
+
+					switch multibuy_goods.length
+						when 1 then this_discount = 0
+						when 2 then this_discount = multibuy_discounts[0]
+						when 3 then this_discount = multibuy_discounts[1]
+						else this_discount = multibuy_discounts[2]
+
+					if not this_discount
+						get_deal_price($(multibuy_goods[0])).text(get_original_price($(multibuy_goods[0])))
+						return true
+
+					for this_multibuy in multibuy_goods
+						final_price = Math.floor(get_original_price($(this_multibuy)) * (100 - this_discount) / 100)
+						if final_price < get_minimum_price($(this_multibuy))
+							$(_this).prop('checked',false)
+							$(_this).trigger('change')
+							alert "#{if $(this_multibuy).parent().siblings().children('._product_id').length then '产品 #' + $(this_multibuy).parent().siblings().children('._product_id').text() else '单件 #' + $(this_multibuy).parent().siblings().children('._item_id').text()} 按当前连拍折扣计算低于最低价，已取消当前折扣选择"
+							return true
+						get_deal_price($(this_multibuy)).text(final_price)
+			calculate_total()
+
+		cancel_account = ->
+			$('#auction_trade_user_id').val(null)
+			$('#server').data('account', null).data('vouchers', null)
+			$('#account_text').hide()
+			$('#account_query').fadeIn()
+			#$('#contact_list').slideUp().html('')
+			$('#auction_trade_contact_attributes_id').after('<select name="auction_trade[contact_attributes][id]" id="auction_trade_contact_attributes_id"><option></option></select>').remove()
+			$('#auction_trade_invoice_contact_attributes_id').after('<select name="auction_trade[invoice_contact_attributes][id]" id="auction_trade_invoice_contact_attributes_id"><option></option></select>').remove()
+			$('#contact_form input, #invoice_contact_form input').val(null)
+			reload_product()
+
+		$(document).on 'reveal.facebox', new_account_ready
+		$('#auction_trade_user_query_confirm').on 'click', -> query_account() and false
+		$('#account_select').on 'change', cancel_account
+		$('#auction_trade_user_query').on 'keydown', (event) -> query_account() if event.keyCode == 13
+		$('#new_auction_trade input').on 'keydown', (event) -> false if event.keyCode == 13
+
+		$(document).on 'submit', '#new_core_account', ->
+			$.ajax
+				dataType: 'json'
+				type: $(this).attr('method')
+				url: $(this).attr('action')
+				data: $(this).serialize()
+				context: this
+				beforeSend: -> $('#new_core_account :input').prop('disabled', true)
+			.always -> $('#new_core_account :input').prop('disabled', false)
+			.fail network_unavailable
+			.done (resp) ->
+				unless resp.account
+					$.ajax url: '/manage/core/accounts/new?valid&' + $(this).serialize()
+					.done (html) -> $('#facebox .content').html(html)
+					return
+				$.facebox.close()
+				$('#auction_trade_user_query').val(resp.account.id)
+				$('#auction_trade_user_query_confirm').click()
+			false
+
+
+
+		contact_fields = 'name mobile phone country province city town address postcode'.split(' ')
+
+		show_contacts = ->
+			$('#contact_form :input').prop('disabled', false)
+			$('#contact_form table tr, #contact_form td').show()
+		show_invoice_contacts = ->
+			$('#invoice_contact_form input').prop('disabled', false)
+			$('#invoice_contact_form tr, #invoice_contact_form td').show()
+		hide_contacts = ->
+			$('#contact_form input').val(null).prop('disabled', true)
+		hide_invoice_contacts = ->
+			$('#invoice_contact_form input').val(null).prop('disabled', true)
+
+		update_contacts = ->
+			return unless id = $('#auction_trade_user_id').val()
+			return unless $('#auction_trade_need_delivery').prop('checked')
+			$.ajax
+				dataType: 'json'
+				url: '/admin/shop/contacts'
+				data: { 'where[user_id]': id, 'where[active]': 'true', 'order[created_at]': 'desc', per_page: 10 }
+				beforeSend: -> hide_contacts()
+			.always -> 1
+			.fail network_unavailable
+			.done (contacts) ->
+				html = ['<select name="auction_trade[contact_attributes][id]" id="auction_trade_contact_attributes_id"><option></option>']
+				$.map contacts, (contact) ->
+					html = html.concat(['<option value="', contact.id, '" data-contact=\'', JSON.stringify(contact), '\' >', contact.id, '　　　　　　', _.values(_.pick(contact, contact_fields)).join('　　'), '</option>'])
+				html = html.concat(['</select>']).join('')
+				$('#auction_trade_contact_attributes_id').after(html).remove()
+				$('#auction_trade_contact_attributes_id').val($('#auction_trade_contact_attributes_id option:eq(1)').val()).change()
+				#$('#contact_list').html(html)
+				show_contacts()
+
+		update_invoice_contacts = ->
+			return unless id = $('#auction_trade_user_id').val()
+			return unless $('#auction_trade_need_invoice').prop('checked')
+			$.ajax
+				dataType: 'json'
+				url: '/admin/shop/contacts'
+				data: { 'where[user_id]': id, 'where[active]': 'true', 'order[created_at]': 'desc', per_page: 10 }
+				beforeSend: -> hide_invoice_contacts()
+			.always -> 1
+			.fail -> network_unavailable()
+			.done (contacts) ->
+				html = ['<select name="auction_trade[invoice_contact_attributes][id]" id="auction_trade_invoice_contact_attributes_id"><option></option>']
+				$.map contacts, (contact) ->
+					html = html.concat(['<option value="', contact.id, '" data-contact=\'', JSON.stringify(contact), '\' >', contact.id, '　　　　　　', _.values(_.pick(contact, contact_fields)).join('　　'), '</option>'])
+				html = html.concat(['</select>']).join('')
+				$('#auction_trade_invoice_contact_attributes_id').after(html).remove()
+				$('#auction_trade_invoice_contact_attributes_id').val($('#auction_trade_contact_attributes_id option:eq(1)').val()).change()
+				show_invoice_contacts()
+
+		$(document).on 'change', '#auction_trade_contact_attributes_id', ->
+			return unless contact = $('#auction_trade_contact_attributes_id option:selected').data('contact')
+			$.map ['id'].concat(contact_fields), (field) ->
+				$('#auction_trade_contact_attributes_' + field).val(contact[field])
+
+		$(document).on 'change', '#auction_trade_invoice_contact_attributes_id', ->
+			return unless contact = $('#auction_trade_invoice_contact_attributes_id option:selected').data('contact')
+			$.map ['id'].concat(contact_fields), (name) ->
+				$('#auction_trade_invoice_contact_attributes_' + name).val(contact[name])
+
+		$('#contact_form input').on 'input', ->
+			$('#auction_trade_contact_attributes_id').val(null)
+
+		$('#invoice_contact_form input').on 'input', ->
+			$('#auction_trade_invoice_contact_attributes_id').val(null)
+
+		is_need_delivery = ->
+			dom = $('tr.delivery_time, tr.delivery_phone, tr.contact')
+			if $('#auction_trade_need_delivery').prop('checked')
+				dom.show().find(':input').prop('disabled', false)
+				if $('#auction_trade_user_id').val() then update_contacts() else show_contacts()
+			else
+				dom.hide().find(':input').prop('disabled', true)
+				hide_contacts()
+
+		is_need_invoice = ->
+			dom = $('tr.invoice_type, tr.invoice_contact, tr.invoice_content, tr.invoice_title')
+			if $('#auction_trade_need_invoice').prop('checked')
+				dom.show().find(':input').prop('disabled', false)
+				if $('#auction_trade_user_id').val() then update_invoice_contacts() else show_invoice_contacts()
+			else
+				dom.hide().find(':input').prop('disabled', true)
+				hide_invoice_contacts()
+
+		$(document).on 'change', '#auction_trade_need_delivery', is_need_delivery
+		$(document).on 'change', '#auction_trade_need_invoice', is_need_invoice
+
+
+
+		add_product = (options = {}) ->
+			return unless id = options.product_id || $('#product_id').val()
+			$.ajax
+				url: '/admin/shop/products/' + id + '.json'
+				beforeSend: -> $('#product_id').prop('disabled', true)
+			.always -> $('#product_id').prop('disabled', false)
+			.fail network_unavailable
+			.done (product) ->
+				return unless product.id
+				guide = $('#server').data().trade.guide
+				account = $('#server').data('account')
+				level = account.auction_user && account.auction_user.level if account
+				vouchers = $('#server').data('vouchers')
+				measure = options.measure || $('#product_measure').val() || ''
+				rand = Math.floor(Math.random()*100000000)
+
+				html = '
+					<tr>
+						<td>
+							<input type="checkbox" checked="checked" class="unit_checker" />
+							<input type="hidden" name="auction_trade[units][' + rand + '][product_id]" value="' + product.id + '" />
+							<input type="hidden" name="auction_trade[units][' + rand + '][measure]" value="' + measure + '" />
+						</td>
+						<td><a href="/shop/products' + product.id + '" target="_blank"><img src="http://i0.weimall.net.cn' + product.major_pic + '.thumb65.jpg" style="width: 65px; height: 65px;" /></a></td>
+						<td><a target="_blank" href="/admin/shop/products/' + product.id + '" class="_product_id">' + product.id + '</a></td>
+						<td>' + measure + '</td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>' + product.price + '</td>
+						<td class="_shop_price">' + product.shop_price + '</td>
+						<td class="_sale_price">' + product.discount + '</td>
+						<td class="_minimum_price">' + (if product.minimum_price then product.minimum_price else "") + '</td>
+						<td class="_deal_price">' + (if account then product.discount else product.shop_price) + '</td>
+						<td>' + (if level then '<input type="checkbox" name="auction_trade[units][' + rand + '][level_percent]" class="_level_percent" value="' + level.percent + '" ' + (if options.level_percent then 'checked="checked"' else '') + ' /><a target="_blank" title="' + (options.percent || level.percent) + '%" href="/admin/shop/levels/' + level.id + '"><img src="http://i0.weimall.net.cn' + level.icon + '" style="vertical-align: middle;" /></a>' else '') + '</td>
+						<td>' + (if product.multibuy and account then '<input type="checkbox" name="auction_trade[units][' + rand + '][multibuy_id]" class="_multibuy" value="' + product.multibuy.id + '" ' + (if options.multibuy_id then 'checked="checked"' else '') + ' /><a target="_blank" href="http://www.weimall.com/shop/products?where[multibuy_id]=' + (options.multibuy_id || product.multibuy.id) + '">' + product.multibuy.percent_for_2 + ',' + product.multibuy.percent_for_3 + ',' + product.multibuy.percent_for_4 + '</a>' else '') + '</td>
+						<td>' + (if guide and guide.percent and account then '<select name="auction_trade[units][' + rand + '][guide_percent]" class="_guide_percent"><option></option>' + (if guide.percent then _.map(_.range(1, 1 + guide.percent), (i) -> '<option value=' + i + '>' + i + '% - ' + (100 - i) + '折</option>' ).join('') else '') + '</select>' else '') + '</td>
+						<td>' + (if account then '<select name="auction_trade[units][' + rand + '][point_percent]" class="_point_percent"><option></option><option value="5">5% - 九五折</option><option value="10">10% - 九折</option><option value="100">100% - 换购</option></select>' else '') + '</td>
+						<td>' + (if vouchers && vouchers.length > 0 then '<select name="auction_trade[units][' + rand + '][voucher_id]" class="_voucher"><option></option>' + _.map(vouchers, (voucher) -> '<option value="' + voucher.id + '" data-amount="' + voucher.event.amount + '" data-limitation="' + voucher.event.limitation + '">满' + voucher.event.limitation + '减' + voucher.event.amount + ' - ' + voucher.event.ended_at.replace(/T.+/, '') + ' 过期</option>') + '</select>' else '') + '</td>
+						<td><a href="#" class="auction_unit_delete">删除</a></td>
+					</tr>
+				'
+				$('tr.units table tbody').append(html)
+				$('tr.units table').show()
+				$('#product_id').val(null)
+				$('#product_measure').after($('#product_measure').outerHTML().replace(/<option>.*<\/option>/, '<option></option>')).remove()
+				$('#product_measure, #product_confirm').val(null).prop('disabled', true)
+				$('select[name="auction_trade[units][' + rand + '][guide_percent]"]').val(options.guide_percent)
+				$('select[name="auction_trade[units][' + rand + '][point_percent]"]').val(options.point_percent)
+				$('select[name="auction_trade[units][' + rand + '][voucher_id]"]').val(options.voucher_id)
+				calculate_total()
+				options.callback.call() if options.callback
+
+		add_item = (options = {}) ->
+			return unless id = options.item_id || $('#item_id').val()
+			$.ajax
+				url: '/admin/shop/items.json'
+				data: { query: id, 'where[published]': true, 'where[trade_id]': null }
+				beforeSend: -> $('#item_id, #item_confirm').prop('disabled', true)
+			.always -> $('#item_id, #item_confirm').prop('disabled', false)
+			.fail network_unavailable
+			.done (items) ->
+				return unless item = items[0]
+				product = item.product
+				guide = $('#server').data().trade.guide
+				account = $('#server').data('account')
+				level = account.auction_user && account.auction_user.level if account
+				vouchers = $('#server').data('vouchers')
+				rand = Math.floor(Math.random()*100000000)
+
+				html = '
+					<tr>
+						<td>
+							<input type="checkbox" checked="checked" class="unit_checker" />
+							<input type="hidden" name="auction_trade[units][' + rand + '][item_id]" value="' + item.id + '" />
+						</td>
+						<td><a href="/shop/products' + product.id + '" target="_blank"><img src="http://i0.weimall.net.cn' + product.major_pic + '.thumb65.jpg" style="width: 65px; height: 65px;" /></a></td>
+						<td></td>
+						<td></td>
+						<td><a target="_blank"" href="/admin/shop/items/' + item.id + '" class="_item_id">' + item.id + '</a></td>
+						<td>' + item.identifer + '</td>
+						<td>' + item.barcode + '</td>
+						<td>' + product.price + '</td>
+						<td class="_shop_price">' + product.shop_price + '</td>
+						<td class="_sale_price">' + product.discount + '</td>
+						<td class="_minimum_price">' + (if product.minimum_price then product.minimum_price else "") + '</td>
+						<td class="_deal_price">' + (if account then product.discount else product.shop_price) + '</td>
+						<td>' + (if level then '<input type="checkbox" name="auction_trade[units][' + rand + '][level_percent]" class="_level_percent" value="' + level.percent + '" ' + (if options.level_percent then 'checked="checked"' else '') + ' /><a target="_blank" title="' + level.percent + '%" href="/admin/shop/levels/' + level.id + '"><img src="http://i0.weimall.net.cn' + level.icon + '" style="vertical-align: middle;" /></a>' else '') + '</td>
+						<td>' + (if product.multibuy and account then '<input type="checkbox" name="auction_trade[units][' + rand + '][multibuy_id]" class="_multibuy" value="' + product.multibuy.id + '" ' + (if options.multibuy_id then 'checked="checked"' else '') + ' /><a target="_blank" href="/shop/products?where[multibuy_id]=' + product.multibuy.id + '">' + product.multibuy.percent_for_2 + ',' + product.multibuy.percent_for_3 + ',' + product.multibuy.percent_for_4 + '</a>' else '') + '</td>
+						<td>' + (if guide and guide.percent and account then '<select name="auction_trade[units][' + rand + '][guide_percent]" class="_guide_percent"><option></option>' + (if guide.percent then _.map(_.range(1, 1 + guide.percent), (i) -> '<option value=' + i + '>' + i + '% - ' + (100 - i) + '折</option>' ).join('') else '') + '</select>' else '') + '</td>
+						<td>' + (if account then '<select name="auction_trade[units][' + rand + '][point_percent]" class="_point_percent"><option></option><option value="5">5% - 九五折</option><option value="10">10% - 九折</option><option value="100">100% - 换购</option></select>' else '') + '</td>
+						<td>' + (if vouchers && vouchers.length > 0 then '<select name="auction_trade[units][' + rand + '][voucher_id]" class="_voucher"><option></option>' + _.map(vouchers, (voucher) -> '<option value="' + voucher.id + '" data-amount="' + voucher.event.amount + '" data-limitation="' + voucher.event.limitation + '">满' + voucher.event.limitation + '减' + voucher.event.amount + ' - ' + voucher.event.ended_at.replace(/T.+/, '') + ' 过期</option>') + '</select>' else '') + '</td>
+						<td><a href="#" class="auction_unit_delete">删除</a></td>
+					</tr>
+				'
+				$('tr.units table tbody').append(html)
+				$('tr.units table').show()
+				$('#item_id').val(null)
+				$('#item_confirm').prop('disabled', true)
+				$('select[name="auction_trade[units][' + rand + '][guide_percent]"]').val(options.guide_percent)
+				$('select[name="auction_trade[units][' + rand + '][point_percent]"]').val(options.point_percent)
+				$('select[name="auction_trade[units][' + rand + '][voucher_id]"]').val(options.voucher_id)
+				calculate_total()
+				options.callback.call() if options.callback
+
+		$(document).on 'click', '.auction_unit_delete', ->
+			$(this).closest('tr').remove() if confirm('确认删除?')
+			recalculate_discount()
+			false
+
+		$(document).on 'change', '.unit_checker', ->
+			if $(this).prop('checked')
+				tr = $(this).closest('tr').css('color', '')
+				tr.find('a').css('color', '')
+				tr.find('input, select').prop('disabled', false)
+				tr.find('img').css('opacity', 1)
+			else
+				tr = $(this).closest('tr').css('color', 'silver')
+				tr.find('a').css('color', 'silver')
+				tr.find('input, select').prop('disabled', true)
+				tr.find('img').css('opacity', 0.3)
+				$(this).prop('disabled', false)
+			recalculate_discount()
+
+		$('#product_id').on 'keydown', (event) -> add_product() if event.keyCode == 13
+		$('#product_id').on 'input', ->
+			unless $(this).val()
+				$('#product_measure, #product_confirm').prop('disabled', true)
+				return
+			$.ajax
+				url: '/admin/shop/products/' + $(this).val() + '.json'
+			.done (product) ->
+				measures = _.sortBy(_.without(_.map(JSON.parse(product.measures_unsold_count), (count, measure) -> measure if (count) ), null)) if product.measures_unsold_count
+				unless product.id && measures && measures.length
+					$('#product_measure, #product_confirm').val(null).prop('disabled', true)
+					return
+				html = '<select id="product_measure" style="width: 150px;" name="product_measure">' + _.map(measures, (measure) -> '<option>' + (measure || '') + '</option>').join('') + '</select>'
+				$('#product_measure').after(html).remove()
+				$('#product_confirm').prop('disabled', false)
+		$('#product_confirm').on 'click', ->
+			add_product()
+			false
+
+		$('#item_id').on 'keydown', (event) -> add_item() if event.keyCode == 13
+		$('#item_id').on 'input', ->
+			$('#item_confirm').prop('disabled', !$(this).val())
+			add_item() if ('' + $(this).val()).length == 12
+		$('#item_confirm').on 'click', ->
+			add_item()
+			false
+
+		init_units = (units) ->
+			return unless unit = _.last(units)
+			unit = _.extend unit, callback: ->
+				init_units(_.initial(units))
+				recalculate_discount()
+			if unit.product_id then add_product(unit) else add_item(unit)
+
+
+
+		$('#new_auction_trade').on 'submit', ->
+			$.ajax
+				dataType: 'json'
+				type: $(this).attr('method')
+				url: $(this).attr('action')
+				data: $(this).serialize()
+				context: this
+				beforeSend: -> $('#new_core_account :input').prop('disabled', true)
+			.always -> $('#new_core_account :input').prop('disabled', false)
+			.fail network_unavailable
+			.done (resp) ->
+				if trade = resp.trade
+					if !$('#server').data().trade.guide || $('#auction_trade_need_delivery').prop('checked')
+						document.location.href = '/admin/shop/trades?where[id]=' + trade.id
+					else
+						$.facebox '
+							<h2>交易 ' + trade.id + '</h2>
+							<table class="form-table">
+								<tbody>
+									<tr>
+										<td style="padding: 20px;">
+											&nbsp;&nbsp;<button class="button" id="trade_action_create" disabled="disabled">创建</button>
+											&nbsp;&nbsp;<button class="button" data-trade_id="' + trade.id + '" id="trade_action_audit">审核</button>
+											&nbsp;&nbsp;<button class="button" data-trade_id="' + trade.id + '" id="trade_action_prepare" disabled="disabled">出库</button>
+											&nbsp;&nbsp;<button class="button" data-trade_id="' + trade.id + '" id="trade_action_ship" disabled="disabled">发货</button>
+											&nbsp;&nbsp;<button class="button" data-trade_id="' + trade.id + '" id="trade_action_receive" disabled="disabled">收货</button>
+											&nbsp;&nbsp;<button class="button" data-trade_id="' + trade.id + '" id="trade_action_complete" disabled="disabled">完成</button>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						'
+				else
+					$.ajax url: $(this).attr('action') + '/new?valid&' + $(this).serialize()
+					.done (html) -> $('.wrap').html(html)
+			false
+
+		$(document).on 'click', '#trade_action_audit', ->
+			$.ajax
+				type: 'put'
+				dataType: 'json'
+				url: '/admin/shop/trades/' + $(this).data('trade_id') + '/audit'
+				context: this
+			.done ->
+				$(this).prop('disabled', true)
+				$(this).next().prop('disabled', false)
+			false
+
+		$(document).on 'click', '#trade_action_prepare', ->
+			$.ajax
+				type: 'put'
+				dataType: 'json'
+				url: '/admin/shop/trades/' + $(this).data('trade_id') + '/prepare.json'
+				context: this
+			.done ->
+				$(this).prop('disabled', true)
+				$(this).next().prop('disabled', false)
+			false
+
+		$(document).on 'click', '#trade_action_ship', ->
+			$.ajax
+				type: 'put'
+				dataType: 'json'
+				url: '/admin/shop/trades/' + $(this).data('trade_id') + '/ship.json'
+				context: this
+			.done ->
+				$(this).prop('disabled', true)
+				$(this).next().prop('disabled', false)
+			false
+
+		$(document).on 'click', '#trade_action_receive', ->
+			$.ajax
+				type: 'put'
+				dataType: 'json'
+				url: '/admin/shop/trades/' + $(this).data('trade_id') + '/receive.json'
+				context: this
+			.done ->
+				$(this).prop('disabled', true)
+				$(this).next().prop('disabled', false)
+			false
+
+		$(document).on 'click', '#trade_action_complete', ->
+			document.location.href = '/admin/shop/trades?where[id]=' + $(this).data('trade_id')
+			# window.open('/admin/shop/trades?where[id]=' + $(this).data('trade_id'))
+			false
+
+		$(document).on
+			change: -> calculate_discount(this)
+		,'._level_percent, ._multibuy, ._guide_percent, ._point_percent, ._voucher'
+
+		onload = ->
+			$('#new_auction_trade > table > tbody > tr, tr.units table').hide()
+			$('#new_auction_trade :input').prop('disabled', true)
+			$('.submit, tr.user_id, tr.units, tr.price, tr.need_delivery, tr.need_invoice, tr.comment, tr.remark, tr.package_from, tr.package_to, tr.package_content, tr.whisper_style, tr.whisper_from, tr.whisper_to, tr.whisper_content').show().find(':input').prop('disabled', false)
+			$('#product_measure, #product_confirm, #item_confirm').prop('disabled', true)
+			$('tr.guide_id, tr.shop_identifier, tr.mall_promotion_id').show().find(':input').prop('disabled', false) if (guide = $('#server').data().trade.guide) && guide.shop_id
+			is_need_delivery()
+			is_need_invoice()
+			query_account() if $('#auction_trade_user_id').val()
+			init_units($('#server').data().trade.units || [])
+			$('#new_auction_trade').show()
+
+
+
+			#$('tr.invoice_type, tr.invoice_contact, tr.invoice_content, tr.invoice_title').show() if $('#need_invoice').prop('checked')
+			# query_account() if $('#auction_trade_user_id').val()
+
+			# $('#_auction_trade_contact_0, #_auction_trade_invoice_contact_0').prop('checked', false)
+			# $('#contact_form td, #invoice_contact_form td').hide()
+
+		onload()

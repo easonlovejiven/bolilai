@@ -1,0 +1,126 @@
+<% @record = @comment %>
+<% @show = !%w[new edit].include?(params[:action]) && @record.valid? %>
+<div class="modal-header">
+  <%= render "admin/modal/header" %>
+</div>
+<%= render 'admin/shared/prompt' %>
+<div class="modal-body">
+  <%= form_for @comment, as: :comment, :url => @comment.new_record? ? admin_shop_comments_path : admin_shop_comment_path(@comment),
+               :html => {:method => @comment.new_record? ? :post : :put, :multipart => true, class: "form-horizontal"} do |f| %>
+
+      <% unless @comment.new_record? %>
+          <div class="form-group">
+            <%= f.label :id, 'ID', {class: 'col-md-3 control-label'} %>
+            <div class="form-control-static">
+              <strong><%= @record.id %></strong>
+            </div>
+          </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= f.label :user, '用户ID', {class: 'col-md-3 control-label'} %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= @record.user_id %>
+            </div>
+        <% else %>
+            <div class="col-md-4">
+              <%= f.text_field :user_id, {class: 'form-control', required: true} %>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :commentable_id, '商品ID', {class: 'col-md-3 control-label'} %>
+        <% if @show %>
+            <div class="form-control-static">
+              <%= @record.commentable && @record.commentable.name %>
+            </div>
+        <% else %>
+            <div class="col-md-4">
+              <%= f.text_field :commentable_id, {class: 'form-control', required: true} %>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :title, '<sup>*</sup>标题'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="col-md-8 form-control-static">
+              <%= @record.title %>
+            </div>
+        <% else %>
+            <div class="col-md-4">
+              <%= f.text_field :title, {class: 'form-control', required: true} %>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :body, '<sup>*</sup>内容'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="col-md-8 form-control-static">
+              <%= @record.body %>
+            </div>
+        <% else %>
+            <div class="col-md-8">
+              <%= f.text_area :body, {class: 'form-control', required: true} %>
+            </div>
+        <% end %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :score, '<sup>*</sup>评级'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="col-md-8 form-control-static">
+              <%= @record.score %> 级
+            </div>
+        <% else %>
+            <div class="col-md-4">
+              <%= f.select :score, (1..5).to_a, {:include_blank => '请选择'}, {class: 'form-control', required: true} %>
+            </div>
+        <% end %>
+      </div>
+
+      <%= render :partial => "admin/modal/image_field", locals: {f: f, field: :pic, max_files: 6, form_as: :comment, required: true, nested_filed: :comment_images} %>
+
+      <div class="form-group">
+        <%= f.label :active, '<sup>*</sup>激活'.html_safe, class: 'col-md-3 control-label' %>
+        <% if @show %>
+            <div class="col-md-8 form-control-static">
+              <%= @record.active? ? '是' : '否' %>
+            </div>
+        <% else %>
+            <div class="col-md-4">
+              <%= f.select :active, [['是', true], ['否', false]], {:include_blank => '请选择'}, {class: 'form-control', required: true} %>
+            </div>
+        <% end %>
+      </div>
+
+      <% unless @record.new_record? %>
+          <div class="form-group">
+            <%= f.label :created_at, '创建时间', class: 'col-md-3 control-label' %>
+            <div class="form-control-static">
+              <strong><%= @record.created_at && @record.created_at.to_s(:db) %></strong>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :updated_at, '修改时间', class: 'col-md-3 control-label' %>
+            <div class="form-control-static">
+              <strong><%= @record.updated_at && @record.updated_at.to_s(:db) %></strong>
+            </div>
+          </div>
+      <% end %>
+
+      <div class="form-actions">
+        <% if @show %>
+            <%= link_to '查看', admin_shop_comment_path(@record), "data-target" => "rightPanel", class: 'btn btn-success' if can?(:show, :shop_comment) %>
+            <%= link_to '编辑', edit_admin_shop_comment_path(@record), "data-target" => "rightPanel", class: 'btn btn-success' if can?(:update, :shop_comment) %>
+            <%= link_to '删除', delete_admin_shop_comment_path(@record), "data-target" => "rightPanel", class: 'btn btn-success' if can?(:destroy, :shop_comment) %>
+        <% else %>
+            <input type="submit" value="提交" class="btn btn-primary"/>
+        <% end %>
+      </div>
+  <% end %>
+</div>

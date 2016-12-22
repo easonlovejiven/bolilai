@@ -1,0 +1,226 @@
+<% @record = @brand %>
+<% @show = !%w[new edit].include?(params[:action]) && @record.valid? %>
+<div class="modal-header">
+  <%= render "admin/modal/header" %>
+</div>
+<%= render 'admin/shared/prompt' %>
+<%#= render 'admin/shared/header', record: @record %>
+<%= form_for @brand, as: :brand, :url => @brand.new_record? ? admin_shop_brands_path : admin_shop_brand_path(@brand), :html => {:method => @brand.new_record? ? :post : :put, :multipart => true, class: "form-horizontal"} do |f| %>
+<%#= f.error_messages %>
+    <div class="modal-body">
+      <fieldset>
+        <%= render 'admin/modal/id', {f: f} if @show %>
+        <%= render 'admin/modal/text_field', {f: f, field: :name, required: true} %>
+        <%= render 'admin/modal/text_field', {f: f, field: :chinese, required: true} %>
+
+        <div class="form-group">
+          <%= f.label :abbreviation, "缩写", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8">
+            <% if params[:action] == 'show' %>
+                <%= h @brand.abbreviation %>
+            <% else %>
+                <%= f.text_field :abbreviation, class: 'form-control' %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :initial, "首字母", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8">
+            <% if params[:action] == 'show' %>
+                <%= h @brand.initial %>
+            <% else %>
+                <%= f.select :initial, @brand.class.const_get("INITIAL"), include_blank: true, class: 'form-control' %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :genre, "类型", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8">
+            <% if params[:action] == 'show' %>
+                <%= h @brand.genre %>
+            <% else %>
+                <%= f.text_field :genre %>
+            <% end %>
+          </div>
+        </div>
+
+        <%#= render 'admin/modal/image_field', {f: f, field: :pic_image, required: true} %>
+
+        <%= render :partial => "admin/modal/image_field", locals: {f: f, field: :pic, max_files: 1, form_as: :brand, required: true} %>
+
+
+        <div class="form-group">
+          <%= f.label :link, "链接", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8">
+            <% if params[:action] == 'show' %>
+                <%= link_to @brand.link || '', @brand.link, :target => "_blank" %>
+            <% else %>
+                <%= f.text_field :link, class: 'form-control' %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :shop_link, "旗舰店链接", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8">
+            <% if params[:action] == 'show' %>
+                <%= link_to @brand.shop_link || '', @brand.shop_link, :target => "_blank" %>
+            <% else %>
+                <%= f.text_field :shop_link, class: 'form-control' %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :title, "标题", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8">
+            <% if params[:action] == 'show' %>
+                <%= h @brand.title %>
+            <% else %>
+                <%= f.text_field :title, class: 'form-control' %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :description, "描述", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8">
+            <% if params[:action] == 'show' %>
+                <%= simple_format h @brand.description %>
+            <% else %>
+                <%= f.text_area :description, class: 'form-control' %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :summary, "概要", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8">
+            <% if params[:action] == 'show' %>
+                <%= simple_format h @brand.summary %>
+            <% else %>
+                <%= f.text_area :summary, class: 'form-control' %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :year, "年份", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8">
+            <% if params[:action] == 'show' %>
+                <%= @brand.year %>
+            <% else %>
+                <%= f.text_field :year, class: 'form-control' %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :founded_on, "创立日期", :style => "text-decoration:line-through;", class: " col-md-3 control-label" %>
+          <div class="col-md-8">
+            <% if params[:action] == 'show' %>
+                <%= @brand.founded_on && @brand.founded_on.to_s(:db) %>
+            <% else %>
+                <%= f.text_field :founded_on, :class => "datepicker form-control" %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :keywords, "关键字", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8">
+            <% if params[:action] == 'show' %>
+                <%= h @brand.keywords %>
+            <% else %>
+                <%= f.text_field :keywords, class: 'form-control' %>
+                （用英文逗号分隔）
+            <% end %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :special_product_ids, "特殊产品ID列表", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8">
+            <% if params[:action] == 'show' %>
+                <%= h @brand.special_product_ids %>
+            <% else %>
+                <%= f.text_field :special_product_ids, class: 'form-control' %>
+                （用英文逗号分隔）
+            <% end %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :special_products, "特殊产品预览", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8">
+            <% @brand.special_products.each do |product| %>
+                <%= link_to_if @current_user.can_show_product?, product.major_pic.blank? ? %[<div style="width:50px;height:50px;background-color:#fafafa;"></div>] : image_tag("#{product.major_pic}.thumb145.jpg", :style => 'width:50px;height:50px;margin:0;'), admin_shop_product_path(product), :title => product.name, "data-target" => "rightPanel" %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :order, "排序", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8">
+            <% if params[:action] == 'show' %>
+                <%= h @brand.order %>
+            <% else %>
+                <%= f.text_field :order, class: 'form-control' %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :recommend, "推荐", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8">
+            <% if params[:action] == 'show' %>
+                <span title="<%= @brand.recommend %>"><%= h Shop::Brand::RECOMMEND_OPTIONS[@brand.recommend] %></span>
+            <% else %>
+                <%= f.select :recommend, Shop::Brand::RECOMMEND_OPTIONS.map(&:reverse), {:include_blank => ""} %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :introduced, "介绍", {class: 'col-md-3 control-label'} %>
+          <div class="col-md-8">
+            <% if params[:action] == 'show' %>
+                <%= @brand.introduced ? '✔' : '✘' %>
+            <% else %>
+                <%= f.check_box :introduced %>介绍
+            <% end %>
+          </div>
+        </div>
+
+        <% if !@brand.new_record? %>
+            <div class="form-group">
+              <%= f.label :created_at, '创建时间', {class: 'col-md-3 control-label'} %>
+              <div class="col-md-8"><%= @brand.created_at && @brand.created_at.to_s(:db) %></div>
+            </div>
+            <div class="form-group">
+              <%= f.label :updated_at, '修改时间', {class: 'col-md-3 control-label'} %>
+              <div class="col-md-8"><%= @brand.updated_at && @brand.updated_at.to_s(:db) %></div>
+            </div>
+
+            <div class="form-group">
+              <%= f.label :editor, "编辑", {class: 'col-md-3 control-label'} %>
+              <div class="col-md-8">
+                <%= link_to_if can?(:show, @brand.editor), @brand.editor.name, admin_manage_editor_path(@brand.editor), "data-target" => "rightPanel" if @brand.editor %>
+              </div>
+            </div>
+        <% end %>
+
+        <% if @show %>
+            <div class="form-actions">
+              <%= link_to '查看', admin_shop_brand_path(@brand), class: "btn btn-primary", "data-target" => "rightPanel" if can?(:show, @brand) %>
+              <%= link_to '编辑', edit_admin_shop_brand_path(@brand), class: "btn btn-primary", "data-target" => "rightPanel" if can?(:update, @brand) %>
+              <%= link_to '删除', delete_admin_shop_brand_path(@brand), class: "btn btn-primary", "data-target" => "rightPanel" if can?(:destroy, @brand) %>
+            </div>
+        <% else %>
+            <%= render 'admin/modal/footer', {f: f} %>
+        <% end %>
+      </fieldset>
+    </div>
+<% end %>

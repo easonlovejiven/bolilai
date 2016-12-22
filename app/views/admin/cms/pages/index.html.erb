@@ -1,0 +1,90 @@
+<div class="row">
+  <div class="col-xs-12">
+    <div class="jarviswidget">
+      <header>
+          <span class="widget-icon">
+            <i class="fa fa-table"></i>
+          </span>
+
+        <h2>页面列表</h2>
+
+        <div class="widget-toolbar">
+          <%= link_to raw('<i class="fa fa-plus-circle"></i> 创建'), new_admin_cms_page_path, "data-target" => "rightPanel", class: 'btn btn-xs btn-default' if can?(:show, ::Cms::Page.new) %>
+          <%= link_to raw('删除'), batch_delete_admin_cms_pages_path, "data-href" => "#{batch_delete_admin_cms_pages_path}", "data-target" => "rightPanel", class: 'btn btn-xs btn-default batch_delete' if can?(:destroy, ::Cms::Page.new) %>
+        </div>
+      </header>
+      <div>
+        <div class="widget-body-toolbar">
+          <%= form_tag request.path, method: 'get', id: 'search_form', class: 'form-inline' do %>
+              <%= render 'admin/shared/search/basic', field: 'id', kv: search_field_kv(:id), size: 4 %>
+              <%= render 'admin/shared/search/basic', field: 'name', kv: search_field_kv(:name, :like) %>
+              <%= render 'admin/shared/search/select', field: 'category_id', kv: search_field_kv(:category_id), options: nested_set_options(::Cms::Category.active) { |i| "#{'-'*i.level} #{i.name}" } %>
+              <%= render 'admin/shared/search/range', field: 'created_at', class_names: 'hasDatepicker' %>
+              <%= render 'admin/shared/search/select', field: 'active', kv: search_field_kv(:active), options: [['✔', 'true'], ['✘', 'false']] %>
+              <%= render 'admin/shared/search/basic', field: 'editor_id', kv: search_field_kv(:editor_id), size: 4 %>
+              <%= render 'admin/shared/search/order' %>
+              <%= render 'admin/shared/search/page' %>
+              <%= submit_tag t(:search), class: 'btn search-xs btn-success' %>
+              <%= link_to t(:reset), request.path, class: 'btn search-xs btn-default', data: {remote: true} %>
+          <% end %>
+        </div>
+        <div class="widget-body no-padding">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+              <thead>
+              <tr class="heading">
+                <th id="checkall"><input type="checkbox"/></th>
+                <% %w[ID 标题 标签 模板类型 所属栏目 创建时间 操作 发布].each do |name| %>
+                    <th><%= name %></th>
+                <% end %>
+              </tr>
+              </thead>
+              <tbody>
+              <% @pages.each do |page| %>
+                  <tr>
+                    <td class="check"><input id="<%= page.id %>" type="checkbox"/></td>
+                    <td>
+                      <%= link_to page.id, page.url, target: '_blank' %>
+                    </td>
+                    <td>
+                      <%= page.name %>
+                    </td>
+                    <td>
+                      <%= page.tag_list %>
+                    </td>
+                    <td>
+                      <%= ::Cms::Page::TEMPLATE_TYPE[page.template_type] %>
+                    </td>
+                    <td>
+                      <%= page.category.blank? ? "无" : page.category.name %>
+                    </td>
+                    <td>
+                      <%= page.created_at && page.created_at.to_s(:db) %>
+                    </td>
+                    <td class="op">
+                      <%= link_to '查看', admin_cms_page_path(page), "data-target" => "rightPanel", class: 'btn btn-xs btn-success' if can?(:show, page) %>
+                      <%= link_to '编辑', edit_admin_cms_page_path(page), "data-target" => "rightPanel", class: 'btn btn-xs btn-success' if can?(:update, page) %>
+                      <%= link_to '删除', delete_admin_cms_page_path(page), "data-target" => "rightPanel", class: 'btn btn-xs btn-success' if can?(:destroy, page) %>
+                      <%= link_to '刷新', clear_admin_shop_products_path('urls' => [url_for(page).to_str]), class: 'btn btn-xs btn-success', :method => :post if can?(:update, page) %>
+                      <%= link_to '访问', visit_article_link(page), class: 'btn btn-xs btn-success', target: '_blank' if can?(:show, page) %>
+                    </td>
+                    <td><%= render :partial => "admin/shared/publish", :object => page %></td>
+                  </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!--分页工具条-->
+        <div class="dt-toolbar-footer">
+          <%= render "admin/shared/pagination", object: @pages %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        App.handleDatePickers();
+    })
+</script>

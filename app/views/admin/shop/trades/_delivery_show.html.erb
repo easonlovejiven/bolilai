@@ -1,0 +1,17 @@
+<% case trade.delivery_service
+     when *%w[lianbangkuaidi zhaijisong shunfeng ems] %>
+    <a href="<%= delivery_query_admin_shop_trade_path(trade) %>" data-target="rightPanel" class="express_icon express-<%= trade.delivery_service %>">
+      <div class='tips_text'>
+        <span><%= {'lianbangkuaidi' => '联邦快递', 'zhaijisong' => '宅急送', 'shunfeng' => '顺丰速运', 'ems' => '邮政EMS'}[trade.delivery_service] %> <%= trade.delivery_identifier %></span><i class='icon'></i>
+      </div>
+    </a>
+<% when 'ems_' %>
+    <span class="express_icon express-ems"><div class="tips_text">
+      <span> <%= trade.delivery_identifier %></span><i class="icon"></i></div></span>
+<% when 'offline' %>
+    <span class="express_icon express-offline"><div class="tips_text"><span>线下</span><i class="icon"></i></div></span>
+<% when 'pickup' %>
+    <span class="express_icon express-pickup"><div class="tips_text"><span>自取</span><i class="icon"></i></div></span>
+<% else %>
+    <%= h trade.delivery_service %>
+<% end %>

@@ -1,0 +1,1 @@
+<%= raw "{\"products\":[#{cache_items(@products.map { |p| p.assign_options(Auction::Product.xml_options_for(params[:response])) }, "views//shop/products/%i/response_summary", 'product', 'json').values.join(',')}]}" %>

@@ -1,0 +1,74 @@
+<h2><%= { 'show' => '查看', 'new' => '新建', 'edit' => '编辑' }[params[:action]] %>国家</h2>
+
+<%= form_for :country, @country, :url => @country.new_record? ? admin_shop_countries_path : admin_shop_country_path(@country) , :html => { :method => @country.new_record? ? :post : :put, :multipart => true } do |f| %>
+
+	<%= f.error_messages %>
+
+	<table class="form-table">
+		<tbody>
+			<% if !@country.new_record? %>
+			<tr class="form-field form-required">
+				<th scope="row"><%= f.label :id, "ID" %></th>
+				<td><%= @country.id %></td>
+			</tr>
+			<% end %>
+
+			<tr class="form-field form-required">
+				<th scope="row"><%= f.label :name, "名称" %></th>
+				<td>
+				<% if params[:action] == 'show' %>
+					<%= h @country.name %>
+				<%else%>
+					<%= f.text_field :name %>
+				<% end %>
+				</td>
+			</tr>
+
+			<tr class="form-field form-required">
+				<th scope="row"><%= f.label :order, "排序" %></th>
+				<td>
+				<% if params[:action] == 'show' %>
+					<%= h @country.order %>
+				<%else%>
+					<%= f.text_field :order %>
+				<% end %>
+				</td>
+			</tr>
+
+			<% if !@country.new_record? %>
+			<tr class="form-field">
+				<th scope="row"><%= f.label :created_at, '创建时间' %></th>
+				<td><%= @country.created_at && @country.created_at.to_s(:db) %></td>
+			</tr>
+
+			<tr class="form-field">
+				<th scope="row"><%= f.label :updated_at, '修改时间' %></th>
+				<td><%= @country.updated_at && @country.updated_at.to_s(:db) %></td>
+			</tr>
+
+			<tr class="form-field form-required">
+				<th scope="row"><%= f.label :editor, '编辑' %></th>
+				<td><%= link_to_if @current_user.can_show_editor?, h(@country.editor.name), admin_manage_editor_path(@country.editor), "data-target" => "rightPanel" if @country.editor %>
+				</td>
+			</tr>
+			<%end%>
+
+			<% if params[:action] == 'show' %>
+			<tr class="form-field form-required">
+				<th scope="row">操作</th>
+				<td class="op">
+					<%= link_to '查看', admin_shop_country_path(@country), "data-target" => "rightPanel" if @current_user.can_show_country? %>
+					<%= link_to '编辑', edit_admin_shop_country_path(@country), "data-target" => "rightPanel" if @current_user.can_update_country? %>
+					<%= link_to '删除', admin_shop_country_path(@country), :confirm => "确定删除吗？", :method => :delete if @current_user.can_destroy_country? %>
+				</td>
+			</tr>
+			<% end %>
+		</tbody>
+	</table>
+
+	<% if params[:action] != 'show' %>
+		<p class="submit">
+			<input type="submit" value="提交" id="addusersub" name="adduser" />
+		</p>
+	<% end %>
+<% end %>
